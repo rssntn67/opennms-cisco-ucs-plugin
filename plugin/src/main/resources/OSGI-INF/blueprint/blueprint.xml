@@ -17,7 +17,15 @@
     <reference id="alarmDao" interface="org.opennms.integration.api.v1.dao.AlarmDao" availability="optional"/>
     <reference id="edgeDao" interface="org.opennms.integration.api.v1.dao.EdgeDao" availability="optional"/>
     <reference id="eventForwarder" interface="org.opennms.integration.api.v1.events.EventForwarder" availability="optional"/>
+    <reference id="locationAwareSnmpClient" interface="org.opennms.netmgt.snmp.proxy.LocationAwareSnmpClient" availability="optional"/>
+    <reference id="snmpPeerFactory" interface="org.opennms.netmgt.config.api.SnmpAgentConfigFactory" availability="optional"/>
 
+    <!-- Build Cisco UCS Manager Requisition Interface -->
+    <bean id="ciscoUcsRequisitionProvider" class="it.xeniaprogetti.cisco.ucs.plugin.requisition.CiscoUcsRequisitionProvider">
+        <argument ref="nodeDao"/>
+        <argument ref="locationAwareSnmpClient"/>
+        <argument ref="snmpPeerFactory"/>
+    </bean>
     <!-- Build our API client -->
     <bean id="apiClient" class="it.xeniaprogetti.cisco.ucs.plugin.ApiClient">
         <argument value="${url}"/>
