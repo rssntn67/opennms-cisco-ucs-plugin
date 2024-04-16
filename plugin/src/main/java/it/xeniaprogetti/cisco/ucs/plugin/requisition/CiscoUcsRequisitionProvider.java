@@ -23,7 +23,6 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
     private final LocationAwareSnmpClient locationAwareSnmpClient;
 
     private final NodeDao nodeDao;
-    private final SnmpAgentConfigFactory snmpAgentConfigFactory;
     public final static String TYPE = "cisco-ucs";
 
     private static final Logger LOG = LoggerFactory.getLogger( CiscoUcsRequisitionProvider.class);
@@ -43,11 +42,9 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
     public final static String PARAMETER_MATCH_VM="matchVM";
 
     public CiscoUcsRequisitionProvider(final NodeDao nodeDao,
-                           final LocationAwareSnmpClient locationAwareSnmpClient,
-                                       final SnmpAgentConfigFactory snmpAgentConfigFactory) {
+                           final LocationAwareSnmpClient locationAwareSnmpClient) {
         this.nodeDao = nodeDao;
         this.locationAwareSnmpClient = locationAwareSnmpClient;
-        this.snmpAgentConfigFactory = snmpAgentConfigFactory;
 
     }
 

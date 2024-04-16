@@ -9,10 +9,15 @@ import org.opennms.integration.api.v1.scv.SecureCredentialsVault;
 import org.opennms.integration.api.v1.scv.immutables.ImmutableCredentials;
 import org.opennms.netmgt.config.SnmpPeerFactory;
 import org.opennms.netmgt.snmp.SnmpAgentConfig;
+import org.opennms.netmgt.snmp.SnmpObjId;
+import org.opennms.netmgt.snmp.proxy.LocationAwareSnmpClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 public class ConnectionManager {
@@ -21,15 +26,19 @@ public class ConnectionManager {
     public static final String ADDRESS_KEY = "address";
     public static final String LOCATION_KEY = "location";
 
+    private static final Logger LOG = LoggerFactory.getLogger(ConnectionManager.class);
 
     private final RuntimeInfo runtimeInfo;
 
     private final SecureCredentialsVault vault;
+    private final LocationAwareSnmpClient locationAwareSnmpClient;
 
     public ConnectionManager(final RuntimeInfo runtimeInfo,
-                             final SecureCredentialsVault vault) {
+                             final SecureCredentialsVault vault,
+                             LocationAwareSnmpClient locationAwareSnmpClient) {
         this.runtimeInfo = Objects.requireNonNull(runtimeInfo);
         this.vault = Objects.requireNonNull(vault);
+        this.locationAwareSnmpClient = locationAwareSnmpClient;
     }
 
     /**
@@ -102,7 +111,6 @@ public class ConnectionManager {
 
     private static SnmpAgentConfig fromStore(final Credentials credentials) throws UnknownHostException {
 
-
         if (Strings.isNullOrEmpty(credentials.getPassword())) {
             throw new IllegalStateException("API password is missing");
         }
@@ -122,12 +130,29 @@ public class ConnectionManager {
         return agentConfig;
     }
 
+    public Optional<ConnectionValidationError> validate(Connection connection) {
+        SnmpAgentConfig agentConfig = ((ConnectionImpl) connection).agentConfig;
+        var result = locationAwareSnmpClient.get(agentConfig, SnmpObjId.get("1.3.6.1.2.1.1.0")).execute();
+        boolean validated = false;
+        try {
+            validated = result.get().toDisplayString().startsWith("1.3.6.1.4.1.9.12");
+        } catch (InterruptedException | ExecutionException e) {
+            return Optional.of(new ConnectionValidationError("Connection could not be validated: " + e.getMessage()));
+        }
+        LOG.info("validate: {},  {}", connection.getAlias(), validated);
+        if (validated) {
+            return Optional.empty();
+        }
+        return Optional.of(new ConnectionValidationError("Connection credential errors"));
+    }
+
+
 
     private class ConnectionImpl implements Connection {
         private final String alias;
-        private final String location;
+        private String location;
 
-        private final SnmpAgentConfig agentConfig;
+        private SnmpAgentConfig agentConfig;
 
         private ConnectionImpl(final String alias, final SnmpAgentConfig agentConfig, String location) {
             this.alias = Objects.requireNonNull(alias).toLowerCase();
@@ -173,6 +198,12 @@ public class ConnectionManager {
         @Override
         public String getLocation() {
             return this.location;
+        }
+
+        @Override
+        public void setLocation(String location) {
+            this.location = location;
+            this.agentConfig = SnmpPeerFactory.getInstance().getAgentConfig(this.agentConfig.getAddress(), location);
         }
 
 

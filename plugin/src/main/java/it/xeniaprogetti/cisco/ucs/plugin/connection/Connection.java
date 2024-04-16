@@ -56,6 +56,7 @@ public interface Connection {
      */
     String getLocation();
 
+    void setLocation(String location);
 
     /**
      * Save the altered connection config in the underlying store.
