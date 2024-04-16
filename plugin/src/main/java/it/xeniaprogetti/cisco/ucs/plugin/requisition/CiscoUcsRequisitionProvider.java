@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
 
+import it.xeniaprogetti.cisco.ucs.plugin.snmp.CiscoUcsComputeBoardTableTracker;
 import org.opennms.integration.api.v1.config.requisition.Requisition;
 import org.opennms.integration.api.v1.config.requisition.immutables.ImmutableRequisition;
 import org.opennms.integration.api.v1.dao.NodeDao;
@@ -101,7 +102,10 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
         final var requisition = ImmutableRequisition.newBuilder()
                 .setForeignSource(context.request.foreignSource);
 
-        CiscoUcsVmInstanceTableTracker tt = new CiscoUcsVmInstanceTableTracker();
+        CiscoUcsVmInstanceTableTracker vmInstanceTableTracker = new CiscoUcsVmInstanceTableTracker();
+        CiscoUcsComputeBoardTableTracker computeBoardTableTracker = new CiscoUcsComputeBoardTableTracker();
+
+
 
         return requisition.build();
     }

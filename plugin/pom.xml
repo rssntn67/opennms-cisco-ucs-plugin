@@ -73,7 +73,7 @@
         </dependency>
         <dependency>
             <groupId>org.opennms</groupId>
-            <artifactId>opennms-config-api</artifactId>
+            <artifactId>opennms-config</artifactId>
         </dependency>
 
         <dependency>
