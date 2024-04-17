@@ -1,4 +1,3 @@
-1.3.6.1.4.1.9.9.719.1.9.6.1.1	cucsComputeBoardInstanceId	0	0	Instance identifier of the managed object.
 1.3.6.1.4.1.9.9.719.1.9.6.1.2	cucsComputeBoardDn	0	0	Cisco UCS compute:Board:dn managed object property
 1.3.6.1.4.1.9.9.719.1.9.6.1.3	cucsComputeBoardRn	0	0	Cisco UCS compute:Board:rn managed object property
 1.3.6.1.4.1.9.9.719.1.9.6.1.4	cucsComputeBoardCmosVoltage	0	0	Cisco UCS compute:Board:cmosVoltage managed object property
