@@ -133,7 +133,7 @@ public class ConnectionManager {
     public Optional<ConnectionValidationError> validate(Connection connection) {
         SnmpAgentConfig agentConfig = ((ConnectionImpl) connection).agentConfig;
         var result = locationAwareSnmpClient.get(agentConfig, SnmpObjId.get("1.3.6.1.2.1.1.0")).execute();
-        boolean validated = false;
+        boolean validated;
         try {
             validated = result.get().toDisplayString().startsWith("1.3.6.1.4.1.9.12");
         } catch (InterruptedException | ExecutionException e) {
