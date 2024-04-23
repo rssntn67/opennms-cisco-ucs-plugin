@@ -23,7 +23,7 @@
         <argument ref="nodeDao"/>
     </bean>
     <!-- Build our API client -->
-    <bean id="apiClient" class="it.xeniaprogetti.cisco.ucs.plugin.ApiClient">
+    <bean id="apiClient" class="it.xeniaprogetti.cisco.ucs.plugin.client.impl.ApiClient">
         <argument value="${url}"/>
         <argument value="${apiKey}"/>
     </bean>

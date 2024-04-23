@@ -1,9 +1,8 @@
-package it.xeniaprogetti.cisco.ucs.plugin;
+package it.xeniaprogetti.cisco.ucs.plugin.client.impl;
 
 import it.xeniaprogetti.cisco.ucs.plugin.client.ApiClientCredentials;
 import org.junit.Test;
 
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 public class ApiClientTest {

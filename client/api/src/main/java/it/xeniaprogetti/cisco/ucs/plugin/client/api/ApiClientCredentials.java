@@ -1,4 +1,4 @@
-package it.xeniaprogetti.cisco.ucs.plugin.client;
+package it.xeniaprogetti.cisco.ucs.plugin.client.api;
 
 import java.util.Objects;
 

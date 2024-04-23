@@ -1,4 +1,4 @@
-package it.xeniaprogetti.cisco.ucs.plugin;
+package it.xeniaprogetti.cisco.ucs.plugin.client.impl;
 
 import java.io.IOException;
 import java.security.KeyManagementException;
@@ -12,7 +12,6 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import it.xeniaprogetti.cisco.ucs.plugin.client.ApiClientCredentials;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import okhttp3.Call;
 import okhttp3.Callback;
