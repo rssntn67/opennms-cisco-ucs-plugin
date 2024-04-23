@@ -8,7 +8,7 @@
         <version>0.1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>opennms-cisco-ucs-plugin-client-impl</artifactId>
+    <artifactId>cisco-ucs-plugin-client-impl</artifactId>
     <name>OpenNMS :: Plugins :: Cisco UCS :: Client :: Impl</name>
     <packaging>bundle</packaging>
 
@@ -20,7 +20,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Export-Package>it.xeniaprogetti.cisco.ucs.client.impl.*</Export-Package>
+                        <Export-Package>it.xeniaprogetti.cisco.ucs.plugin.client.impl.*</Export-Package>
                     </instructions>
                 </configuration>
             </plugin>
