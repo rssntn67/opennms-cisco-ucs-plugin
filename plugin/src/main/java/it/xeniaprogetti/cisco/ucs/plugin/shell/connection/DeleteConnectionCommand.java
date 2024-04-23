@@ -9,9 +9,7 @@ import org.apache.karaf.shell.api.action.Completion;
 import org.apache.karaf.shell.api.action.lifecycle.Reference;
 import org.apache.karaf.shell.api.action.lifecycle.Service;
 
-import java.net.UnknownHostException;
-
-@Command(scope = "opennms-cisco-ucs", name = "connection-delete", description = "Delete a connection", detailedDescription = "Deletes Cisco UCS Manager connection ")
+@Command(scope = "opennms-cucs", name = "connection-delete", description = "Delete a connection", detailedDescription = "Deletes a connection for Cisco UCS Manager XML API")
 @Service
 public class DeleteConnectionCommand implements Action {
 
@@ -23,7 +21,7 @@ public class DeleteConnectionCommand implements Action {
     public String alias = null;
 
     @Override
-    public Object execute() throws UnknownHostException {
+    public Object execute() {
         if (this.connectionManager.deleteConnection(alias)) {
             System.out.println("Connection deleted");
         } else {

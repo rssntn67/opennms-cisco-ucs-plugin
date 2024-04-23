@@ -2,43 +2,37 @@ package it.xeniaprogetti.cisco.ucs.plugin.connection;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;
+import it.xeniaprogetti.cisco.ucs.plugin.client.ApiClientCredentials;
 import org.opennms.integration.api.v1.runtime.Container;
 import org.opennms.integration.api.v1.runtime.RuntimeInfo;
 import org.opennms.integration.api.v1.scv.Credentials;
 import org.opennms.integration.api.v1.scv.SecureCredentialsVault;
 import org.opennms.integration.api.v1.scv.immutables.ImmutableCredentials;
-import org.opennms.netmgt.config.SnmpPeerFactory;
-import org.opennms.netmgt.snmp.SnmpAgentConfig;
-import org.opennms.netmgt.snmp.SnmpObjId;
-import org.opennms.netmgt.snmp.proxy.LocationAwareSnmpClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.*;
-import java.util.concurrent.ExecutionException;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.Map;
+import java.util.HashMap;
+
 import java.util.stream.Collectors;
 
 public class ConnectionManager {
 
-    private static final String PREFIX = "cisco_ucs_connection_";
-    public static final String ADDRESS_KEY = "address";
-    public static final String LOCATION_KEY = "location";
+    private static final String PREFIX = "cucs_connection_";
+    public static final String CUSCM_URL_KEY = "cucsUrl";
+    public static final String IGNORE_SSL_CERTIFICATE_VALIDATION_KEY = "ignoreSslCertificateValidation";
 
-    private static final Logger LOG = LoggerFactory.getLogger(ConnectionManager.class);
+    public static final String ALIAS_KEY = "alias";
 
     private final RuntimeInfo runtimeInfo;
 
     private final SecureCredentialsVault vault;
-    private final LocationAwareSnmpClient locationAwareSnmpClient;
 
     public ConnectionManager(final RuntimeInfo runtimeInfo,
-                             final SecureCredentialsVault vault,
-                             LocationAwareSnmpClient locationAwareSnmpClient) {
+                             final SecureCredentialsVault vault) {
         this.runtimeInfo = Objects.requireNonNull(runtimeInfo);
         this.vault = Objects.requireNonNull(vault);
-        this.locationAwareSnmpClient = locationAwareSnmpClient;
     }
 
     /**
@@ -61,34 +55,35 @@ public class ConnectionManager {
      * @param alias the alias of the connection config to retrieve
      * @return The connection config or {@code Optional#empty()} of no such alias exists
      */
-    public Optional<Connection> getConnection(final String alias) throws UnknownHostException {
+    public Optional<Connection> getConnection(final String alias) {
         this.ensureCore();
 
         final var credentials = this.vault.getCredentials(PREFIX + alias.toLowerCase());
         if (credentials == null) {
             return Optional.empty();
         }
-        ConnectionImpl conn = new ConnectionImpl(alias, fromStore(credentials), credentials.getAttribute(LOCATION_KEY));
+        ConnectionImpl conn = new ConnectionImpl(alias, fromStore(credentials));
         return Optional.of(conn);
     }
 
     /**
-     * Creates authentication connection under the given alias.
+     * Creates a basic authentication connection under the given alias.
      *
      * @param alias           the alias of the connection to add
-     * @param inetAddress        the inet address of the cisco ucs manager
+     * @param url        the URL of the prism server
      * @param username          the username to authenticate the connection
      * @param password          the password to authenticate the connection
-     * @param location          the location
-     *
+     * @param ignoreSslCerticateValidation          ignore Ssl Certificate Validation
      */
-    public Connection newConnection(final String alias, final InetAddress inetAddress, final String username, final String password, final String location) {
+    public Connection newConnection(final String alias, final String url, final String username, final String password, final boolean ignoreSslCerticateValidation) {
         this.ensureCore();
 
-        SnmpAgentConfig credentials = SnmpPeerFactory.getInstance().getAgentConfig(inetAddress,location);
-        credentials.setSecurityName(username);
-        credentials.setAuthPassPhrase(password);
-        return new ConnectionImpl(alias, credentials,location);
+        return new ConnectionImpl(alias, ApiClientCredentials.builder()
+                .withUrl(url)
+                .withUsername(username)
+                .withPassword(password)
+                .withIgnoreSslCertificateValidation(ignoreSslCerticateValidation)
+                .build());
     }
 
     /**
@@ -98,7 +93,7 @@ public class ConnectionManager {
      * @return <b>true</b> if an existing connection with given alias was found and deleted and <b>false</b> if no
      * connection with given alias was not found
      */
-    public boolean deleteConnection(final String alias) throws UnknownHostException {
+    public boolean deleteConnection(final String alias) {
         this.ensureCore();
 
         final var connection = this.getConnection(alias);
@@ -109,7 +104,8 @@ public class ConnectionManager {
         return true;
     }
 
-    private static SnmpAgentConfig fromStore(final Credentials credentials) throws UnknownHostException {
+    private static ApiClientCredentials fromStore(final Credentials credentials) {
+
 
         if (Strings.isNullOrEmpty(credentials.getPassword())) {
             throw new IllegalStateException("API password is missing");
@@ -118,46 +114,50 @@ public class ConnectionManager {
             throw new IllegalStateException("API username is missing");
         }
 
-        final var inetAddress = InetAddress.getByName(credentials.getAttribute(ADDRESS_KEY));
+        if (Strings.isNullOrEmpty(credentials.getAttribute(CUSCM_URL_KEY))) {
+            throw new IllegalStateException("Prism URL is missing");
+        }
+
+        if (Strings.isNullOrEmpty(credentials.getAttribute(IGNORE_SSL_CERTIFICATE_VALIDATION_KEY))) {
+            throw new IllegalStateException("Ignore  SSL CERTIFICATION Validation is missing");
+        }
+
+
+        final var prismUrl = credentials.getAttribute(CUSCM_URL_KEY);
 
         final var username = credentials.getUsername();
         final var password = credentials.getPassword();
-        final var location = credentials.getAttribute(LOCATION_KEY);
+        final var ignoreSslCertificateValidation = Boolean.parseBoolean(credentials.getAttribute(IGNORE_SSL_CERTIFICATE_VALIDATION_KEY));
 
-        SnmpAgentConfig agentConfig =  SnmpPeerFactory.getInstance().getAgentConfig(inetAddress, location);
-        agentConfig.setSecurityName(username);
-        agentConfig.setAuthPassPhrase(password);
-        return agentConfig;
-    }
-
-    public Optional<ConnectionValidationError> validate(Connection connection) {
-        SnmpAgentConfig agentConfig = ((ConnectionImpl) connection).agentConfig;
-        var result = locationAwareSnmpClient.get(agentConfig, SnmpObjId.get("1.3.6.1.2.1.1.0")).execute();
-        boolean validated;
-        try {
-            validated = result.get().toDisplayString().startsWith("1.3.6.1.4.1.9.12");
-        } catch (InterruptedException | ExecutionException e) {
-            return Optional.of(new ConnectionValidationError("Connection could not be validated: " + e.getMessage()));
+        return ApiClientCredentials.builder()
+                .withUrl(prismUrl)
+                .withUsername(username)
+                .withPassword(password)
+                .withIgnoreSslCertificateValidation(ignoreSslCertificateValidation)
+                .build();
         }
-        LOG.info("validate: {},  {}", connection.getAlias(), validated);
-        if (validated) {
-            return Optional.empty();
-        }
-        return Optional.of(new ConnectionValidationError("Connection credential errors"));
-    }
-
 
 
     private class ConnectionImpl implements Connection {
         private final String alias;
-        private String location;
 
-        private SnmpAgentConfig agentConfig;
+        private ApiClientCredentials credentials;
 
-        private ConnectionImpl(final String alias, final SnmpAgentConfig agentConfig, String location) {
+        private ConnectionImpl(final String alias, final ApiClientCredentials credentials) {
             this.alias = Objects.requireNonNull(alias).toLowerCase();
-            this.agentConfig = Objects.requireNonNull(agentConfig);
-            this.location = location;
+            this.credentials = Objects.requireNonNull(credentials);
+        }
+
+        @Override
+        public boolean isIgnoreSslCertificateValidation() {
+            return this.credentials.ignoreSslCertificateValidation;
+        }
+
+        @Override
+        public void setIgnoreSslCertificateValidation(boolean ignoreSslCertificateValidation) {
+            this.credentials = ApiClientCredentials.builder(this.credentials)
+                    .withIgnoreSslCertificateValidation(ignoreSslCertificateValidation)
+                    .build();
         }
 
         @Override
@@ -166,49 +166,44 @@ public class ConnectionManager {
         }
 
         @Override
-        public InetAddress getCiscoUcsInetAddress() {
-            return agentConfig.getAddress();
+        public String getUrl() {
+            return this.credentials.url;
         }
 
         @Override
-        public void setCiscoUcsInetAddress(InetAddress inetAddress) {
-            agentConfig.setAddress(inetAddress);
+        public void setUrl(final String url) {
+            this.credentials = ApiClientCredentials.builder()
+                                                            .withUrl(url)
+                                                            .build();
         }
-
         @Override
         public String getUsername() {
-            return this.agentConfig.getSecurityName();
+            return this.credentials.username;
         }
 
         @Override
         public void setUsername(final String username) {
-            this.agentConfig.setSecurityName(username);
+            this.credentials = ApiClientCredentials.builder(this.credentials)
+                    .withUsername(username)
+                    .build();
         }
 
         @Override
         public String getPassword() {
-            return this.agentConfig.getAuthPassPhrase();
+            return this.credentials.password;
         }
 
         @Override
         public void setPassword(final String password) {
-            this.agentConfig.setAuthPassPhrase(password);
-        }
-
-        @Override
-        public String getLocation() {
-            return this.location;
-        }
-
-        @Override
-        public void setLocation(String location) {
-            this.location = location;
-            this.agentConfig = SnmpPeerFactory.getInstance().getAgentConfig(this.agentConfig.getAddress(), location);
+            this.credentials = ApiClientCredentials.builder(this.credentials)
+                    .withPassword(password)
+                    .build();
         }
 
 
         @Override
         public void save() {
+            // Purge cached client with old credentials
             ConnectionManager.this.vault.setCredentials(PREFIX + this.alias, this.asCredentials());
         }
 
@@ -217,21 +212,21 @@ public class ConnectionManager {
             ConnectionManager.this.vault.deleteCredentials(PREFIX + this.alias);
         }
 
-
         private Credentials asCredentials() {
             Map<String,String> credentialMap = new HashMap<>();
-            credentialMap.put(ADDRESS_KEY, this.agentConfig.getAddress().getHostAddress());
-            credentialMap.put(LOCATION_KEY, this.location);
-            return new ImmutableCredentials(this.agentConfig.getSecurityName(), this.agentConfig.getAuthPassPhrase(), credentialMap);
+            credentialMap.put(CUSCM_URL_KEY, this.credentials.url);
+            credentialMap.put(IGNORE_SSL_CERTIFICATE_VALIDATION_KEY, String.valueOf(this.credentials.ignoreSslCertificateValidation));
+            return new ImmutableCredentials(this.credentials.username, this.credentials.password, credentialMap);
         }
 
         @Override
         public String toString() {
             return MoreObjects.toStringHelper(this)
                               .add("alias", this.alias)
-                              .add(ADDRESS_KEY, this.agentConfig.getAddress().getHostAddress())
-                              .add("agentConfig", this.agentConfig)
-                              .add(LOCATION_KEY, this.location)
+                              .add(CUSCM_URL_KEY, this.credentials.url)
+                              .add("username", this.credentials.username)
+                              .add("password", "******")
+                              .add(IGNORE_SSL_CERTIFICATE_VALIDATION_KEY, this.credentials.ignoreSslCertificateValidation)
                         .toString();
         }
     }

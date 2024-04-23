@@ -8,23 +8,19 @@
     <!-- Configuration stored in $OPENNMS_HOME/etc/it.xeniaprogetti.cisco.ucs.plugin.cfg file -->
     <cm:property-placeholder id="cisco-ucsPluginProperties" persistent-id="it.xeniaprogetti.cisco.ucs.plugin" update-strategy="reload">
         <cm:default-properties>
-            <cm:property name="url" value="http://127.0.0.1:8888/target" />
-            <cm:property name="apiKey" value="TOKEN" />
+            <cm:property name="events.delay" value="300000" />
+            <cm:property name="events.retrieve.days" value="3" />
         </cm:default-properties>
     </cm:property-placeholder>
 
+    <reference id="nodeDao" interface="org.opennms.integration.api.v1.dao.NodeDao" availability="optional"/>
+    <reference id="clientProvider" interface="org.opennms.nutanix.client.api.V3ClientProvider" />
+
     <!-- Pull in service implementations from the OSGi registry -->
-    <reference id="alarmDao" interface="org.opennms.integration.api.v1.dao.AlarmDao" availability="optional"/>
-    <reference id="edgeDao" interface="org.opennms.integration.api.v1.dao.EdgeDao" availability="optional"/>
-    <reference id="eventForwarder" interface="org.opennms.integration.api.v1.events.EventForwarder" availability="optional"/>
-    <reference id="locationAwareSnmpClient" interface="org.opennms.netmgt.snmp.proxy.LocationAwareSnmpClient" availability="optional"/>
-    <reference id="snmpPeerFactory" interface="org.opennms.netmgt.config.api.SnmpAgentConfigFactory" availability="optional"/>
 
     <!-- Build Cisco UCS Manager Requisition Interface -->
     <bean id="ciscoUcsRequisitionProvider" class="it.xeniaprogetti.cisco.ucs.plugin.requisition.CiscoUcsRequisitionProvider">
         <argument ref="nodeDao"/>
-        <argument ref="locationAwareSnmpClient"/>
-        <argument ref="snmpPeerFactory"/>
     </bean>
     <!-- Build our API client -->
     <bean id="apiClient" class="it.xeniaprogetti.cisco.ucs.plugin.ApiClient">

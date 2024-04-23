@@ -1,2 +1,4 @@
-package it.xeniaprogetti.cisco.ucs.plugin.model;public class AaaLogin {
+package it.xeniaprogetti.cisco.ucs.plugin.model;
+
+public class AaaLogin {
 }

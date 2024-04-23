@@ -1,17 +1,15 @@
-package org.opennms.nutanix.client.api;
+package it.xeniaprogetti.cisco.ucs.plugin.client;
 
 import java.util.Objects;
 
-import com.google.common.base.MoreObjects;
-
 /**
- * Credentials for a Nutanix API connection.
+ * Credentials for a Cisco Ucs Manager XML API connection.
  */
 public class ApiClientCredentials {
     /**
-     * The URL of the Nutanix orchestrator.
+     * The URL of the Cisco Ucs Manager XML orchestrator.
      */
-    public final String prismUrl;
+    public final String url;
 
     /**
      * The username used to authenticate the connection to the PRISM ELEMENT.
@@ -28,30 +26,26 @@ public class ApiClientCredentials {
      */
     public final Boolean ignoreSslCertificateValidation;
 
-    public final Integer length;
-
     private ApiClientCredentials(final Builder builder) {
-        this.prismUrl = Objects.requireNonNull(builder.prismUrl);
+        this.url = Objects.requireNonNull(builder.url);
         this.username = builder.username;
         this.password = builder.password;
         this.ignoreSslCertificateValidation = builder.ignoreSslCertificateValidation;
-        this.length = builder.length;
     }
 
     public static class Builder {
-        private String prismUrl;
+        private String url;
         private String username;
         private String password;
 
         private boolean ignoreSslCertificateValidation = false;
 
-        private int length = 20;
 
         private Builder() {
         }
 
-        public Builder withPrismUrl(final String orchestratorUrl) {
-            this.prismUrl = orchestratorUrl;
+        public Builder withUrl(final String url) {
+            this.url = url;
             return this;
         }
 
@@ -71,11 +65,6 @@ public class ApiClientCredentials {
             return this;
         }
 
-        public Builder withLength(final int length){
-            this.length=length;
-            return this;
-        }
-
         public ApiClientCredentials build() {
             return new ApiClientCredentials(this);
         }
@@ -87,23 +76,21 @@ public class ApiClientCredentials {
 
     public static Builder builder(ApiClientCredentials credentials) {
         return builder()
-                .withPrismUrl(credentials.prismUrl)
+                .withUrl(credentials.url)
                 .withUsername(credentials.username)
                 .withPassword(credentials.password)
-                .withIgnoreSslCertificateValidation(credentials.ignoreSslCertificateValidation)
-                .withLength(credentials.length);
+                .withIgnoreSslCertificateValidation(credentials.ignoreSslCertificateValidation);
 
     }
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("prismUrl", this.prismUrl)
-                .add("username", this.username)
-                .add("password", "*****")
-                .add("ignoreSslCertificateValidation", this.ignoreSslCertificateValidation)
-                .add("length", this.length)
-                .toString();
+        return "ApiClientCredentials{" +
+                "url='" + url + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + "****" + '\'' +
+                ", ignoreSslCertificateValidation=" + ignoreSslCertificateValidation +
+                '}';
     }
 
     @Override
@@ -115,7 +102,7 @@ public class ApiClientCredentials {
             return false;
         }
         final ApiClientCredentials that = (ApiClientCredentials) o;
-        return Objects.equals(this.prismUrl, that.prismUrl) &&
+        return Objects.equals(this.url, that.url) &&
                 Objects.equals(this.username, that.username) &&
                 Objects.equals(this.password, that.password) &&
                 Objects.equals(this.ignoreSslCertificateValidation, that.ignoreSslCertificateValidation);
@@ -124,7 +111,7 @@ public class ApiClientCredentials {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.prismUrl,
+        return Objects.hash(this.url,
                  this.username, this.password, this.ignoreSslCertificateValidation);
     }
 

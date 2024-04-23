@@ -1,17 +1,13 @@
 
-package org.opennms.nutanix.clients;
+package it.xeniaprogetti.cisco.ucs.plugin.client;
+
+import it.xeniaprogetti.cisco.ucs.plugin.connection.Connection;
+import it.xeniaprogetti.cisco.ucs.plugin.connection.ConnectionValidationError;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 import java.util.Optional;
-
-import org.opennms.nutanix.client.api.ApiClientCredentials;
-import org.opennms.nutanix.client.api.ApiClientProvider;
-import org.opennms.nutanix.client.api.ApiClientService;
-import org.opennms.nutanix.client.api.NutanixApiException;
-import org.opennms.nutanix.connections.Connection;
-import org.opennms.nutanix.connections.ConnectionValidationError;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class ClientManager {
     private static final Logger LOG = LoggerFactory.getLogger(ClientManager.class);
@@ -22,8 +18,8 @@ public class ClientManager {
         clientProvider = Objects.requireNonNull(provider);
     }
     public Optional<ConnectionValidationError> validate(Connection connection) {
-        boolean validated = clientProvider.validate(asNutanixCredentials(connection));
-        LOG.info("validate: {}, version {} - {}", connection.getAlias(), clientProvider.getApiVersion().version,validated);
+        boolean validated = clientProvider.validate(asApiClientCredentials(connection));
+        LOG.info("validate: {} -> {}", connection.getAlias(), validated);
         if (validated) {
             return Optional.empty();
         }
@@ -31,17 +27,16 @@ public class ClientManager {
     }
 
 
-    public ApiClientService getClient(Connection connection) throws NutanixApiException{
-        return clientProvider.client(asNutanixCredentials(connection));
+    public ApiClientService getClient(Connection connection) {
+        return clientProvider.client(asApiClientCredentials(connection));
     }
 
-    private static ApiClientCredentials asNutanixCredentials(Connection connection) {
+    private static ApiClientCredentials asApiClientCredentials(Connection connection) {
         return ApiClientCredentials.builder()
                 .withUsername(connection.getUsername())
                 .withPassword(connection.getPassword())
-                .withPrismUrl(connection.getPrismUrl())
+                .withUrl(connection.getUrl())
                 .withIgnoreSslCertificateValidation(connection.isIgnoreSslCertificateValidation())
-                .withLength(connection.getLength())
                 .build();
     }
 

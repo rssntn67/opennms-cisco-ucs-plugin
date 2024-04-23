@@ -1,5 +1,6 @@
 package it.xeniaprogetti.cisco.ucs.plugin.shell.connection;
 
+import it.xeniaprogetti.cisco.ucs.plugin.client.ClientManager;
 import it.xeniaprogetti.cisco.ucs.plugin.connection.ConnectionManager;
 import org.apache.karaf.shell.api.action.Action;
 import org.apache.karaf.shell.api.action.Argument;
@@ -8,32 +9,34 @@ import org.apache.karaf.shell.api.action.Option;
 import org.apache.karaf.shell.api.action.lifecycle.Reference;
 import org.apache.karaf.shell.api.action.lifecycle.Service;
 
-import java.net.InetAddress;
-
-@Command(scope = "opennms-cisco-ucs", name = "connection-edit", description = "Edit a connection", detailedDescription = "Edit an existing connection to a nutanix prism")
+@Command(scope = "opennms-cucs", name = "connection-edit", description = "Edit a connection", detailedDescription = "Edit an existing connection for Cisco UCS Manger XML API")
 @Service
 public class EditConnectionCommand implements Action {
 
     @Reference
     private ConnectionManager connectionManager;
 
+    @Reference
+    private ClientManager clientManager;
+
     @Option(name="-f", aliases="--force", description="Skip validation and save the connection as-is")
     public boolean skipValidation = false;
+
+    @Option(name = "-i", aliases = "--ignore-ssl-certificate-validation", description = "Ignore ssl certificate validation")
+    boolean ignoreSslCertificateValidation = false;
 
     @Argument(name = "alias", description = "Alias", required = true)
     public String alias = null;
 
-    @Argument(index = 1, name = "address", description = "Cisco UCS address", required = true)
-    public String address = null;
+    @Argument(index = 1, name = "url", description = "Nutanix Prism Url", required = true)
+    public String url = null;
 
-    @Argument(index = 2, name = "username", description = "Cisco UCS Snmp Agent Security Name", required = true)
+    @Argument(index = 2, name = "username", description = "Nutanix Prism API username", required = true)
     public String username = null;
 
-    @Argument(index = 3, name = "password", description = "Cisco UCS Snmp Agent Auth Passphrase", required = true, censor = true)
+    @Argument(index = 3, name = "password", description = "Nutanix Prism API password", required = true, censor = true)
     public String password = null;
 
-    @Argument(index = 4, name = "location", description = "OpenNMS Location")
-    public String location = "Default";
 
     @Override
     public Object execute() throws Exception {
@@ -45,16 +48,16 @@ public class EditConnectionCommand implements Action {
         }
 
 
-        connection.get().setLocation(location);
+        connection.get().setUrl(url);
         connection.get().setUsername(username);
         connection.get().setPassword(password);
-        connection.get().setCiscoUcsInetAddress(InetAddress.getByName(address));
+        connection.get().setIgnoreSslCertificateValidation(ignoreSslCertificateValidation);
 
         System.err.println("updating: " + connection);
 
 
         if (!this.skipValidation) {
-            final var error = connectionManager.validate(connection.get());
+            final var error = clientManager.validate(connection.get());
             if (error.isPresent()) {
                 System.err.println("Failed to validate credentials: " + error.get().message);
                 return null;

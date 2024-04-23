@@ -2,10 +2,11 @@
 package it.xeniaprogetti.cisco.ucs.plugin.connection;
 
 
-import java.net.InetAddress;
-
 public interface Connection {
 
+    boolean isIgnoreSslCertificateValidation();
+
+    void setIgnoreSslCertificateValidation(boolean ignoreSslCertificateValidation);
     /**
      * Returns the alias of the connection.
      * The alias is a unique identifier representing a connection configuration.
@@ -15,48 +16,40 @@ public interface Connection {
     String getAlias();
 
     /**
-     * Returns the ip address of the cisco ucs Manager.
-     * @return the cisco ucs manager ip address
+     * Returns the URL of the orchestrator.
+     * @return the orchestrator URL
      */
-    InetAddress getCiscoUcsInetAddress();
+    String getUrl();
 
     /**
-     * Changes the InetAddress of the cisco UCS Manager.
-     * @param inetAddress  the new InetAddress
+     * Changes the URL of the orchestrator.
+     * @param url the new URL
      */
-    void setCiscoUcsInetAddress(final InetAddress inetAddress);
+    void setUrl(final String url);
 
     /**
-     * Returns the SNMP SecurityName used to authenticate the connection.
+     * Returns the Username used to authenticate the connection.
      * @return the username
      */
     String getUsername();
 
     /**
-     * Changes the SNMP SecurityName used to authenticate the connection.
+     * Changes the API username used to authenticate the connection.
      * @param username username
      */
     void setUsername(final String username);
 
     /**
-     * Returns the Auth password used to authenticate the connection.
+     * Returns the password used to authenticate the connection.
      * @return the password
      */
     String getPassword();
 
     /**
-     * Changes the Auth password used to authenticate the connection.
+     * Changes the API password used to authenticate the connection.
      * @param password password
      */
     void setPassword(final String password);
-
-    /**
-     * Returns the location the connection.
-     * @return the location
-     */
-    String getLocation();
-
-    void setLocation(String location);
 
     /**
      * Save the altered connection config in the underlying store.

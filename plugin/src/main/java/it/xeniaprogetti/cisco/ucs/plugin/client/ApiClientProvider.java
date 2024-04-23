@@ -1,17 +1,13 @@
-package org.opennms.nutanix.client.api;
-
-import org.opennms.nutanix.client.api.model.ApiVersion;
+package it.xeniaprogetti.cisco.ucs.plugin.client;
 
 public interface ApiClientProvider {
     /**
-     * Create a client for a Nutanix partner account.
+     * Create a client for a Cisco UCS Manager XML Api .
      *
      * @param credentials the credentials to use for the client.
      * @return a NutanixApiClient client
      */
     ApiClientService client(final ApiClientCredentials credentials);
-
-    ApiVersion getApiVersion();
 
     boolean validate(final ApiClientCredentials credentials);
 

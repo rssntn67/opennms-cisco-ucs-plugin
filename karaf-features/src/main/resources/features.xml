@@ -4,6 +4,7 @@
     <feature name="opennms-plugins-cisco-ucs" description="OpenNMS :: Plugins :: Cisco UCS" version="${project.version}">
         <feature dependency="true">aries-blueprint</feature>
         <feature dependency="true">shell</feature>
+        <feature version="${guava.version}" dependency="true">guava</feature>
         <feature version="${opennms.api.version}" dependency="true">opennms-integration-api</feature>
         <feature version="${okhttp.version}" dependency="true">okhttp</feature>
         <feature version="${jackson.version}" dependency="true">jackson</feature>
@@ -24,4 +25,10 @@
         <bundle dependency="true">mvn:com.fasterxml.jackson.core/jackson-annotations/${jackson.version}</bundle>
         <bundle dependency="true">mvn:com.fasterxml.jackson.core/jackson-core/${jackson.version}</bundle>
     </feature>
+
+    <feature name="guava" description="guava" version="${guava.version}">
+        <bundle dependency="true">mvn:com.google.guava/guava/${guava.version}</bundle>
+        <bundle dependency="true">mvn:com.google.guava/failureaccess/1.0.1</bundle>
+    </feature>
+
 </features>
