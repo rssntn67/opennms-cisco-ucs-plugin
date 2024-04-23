@@ -49,7 +49,7 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>opennms-cisco-ucs-plugin-client-api</artifactId>
+            <artifactId>cisco-ucs-plugin-client-api</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- XML processing: jackson -->

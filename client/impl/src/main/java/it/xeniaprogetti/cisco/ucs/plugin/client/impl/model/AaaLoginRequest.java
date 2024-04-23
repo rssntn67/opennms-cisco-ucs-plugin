@@ -4,7 +4,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 @JacksonXmlRootElement(localName = "aaaLogin")
-public class AaaLogin {
+public class AaaLoginRequest {
         @JacksonXmlProperty(isAttribute = true)
         private String inName;
         @JacksonXmlProperty(isAttribute = true)

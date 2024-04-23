@@ -1,32 +1,36 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.impl.handler;
 
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
 import okhttp3.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.net.ssl.*;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.util.concurrent.CompletableFuture;
+import java.util.Objects;
 
 public class ApiClient {
 
-    private static final MediaType XML = MediaType.parse("application/soap+xml");
+    private static final Logger LOG = LoggerFactory.getLogger(ApiClient.class);
+    private static final MediaType XML = MediaType.parse("text/xml");
 
     private OkHttpClient client = new OkHttpClient();
-    private final XmlMapper mapper = new XmlMapper();
     /*
      * This is very bad practice and should NOT be used in production.
      */
     private static final TrustManager[] trustAllCerts = new TrustManager[] {
             new X509TrustManager() {
                 @Override
-                public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) {
                 }
 
                 @Override
-                public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) {
                 }
 
                 @Override
@@ -53,71 +57,34 @@ public class ApiClient {
     public static OkHttpClient trustAllSslClient(OkHttpClient client) {
         OkHttpClient.Builder builder = client.newBuilder();
         builder.sslSocketFactory(trustAllSslSocketFactory, (X509TrustManager)trustAllCerts[0]);
-        builder.hostnameVerifier(new HostnameVerifier() {
-            @Override
-            public boolean verify(String hostname, SSLSession session) {
-                return true;
-            }
-        });
+        builder.hostnameVerifier((hostname, session) -> true);
         return builder.build();
     }
 
     public ApiClient() {
     }
 
-    public OkHttpClient getClient() {
-        return client;
-    }
-    public void setClient(OkHttpClient okHttpClient) {
-        this.client = okHttpClient;
+    public void setTrustAllCertsClient() {
+        this.client = trustAllSslClient(this.client);
     }
 
-    public CompletableFuture<ResponseBody> doPost(String url, Object requestBodyPayload) {
-        RequestBody body;
-        try {
-            body = RequestBody.create(XML, mapper.writeValueAsString(requestBodyPayload));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public String doPost(String url, String requestBodyPayload) throws ApiException {
         Request request = new Request.Builder()
                 .url(url)
                 .addHeader("Accept", "*/*")
                 .addHeader("Content-Type", "application/x-www-form-urlencoded")
                 .addHeader("User-Agent", ApiClient.class.getCanonicalName())
-                .post(body)
+                .post(RequestBody.create(XML, requestBodyPayload))
                 .build();
 
-        CompletableFuture<ResponseBody> future = new CompletableFuture<>();
-        client.newCall(request)
-                .enqueue(new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        future.completeExceptionally(e);
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) {
-                        try (response) {
-                            if (!response.isSuccessful()) {
-                                String bodyPayload = "(empty)";
-                                ResponseBody body = response.body();
-                                if (body != null) {
-                                    try {
-                                        bodyPayload = body.string();
-                                    } catch (IOException e) {
-                                        // pass
-                                    }
-                                    body.close();
-                                }
-                                future.completeExceptionally(new Exception("Request failed with response code: "
-                                        + response.code() + " and body: " + bodyPayload));
-                            } else {
-                                future.complete(response.body());
-                            }
-                        }
-                    }
-                });
-        return future;
+        try {
+            try (Response response = client.newCall(request).execute()) {
+                return Objects.requireNonNull(response.body()).string();
+            }
+        } catch (IOException e) {
+            LOG.error("doPost: {}", e.getMessage(), e);
+            throw new ApiException("doPost: {}" + e.getMessage(), e);
+        }
     }
 
 }
