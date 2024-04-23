@@ -91,4 +91,21 @@ public class ApiClientTest {
 
     }
 
+    @Test
+    public void testAaaLoginApi() throws JsonProcessingException, ApiException {
+
+        XmlMapper mapper = new XmlMapper();
+        AaaLoginRequest aaaLogin = new AaaLoginRequest();
+        aaaLogin.setInName("ucspe");
+        aaaLogin.setInPassword("ucspe");
+        ApiClient apiClient = new ApiClient();
+        apiClient.setTrustAllCertsClient();
+        String body = apiClient.doPost("https://10.172.192.15/nuova", mapper.writeValueAsString(aaaLogin));
+        System.out.println(body);
+        AaaLoginResponse aaaLoginResponse = mapper.readValue(body, AaaLoginResponse.class);
+
+        System.out.println(aaaLoginResponse.outCookie);
+
+    }
+
 }
