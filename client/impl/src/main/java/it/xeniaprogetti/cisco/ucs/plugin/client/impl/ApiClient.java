@@ -9,7 +9,7 @@ import java.util.concurrent.CompletableFuture;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import it.xeniaprogetti.cisco.ucs.plugin.client.ApiClientCredentials;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientCredentials;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 

@@ -2,7 +2,7 @@ package it.xeniaprogetti.cisco.ucs.plugin.connection;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;
-import it.xeniaprogetti.cisco.ucs.plugin.client.ApiClientCredentials;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientCredentials;
 import org.opennms.integration.api.v1.runtime.Container;
 import org.opennms.integration.api.v1.runtime.RuntimeInfo;
 import org.opennms.integration.api.v1.scv.Credentials;
@@ -23,10 +23,7 @@ public class ConnectionManager {
     public static final String CUSCM_URL_KEY = "cucsUrl";
     public static final String IGNORE_SSL_CERTIFICATE_VALIDATION_KEY = "ignoreSslCertificateValidation";
 
-    public static final String ALIAS_KEY = "alias";
-
     private final RuntimeInfo runtimeInfo;
-
     private final SecureCredentialsVault vault;
 
     public ConnectionManager(final RuntimeInfo runtimeInfo,

@@ -4,6 +4,11 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
 
+import com.google.common.base.Strings;
+import it.xeniaprogetti.cisco.ucs.plugin.client.ClientManager;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientService;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
+import it.xeniaprogetti.cisco.ucs.plugin.connection.ConnectionManager;
 import org.opennms.integration.api.v1.config.requisition.Requisition;
 import org.opennms.integration.api.v1.config.requisition.immutables.ImmutableRequisition;
 import org.opennms.integration.api.v1.dao.NodeDao;
@@ -17,6 +22,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class CiscoUcsRequisitionProvider implements RequisitionProvider {
 
     private final NodeDao nodeDao;
+    private final ConnectionManager connectionManager;
+    private final ClientManager clientManager;
     public final static String TYPE = "cisco-ucs";
 
     private static final Logger LOG = LoggerFactory.getLogger( CiscoUcsRequisitionProvider.class);
@@ -27,16 +34,11 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
     public final static String PARAMETER_ALIAS="alias";
     public final static String PARAMETER_LOCATION="location";
 
-    public final static String PARAMETER_IMPORT_VMS="importVms";
-    public final static String PARAMETER_IMPORT_ALL_VMS="importALLVms";
-    public final static String PARAMETER_IMPORT_HOSTS ="importHosts";
 
-    public final static String PARAMETER_IMPORT_CLUSTERS="importClusters";
-
-    public final static String PARAMETER_MATCH_VM="matchVM";
-
-    public CiscoUcsRequisitionProvider(final NodeDao nodeDao) {
-        this.nodeDao = nodeDao;
+    public CiscoUcsRequisitionProvider(final NodeDao nodeDao, final ConnectionManager connectionManager, final ClientManager clientManager) {
+        this.nodeDao = Objects.requireNonNull(nodeDao);
+        this.connectionManager = Objects.requireNonNull(connectionManager);
+        this.clientManager = Objects.requireNonNull(clientManager);
     }
 
     @Override
@@ -47,31 +49,12 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
     @Override
     public final RequisitionRequest getRequest(final Map<String, String> parameters) {
         final var alias = Objects.requireNonNull(parameters.get(PARAMETER_ALIAS), "Missing requisition parameter: alias");
+        final var location = Objects.requireNonNullElse(parameters.get(PARAMETER_LOCATION), nodeDao.getDefaultLocationName());
 
-        final var request = new Request(alias,"default");
+        final var request = new Request(alias,location);
 
         if (parameters.containsKey(PARAMETER_FOREIGN_SOURCE)) {
             request.foreignSource=parameters.get(PARAMETER_FOREIGN_SOURCE);
-        }
-
-        if (parameters.containsKey(PARAMETER_IMPORT_VMS)) {
-            request.importVms=Boolean.parseBoolean(parameters.get(PARAMETER_IMPORT_VMS));
-        }
-
-        if (parameters.containsKey(PARAMETER_IMPORT_ALL_VMS)) {
-            request.importAllVms=Boolean.parseBoolean(parameters.get(PARAMETER_IMPORT_ALL_VMS));
-        }
-
-        if (parameters.containsKey(PARAMETER_IMPORT_HOSTS)) {
-            request.importHosts=Boolean.parseBoolean(parameters.get(PARAMETER_IMPORT_HOSTS));
-        }
-
-        if (parameters.containsKey(PARAMETER_IMPORT_CLUSTERS)) {
-            request.importClusters=Boolean.parseBoolean(parameters.get(PARAMETER_IMPORT_CLUSTERS));
-        }
-
-        if (parameters.containsKey(PARAMETER_MATCH_VM)) {
-            request.matchVM=parameters.get(PARAMETER_MATCH_VM);
         }
 
         return request;
@@ -92,21 +75,14 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
 
         return requisition.build();
     }
+
     public static class Request implements RequisitionRequest {
 
         private String alias;
-        private boolean importVms = true;
-        private boolean importHosts = true;
-
-        private boolean importClusters = true;
-
-        private boolean importAllVms = false;
 
         private String foreignSource;
 
         private String location;
-
-        private String matchVM;
 
         public Request() {
         }
@@ -125,15 +101,28 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
             this.request = Objects.requireNonNull(request);
         }
 
-        public Request getRequest() {
-            return this.request;
+        public ApiClientService client() throws ApiException {
+            var connection =  connectionManager.getConnection(request.alias);
+            if (connection.isEmpty()) {
+                throw new ApiException("No connection for alias", new NullPointerException("No connection found for "+ request.alias));
+            }
+            if (clientManager.validate(connection.get()).isEmpty()) {
+                LOG.info("Using Default Connection Alias {}", request.alias);
+                return clientManager.getClient(connection.get());
+            }
+            throw new ApiException("Connection for alias is not valid and no pool available", new NullPointerException("Connection is not valid for " + request.alias));
         }
+
         public String getAlias() {
             return this.request.alias;
         }
 
         public String getLocation() {
             return this.request.location;
+        }
+
+        public Request getRequest() {
+            return request;
         }
     }
 

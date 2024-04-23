@@ -1,22 +1,22 @@
-package org.opennms.nutanix.client.api;
+package it.xeniaprogetti.cisco.ucs.plugin.client.api;
 
 import java.util.List;
 import java.util.Map;
 
-public class NutanixApiException extends Exception {
+public class ApiException extends Exception {
 
     private int code = 0;
     private Map<String, List<String>> responseHeaders = null;
     private String responseBody = null;
 
-    public NutanixApiException(String message, Throwable throwable, int code, Map<String, List<String>> responseHeaders, String responseBody) {
+    public ApiException(String message, Throwable throwable, int code, Map<String, List<String>> responseHeaders, String responseBody) {
         super(message, throwable);
         this.code = code;
         this.responseHeaders = responseHeaders;
         this.responseBody = responseBody;
     }
 
-    public NutanixApiException(String message, Throwable throwable) {
+    public ApiException(String message, Throwable throwable) {
         super(message,throwable);
     }
 

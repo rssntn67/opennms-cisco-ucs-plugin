@@ -14,37 +14,30 @@
     </cm:property-placeholder>
 
     <reference id="nodeDao" interface="org.opennms.integration.api.v1.dao.NodeDao" availability="optional"/>
-    <reference id="clientProvider" interface="org.opennms.nutanix.client.api.V3ClientProvider" />
+    <reference id="clientProvider" interface="it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientProvider" />
 
     <!-- Pull in service implementations from the OSGi registry -->
+    <bean id="clientManager" class="it.xeniaprogetti.cisco.ucs.plugin.client.ClientManager">
+        <argument ref="clientProvider"/>
+    </bean>
+    <service ref="clientManager" interface="it.xeniaprogetti.cisco.ucs.plugin.client.ClientManager"/>
+
+    <bean id="connectionManager" class="it.xeniaprogetti.cisco.ucs.plugin.connections.ConnectionManager">
+        <argument>
+            <reference interface="org.opennms.integration.api.v1.runtime.RuntimeInfo" availability="optional"/>
+        </argument>
+        <argument>
+            <reference interface="org.opennms.integration.api.v1.scv.SecureCredentialsVault" availability="optional"/>
+        </argument>
+    </bean>
+    <service ref="connectionManager" interface="org.opennms.nutanix.connections.ConnectionManager"/>
 
     <!-- Build Cisco UCS Manager Requisition Interface -->
     <bean id="ciscoUcsRequisitionProvider" class="it.xeniaprogetti.cisco.ucs.plugin.requisition.CiscoUcsRequisitionProvider">
         <argument ref="nodeDao"/>
+        <argument ref="connectionManager"/>
+        <argument ref="clientProvider"/>
     </bean>
-    <!-- Build our API client -->
-    <bean id="apiClient" class="it.xeniaprogetti.cisco.ucs.plugin.client.impl.ApiClient">
-        <argument value="${url}"/>
-        <argument value="${apiKey}"/>
-    </bean>
-
-    <!-- Build our forwarder bean -->
-    <bean id="alarmForwarder" class="it.xeniaprogetti.cisco.ucs.plugin.AlarmForwarder">
-        <argument ref="apiClient"/>
-        <argument ref="eventForwarder"/>
-    </bean>
-    <!-- Expose the forwarder as a AlarmLifecycleListener so we get callbacks -->
-    <service interface="org.opennms.integration.api.v1.alarms.AlarmLifecycleListener" ref="alarmForwarder"/>
-    <!-- Expose the forwarder directly for access from our shell commands -->
-    <service interface="it.xeniaprogetti.cisco.ucs.plugin.AlarmForwarder" ref="alarmForwarder"/>
-
-    <!-- Build our forwarder bean -->
-    <bean id="topologyForwarder" class="it.xeniaprogetti.cisco.ucs.plugin.TopologyForwarder">
-        <argument ref="apiClient"/>
-        <argument ref="edgeDao"/>
-    </bean>
-    <!-- Expose the forwarder directly for access from our shell commands -->
-    <service interface="it.xeniaprogetti.cisco.ucs.plugin.TopologyForwarder" ref="topologyForwarder"/>
 
     <!-- Build and expose the JAX-RS annotated webhook handler.
          This will automatically mount the endpoint over the REST API. -->

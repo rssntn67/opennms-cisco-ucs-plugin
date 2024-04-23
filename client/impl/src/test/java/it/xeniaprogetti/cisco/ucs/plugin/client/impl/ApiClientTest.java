@@ -1,6 +1,6 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.impl;
 
-import it.xeniaprogetti.cisco.ucs.plugin.client.ApiClientCredentials;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientCredentials;
 import org.junit.Test;
 
 import java.util.concurrent.ExecutionException;

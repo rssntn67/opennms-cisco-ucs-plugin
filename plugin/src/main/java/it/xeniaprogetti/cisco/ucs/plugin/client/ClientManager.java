@@ -1,6 +1,9 @@
 
 package it.xeniaprogetti.cisco.ucs.plugin.client;
 
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientCredentials;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientProvider;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientService;
 import it.xeniaprogetti.cisco.ucs.plugin.connection.Connection;
 import it.xeniaprogetti.cisco.ucs.plugin.connection.ConnectionValidationError;
 import org.slf4j.Logger;
