@@ -28,27 +28,70 @@ public class AaaLoginApi {
         this.client = Objects.requireNonNull(client);
     }
 
-    public AaaLoginResponse login() throws ApiException {
+    public String login() throws ApiException {
         try {
-            return mapper.readValue(client.doPost(this.url, mapper.writeValueAsString(new AaaLoginRequest(this.username,this.password))), AaaLoginResponse.class);
+            AaaLoginResponse response =
+                mapper.readValue(
+                        client.doPost(
+                                this.url,
+                                mapper.writeValueAsString(
+                                        new AaaLoginRequest(this.username,this.password))),
+                        AaaLoginResponse.class);
+            if (response.errorCode > 0) {
+                LOG.error("login failed: with error code: {}, {}", response.errorCode, response);
+                throw new ApiException(
+                        "login: server responded with error: " + response.errorCode
+                        ,new RuntimeException("login error code: " + response.errorCode)
+                        , response.errorCode
+                        , response.toString());
+            }
+            return response.outCookie;
         } catch (JsonProcessingException e) {
-            LOG.error("login: error {}", e.getMessage(), e);
+            LOG.error("login: {}", e.getMessage(), e);
             throw new ApiException("login: " +e.getMessage(),e);
         }
     }
 
-    public AaaRefreshResponse refresh(String token) throws ApiException {
+    public String refresh(String token) throws ApiException {
         try {
-            return mapper.readValue(client.doPost(this.url, mapper.writeValueAsString(new AaaRefreshRequest(this.username,this.password, token))), AaaRefreshResponse.class);
+            AaaRefreshResponse response =
+                mapper.readValue
+                        (
+                            client.doPost(
+                                this.url,
+                                mapper.writeValueAsString(
+                                        new AaaRefreshRequest(this.username,this.password, token)
+                                )
+                        ),
+                        AaaRefreshResponse.class);
+            if (response.errorCode > 0) {
+                LOG.error("refresh failed: with error code: {}, {}", response.errorCode, response);
+                throw new ApiException(
+                        "refresh: server responded with error: {}" + response.errorCode
+                        ,new RuntimeException("refresh error code: " + response.errorCode)
+                        , response.errorCode
+                        , response.toString());
+            }
+            return response.outCookie;
         } catch (JsonProcessingException e) {
             LOG.error("refresh: error {}", e.getMessage(),e);
             throw new ApiException("refresh: " +e.getMessage(),e);
         }
     }
 
-    public AaaLogoutResponse logout(String token) throws ApiException {
+    public void logout(String token) throws ApiException {
         try {
-            return mapper.readValue(client.doPost(this.url, mapper.writeValueAsString(new AaaLogoutRequest(token))), AaaLogoutResponse.class);
+            AaaLogoutResponse response =
+                mapper.readValue(client.doPost(this.url, mapper.writeValueAsString(new AaaLogoutRequest(token))), AaaLogoutResponse.class);
+            if (response.errorCode > 0) {
+                LOG.error("logout failed: with error code: {}, {}", response.errorCode, response);
+                throw new ApiException(
+                        "logout: server responded with error: {}" + response.errorCode
+                        ,new RuntimeException("login error code: " + response.errorCode)
+                        ,200
+                        , response.toString());
+            }
+
         } catch (JsonProcessingException e) {
             LOG.error("logout: error {}", e.getMessage(),e);
             throw new ApiException("logout: " +e.getMessage(),e);

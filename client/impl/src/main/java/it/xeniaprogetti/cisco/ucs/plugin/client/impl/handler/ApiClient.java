@@ -1,11 +1,7 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.impl.handler;
 
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
-import okhttp3.MediaType;
-import okhttp3.Response;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
+import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +12,6 @@ import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Objects;
 
 public class ApiClient {
 
@@ -72,30 +67,37 @@ public class ApiClient {
         this.client = trustAllSslClient(this.client);
     }
 
-    public String doPost(String url, String requestBodyPayload) throws ApiException {
-        LOG.info("doPost: url: {}, xml: {}", url, requestBodyPayload);
+    public String doPost(String url, String requestBody) throws ApiException {
+        LOG.debug("doPost: url: {}, requestBody: {}", url, requestBody);
         Request request = new Request.Builder()
                 .url(url)
                 .addHeader("Accept", "*/*")
                 .addHeader("Content-Type", "application/x-www-form-urlencoded")
                 .addHeader("User-Agent", ApiClient.class.getCanonicalName())
-                .post(RequestBody.create(XML, requestBodyPayload))
+                .post(RequestBody.create(XML, requestBody))
                 .build();
 
         try {
             try (Response response = client.newCall(request).execute()) {
+                LOG.info("doPost: {}", response);
                 if (response.code() != 200) {
-                    LOG.error("doPost: {}", response);
                     if (response.body() != null)
                         throw new ApiException("doPost Error: ", new RuntimeException("cannot execute command"), response.code(), response.headers().toMultimap(),response.body().string());
                     else
                         throw new ApiException("doPost Error: ", new RuntimeException("cannot execute command"), response.code(), response.headers().toMultimap(),"");
                 }
-                return Objects.requireNonNull(response.body()).string();
+                if (response.body() == null) {
+                    LOG.error("doPost : response body is null");
+                    throw new ApiException("doPost Error response body is null: ", new RuntimeException("cannot execute command"), response.code(), response.headers().toMultimap(),"");
+                }
+                String r = response.body().string();
+                LOG.debug("doPost: {}", r);
+
+                return r;
             }
         } catch (IOException e) {
             LOG.error("doPost: {}", e.getMessage(), e);
-            throw new ApiException("doPost: {}" + e.getMessage(), e);
+            throw new ApiException("doPost: " + e.getMessage(), e);
         }
     }
 

@@ -6,6 +6,7 @@ import java.util.Map;
 public class ApiException extends Exception {
 
     private int code = 0;
+    private int errCode = 0;
     private Map<String, List<String>> responseHeaders = null;
     private String responseBody = null;
 
@@ -13,6 +14,13 @@ public class ApiException extends Exception {
         super(message, throwable);
         this.code = code;
         this.responseHeaders = responseHeaders;
+        this.responseBody = responseBody;
+    }
+
+    public ApiException(String message, Throwable throwable, int errCode, String responseBody) {
+        super(message, throwable);
+        this.code = 200;
+        this.errCode = errCode;
         this.responseBody = responseBody;
     }
 
@@ -45,5 +53,9 @@ public class ApiException extends Exception {
      */
     public String getResponseBody() {
         return responseBody;
+    }
+
+    public int getErrCode() {
+        return this.errCode;
     }
 }
