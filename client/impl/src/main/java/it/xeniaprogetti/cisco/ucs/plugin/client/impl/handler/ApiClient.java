@@ -69,6 +69,7 @@ public class ApiClient {
     }
 
     public String doPost(String url, String requestBodyPayload) throws ApiException {
+        LOG.info("doPost: url: {}, xml: {}", url, requestBodyPayload);
         Request request = new Request.Builder()
                 .url(url)
                 .addHeader("Accept", "*/*")
@@ -79,6 +80,13 @@ public class ApiClient {
 
         try {
             try (Response response = client.newCall(request).execute()) {
+                if (response.code() != 200) {
+                    LOG.error("doPost: {}", response);
+                    if (response.body() != null)
+                        throw new ApiException("doPost Error: ", new RuntimeException("cannot execute command"), response.code(), response.headers().toMultimap(),response.body().string());
+                    else
+                        throw new ApiException("doPost Error: ", new RuntimeException("cannot execute command"), response.code(), response.headers().toMultimap(),"");
+                }
                 return Objects.requireNonNull(response.body()).string();
             }
         } catch (IOException e) {

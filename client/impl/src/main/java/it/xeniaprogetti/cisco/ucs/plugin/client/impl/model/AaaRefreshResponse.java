@@ -31,6 +31,13 @@ public class AaaRefreshResponse {
     public String outPasswdExpiryStatus;
     @JacksonXmlProperty(isAttribute = true)
     public int outPasswdExpiryDuration;
+    @JacksonXmlProperty(isAttribute = true)
+    public int errorCode;
+    @JacksonXmlProperty(isAttribute = true)
+    public String errorDescr;
+    @JacksonXmlProperty(isAttribute = true)
+    public String invocationResult;
+
 }
 
 
