@@ -7,6 +7,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.AaaLoginApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.handler.ApiClient;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.AaaLoginRequest;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.ConfigFindDnsByClassIdResponse;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -24,6 +25,17 @@ public class ApiClientTest {
         XmlMapper mapper = new XmlMapper();
         AaaLoginRequest aaaLogin = new AaaLoginRequest("pippo","pluto");
         Assert.assertEquals(xml,mapper.writeValueAsString(aaaLogin));
+    }
+
+    @Test
+    public void canSerializeConfigFindDnsByClassIdToXml() throws JsonProcessingException {
+        XmlMapper mapper = new XmlMapper();
+        String xml="<configFindDnsByClassId cookie=\"1713476816/da9ab72a-49e4-49ed-9a5a-c0e951d00b2f\" response=\"yes\" classId=\"computeItem\"> <outDns> <dn value=\"sys/chassis-3/blade-3\"/> <dn value=\"sys/chassis-4/blade-2\"/> <dn value=\"sys/chassis-3/blade-2\"/> <dn value=\"sys/chassis-4/blade-1\"/> <dn value=\"sys/chassis-3/blade-1\"/> <dn value=\"sys/rack-unit-9\"/> <dn value=\"sys/rack-unit-8\"/> <dn value=\"sys/rack-unit-7\"/> <dn value=\"sys/rack-unit-6\"/> <dn value=\"sys/rack-unit-5\"/> <dn value=\"sys/rack-unit-4\"/> <dn value=\"sys/rack-unit-3\"/> <dn value=\"sys/rack-unit-2\"/> <dn value=\"sys/rack-unit-1\"/> </outDns> </configFindDnsByClassId>";
+        LOG.debug(xml);
+        ConfigFindDnsByClassIdResponse response = mapper.readValue(xml, ConfigFindDnsByClassIdResponse.class);
+        Assert.assertNotNull(response.outDns);
+        LOG.debug(response.toString());
+        Assert.assertEquals(14, response.outDns.size());
     }
 
     @Test
