@@ -21,10 +21,7 @@ public class ApiClientTest {
     public void canSerializeAaaLoginToXml() throws JsonProcessingException {
         String xml = "<aaaLogin inName=\"ucspe\" inPassword=\"ucspe\"/>";
         XmlMapper mapper = new XmlMapper();
-        AaaLoginRequest aaaLogin = new AaaLoginRequest();
-        aaaLogin.setInName("ucspe");
-        aaaLogin.setInPassword("ucspe");
-
+        AaaLoginRequest aaaLogin = new AaaLoginRequest("ucspe","ucspe");
         Assert.assertEquals(xml,mapper.writeValueAsString(aaaLogin));
     }
 
@@ -52,9 +49,7 @@ public class ApiClientTest {
     public void okHttpPostTestWithXmlMapper()  throws IOException {
         MediaType XML = MediaType.parse("text/xml");
         XmlMapper mapper = new XmlMapper();
-        AaaLoginRequest aaaLogin = new AaaLoginRequest();
-        aaaLogin.setInName("ucspe");
-        aaaLogin.setInPassword("ucspe");
+        AaaLoginRequest aaaLogin = new AaaLoginRequest("ucspe","ucspe");
 
         RequestBody requestBody = RequestBody.create(XML,mapper.writeValueAsString(aaaLogin));
 
@@ -78,9 +73,7 @@ public class ApiClientTest {
     @Test
     public void testApiClientLogin() throws JsonProcessingException, ApiException {
         XmlMapper mapper = new XmlMapper();
-        AaaLoginRequest aaaLogin = new AaaLoginRequest();
-        aaaLogin.setInName("ucspe");
-        aaaLogin.setInPassword("ucspe");
+        AaaLoginRequest aaaLogin = new AaaLoginRequest("ucspe","ucspe");
         ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         String body = apiClient.doPost("https://10.172.192.15/nuova", mapper.writeValueAsString(aaaLogin));
@@ -95,9 +88,7 @@ public class ApiClientTest {
     public void testAaaLoginApi() throws JsonProcessingException, ApiException {
 
         XmlMapper mapper = new XmlMapper();
-        AaaLoginRequest aaaLogin = new AaaLoginRequest();
-        aaaLogin.setInName("ucspe");
-        aaaLogin.setInPassword("ucspe");
+        AaaLoginRequest aaaLogin = new AaaLoginRequest("ucspe","ucspe");
         ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         String body = apiClient.doPost("https://10.172.192.15/nuova", mapper.writeValueAsString(aaaLogin));

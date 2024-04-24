@@ -5,48 +5,54 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientCredentials;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.handler.ApiClient;
-import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.AaaLoginRequest;
-import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.AaaLoginResponse;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
 public class AaaLoginApi {
 
-    private final ApiClient client = new ApiClient();
-    private final AaaLoginRequest request;
+    private final Logger LOG = LoggerFactory.getLogger(AaaLoginApi.class);
+    private final ApiClient client;
     private final String url;
+    private final String username;
+    private final String password;
     private final XmlMapper mapper = new XmlMapper();
 
-    public AaaLoginApi(ApiClientCredentials credentials) {
+    public AaaLoginApi(ApiClientCredentials credentials, ApiClient client) {
         Objects.requireNonNull(credentials);
-        this.request = new AaaLoginRequest();
-        this.request.setInName(Objects.requireNonNull(credentials.username));
-        this.request.setInPassword( Objects.requireNonNull(credentials.password));
+        this.username = credentials.username;
+        this.password = Objects.requireNonNull(credentials.password);
         this.url = Objects.requireNonNull(credentials.url);
-        if (credentials.ignoreSslCertificateValidation) {
-            client.setTrustAllCertsClient();
-        }
+        this.client = Objects.requireNonNull(client);
     }
 
-    public AaaLoginResponse getResponse() throws ApiException {
+    public AaaLoginResponse login() throws ApiException {
         try {
-            return mapper.readValue(client.doPost(this.url, mapper.writeValueAsString(this.request)), AaaLoginResponse.class);
+            return mapper.readValue(client.doPost(this.url, mapper.writeValueAsString(new AaaLoginRequest(this.username,this.password))), AaaLoginResponse.class);
         } catch (JsonProcessingException e) {
-            throw new ApiException("getResponse: " +e.getMessage(),e);
+            LOG.error("login: error {}", e.getMessage(), e);
+            throw new ApiException("login: " +e.getMessage(),e);
         }
     }
 
-    public ApiClient getClient() {
-        return this.client;
+    public AaaRefreshResponse refresh(String token) throws ApiException {
+        try {
+            return mapper.readValue(client.doPost(this.url, mapper.writeValueAsString(new AaaRefreshRequest(this.username,this.password, token))), AaaRefreshResponse.class);
+        } catch (JsonProcessingException e) {
+            LOG.error("refresh: error {}", e.getMessage(),e);
+            throw new ApiException("refresh: " +e.getMessage(),e);
+        }
     }
 
-    public XmlMapper getMapper() {
-        return this.mapper;
+    public AaaLogoutResponse logout(String token) throws ApiException {
+        try {
+            return mapper.readValue(client.doPost(this.url, mapper.writeValueAsString(new AaaLogoutRequest(token))), AaaLogoutResponse.class);
+        } catch (JsonProcessingException e) {
+            LOG.error("logout: error {}", e.getMessage(),e);
+            throw new ApiException("logout: " +e.getMessage(),e);
+        }
     }
-    
-    public String getUrl() {
-        return this.url;
-    }
-
 
 }
