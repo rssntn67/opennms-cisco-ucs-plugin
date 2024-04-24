@@ -12,11 +12,13 @@ import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Objects;
 
 public class ApiClient {
 
     private static final Logger LOG = LoggerFactory.getLogger(ApiClient.class);
     private static final MediaType XML = MediaType.parse("text/xml");
+    private final String url;
 
     private OkHttpClient client = new OkHttpClient();
     /*
@@ -60,14 +62,15 @@ public class ApiClient {
         return builder.build();
     }
 
-    public ApiClient() {
+    public ApiClient(String url) {
+        this.url = Objects.requireNonNull(url);
     }
 
     public void setTrustAllCertsClient() {
         this.client = trustAllSslClient(this.client);
     }
 
-    public String doPost(String url, String requestBody) throws ApiException {
+    public String doPost(String requestBody) throws ApiException {
         LOG.debug("doPost: url: {}, requestBody: {}", url, requestBody);
         Request request = new Request.Builder()
                 .url(url)

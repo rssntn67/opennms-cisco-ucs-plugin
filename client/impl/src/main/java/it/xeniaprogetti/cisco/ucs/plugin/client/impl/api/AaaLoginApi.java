@@ -15,7 +15,6 @@ public class AaaLoginApi {
 
     private final Logger LOG = LoggerFactory.getLogger(AaaLoginApi.class);
     private final ApiClient client;
-    private final String url;
     private final String username;
     private final String password;
     private final XmlMapper mapper = new XmlMapper();
@@ -24,7 +23,6 @@ public class AaaLoginApi {
         Objects.requireNonNull(credentials);
         this.username = credentials.username;
         this.password = Objects.requireNonNull(credentials.password);
-        this.url = Objects.requireNonNull(credentials.url);
         this.client = Objects.requireNonNull(client);
     }
 
@@ -33,7 +31,6 @@ public class AaaLoginApi {
             AaaLoginResponse response =
                 mapper.readValue(
                         client.doPost(
-                                this.url,
                                 mapper.writeValueAsString(
                                         new AaaLoginRequest(this.username,this.password))),
                         AaaLoginResponse.class);
@@ -58,7 +55,6 @@ public class AaaLoginApi {
                 mapper.readValue
                         (
                             client.doPost(
-                                this.url,
                                 mapper.writeValueAsString(
                                         new AaaRefreshRequest(this.username,this.password, token)
                                 )
@@ -82,7 +78,7 @@ public class AaaLoginApi {
     public void logout(String token) throws ApiException {
         try {
             AaaLogoutResponse response =
-                mapper.readValue(client.doPost(this.url, mapper.writeValueAsString(new AaaLogoutRequest(token))), AaaLogoutResponse.class);
+                mapper.readValue(client.doPost(mapper.writeValueAsString(new AaaLogoutRequest(token))), AaaLogoutResponse.class);
             if (response.errorCode > 0) {
                 LOG.error("logout failed: with error code: {}, {}", response.errorCode, response);
                 throw new ApiException(

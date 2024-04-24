@@ -12,7 +12,7 @@ public class XmlApiClientService implements ApiClientService {
     private final ApiClientCredentials credentials;
 
     private ApiClient getClient(ApiClientCredentials credentials) {
-        ApiClient apiClient = new ApiClient();
+        ApiClient apiClient = new ApiClient(credentials.url);
         if (credentials.ignoreSslCertificateValidation) {
             apiClient.setTrustAllCertsClient();
         }

@@ -6,9 +6,14 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 @JacksonXmlRootElement(localName = "configFindDnsByClassId")
 public class ConfigFindDnsByClassIdRequest {
     @JacksonXmlProperty(isAttribute = true)
-    public String classId;
+    private final String classId;
     @JacksonXmlProperty(isAttribute = true)
-    public String cookie;
+    private final String cookie;
+
+    public ConfigFindDnsByClassIdRequest(String classId, String cookie) {
+        this.classId = classId;
+        this.cookie = cookie;
+    }
 
     @Override
     public String toString() {

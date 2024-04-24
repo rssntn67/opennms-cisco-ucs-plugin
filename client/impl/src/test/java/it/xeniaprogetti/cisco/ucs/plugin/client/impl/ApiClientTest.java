@@ -5,6 +5,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientCredentials;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.AaaLoginApi;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.ConfigFindDnsByClassIdApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.handler.ApiClient;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.AaaLoginRequest;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.ConfigFindDnsByClassIdResponse;
@@ -13,9 +14,20 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 public class ApiClientTest {
 
     private final Logger LOG = LoggerFactory.getLogger(ApiClientTest.class);
+
+    private ApiClientCredentials getCredentials() {
+        return ApiClientCredentials.builder()
+                .withUrl("https://10.172.192.15/nuova")
+                .withUsername("pippo")
+                .withPassword("pluto")
+                .withIgnoreSslCertificateValidation(true)
+                .build();
+    }
     /**
      * Verifies that the object is serialized to XML as expected.
      */
@@ -40,13 +52,8 @@ public class ApiClientTest {
 
     @Test
     public void testAaaLoginApi() {
-        ApiClientCredentials credentials = ApiClientCredentials.builder()
-                .withUrl("https://10.172.192.15/nuova")
-                .withUsername("pippo")
-                .withPassword("pluto")
-                .withIgnoreSslCertificateValidation(true)
-                .build();
-        ApiClient apiClient = new ApiClient();
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
         apiClient.setTrustAllCertsClient();
         AaaLoginApi loginApi = new AaaLoginApi(credentials,apiClient);
         String aaaLoginResponse = null;
@@ -79,7 +86,7 @@ public class ApiClientTest {
                 .withPassword("pluto")
                 .withIgnoreSslCertificateValidation(true)
                 .build();
-        ApiClient apiClient = new ApiClient();
+        ApiClient apiClient = new ApiClient(credentials.url);
         apiClient.setTrustAllCertsClient();
         AaaLoginApi loginApi = new AaaLoginApi(credentials,apiClient);
         try {
@@ -97,13 +104,8 @@ public class ApiClientTest {
     @Test
     public void testApiClientLoginApiWithErrorCode()  {
 
-        ApiClientCredentials credentials = ApiClientCredentials.builder()
-                .withUrl("https://10.172.192.15/nuova")
-                .withUsername("pippo")
-                .withPassword("pluto")
-                .withIgnoreSslCertificateValidation(true)
-                .build();
-        ApiClient apiClient = new ApiClient();
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
         apiClient.setTrustAllCertsClient();
         AaaLoginApi loginApi = new AaaLoginApi(credentials,apiClient);
         String token = null;
@@ -139,5 +141,20 @@ public class ApiClientTest {
 
     }
 
+    @Test
+    public void testApiClientDnsFindByClassIdApi() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaLoginApi loginApi = new AaaLoginApi(credentials,apiClient);
+        String token = loginApi.login();
+        ConfigFindDnsByClassIdApi api = new ConfigFindDnsByClassIdApi(apiClient);
+        List<String> equipments = api.getDnByClassId(token, ConfigFindDnsByClassIdApi.Item.equipmentItem);
+        List<String> computes = api.getDnByClassId(token, ConfigFindDnsByClassIdApi.Item.computeItem);
+        LOG.debug(equipments.toString());
+        LOG.debug(computes.toString());
 
-}
+    }
+
+
+    }
