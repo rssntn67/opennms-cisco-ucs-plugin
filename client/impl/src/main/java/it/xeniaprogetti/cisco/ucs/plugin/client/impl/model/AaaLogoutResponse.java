@@ -17,4 +17,17 @@ public class AaaLogoutResponse {
     public String errorDescr;
     @JacksonXmlProperty(isAttribute = true)
     public String invocationResult;
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("AaaLogoutResponse{");
+        sb.append("cookie='").append(cookie).append('\'');
+        sb.append(", response='").append(response).append('\'');
+        sb.append(", outStatus='").append(outStatus).append('\'');
+        sb.append(", errorCode=").append(errorCode);
+        sb.append(", errorDescr='").append(errorDescr).append('\'');
+        sb.append(", invocationResult='").append(invocationResult).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

@@ -10,7 +10,13 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.AaaLoginRequest;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.AaaLoginResponse;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.AaaLogoutResponse;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.AaaRefreshResponse;
-import okhttp3.*;
+import okhttp3.MediaType;
+import okhttp3.Response;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Call;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -91,15 +97,23 @@ public class ApiClientTest {
     @Test
     public void testAaaLoginError() throws JsonProcessingException, ApiException {
 
-        XmlMapper mapper = new XmlMapper();
-        AaaLoginRequest aaaLogin = new AaaLoginRequest("pippo","pippo");
+        ApiClientCredentials credentials = ApiClientCredentials.builder()
+                .withUrl("https://10.172.192.15/nuova")
+                .withUsername("pippo")
+                .withPassword("pluto")
+                .withIgnoreSslCertificateValidation(true)
+                .build();
         ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
-        String body = apiClient.doPost("https://10.172.192.15/nuova", mapper.writeValueAsString(aaaLogin));
-        System.out.println(body);
-        AaaLoginResponse aaaLoginResponse = mapper.readValue(body, AaaLoginResponse.class);
-        System.out.println(aaaLoginResponse.outCookie);
-
+        AaaLoginApi loginApi = new AaaLoginApi(credentials,apiClient);
+        AaaLoginResponse aaaLoginResponse = loginApi.login();
+        System.out.println("login cookie: "+aaaLoginResponse.outCookie);
+        String outCookie = new String(aaaLoginResponse.outCookie).replace("0","1");
+        System.out.println("modified cookie: "+outCookie);
+        AaaRefreshResponse aaaRefreshResponse = loginApi.refresh(outCookie);
+        System.out.println("refresh errorCode: " + aaaRefreshResponse.errorCode);
+        AaaLogoutResponse aaaLogoutResponse = loginApi.logout(outCookie);
+        System.out.println("logout errorCode: " + aaaLogoutResponse.errorCode);
     }
 
 
