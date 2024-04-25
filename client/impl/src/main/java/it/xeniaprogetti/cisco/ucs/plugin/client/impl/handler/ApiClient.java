@@ -82,7 +82,7 @@ public class ApiClient {
 
         try {
             try (Response response = client.newCall(request).execute()) {
-                LOG.info("doPost: {}", response);
+                LOG.debug("doPost: {}", response);
                 if (response.code() != 200) {
                     if (response.body() != null)
                         throw new ApiException("doPost Error: ", new RuntimeException("cannot execute command"), response.code(), response.headers().toMultimap(),response.body().string());
@@ -94,7 +94,7 @@ public class ApiClient {
                     throw new ApiException("doPost Error response body is null: ", new RuntimeException("cannot execute command"), response.code(), response.headers().toMultimap(),"");
                 }
                 String r = response.body().string();
-                LOG.debug("doPost: {}", r);
+                LOG.debug("doPost: Body:{}", r);
 
                 return r;
             }

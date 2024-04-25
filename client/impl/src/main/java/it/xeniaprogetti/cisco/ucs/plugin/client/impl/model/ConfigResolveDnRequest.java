@@ -15,9 +15,9 @@ public class ConfigResolveDnRequest {
     @JacksonXmlProperty(isAttribute = true)
     private final boolean inHierarchical;
 
-    public ConfigResolveDnRequest(String dn, String cookie, boolean inHierarchical) {
-        this.dn = dn;
+    public ConfigResolveDnRequest(String cookie, String dn, boolean inHierarchical) {
         this.cookie = cookie;
+        this.dn = dn;
         this.inHierarchical = inHierarchical;
     }
 }

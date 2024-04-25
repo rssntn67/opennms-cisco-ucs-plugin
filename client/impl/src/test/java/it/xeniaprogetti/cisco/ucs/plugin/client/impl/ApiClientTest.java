@@ -6,10 +6,9 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientCredentials;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.AaaLoginApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.ConfigFindDnsByClassIdApi;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.ConfigResolveDnApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.handler.ApiClient;
-import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.AaaLoginRequest;
-import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.ConfigFindDnsByClassIdResponse;
-import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.ConfigResolveDnResponse;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.*;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -216,7 +215,32 @@ public class ApiClientTest {
     }
 
     @Test
-    public void testApiClientDnsFindByClassIdApi() throws ApiException {
+    public void testApiClientConfigResolveClass() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient client = new ApiClient(credentials.url);
+        client.setTrustAllCertsClient();
+        AaaLoginApi loginApi = new AaaLoginApi(credentials,client);
+        String token = loginApi.login();
+        ConfigResolveClassRequest request = new ConfigResolveClassRequest(ConfigResolveClassRequest.ClassId.networkElement,token);
+        System.out.println(client.doPost(request.getRequest()));
+        loginApi.logout(token);
+    }
+
+    @Test
+    public void testApiClientConfigResolveChildren() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient client = new ApiClient(credentials.url);
+        client.setTrustAllCertsClient();
+        AaaLoginApi loginApi = new AaaLoginApi(credentials,client);
+        String token = loginApi.login();
+        ConfigResolveChildrenRequest request =
+                new ConfigResolveChildrenRequest(ConfigResolveClassRequest.ClassId.equipmentChassis,"sys",token);
+        System.out.println(client.doPost(request.getRequest()));
+        loginApi.logout(token);
+    }
+
+    @Test
+    public void testApiClientApiEquipment() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
         ApiClient apiClient = new ApiClient(credentials.url);
         apiClient.setTrustAllCertsClient();
@@ -224,11 +248,27 @@ public class ApiClientTest {
         String token = loginApi.login();
         ConfigFindDnsByClassIdApi api = new ConfigFindDnsByClassIdApi(apiClient);
         List<String> equipments = api.getDnByClassId(token, ConfigFindDnsByClassIdApi.Item.equipmentItem);
+        final ConfigResolveDnApi dnApi = new ConfigResolveDnApi(apiClient);
+        for (String dn : equipments) {
+            LOG.info("equipment: {}: {}",dn, dnApi.getByDn(token, dn, false));
+        }
+        loginApi.logout(token);
+    }
+
+    @Test
+    public void testApiClientCompute() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaLoginApi loginApi = new AaaLoginApi(credentials,apiClient);
+        String token = loginApi.login();
+        ConfigFindDnsByClassIdApi api = new ConfigFindDnsByClassIdApi(apiClient);
         List<String> computes = api.getDnByClassId(token, ConfigFindDnsByClassIdApi.Item.computeItem);
-        LOG.debug(equipments.toString());
-        LOG.debug(computes.toString());
-
+        final ConfigResolveDnApi dnApi = new ConfigResolveDnApi(apiClient);
+        for (String dn : computes) {
+            LOG.info("compute: {}: {}",dn, dnApi.getByDn(token, dn, false));
+        }
+        loginApi.logout(token);
     }
 
-
-    }
+}
