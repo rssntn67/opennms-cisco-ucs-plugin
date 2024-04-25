@@ -62,11 +62,12 @@ public class ApiClientTest {
                 "<dn value=\"sys/rack-unit-1\"/> " +
                 "</outDns> " +
                 "</configFindDnsByClassId>";
-        LOG.debug(xml);
         ConfigFindDnsByClassIdResponse response = mapper.readValue(xml, ConfigFindDnsByClassIdResponse.class);
         Assert.assertNotNull(response.outDns);
         LOG.debug(response.toString());
         Assert.assertEquals(14, response.outDns.size());
+        LOG.debug(xml);
+        LOG.debug(mapper.writeValueAsString(response));
     }
 
     @Test

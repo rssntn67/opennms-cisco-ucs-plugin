@@ -40,24 +40,22 @@ public class AaaLoginResponse {
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("AaaLoginResponse{");
-        sb.append("cookie='").append(cookie).append('\'');
-        sb.append(", response='").append(response).append('\'');
-        sb.append(", outCookie='").append(outCookie).append('\'');
-        sb.append(", outRefreshPeriod=").append(outRefreshPeriod);
-        sb.append(", outPriv='").append(outPriv).append('\'');
-        sb.append(", outDomains='").append(outDomains).append('\'');
-        sb.append(", outChannel='").append(outChannel).append('\'');
-        sb.append(", outEvtChannel='").append(outEvtChannel).append('\'');
-        sb.append(", outSessionId='").append(outSessionId).append('\'');
-        sb.append(", outVersion='").append(outVersion).append('\'');
-        sb.append(", outName='").append(outName).append('\'');
-        sb.append(", outPasswdExpiryStatus='").append(outPasswdExpiryStatus).append('\'');
-        sb.append(", outPasswdExpiryDuration=").append(outPasswdExpiryDuration);
-        sb.append(", errorCode=").append(errorCode);
-        sb.append(", errorDescr='").append(errorDescr).append('\'');
-        sb.append(", invocationResult='").append(invocationResult).append('\'');
-        sb.append('}');
-        return sb.toString();
+        return "AaaLoginResponse{" + "cookie='" + cookie + '\'' +
+                ", response='" + response + '\'' +
+                ", outCookie='" + outCookie + '\'' +
+                ", outRefreshPeriod=" + outRefreshPeriod +
+                ", outPriv='" + outPriv + '\'' +
+                ", outDomains='" + outDomains + '\'' +
+                ", outChannel='" + outChannel + '\'' +
+                ", outEvtChannel='" + outEvtChannel + '\'' +
+                ", outSessionId='" + outSessionId + '\'' +
+                ", outVersion='" + outVersion + '\'' +
+                ", outName='" + outName + '\'' +
+                ", outPasswdExpiryStatus='" + outPasswdExpiryStatus + '\'' +
+                ", outPasswdExpiryDuration=" + outPasswdExpiryDuration +
+                ", errorCode=" + errorCode +
+                ", errorDescr='" + errorDescr + '\'' +
+                ", invocationResult='" + invocationResult + '\'' +
+                '}';
     }
 }

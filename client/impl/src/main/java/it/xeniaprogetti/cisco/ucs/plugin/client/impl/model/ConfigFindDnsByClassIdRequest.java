@@ -15,12 +15,4 @@ public class ConfigFindDnsByClassIdRequest {
         this.cookie = cookie;
     }
 
-    @Override
-    public String toString() {
-        final StringBuffer sb = new StringBuffer("ConfigFindDnsByClassIdRequest{");
-        sb.append("classId='").append(classId).append('\'');
-        sb.append(", cookie='").append(cookie).append('\'');
-        sb.append('}');
-        return sb.toString();
-    }
 }

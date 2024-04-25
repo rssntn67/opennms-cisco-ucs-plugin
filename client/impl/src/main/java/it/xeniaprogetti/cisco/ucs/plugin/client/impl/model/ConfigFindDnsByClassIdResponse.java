@@ -1,6 +1,6 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.impl.model;
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlCData;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
@@ -20,21 +20,19 @@ public class ConfigFindDnsByClassIdResponse {
     public String invocationResult;
     @JacksonXmlProperty(isAttribute = true)
     public String classId;
-    @JacksonXmlCData
-    public List<DistinguishedName> outDns;
+    @JacksonXmlElementWrapper(localName = "outDns")
+    public List<Dn> outDns;
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("ConfigFindDnsByClassIdResponse{");
-        sb.append("cookie='").append(cookie).append('\'');
-        sb.append(", response='").append(response).append('\'');
-        sb.append(", errorCode=").append(errorCode);
-        sb.append(", errorDescr='").append(errorDescr).append('\'');
-        sb.append(", invocationResult='").append(invocationResult).append('\'');
-        sb.append(", classId='").append(classId).append('\'');
-        sb.append(", outDns=").append(outDns);
-        sb.append('}');
-        return sb.toString();
+        return "ConfigFindDnsByClassIdResponse{" + "cookie='" + cookie + '\'' +
+                ", response='" + response + '\'' +
+                ", errorCode=" + errorCode +
+                ", errorDescr='" + errorDescr + '\'' +
+                ", invocationResult='" + invocationResult + '\'' +
+                ", classId='" + classId + '\'' +
+                ", outDns=" + outDns +
+                '}';
     }
 
 

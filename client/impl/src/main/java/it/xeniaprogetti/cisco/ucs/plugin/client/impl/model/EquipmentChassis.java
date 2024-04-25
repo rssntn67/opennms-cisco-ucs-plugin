@@ -105,4 +105,60 @@ public class EquipmentChassis {
     public String versionHolder;
     @JacksonXmlProperty(isAttribute = true)
     public String vid;
+
+    @Override
+    public String toString() {
+        return "EquipmentChassis{" +
+                "ackProgressIndicator='" + ackProgressIndicator + '\'' +
+                ", adminState='" + adminState + '\'' +
+                ", assetTag='" + assetTag + '\'' +
+                ", assignedToDn='" + assignedToDn + '\'' +
+                ", association='" + association + '\'' +
+                ", availability='" + availability + '\'' +
+                ", configState='" + configState + '\'' +
+                ", connPath='" + connPath + '\'' +
+                ", connStatus='" + connStatus + '\'' +
+                ", discovery='" + discovery + '\'' +
+                ", discoveryStatus='" + discoveryStatus + '\'' +
+                ", dn='" + dn + '\'' +
+                ", fabricEpDn='" + fabricEpDn + '\'' +
+                ", fanSpeedConfigState='" + fanSpeedConfigState + '\'' +
+                ", fltAggr=" + fltAggr +
+                ", fsmDescr='" + fsmDescr + '\'' +
+                ", fsmFlags='" + fsmFlags + '\'' +
+                ", fsmPrev='" + fsmPrev + '\'' +
+                ", fsmProgr=" + fsmProgr +
+                ", fsmRmtInvErrCode='" + fsmRmtInvErrCode + '\'' +
+                ", fsmRmtInvErrDescr='" + fsmRmtInvErrDescr + '\'' +
+                ", fsmRmtInvRslt='" + fsmRmtInvRslt + '\'' +
+                ", fsmStageDescr=" + fsmStageDescr +
+                ", fsmStamp=" + fsmStamp +
+                ", fsmStatus='" + fsmStatus + '\'' +
+                ", fsmTry=" + fsmTry +
+                ", id=" + id +
+                ", lcTs=" + lcTs +
+                ", licGP=" + licGP +
+                ", licState='" + licState + '\'' +
+                ", managingInst='" + managingInst + '\'' +
+                ", mfgTime='" + mfgTime + '\'' +
+                ", model='" + model + '\'' +
+                ", operQualifier='" + operQualifier + '\'' +
+                ", operQualifierReason='" + operQualifierReason + '\'' +
+                ", operState='" + operState + '\'' +
+                ", operability='" + operability + '\'' +
+                ", partNumber='" + partNumber + '\'' +
+                ", power='" + power + '\'' +
+                ", presence='" + presence + '\'' +
+                ", revision=" + revision +
+                ", seepromOperState='" + seepromOperState + '\'' +
+                ", serial='" + serial + '\'' +
+                ", serviceState='" + serviceState + '\'' +
+                ", thermal='" + thermal + '\'' +
+                ", thermalStateQualifier='" + thermalStateQualifier + '\'' +
+                ", usrLbl='" + usrLbl + '\'' +
+                ", vendor='" + vendor + '\'' +
+                ", versionHolder='" + versionHolder + '\'' +
+                ", vid='" + vid + '\'' +
+                '}';
+    }
 }

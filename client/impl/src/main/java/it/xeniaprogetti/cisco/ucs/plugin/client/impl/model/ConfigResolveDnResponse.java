@@ -4,8 +4,6 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlCData;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
-import java.util.List;
-
 @JacksonXmlRootElement(localName = "configResolveDn")
 public class ConfigResolveDnResponse {
     @JacksonXmlProperty(isAttribute = true)
@@ -23,5 +21,16 @@ public class ConfigResolveDnResponse {
     @JacksonXmlCData
     public  OutConfig outConfig;
 
-
+    @Override
+    public String toString() {
+        return "ConfigResolveDnResponse{" +
+                "cookie='" + cookie + '\'' +
+                ", response='" + response + '\'' +
+                ", errorCode=" + errorCode +
+                ", errorDescr='" + errorDescr + '\'' +
+                ", invocationResult='" + invocationResult + '\'' +
+                ", dn='" + dn + '\'' +
+                ", outConfig=" + outConfig +
+                '}';
+    }
 }
