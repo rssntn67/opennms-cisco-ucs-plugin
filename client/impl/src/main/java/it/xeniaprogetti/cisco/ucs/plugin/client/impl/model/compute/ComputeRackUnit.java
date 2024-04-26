@@ -1,10 +1,11 @@
-package it.xeniaprogetti.cisco.ucs.plugin.client.impl.model;
+package it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.compute;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.UcsElement;
 
 import java.util.Date;
 
-public class ComputeRackUnit {
+public class ComputeRackUnit extends UcsElement {
     @JacksonXmlProperty(isAttribute = true)
     public String adminPower;
     @JacksonXmlProperty(isAttribute = true)

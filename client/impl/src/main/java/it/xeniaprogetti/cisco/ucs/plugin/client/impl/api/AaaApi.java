@@ -5,21 +5,24 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientCredentials;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.handler.ApiClient;
-import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.*;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.request.UcsXmlApiRequest;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.AaaLoginResponse;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.AaaLogoutResponse;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.AaaRefreshResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
-public class AaaLoginApi {
+public class AaaApi {
 
-    private final Logger LOG = LoggerFactory.getLogger(AaaLoginApi.class);
+    private final Logger LOG = LoggerFactory.getLogger(AaaApi.class);
     private final ApiClient client;
     private final String username;
     private final String password;
     private final XmlMapper mapper = new XmlMapper();
 
-    public AaaLoginApi(ApiClientCredentials credentials, ApiClient client) {
+    public AaaApi(ApiClientCredentials credentials, ApiClient client) {
         Objects.requireNonNull(credentials);
         this.username = credentials.username;
         this.password = Objects.requireNonNull(credentials.password);
@@ -30,10 +33,9 @@ public class AaaLoginApi {
         try {
             AaaLoginResponse response =
                 mapper.readValue(
-                        client.doPost(
-                                mapper.writeValueAsString(
-                                        new AaaLoginRequest(this.username,this.password))),
-                        AaaLoginResponse.class);
+                        client.doPost(UcsXmlApiRequest.getLoginRequest(this.username,this.password))
+                        , AaaLoginResponse.class
+                );
             if (response.errorCode > 0) {
                 LOG.error("login failed: with error code: {}, {}", response.errorCode, response);
                 throw new ApiException(
@@ -54,12 +56,9 @@ public class AaaLoginApi {
             AaaRefreshResponse response =
                 mapper.readValue
                         (
-                            client.doPost(
-                                mapper.writeValueAsString(
-                                        new AaaRefreshRequest(this.username,this.password, token)
-                                )
-                        ),
-                        AaaRefreshResponse.class);
+                            client.doPost(UcsXmlApiRequest.getRefreshRequest(this.username,this.password, token)),
+                            AaaRefreshResponse.class
+                        );
             if (response.errorCode > 0) {
                 LOG.error("refresh failed: with error code: {}, {}", response.errorCode, response);
                 throw new ApiException(
@@ -78,7 +77,10 @@ public class AaaLoginApi {
     public void logout(String token) throws ApiException {
         try {
             AaaLogoutResponse response =
-                mapper.readValue(client.doPost(mapper.writeValueAsString(new AaaLogoutRequest(token))), AaaLogoutResponse.class);
+                mapper.readValue(
+                    client.doPost(UcsXmlApiRequest.getLogoutRequest(token)),
+                    AaaLogoutResponse.class
+                );
             if (response.errorCode > 0) {
                 LOG.error("logout failed: with error code: {}, {}", response.errorCode, response);
                 throw new ApiException(

@@ -1,10 +1,10 @@
-package it.xeniaprogetti.cisco.ucs.plugin.client.impl.model;
+package it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
-@JacksonXmlRootElement(localName = "aaaRefresh")
-public class AaaRefreshResponse {
+@JacksonXmlRootElement(localName = "aaaLogin")
+public class AaaLoginResponse {
     @JacksonXmlProperty(isAttribute = true)
     public String cookie;
     @JacksonXmlProperty(isAttribute = true)
@@ -40,7 +40,7 @@ public class AaaRefreshResponse {
 
     @Override
     public String toString() {
-        return "AaaRefreshResponse{" + "cookie='" + cookie + '\'' +
+        return "AaaLoginResponse{" + "cookie='" + cookie + '\'' +
                 ", response='" + response + '\'' +
                 ", outCookie='" + outCookie + '\'' +
                 ", outRefreshPeriod=" + outRefreshPeriod +
@@ -59,5 +59,3 @@ public class AaaRefreshResponse {
                 '}';
     }
 }
-
-

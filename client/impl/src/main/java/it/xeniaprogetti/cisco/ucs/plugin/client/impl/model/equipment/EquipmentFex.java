@@ -1,8 +1,9 @@
-package it.xeniaprogetti.cisco.ucs.plugin.client.impl.model;
+package it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.equipment;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.UcsElement;
 
-public class EquipmentFex {
+public class EquipmentFex extends UcsElement {
     @JacksonXmlProperty(isAttribute = true)
     public String adminPowerState;
     @JacksonXmlProperty(isAttribute = true)
