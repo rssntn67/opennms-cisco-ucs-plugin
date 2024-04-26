@@ -1,7 +1,6 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientCredentials;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
@@ -15,8 +14,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.equipment.EquipmentFe
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.equipment.EquipmentRackEnclosure;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.network.NetworkElement;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.request.UcsXmlApiRequest;
-import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigFindDnsByClassIdResponse;
-import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigResolveDnResponse;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.*;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -112,11 +110,49 @@ public class ApiClientTest {
                 "thermalStateQualifier=\"\" usrLbl=\"\" vendor=\"Cisco Systems Inc\" versionHolder=\"yes\" vid=\"\"/> " +
                 "</outConfig> " +
                 "</configResolveDn>";
-        ConfigResolveDnResponse<EquipmentChassis> response =
-                mapper.readValue(xml, new TypeReference<ConfigResolveDnResponse<EquipmentChassis>>() {});
+        ConfigResolveEquipmentChassisDnResponse response =
+                mapper.readValue(xml, ConfigResolveEquipmentChassisDnResponse.class);
         LOG.info(response.toString());
-        Assert.assertNotNull(response.outconfig.ucsElement.model);
-        Assert.assertEquals(response.dn, response.outconfig.ucsElement.dn);
+        Assert.assertNotNull(response.outconfig.equipmentChassis.model);
+        Assert.assertEquals(response.dn, response.outconfig.equipmentChassis.dn);
+    }
+
+    @Test
+    public void canDeSerializeXmlToEquipmentFex() throws JsonProcessingException {
+        XmlMapper mapper = new XmlMapper();
+        String xml = "<configResolveDn dn=\"sys/fex-2\" cookie=\"1714168516/c91b06a0-2ca4-4094-a1d6-098ee701b21c\" response=\"yes\"> " +
+                "<outConfig> <equipmentFex adminPowerState=\"policy\" adminState=\"acknowledged\" configState=\"un-acknowledged\" dn=\"sys/fex-2\" fltAggr=\"0\" fsmDescr=\"\" fsmPrev=\"nop\" fsmProgr=\"100\" fsmRmtInvErrCode=\"none\" fsmRmtInvErrDescr=\"\" fsmRmtInvRslt=\"\" fsmStageDescr=\"\" fsmStamp=\"never\" fsmStatus=\"nop\" fsmTry=\"0\" id=\"2\" licGP=\"0\" licState=\"license-ok\" model=\"N2K-C2232TM-E-10GE\" operQualifier=\"\" operQualifierReason=\"N/A\" operState=\"operable\" operability=\"unknown\" power=\"unknown\" presence=\"unknown\" revision=\"0\" serial=\"FX22\" switchId=\"B\" thermal=\"unknown\" usrLbl=\"\" vendor=\"Cisco Systems\" voltage=\"unknown\"/> " +
+                "</outConfig> </configResolveDn>";
+        ConfigResolveEquipmentFexDnResponse response =
+                mapper.readValue(xml, ConfigResolveEquipmentFexDnResponse.class);
+        LOG.info(response.toString());
+        Assert.assertNotNull(response.outconfig.equipmentFex.model);
+        Assert.assertEquals(response.dn, response.outconfig.equipmentFex.dn);
+    }
+
+    @Test
+    public void canDeSerializeXmlToEquipmentRackEnclosure() throws JsonProcessingException {
+        XmlMapper mapper = new XmlMapper();
+        String xml = "<configResolveDn dn=\"sys/rack-enclosure-1\" cookie=\"1713476816/da9ab72a-49e4-49ed-9a5a-c0e951d00b2f\" response=\"yes\"> " +
+                "<outConfig> <equipmentRackEnclosure assetTag=\"\" childAction=\"deleteNonPresent\" dn=\"sys/rack-enclosure-1\" " +
+                "fltAggr=\"0\" id=\"1\" mfgTime=\"not-applicable\" model=\"UCSC-C4200-SFF\" operQualifierReason=\"N/A\" " +
+                "operability=\"operable\" partNumber=\"\" presence=\"equipped\" revision=\"0\" serial=\"ENCL15\" " +
+                "vendor=\"Cisco Systems Inc\" vid=\"\"> <equipmentSlotEp childAction=\"deleteNonPresent\" " +
+                "enclosureId=\"1\" fltAggr=\"0\" id=\"4\" model=\"\" operQualifierReason=\"N/A\" operability=\"unknown\" " +
+                "presence=\"empty\" refDn=\"\" revision=\"0\" rn=\"slot-ep-4\" serial=\"\" type=\"unknown\" vendor=\"\"/> " +
+                "<equipmentSlotEp childAction=\"deleteNonPresent\" enclosureId=\"1\" fltAggr=\"0\" id=\"3\" model=\"\" operQualifierReason=\"N/A\" operability=\"unknown\" presence=\"empty\" refDn=\"\" revision=\"0\" rn=\"slot-ep-3\" serial=\"\" type=\"unknown\" vendor=\"\"/> " +
+                "<equipmentSlotEp childAction=\"deleteNonPresent\" enclosureId=\"1\" fltAggr=\"0\" id=\"2\" model=\"\" operQualifierReason=\"N/A\" operability=\"unknown\" presence=\"equipped\" refDn=\"sys/rack-unit-2\" revision=\"0\" rn=\"slot-ep-2\" serial=\"\" type=\"compute\" vendor=\"\"/> " +
+                "<equipmentSlotEp childAction=\"deleteNonPresent\" enclosureId=\"1\" fltAggr=\"0\" id=\"1\" model=\"\" operQualifierReason=\"N/A\" operability=\"unknown\" presence=\"equipped\" refDn=\"sys/rack-unit-1\" revision=\"0\" rn=\"slot-ep-1\" serial=\"\" type=\"compute\" vendor=\"\"/> " +
+                "<equipmentPsu Type=\"ac\" assetTag=\"\" childAction=\"deleteNonPresent\" fltAggr=\"0\" fsmDescr=\"\" fsmFlags=\"\" fsmPrev=\"nop\" fsmProgr=\"100\" fsmRmtInvErrCode=\"none\" fsmRmtInvErrDescr=\"\" fsmRmtInvRslt=\"\" fsmStageDescr=\"\" fsmStamp=\"never\" " +
+                "fsmStatus=\"nop\" fsmTry=\"0\" id=\"0\" model=\"\" operQualifierReason=\"N/A\" operState=\"unknown\" operability=\"unknown\" partNumber=\"\" perf=\"unknown\" power=\"unknown\" powerStateQualifier=\"unknown\" presence=\"unknown\" psuFirmwareVersion=\"\" psuInputSrc=\"N/A\" psuType=\"N/A\" psuWattage=\"0\" revision=\"0\" rn=\"psu-0\" serial=\"\" thermal=\"unknown\" vendor=\"\" vid=\"\" voltage=\"unknown\"> " +
+                "<equipmentPsuFsm childAction=\"deleteNonPresent\" completionTime=\"\" currentFsm=\"nop\" descr=\"\" fsmStatus=\"nop\" instanceId=\"0\" progress=\"100\" rmtErrCode=\"none\" rmtErrDescr=\"\" rmtRslt=\"\" rn=\"fsm\"/> " +
+                "</equipmentPsu> " +
+                "</equipmentRackEnclosure> </outConfig> </configResolveDn>";
+        ConfigResolveEquipmentRackEnclosureDnResponse response =
+                mapper.readValue(xml, ConfigResolveEquipmentRackEnclosureDnResponse.class);
+        LOG.info(response.toString());
+        Assert.assertNotNull(response.outconfig.equipmentRackEnclosure.model);
+        Assert.assertEquals(response.dn, response.outconfig.equipmentRackEnclosure.dn);
     }
 
     @Test
@@ -148,9 +184,67 @@ public class ApiClientTest {
                 "</configResolveDn>";
 
         XmlMapper mapper = new XmlMapper();
-        ConfigResolveDnResponse<ComputeBlade> response = mapper.readValue(xml, mapper.getTypeFactory().constructParametricType(ConfigResolveDnResponse.class, ComputeBlade.class));
-        Assert.assertNotNull(response.outconfig.ucsElement.model);
-        Assert.assertEquals(response.dn, response.outconfig.ucsElement.dn);
+        ConfigResolveComputeBladeDnResponse response = mapper.readValue(xml, ConfigResolveComputeBladeDnResponse.class);
+        Assert.assertNotNull(response.outconfig.computeBlade.model);
+        Assert.assertEquals(response.dn, response.outconfig.computeBlade.dn);
+
+    }
+
+    @Test
+    public void canDeSerializeXmlToComputeRackUnit() throws JsonProcessingException {
+
+        String xml ="<configResolveDn dn=\"sys/rack-unit-8\" cookie=\"1714168516/c91b06a0-2ca4-4094-a1d6-098ee701b21c\" response=\"yes\"> " +
+                "<outConfig> " +
+                "<computeRackUnit adminPower=\"policy\" adminState=\"in-service\" assetTag=\"\" " +
+                "assignedToDn=\"\" association=\"none\" availability=\"available\" availableMemory=\"49152\" " +
+                "checkPoint=\"discovered\" connPath=\"A,B\" connStatus=\"A,B\" descr=\"\" discovery=\"complete\" " +
+                "discoveryStatus=\"\" dn=\"sys/rack-unit-8\" enclosureId=\"0\" fanSpeedConfigStatus=\"\" " +
+                "fanSpeedPolicyFault=\"no\" fltAggr=\"2\" fsmDescr=\"\" fsmFlags=\"\" fsmPrev=\"DiscoverSuccess\" " +
+                "fsmProgr=\"100\" fsmRmtInvErrCode=\"none\" fsmRmtInvErrDescr=\"\" fsmRmtInvRslt=\"\" " +
+                "fsmStageDescr=\"\" fsmStamp=\"2024-04-24T02:44:55.707\" fsmStatus=\"nop\" " +
+                "fsmTry=\"0\" id=\"8\" intId=\"80305\" kmipFault=\"no\" kmipFaultDescription=\"\" " +
+                "lc=\"discovered\" lcTs=\"1970-01-01T01:00:00.000\" localId=\"\" " +
+                "lowVoltageMemory=\"not-applicable\" managingInst=\"A\" memorySpeed=\"not-applicable\" " +
+                "mfgTime=\"not-applicable\" model=\"UCSC-C240-M6N\" name=\"\" " +
+                "numOf40GAdaptorsWithOldFw=\"0\" numOf40GAdaptorsWithUnknownFw=\"0\" " +
+                "numOfAdaptors=\"2\" numOfCores=\"4\" numOfCoresEnabled=\"4\" numOfCpus=\"2\" " +
+                "numOfEthHostIfs=\"0\" numOfFcHostIfs=\"0\" numOfThreads=\"16\" operPower=\"off\" " +
+                "operPwrTransSrc=\"unknown\" operQualifier=\"\" operQualifierReason=\"N/A\" " +
+                "operState=\"unassociated\" operability=\"operable\" " +
+                "originalUuid=\"1b4e28ba-2fa1-11d2-e008-b9a761bde3fb\" partNumber=\"\" " +
+                "physicalSecurity=\"chassis-open\" policyLevel=\"0\" policyOwner=\"local\" " +
+                "presence=\"equipped\" revision=\"0\" serial=\"RK87\" serverId=\"8\" slotId=\"0\" " +
+                "storageOperQualifier=\"unknown\" totalMemory=\"49152\" usrLbl=\"\" " +
+                "uuid=\"1b4e28ba-2fa1-11d2-e008-b9a761bde3fb\" vendor=\"Cisco Systems Inc\" " +
+                "versionHolder=\"no\" vethStatus=\"\" vid=\"0\"/>" +
+                " </outConfig> " +
+                "</configResolveDn>";
+
+        XmlMapper mapper = new XmlMapper();
+        ConfigResolveComputeRackUnitDnResponse response = mapper.readValue(xml, ConfigResolveComputeRackUnitDnResponse.class);
+        Assert.assertNotNull(response.outconfig.computeRackUnit.model);
+        Assert.assertEquals(response.dn, response.outconfig.computeRackUnit.dn);
+
+    }
+
+    @Test
+    public void canDeSerializeXmlToNetworkElement() throws JsonProcessingException {
+
+        String xml ="<configResolveDn dn=\"sys/switch-A\" cookie=\"1713476816/da9ab72a-49e4-49ed-9a5a-c0e951d00b2f\" response=\"yes\"> " +
+                "<outConfig> " +
+                "<networkElement adminEvacState=\"fill\" adminInbandIfState=\"disable\" diffMemory=\"1\" " +
+                "dn=\"sys/switch-A\" expectedMemory=\"32500\" fltAggr=\"12884901888\" forceEvac=\"no\" id=\"A\" " +
+                "inbandIfGw=\"0.0.0.0\" inbandIfIp=\"0.0.0.0\" inbandIfMask=\"0.0.0.0\" inbandIfVnet=\"0\" " +
+                "inventoryStatus=\"\" minActiveFan=\"2\" model=\"UCS-FI-64108\" oobIfGw=\"10.172.192.1\" " +
+                "oobIfIp=\"10.172.192.22\" oobIfMac=\"00:00:00:00:00:00\" oobIfMask=\"255.255.255.0\" " +
+                "operEvacState=\"fill\" operability=\"operable\" revision=\"0\" serial=\"FDO231307E9\" " +
+                "shutdownFanRemoveal=\"no\" thermal=\"unknown\" totalMemory=\"32870\" vendor=\"Cisco Systems, Inc.\"/>" +
+                " </outConfig> </configResolveDn>";
+
+        XmlMapper mapper = new XmlMapper();
+        ConfigResolveNetworkElementDnResponse response = mapper.readValue(xml, ConfigResolveNetworkElementDnResponse.class);
+        Assert.assertNotNull(response.outconfig.networkElement.model);
+        Assert.assertEquals(response.dn, response.outconfig.networkElement.dn);
 
     }
 

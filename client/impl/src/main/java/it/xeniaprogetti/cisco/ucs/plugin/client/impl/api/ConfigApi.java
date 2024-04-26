@@ -63,6 +63,7 @@ public class ConfigApi {
         }
     }
 
+    /*
     public <T extends UcsElement> T getUcsElementByDn(String cookie, String dn, Class<T> clazz) throws ApiException {
         try {
             ConfigResolveDnResponse<T> response = mapper.readValue(
@@ -82,7 +83,7 @@ public class ConfigApi {
             LOG.error("getByDn: {}", e.getMessage(), e);
             throw new ApiException("getByDn: " +e.getMessage(),e);
         }
-    }
+    }*/
 
     public <T extends UcsElement> List<T> getUcsElementsByClassId(String cookie, Class<T> clazz) throws ApiException {
         ClassId classId;

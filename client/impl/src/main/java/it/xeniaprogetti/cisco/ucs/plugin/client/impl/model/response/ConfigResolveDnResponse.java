@@ -6,7 +6,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.UcsElement;
 
 @JacksonXmlRootElement(localName = "configResolveDn")
-public class ConfigResolveDnResponse<T extends UcsElement> {
+public abstract class ConfigResolveDnResponse {
     @JacksonXmlProperty(isAttribute = true)
     public String cookie;
     @JacksonXmlProperty(isAttribute = true)
@@ -19,23 +19,5 @@ public class ConfigResolveDnResponse<T extends UcsElement> {
     public String invocationResult;
     @JacksonXmlProperty(isAttribute = true)
     public String dn;
-    @JacksonXmlElementWrapper(localName = "outConfig")
-    public  OutConfig outconfig;
 
-    @Override
-    public String toString() {
-        return "ConfigResolveDnResponse{" +
-                "cookie='" + cookie + '\'' +
-                ", response='" + response + '\'' +
-                ", errorCode=" + errorCode +
-                ", errorDescr='" + errorDescr + '\'' +
-                ", invocationResult='" + invocationResult + '\'' +
-                ", dn='" + dn + '\'' +
-                ", ucsElement=" + outconfig.ucsElement +
-                '}';
-    }
-
-    public class OutConfig {
-        public T ucsElement;
-    }
 }
