@@ -33,8 +33,6 @@ public class ComputeRackUnit extends UcsElement {
     @JacksonXmlProperty(isAttribute = true)
     public String discoveryStatus;
     @JacksonXmlProperty(isAttribute = true)
-    public String dn;
-    @JacksonXmlProperty(isAttribute = true)
     public int enclosureId;
     @JacksonXmlProperty(isAttribute = true)
     public String fanSpeedConfigStatus;

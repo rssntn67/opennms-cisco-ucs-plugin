@@ -11,8 +11,6 @@ public class EquipmentFex extends UcsElement {
     @JacksonXmlProperty(isAttribute = true)
     public String configState;
     @JacksonXmlProperty(isAttribute = true)
-    public String dn;
-    @JacksonXmlProperty(isAttribute = true)
     public int fltAggr;
     @JacksonXmlProperty(isAttribute = true)
     public String fsmDescr;

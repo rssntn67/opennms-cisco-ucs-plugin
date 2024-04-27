@@ -29,8 +29,6 @@ public class EquipmentChassis extends UcsElement {
     @JacksonXmlProperty(isAttribute = true)
     public String discoveryStatus;
     @JacksonXmlProperty(isAttribute = true)
-    public String dn;
-    @JacksonXmlProperty(isAttribute = true)
     public String fabricEpDn;
     @JacksonXmlProperty(isAttribute = true)
     public String fanSpeedConfigState;

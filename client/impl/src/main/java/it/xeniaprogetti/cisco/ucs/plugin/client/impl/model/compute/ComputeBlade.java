@@ -35,8 +35,6 @@ public class ComputeBlade extends UcsElement {
     @JacksonXmlProperty(isAttribute = true)
     public String discoveryStatus;
     @JacksonXmlProperty(isAttribute = true)
-    public String dn;
-    @JacksonXmlProperty(isAttribute = true)
     public double fltAggr;
     @JacksonXmlProperty(isAttribute = true)
     public String fsmDescr;

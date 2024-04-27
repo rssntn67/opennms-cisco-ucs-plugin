@@ -7,8 +7,6 @@ public class EquipmentRackEnclosure extends UcsElement {
     @JacksonXmlProperty(isAttribute = true)
     public String assetTag;
     @JacksonXmlProperty(isAttribute = true)
-    public String dn;
-    @JacksonXmlProperty(isAttribute = true)
     public int fltAggr;
     @JacksonXmlProperty(isAttribute = true)
     public int id;
