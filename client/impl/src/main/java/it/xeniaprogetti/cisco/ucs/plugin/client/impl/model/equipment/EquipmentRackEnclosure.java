@@ -32,5 +32,25 @@ public class EquipmentRackEnclosure extends UcsElement {
     public String vendor;
     @JacksonXmlProperty(isAttribute = true)
     public int vid;
+
+    @Override
+    public String toString() {
+        return "EquipmentRackEnclosure{" +
+                "assetTag='" + assetTag + '\'' +
+                ", dn='" + dn + '\'' +
+                ", fltAggr=" + fltAggr +
+                ", id=" + id +
+                ", mfgTime='" + mfgTime + '\'' +
+                ", model='" + model + '\'' +
+                ", operQualifierReason='" + operQualifierReason + '\'' +
+                ", operability='" + operability + '\'' +
+                ", partNumber=" + partNumber +
+                ", presence='" + presence + '\'' +
+                ", revision=" + revision +
+                ", serial='" + serial + '\'' +
+                ", vendor='" + vendor + '\'' +
+                ", vid=" + vid +
+                '}';
+    }
 }
 

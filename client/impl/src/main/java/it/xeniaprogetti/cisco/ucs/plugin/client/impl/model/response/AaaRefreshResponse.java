@@ -4,7 +4,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 @JacksonXmlRootElement(localName = "aaaRefresh")
-public class AaaRefreshResponse {
+public class AaaRefreshResponse extends UcsXmlApiResponse {
     @JacksonXmlProperty(isAttribute = true)
     public String cookie;
     @JacksonXmlProperty(isAttribute = true)

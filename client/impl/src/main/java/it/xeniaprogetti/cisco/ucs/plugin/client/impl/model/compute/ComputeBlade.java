@@ -146,4 +146,80 @@ public class ComputeBlade extends UcsElement {
     public String vendor;
     @JacksonXmlProperty(isAttribute = true)
     public String vid;
+
+    @Override
+    public String toString() {
+        return "ComputeBlade{" +
+                "adminPower='" + adminPower + '\'' +
+                ", adminState='" + adminState + '\'' +
+                ", assetTag='" + assetTag + '\'' +
+                ", assignedToDn='" + assignedToDn + '\'' +
+                ", association='" + association + '\'' +
+                ", availability='" + availability + '\'' +
+                ", availableMemory=" + availableMemory +
+                ", chassisId=" + chassisId +
+                ", checkPoint='" + checkPoint + '\'' +
+                ", connPath='" + connPath + '\'' +
+                ", connStatus='" + connStatus + '\'' +
+                ", descr='" + descr + '\'' +
+                ", discovery='" + discovery + '\'' +
+                ", discoveryStatus='" + discoveryStatus + '\'' +
+                ", dn='" + dn + '\'' +
+                ", fltAggr=" + fltAggr +
+                ", fsmDescr='" + fsmDescr + '\'' +
+                ", fsmFlags='" + fsmFlags + '\'' +
+                ", fsmPrev='" + fsmPrev + '\'' +
+                ", fsmProgr=" + fsmProgr +
+                ", fsmRmtInvErrCode='" + fsmRmtInvErrCode + '\'' +
+                ", fsmRmtInvErrDescr='" + fsmRmtInvErrDescr + '\'' +
+                ", fsmRmtInvRslt='" + fsmRmtInvRslt + '\'' +
+                ", fsmStageDescr='" + fsmStageDescr + '\'' +
+                ", fsmStamp=" + fsmStamp +
+                ", fsmStatus='" + fsmStatus + '\'' +
+                ", fsmTry=" + fsmTry +
+                ", intId=" + intId +
+                ", kmipFault='" + kmipFault + '\'' +
+                ", kmipFaultDescription='" + kmipFaultDescription + '\'' +
+                ", lc='" + lc + '\'' +
+                ", lcTs=" + lcTs +
+                ", localId='" + localId + '\'' +
+                ", lowVoltageMemory='" + lowVoltageMemory + '\'' +
+                ", managingInst='" + managingInst + '\'' +
+                ", memorySpeed='" + memorySpeed + '\'' +
+                ", mfgTime='" + mfgTime + '\'' +
+                ", model='" + model + '\'' +
+                ", name='" + name + '\'' +
+                ", numOf40GAdaptorsWithOldFw=" + numOf40GAdaptorsWithOldFw +
+                ", numOf40GAdaptorsWithUnknownFw=" + numOf40GAdaptorsWithUnknownFw +
+                ", numOfAdaptors=" + numOfAdaptors +
+                ", numOfCores=" + numOfCores +
+                ", numOfCoresEnabled=" + numOfCoresEnabled +
+                ", numOfCpus=" + numOfCpus +
+                ", numOfEthHostIfs=" + numOfEthHostIfs +
+                ", numOfFcHostIfs=" + numOfFcHostIfs +
+                ", numOfThreads=" + numOfThreads +
+                ", operPower='" + operPower + '\'' +
+                ", operPwrTransSrc='" + operPwrTransSrc + '\'' +
+                ", operQualifier='" + operQualifier + '\'' +
+                ", operQualifierReason='" + operQualifierReason + '\'' +
+                ", operState='" + operState + '\'' +
+                ", operability='" + operability + '\'' +
+                ", originalUuid='" + originalUuid + '\'' +
+                ", partNumber='" + partNumber + '\'' +
+                ", policyLevel=" + policyLevel +
+                ", policyOwner='" + policyOwner + '\'' +
+                ", presence='" + presence + '\'' +
+                ", revision=" + revision +
+                ", scaledMode='" + scaledMode + '\'' +
+                ", serial='" + serial + '\'' +
+                ", serverId='" + serverId + '\'' +
+                ", slotId=" + slotId +
+                ", storageOperQualifier='" + storageOperQualifier + '\'' +
+                ", totalMemory=" + totalMemory +
+                ", usrLbl='" + usrLbl + '\'' +
+                ", uuid='" + uuid + '\'' +
+                ", vendor='" + vendor + '\'' +
+                ", vid='" + vid + '\'' +
+                '}';
+    }
 }

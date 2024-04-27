@@ -1,27 +1,27 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
-import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.equipment.EquipmentChassis;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.equipment.EquipmentRackEnclosure;
 
-public class ConfigResolveEquipmentChassisDnResponse extends ConfigResolveDnResponse {
+public class ConfigResolveDnResponseEquipmentRackEnclosure extends ConfigResolveDnResponse {
 
     @JacksonXmlElementWrapper(localName = "outConfig")
     public  OutConfig outconfig;
 
     @Override
     public String toString() {
-        return "ConfigResolveEquipmentChassisDnResponse{" +
+        return "ConfigResolveEquipmentrackEnclosureDnResponse{" +
                 "cookie='" + cookie + '\'' +
                 ", response='" + response + '\'' +
                 ", errorCode=" + errorCode +
                 ", errorDescr='" + errorDescr + '\'' +
                 ", invocationResult='" + invocationResult + '\'' +
                 ", dn='" + dn + '\'' +
-                ", outconfig=" + outconfig.equipmentChassis +
+                ", outconfig=" + outconfig.equipmentRackEnclosure +
                 '}';
     }
 
     public static class OutConfig {
-        public EquipmentChassis equipmentChassis;
+        public EquipmentRackEnclosure equipmentRackEnclosure;
     }
 }

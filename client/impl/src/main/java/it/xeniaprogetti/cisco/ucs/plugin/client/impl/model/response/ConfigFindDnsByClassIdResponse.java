@@ -8,7 +8,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.Dn;
 import java.util.List;
 
 @JacksonXmlRootElement(localName = "configFindDnsByClassId")
-public class ConfigFindDnsByClassIdResponse {
+public class ConfigFindDnsByClassIdResponse extends UcsXmlApiResponse {
     @JacksonXmlProperty(isAttribute = true)
     public String cookie;
     @JacksonXmlProperty(isAttribute = true)

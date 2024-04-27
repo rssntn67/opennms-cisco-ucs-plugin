@@ -8,7 +8,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.UcsElement;
 import java.util.List;
 
 @JacksonXmlRootElement(localName = "configResolveClass")
-public class ConfigResolveClassResponse<T extends UcsElement> {
+public class ConfigResolveClassResponse<T extends UcsElement> extends UcsXmlApiResponse {
     @JacksonXmlProperty(isAttribute = true)
     public String cookie;
     @JacksonXmlProperty(isAttribute = true)

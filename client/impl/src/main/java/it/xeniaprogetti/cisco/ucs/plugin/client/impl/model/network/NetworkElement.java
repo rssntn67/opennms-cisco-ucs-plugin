@@ -58,5 +58,38 @@ public class NetworkElement extends UcsElement {
     public int totalMemory;
     @JacksonXmlProperty(isAttribute = true)
     public String vendor;
+
+    @Override
+    public String toString() {
+        return "NetworkElement{" +
+                "adminEvacState='" + adminEvacState + '\'' +
+                ", adminInbandIfState='" + adminInbandIfState + '\'' +
+                ", diffMemory=" + diffMemory +
+                ", dn='" + dn + '\'' +
+                ", expectedMemory=" + expectedMemory +
+                ", fltAggr=" + fltAggr +
+                ", forceEvac='" + forceEvac + '\'' +
+                ", id='" + id + '\'' +
+                ", inbandIfGw='" + inbandIfGw + '\'' +
+                ", inbandIfIp='" + inbandIfIp + '\'' +
+                ", inbandIfMask='" + inbandIfMask + '\'' +
+                ", inbandIfVnet=" + inbandIfVnet +
+                ", inventoryStatus='" + inventoryStatus + '\'' +
+                ", minActiveFan=" + minActiveFan +
+                ", model='" + model + '\'' +
+                ", oobIfGw='" + oobIfGw + '\'' +
+                ", oobIfIp='" + oobIfIp + '\'' +
+                ", oobIfMac='" + oobIfMac + '\'' +
+                ", oobIfMask='" + oobIfMask + '\'' +
+                ", operEvacState='" + operEvacState + '\'' +
+                ", operability='" + operability + '\'' +
+                ", revision=" + revision +
+                ", serial='" + serial + '\'' +
+                ", shutdownFanRemoveal='" + shutdownFanRemoveal + '\'' +
+                ", thermal='" + thermal + '\'' +
+                ", totalMemory=" + totalMemory +
+                ", vendor='" + vendor + '\'' +
+                '}';
+    }
 }
 

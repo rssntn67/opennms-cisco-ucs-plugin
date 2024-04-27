@@ -110,8 +110,8 @@ public class ApiClientTest {
                 "thermalStateQualifier=\"\" usrLbl=\"\" vendor=\"Cisco Systems Inc\" versionHolder=\"yes\" vid=\"\"/> " +
                 "</outConfig> " +
                 "</configResolveDn>";
-        ConfigResolveEquipmentChassisDnResponse response =
-                mapper.readValue(xml, ConfigResolveEquipmentChassisDnResponse.class);
+        ConfigResolveDnResponseEquipmentChassis response =
+                mapper.readValue(xml, ConfigResolveDnResponseEquipmentChassis.class);
         LOG.info(response.toString());
         Assert.assertNotNull(response.outconfig.equipmentChassis.model);
         Assert.assertEquals(response.dn, response.outconfig.equipmentChassis.dn);
@@ -123,8 +123,8 @@ public class ApiClientTest {
         String xml = "<configResolveDn dn=\"sys/fex-2\" cookie=\"1714168516/c91b06a0-2ca4-4094-a1d6-098ee701b21c\" response=\"yes\"> " +
                 "<outConfig> <equipmentFex adminPowerState=\"policy\" adminState=\"acknowledged\" configState=\"un-acknowledged\" dn=\"sys/fex-2\" fltAggr=\"0\" fsmDescr=\"\" fsmPrev=\"nop\" fsmProgr=\"100\" fsmRmtInvErrCode=\"none\" fsmRmtInvErrDescr=\"\" fsmRmtInvRslt=\"\" fsmStageDescr=\"\" fsmStamp=\"never\" fsmStatus=\"nop\" fsmTry=\"0\" id=\"2\" licGP=\"0\" licState=\"license-ok\" model=\"N2K-C2232TM-E-10GE\" operQualifier=\"\" operQualifierReason=\"N/A\" operState=\"operable\" operability=\"unknown\" power=\"unknown\" presence=\"unknown\" revision=\"0\" serial=\"FX22\" switchId=\"B\" thermal=\"unknown\" usrLbl=\"\" vendor=\"Cisco Systems\" voltage=\"unknown\"/> " +
                 "</outConfig> </configResolveDn>";
-        ConfigResolveEquipmentFexDnResponse response =
-                mapper.readValue(xml, ConfigResolveEquipmentFexDnResponse.class);
+        ConfigResolveDnResponseEquipmentFex response =
+                mapper.readValue(xml, ConfigResolveDnResponseEquipmentFex.class);
         LOG.info(response.toString());
         Assert.assertNotNull(response.outconfig.equipmentFex.model);
         Assert.assertEquals(response.dn, response.outconfig.equipmentFex.dn);
@@ -133,23 +133,17 @@ public class ApiClientTest {
     @Test
     public void canDeSerializeXmlToEquipmentRackEnclosure() throws JsonProcessingException {
         XmlMapper mapper = new XmlMapper();
-        String xml = "<configResolveDn dn=\"sys/rack-enclosure-1\" cookie=\"1713476816/da9ab72a-49e4-49ed-9a5a-c0e951d00b2f\" response=\"yes\"> " +
-                "<outConfig> <equipmentRackEnclosure assetTag=\"\" childAction=\"deleteNonPresent\" dn=\"sys/rack-enclosure-1\" " +
-                "fltAggr=\"0\" id=\"1\" mfgTime=\"not-applicable\" model=\"UCSC-C4200-SFF\" operQualifierReason=\"N/A\" " +
-                "operability=\"operable\" partNumber=\"\" presence=\"equipped\" revision=\"0\" serial=\"ENCL15\" " +
-                "vendor=\"Cisco Systems Inc\" vid=\"\"> <equipmentSlotEp childAction=\"deleteNonPresent\" " +
-                "enclosureId=\"1\" fltAggr=\"0\" id=\"4\" model=\"\" operQualifierReason=\"N/A\" operability=\"unknown\" " +
-                "presence=\"empty\" refDn=\"\" revision=\"0\" rn=\"slot-ep-4\" serial=\"\" type=\"unknown\" vendor=\"\"/> " +
-                "<equipmentSlotEp childAction=\"deleteNonPresent\" enclosureId=\"1\" fltAggr=\"0\" id=\"3\" model=\"\" operQualifierReason=\"N/A\" operability=\"unknown\" presence=\"empty\" refDn=\"\" revision=\"0\" rn=\"slot-ep-3\" serial=\"\" type=\"unknown\" vendor=\"\"/> " +
-                "<equipmentSlotEp childAction=\"deleteNonPresent\" enclosureId=\"1\" fltAggr=\"0\" id=\"2\" model=\"\" operQualifierReason=\"N/A\" operability=\"unknown\" presence=\"equipped\" refDn=\"sys/rack-unit-2\" revision=\"0\" rn=\"slot-ep-2\" serial=\"\" type=\"compute\" vendor=\"\"/> " +
-                "<equipmentSlotEp childAction=\"deleteNonPresent\" enclosureId=\"1\" fltAggr=\"0\" id=\"1\" model=\"\" operQualifierReason=\"N/A\" operability=\"unknown\" presence=\"equipped\" refDn=\"sys/rack-unit-1\" revision=\"0\" rn=\"slot-ep-1\" serial=\"\" type=\"compute\" vendor=\"\"/> " +
-                "<equipmentPsu Type=\"ac\" assetTag=\"\" childAction=\"deleteNonPresent\" fltAggr=\"0\" fsmDescr=\"\" fsmFlags=\"\" fsmPrev=\"nop\" fsmProgr=\"100\" fsmRmtInvErrCode=\"none\" fsmRmtInvErrDescr=\"\" fsmRmtInvRslt=\"\" fsmStageDescr=\"\" fsmStamp=\"never\" " +
-                "fsmStatus=\"nop\" fsmTry=\"0\" id=\"0\" model=\"\" operQualifierReason=\"N/A\" operState=\"unknown\" operability=\"unknown\" partNumber=\"\" perf=\"unknown\" power=\"unknown\" powerStateQualifier=\"unknown\" presence=\"unknown\" psuFirmwareVersion=\"\" psuInputSrc=\"N/A\" psuType=\"N/A\" psuWattage=\"0\" revision=\"0\" rn=\"psu-0\" serial=\"\" thermal=\"unknown\" vendor=\"\" vid=\"\" voltage=\"unknown\"> " +
-                "<equipmentPsuFsm childAction=\"deleteNonPresent\" completionTime=\"\" currentFsm=\"nop\" descr=\"\" fsmStatus=\"nop\" instanceId=\"0\" progress=\"100\" rmtErrCode=\"none\" rmtErrDescr=\"\" rmtRslt=\"\" rn=\"fsm\"/> " +
-                "</equipmentPsu> " +
-                "</equipmentRackEnclosure> </outConfig> </configResolveDn>";
-        ConfigResolveEquipmentRackEnclosureDnResponse response =
-                mapper.readValue(xml, ConfigResolveEquipmentRackEnclosureDnResponse.class);
+        String xml = " <configResolveDn dn=\"sys/rack-enclosure-1\" cookie=\"1714205640/a3f871aa-9028-447b-9770-14904ce96e96\" response=\"yes\"> " +
+                "<outConfig> " +
+                "<equipmentRackEnclosure assetTag=\"\" dn=\"sys/rack-enclosure-1\" fltAggr=\"0\" id=\"1\"" +
+                " mfgTime=\"not-applicable\" model=\"UCSC-C4200-SFF\" " +
+                "operQualifierReason=\"N/A\" operability=\"operable\" " +
+                "partNumber=\"\" presence=\"equipped\" revision=\"0\" serial=\"ENCL15\" " +
+                "vendor=\"Cisco Systems Inc\" vid=\"\"/>" +
+                " </outConfig> " +
+                "</configResolveDn>\n";
+        ConfigResolveDnResponseEquipmentRackEnclosure response =
+                mapper.readValue(xml, ConfigResolveDnResponseEquipmentRackEnclosure.class);
         LOG.info(response.toString());
         Assert.assertNotNull(response.outconfig.equipmentRackEnclosure.model);
         Assert.assertEquals(response.dn, response.outconfig.equipmentRackEnclosure.dn);
@@ -184,7 +178,8 @@ public class ApiClientTest {
                 "</configResolveDn>";
 
         XmlMapper mapper = new XmlMapper();
-        ConfigResolveComputeBladeDnResponse response = mapper.readValue(xml, ConfigResolveComputeBladeDnResponse.class);
+        ConfigResolveDnResponseComputeBlade response = mapper.readValue(xml, ConfigResolveDnResponseComputeBlade.class);
+        LOG.info(response.toString());
         Assert.assertNotNull(response.outconfig.computeBlade.model);
         Assert.assertEquals(response.dn, response.outconfig.computeBlade.dn);
 
@@ -222,6 +217,7 @@ public class ApiClientTest {
 
         XmlMapper mapper = new XmlMapper();
         ConfigResolveComputeRackUnitDnResponse response = mapper.readValue(xml, ConfigResolveComputeRackUnitDnResponse.class);
+        LOG.info(response.toString());
         Assert.assertNotNull(response.outconfig.computeRackUnit.model);
         Assert.assertEquals(response.dn, response.outconfig.computeRackUnit.dn);
 
@@ -242,10 +238,33 @@ public class ApiClientTest {
                 " </outConfig> </configResolveDn>";
 
         XmlMapper mapper = new XmlMapper();
-        ConfigResolveNetworkElementDnResponse response = mapper.readValue(xml, ConfigResolveNetworkElementDnResponse.class);
+        ConfigResolveDnResponseNetworkElement response = mapper.readValue(xml, ConfigResolveDnResponseNetworkElement.class);
         Assert.assertNotNull(response.outconfig.networkElement.model);
         Assert.assertEquals(response.dn, response.outconfig.networkElement.dn);
 
+    }
+
+    @Test
+    public void testCanDeserializeErrorXmlString() throws JsonProcessingException {
+        String xml = "<error cookie=\"\" response=\"yes\" errorCode=\"ERR-xml-parse-error\" invocationResult=\"594\" errorDescr=\"XML PARSING ERROR: unknown attribute &apos;1714204607&apos; in element &apos;configResolveDn&apos;\"/>";
+        XmlMapper mapper = new XmlMapper();
+        ErrorResponse errorResponse = mapper.readValue(xml,ErrorResponse.class);
+        Assert.assertEquals("ERR-xml-parse-error", errorResponse.errorCode);
+        Assert.assertEquals(594, errorResponse.invocationResult);
+    }
+
+    @Test
+    public void getComputerRackEnclosureXmlString() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaApi loginApi = new AaaApi(credentials,apiClient);
+        String cookie = loginApi.login();
+        String xmlRequest = "<configResolveDn dn=\"sys/rack-enclosure-1\" cookie=\""+cookie+"\" inHierarchical=\"false\"/>";
+        Assert.assertEquals(xmlRequest,UcsXmlApiRequest.getConfigResolveDnRequest(cookie,"sys/rack-enclosure-1", false));
+        String xmlString = apiClient.doPost(UcsXmlApiRequest.getConfigResolveDnRequest(cookie,"sys/rack-enclosure-1", false));
+        System.out.println(xmlString);
+        loginApi.logout(cookie);
     }
 
     @Test

@@ -156,5 +156,86 @@ public class ComputeRackUnit extends UcsElement {
     public String vethStatus;
     @JacksonXmlProperty(isAttribute = true)
     public int vid;
+
+    @Override
+    public String toString() {
+        return "ComputeRackUnit{" +
+                "adminPower='" + adminPower + '\'' +
+                ", adminState='" + adminState + '\'' +
+                ", assetTag='" + assetTag + '\'' +
+                ", assignedToDn='" + assignedToDn + '\'' +
+                ", association='" + association + '\'' +
+                ", availability='" + availability + '\'' +
+                ", availableMemory=" + availableMemory +
+                ", checkPoint='" + checkPoint + '\'' +
+                ", connPath='" + connPath + '\'' +
+                ", connStatus='" + connStatus + '\'' +
+                ", descr='" + descr + '\'' +
+                ", discovery='" + discovery + '\'' +
+                ", discoveryStatus='" + discoveryStatus + '\'' +
+                ", dn='" + dn + '\'' +
+                ", enclosureId=" + enclosureId +
+                ", fanSpeedConfigStatus='" + fanSpeedConfigStatus + '\'' +
+                ", fanSpeedPolicyFault='" + fanSpeedPolicyFault + '\'' +
+                ", fltAggr=" + fltAggr +
+                ", fsmDescr='" + fsmDescr + '\'' +
+                ", fsmFlags='" + fsmFlags + '\'' +
+                ", fsmPrev='" + fsmPrev + '\'' +
+                ", fsmProgr=" + fsmProgr +
+                ", fsmRmtInvErrCode='" + fsmRmtInvErrCode + '\'' +
+                ", fsmRmtInvErrDescr='" + fsmRmtInvErrDescr + '\'' +
+                ", fsmRmtInvRslt='" + fsmRmtInvRslt + '\'' +
+                ", fsmStageDescr='" + fsmStageDescr + '\'' +
+                ", fsmStamp=" + fsmStamp +
+                ", fsmStatus='" + fsmStatus + '\'' +
+                ", fsmTry=" + fsmTry +
+                ", id=" + id +
+                ", intId=" + intId +
+                ", kmipFault='" + kmipFault + '\'' +
+                ", kmipFaultDescription='" + kmipFaultDescription + '\'' +
+                ", lc='" + lc + '\'' +
+                ", lcTs=" + lcTs +
+                ", localId='" + localId + '\'' +
+                ", lowVoltageMemory='" + lowVoltageMemory + '\'' +
+                ", managingInst='" + managingInst + '\'' +
+                ", memorySpeed='" + memorySpeed + '\'' +
+                ", mfgTime='" + mfgTime + '\'' +
+                ", model='" + model + '\'' +
+                ", name='" + name + '\'' +
+                ", numOf40GAdaptorsWithOldFw=" + numOf40GAdaptorsWithOldFw +
+                ", numOf40GAdaptorsWithUnknownFw=" + numOf40GAdaptorsWithUnknownFw +
+                ", numOfAdaptors=" + numOfAdaptors +
+                ", numOfCores=" + numOfCores +
+                ", numOfCoresEnabled=" + numOfCoresEnabled +
+                ", numOfCpus=" + numOfCpus +
+                ", numOfEthHostIfs=" + numOfEthHostIfs +
+                ", numOfFcHostIfs=" + numOfFcHostIfs +
+                ", numOfThreads=" + numOfThreads +
+                ", operPower='" + operPower + '\'' +
+                ", operPwrTransSrc='" + operPwrTransSrc + '\'' +
+                ", operQualifier='" + operQualifier + '\'' +
+                ", operQualifierReason='" + operQualifierReason + '\'' +
+                ", operState='" + operState + '\'' +
+                ", operability='" + operability + '\'' +
+                ", originalUuid='" + originalUuid + '\'' +
+                ", partNumber='" + partNumber + '\'' +
+                ", physicalSecurity='" + physicalSecurity + '\'' +
+                ", policyLevel=" + policyLevel +
+                ", policyOwner='" + policyOwner + '\'' +
+                ", presence='" + presence + '\'' +
+                ", revision=" + revision +
+                ", serial='" + serial + '\'' +
+                ", serverId=" + serverId +
+                ", slotId=" + slotId +
+                ", storageOperQualifier='" + storageOperQualifier + '\'' +
+                ", totalMemory=" + totalMemory +
+                ", usrLbl='" + usrLbl + '\'' +
+                ", uuid='" + uuid + '\'' +
+                ", vendor='" + vendor + '\'' +
+                ", versionHolder='" + versionHolder + '\'' +
+                ", vethStatus='" + vethStatus + '\'' +
+                ", vid=" + vid +
+                '}';
+    }
 }
 

@@ -10,7 +10,7 @@ public class ConfigResolveComputeRackUnitDnResponse extends ConfigResolveDnRespo
 
     @Override
     public String toString() {
-        return "ConfigResolveComputeBladeDnResponse{" +
+        return "ConfigResolveComputeRackUnitDnResponse{" +
                 "cookie='" + cookie + '\'' +
                 ", response='" + response + '\'' +
                 ", errorCode=" + errorCode +

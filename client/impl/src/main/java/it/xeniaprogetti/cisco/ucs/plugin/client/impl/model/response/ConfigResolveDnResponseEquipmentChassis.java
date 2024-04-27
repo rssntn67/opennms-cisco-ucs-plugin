@@ -1,9 +1,9 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
-import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.equipment.EquipmentFex;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.equipment.EquipmentChassis;
 
-public class ConfigResolveEquipmentFexDnResponse extends ConfigResolveDnResponse {
+public class ConfigResolveDnResponseEquipmentChassis extends ConfigResolveDnResponse {
 
     @JacksonXmlElementWrapper(localName = "outConfig")
     public  OutConfig outconfig;
@@ -17,11 +17,11 @@ public class ConfigResolveEquipmentFexDnResponse extends ConfigResolveDnResponse
                 ", errorDescr='" + errorDescr + '\'' +
                 ", invocationResult='" + invocationResult + '\'' +
                 ", dn='" + dn + '\'' +
-                ", outconfig=" + outconfig.equipmentFex +
+                ", outconfig=" + outconfig.equipmentChassis +
                 '}';
     }
 
     public static class OutConfig {
-        public EquipmentFex equipmentFex;
+        public EquipmentChassis equipmentChassis;
     }
 }

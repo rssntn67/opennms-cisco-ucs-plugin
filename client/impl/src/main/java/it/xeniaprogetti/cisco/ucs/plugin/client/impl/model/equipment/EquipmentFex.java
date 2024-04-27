@@ -68,6 +68,44 @@ public class EquipmentFex extends UcsElement {
     public String vendor;
     @JacksonXmlProperty(isAttribute = true)
     public String voltage;
+
+    @Override
+    public String toString() {
+        return "EquipmentFex{" +
+                "adminPowerState='" + adminPowerState + '\'' +
+                ", adminState='" + adminState + '\'' +
+                ", configState='" + configState + '\'' +
+                ", dn='" + dn + '\'' +
+                ", fltAggr=" + fltAggr +
+                ", fsmDescr='" + fsmDescr + '\'' +
+                ", fsmPrev='" + fsmPrev + '\'' +
+                ", fsmProgr=" + fsmProgr +
+                ", fsmRmtInvErrCode='" + fsmRmtInvErrCode + '\'' +
+                ", fsmRmtInvErrDescr='" + fsmRmtInvErrDescr + '\'' +
+                ", fsmRmtInvRslt='" + fsmRmtInvRslt + '\'' +
+                ", fsmStageDescr='" + fsmStageDescr + '\'' +
+                ", fsmStamp='" + fsmStamp + '\'' +
+                ", fsmStatus='" + fsmStatus + '\'' +
+                ", fsmTry=" + fsmTry +
+                ", id=" + id +
+                ", licGP=" + licGP +
+                ", licState='" + licState + '\'' +
+                ", model='" + model + '\'' +
+                ", operQualifier='" + operQualifier + '\'' +
+                ", operQualifierReason='" + operQualifierReason + '\'' +
+                ", operState='" + operState + '\'' +
+                ", operability='" + operability + '\'' +
+                ", power='" + power + '\'' +
+                ", presence='" + presence + '\'' +
+                ", revision=" + revision +
+                ", serial='" + serial + '\'' +
+                ", switchId='" + switchId + '\'' +
+                ", thermal='" + thermal + '\'' +
+                ", usrLbl='" + usrLbl + '\'' +
+                ", vendor='" + vendor + '\'' +
+                ", voltage='" + voltage + '\'' +
+                '}';
+    }
 }
 
 

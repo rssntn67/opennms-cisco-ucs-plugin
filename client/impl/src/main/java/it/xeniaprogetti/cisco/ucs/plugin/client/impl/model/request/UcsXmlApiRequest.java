@@ -28,7 +28,7 @@ public class UcsXmlApiRequest {
     }
 
     public static String getConfigResolveDnRequest(String cookie, String dn, boolean inHierarchical) {
-        return "<configResolveDn dn=\""+dn+" cookie=\""+cookie+" inHierarchical=\""+inHierarchical+"\"/>";
+        return "<configResolveDn dn=\""+dn+"\" cookie=\""+cookie+"\" inHierarchical=\""+inHierarchical+"\"/>";
     }
 
 }
