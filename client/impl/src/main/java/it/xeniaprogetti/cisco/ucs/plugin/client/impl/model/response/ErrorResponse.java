@@ -4,7 +4,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 @JacksonXmlRootElement(localName = "error")
-public class ErrorResponse extends UcsXmlApiResponse {
+public class ErrorResponse {
     @JacksonXmlProperty(isAttribute = true)
     public String cookie;
     @JacksonXmlProperty(isAttribute = true)

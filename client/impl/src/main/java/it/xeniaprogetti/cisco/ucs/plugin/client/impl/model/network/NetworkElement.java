@@ -11,8 +11,6 @@ public class NetworkElement extends UcsElement {
     @JacksonXmlProperty(isAttribute = true)
     public int diffMemory;
     @JacksonXmlProperty(isAttribute = true)
-    public String dn;
-    @JacksonXmlProperty(isAttribute = true)
     public int expectedMemory;
     @JacksonXmlProperty(isAttribute = true)
     public double fltAggr;

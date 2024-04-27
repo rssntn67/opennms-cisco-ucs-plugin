@@ -1,6 +1,10 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.impl.handler;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ErrorResponse;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.UcsXmlApiResponse;
 import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +25,7 @@ public class ApiClient {
     private final String url;
 
     private OkHttpClient client = new OkHttpClient();
+    private final XmlMapper mapper = new XmlMapper();
     /*
      * This is very bad practice and should NOT be used in production.
      */
@@ -70,7 +75,7 @@ public class ApiClient {
         this.client = trustAllSslClient(this.client);
     }
 
-    public String doPost(String requestBody) throws ApiException {
+    private String doPost(String requestBody) throws ApiException {
         LOG.debug("doPost: url: {}, requestBody: {}", url, requestBody);
         Request request = new Request.Builder()
                 .url(url)
@@ -104,6 +109,34 @@ public class ApiClient {
         }
     }
 
-    public <T extends
+    public String getUrl() {
+        return url;
+    }
+
+    public <T extends UcsXmlApiResponse> T getUcsXmlApiResponse(String requestBody, Class<T> clazz) throws ApiException {
+        String response = doPost(requestBody);
+        try {
+            T t = mapper.readValue(response, clazz);
+            if (t.errorCode > 0) {
+                LOG.error("getUcsXmlApiResponse: failed: with error code: {}, {}", t.errorCode, response);
+                throw new ApiException(
+                        "getUcsXmlApiResponse: server responded with error: " + t.errorCode
+                        ,new RuntimeException("getUcsXmlApiResponse error code: " + t.errorCode)
+                        , t.errorCode
+                        , response);
+            }
+            return t;
+        } catch (JsonProcessingException e) {
+            try {
+                ErrorResponse error = mapper.readValue(response, ErrorResponse.class);
+                throw new ApiException("getUcsXmlApiResponse: server responded with error: " + error.invocationResult
+                        ,new RuntimeException("getUcsXmlApiResponse error: " + error.invocationResult)
+                        , error.invocationResult
+                        , error.toString());
+            } catch (JsonProcessingException ex) {
+                throw new ApiException("getUcsXmlApiResponse: " + ex.getMessage(), ex);
+            }
+        }
+    }
 
 }

@@ -10,16 +10,6 @@ import java.util.List;
 @JacksonXmlRootElement(localName = "configFindDnsByClassId")
 public class ConfigFindDnsByClassIdResponse extends UcsXmlApiResponse {
     @JacksonXmlProperty(isAttribute = true)
-    public String cookie;
-    @JacksonXmlProperty(isAttribute = true)
-    public String response;
-    @JacksonXmlProperty(isAttribute = true)
-    public int errorCode;
-    @JacksonXmlProperty(isAttribute = true)
-    public String errorDescr;
-    @JacksonXmlProperty(isAttribute = true)
-    public String invocationResult;
-    @JacksonXmlProperty(isAttribute = true)
     public String classId;
     @JacksonXmlElementWrapper(localName = "outDns")
     public List<Dn> dns;

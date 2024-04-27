@@ -6,17 +6,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 @JacksonXmlRootElement(localName = "aaaLogout")
 public class AaaLogoutResponse extends UcsXmlApiResponse {
     @JacksonXmlProperty(isAttribute = true)
-    public String cookie;
-    @JacksonXmlProperty(isAttribute = true)
-    public String response;
-    @JacksonXmlProperty(isAttribute = true)
     public String outStatus;
-    @JacksonXmlProperty(isAttribute = true)
-    public int errorCode;
-    @JacksonXmlProperty(isAttribute = true)
-    public String errorDescr;
-    @JacksonXmlProperty(isAttribute = true)
-    public String invocationResult;
 
     @Override
     public String toString() {

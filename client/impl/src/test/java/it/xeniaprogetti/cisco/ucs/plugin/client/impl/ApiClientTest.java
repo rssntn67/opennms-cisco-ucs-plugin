@@ -216,7 +216,7 @@ public class ApiClientTest {
                 "</configResolveDn>";
 
         XmlMapper mapper = new XmlMapper();
-        ConfigResolveComputeRackUnitDnResponse response = mapper.readValue(xml, ConfigResolveComputeRackUnitDnResponse.class);
+        ConfigResolveDnResponseComputeRackUnit response = mapper.readValue(xml, ConfigResolveDnResponseComputeRackUnit.class);
         LOG.info(response.toString());
         Assert.assertNotNull(response.outconfig.computeRackUnit.model);
         Assert.assertEquals(response.dn, response.outconfig.computeRackUnit.dn);

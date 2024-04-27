@@ -6,10 +6,6 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 @JacksonXmlRootElement(localName = "aaaLogin")
 public class AaaLoginResponse extends UcsXmlApiResponse {
     @JacksonXmlProperty(isAttribute = true)
-    public String cookie;
-    @JacksonXmlProperty(isAttribute = true)
-    public String response;
-    @JacksonXmlProperty(isAttribute = true)
     public String outCookie;
     @JacksonXmlProperty(isAttribute = true)
     public int outRefreshPeriod;
@@ -31,12 +27,6 @@ public class AaaLoginResponse extends UcsXmlApiResponse {
     public String outPasswdExpiryStatus;
     @JacksonXmlProperty(isAttribute = true)
     public int outPasswdExpiryDuration;
-    @JacksonXmlProperty(isAttribute = true)
-    public int errorCode;
-    @JacksonXmlProperty(isAttribute = true)
-    public String errorDescr;
-    @JacksonXmlProperty(isAttribute = true)
-    public String invocationResult;
 
     @Override
     public String toString() {

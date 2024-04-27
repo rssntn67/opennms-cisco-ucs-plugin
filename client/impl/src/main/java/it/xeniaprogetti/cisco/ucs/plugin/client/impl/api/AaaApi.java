@@ -1,7 +1,5 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.impl.api;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientCredentials;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.handler.ApiClient;
@@ -20,7 +18,6 @@ public class AaaApi {
     private final ApiClient client;
     private final String username;
     private final String password;
-    private final XmlMapper mapper = new XmlMapper();
 
     public AaaApi(ApiClientCredentials credentials, ApiClient client) {
         Objects.requireNonNull(credentials);
@@ -30,70 +27,27 @@ public class AaaApi {
     }
 
     public String login() throws ApiException {
-        try {
-            AaaLoginResponse response =
-                mapper.readValue(
-                        client.doPost(UcsXmlApiRequest.getLoginRequest(this.username,this.password))
-                        , AaaLoginResponse.class
-                );
-            if (response.errorCode > 0) {
-                LOG.error("login failed: with error code: {}, {}", response.errorCode, response);
-                throw new ApiException(
-                        "login: server responded with error: " + response.errorCode
-                        ,new RuntimeException("login error code: " + response.errorCode)
-                        , response.errorCode
-                        , response.toString());
-            }
-            return response.outCookie;
-        } catch (JsonProcessingException e) {
-            LOG.error("login: {}", e.getMessage(), e);
-            throw new ApiException("login: " +e.getMessage(),e);
-        }
+        LOG.info("login: {} to {}", this.username, this.client.getUrl());
+            return client.getUcsXmlApiResponse
+                (UcsXmlApiRequest.getLoginRequest(this.username,this.password)
+                    ,AaaLoginResponse.class
+                ).outCookie;
     }
 
     public String refresh(String token) throws ApiException {
-        try {
-            AaaRefreshResponse response =
-                mapper.readValue
-                        (
-                            client.doPost(UcsXmlApiRequest.getRefreshRequest(this.username,this.password, token)),
-                            AaaRefreshResponse.class
-                        );
-            if (response.errorCode > 0) {
-                LOG.error("refresh failed: with error code: {}, {}", response.errorCode, response);
-                throw new ApiException(
-                        "refresh: server responded with error: {}" + response.errorCode
-                        ,new RuntimeException("refresh error code: " + response.errorCode)
-                        , response.errorCode
-                        , response.toString());
-            }
-            return response.outCookie;
-        } catch (JsonProcessingException e) {
-            LOG.error("refresh: error {}", e.getMessage(),e);
-            throw new ApiException("refresh: " +e.getMessage(),e);
-        }
+            LOG.info("refresh: {} to {}", this.username, this.client.getUrl());
+            return client.getUcsXmlApiResponse
+                    (UcsXmlApiRequest.getRefreshRequest(this.username,this.password, token)
+                            , AaaRefreshResponse.class
+                    ).outCookie;
     }
 
     public void logout(String token) throws ApiException {
-        try {
-            AaaLogoutResponse response =
-                mapper.readValue(
-                    client.doPost(UcsXmlApiRequest.getLogoutRequest(token)),
+        LOG.info("logout: {} from {}", this.username, this.client.getUrl());
+        client.getUcsXmlApiResponse
+                    (UcsXmlApiRequest.getLogoutRequest(token),
                     AaaLogoutResponse.class
                 );
-            if (response.errorCode > 0) {
-                LOG.error("logout failed: with error code: {}, {}", response.errorCode, response);
-                throw new ApiException(
-                        "logout: server responded with error: {}" + response.errorCode
-                        ,new RuntimeException("login error code: " + response.errorCode)
-                        ,200
-                        , response.toString());
-            }
-
-        } catch (JsonProcessingException e) {
-            LOG.error("logout: error {}", e.getMessage(),e);
-            throw new ApiException("logout: " +e.getMessage(),e);
-        }
     }
 
 }
