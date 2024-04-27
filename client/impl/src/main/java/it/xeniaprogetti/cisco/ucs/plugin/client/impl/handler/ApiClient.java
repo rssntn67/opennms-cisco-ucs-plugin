@@ -75,7 +75,7 @@ public class ApiClient {
         this.client = trustAllSslClient(this.client);
     }
 
-    private String doPost(String requestBody) throws ApiException {
+    public String doPost(String requestBody) throws ApiException {
         LOG.debug("doPost: url: {}, requestBody: {}", url, requestBody);
         Request request = new Request.Builder()
                 .url(url)
@@ -114,6 +114,7 @@ public class ApiClient {
     }
 
     public <T extends UcsXmlApiResponse> T getUcsXmlApiResponse(String requestBody, Class<T> clazz) throws ApiException {
+        LOG.debug("getUcsXmlApiResponse: class: {} ", clazz.getSimpleName());
         String response = doPost(requestBody);
         try {
             T t = mapper.readValue(response, clazz);

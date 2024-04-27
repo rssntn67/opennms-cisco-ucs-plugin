@@ -21,8 +21,7 @@ public class ConfigApi {
 
     public enum ClassItem {
         equipmentItem,
-        computeItem,
-        networkItem
+        computeItem
     }
 
     public enum ClassId {
@@ -44,7 +43,7 @@ public class ConfigApi {
     public List<String> getDnByClassId(String cookie, ClassItem item) throws ApiException {
         LOG.info("getDnByClassId: {}", item);
         return client.getUcsXmlApiResponse(
-                            UcsXmlApiRequest.getConfigFindDnsByClassIdRequest(item.name(), cookie),
+                            UcsXmlApiRequest.getConfigFindDnsByClassIdRequest(cookie,item.name()),
                             ConfigFindDnsByClassIdResponse.class
                 ).dns.stream().map(s -> s.value).collect(Collectors.toList());
     }
@@ -96,5 +95,54 @@ public class ConfigApi {
                 .outconfig
                 .networkElement;
     }
+
+    public List<ComputeBlade> getUcsComputeBladeListByClassId(String cookie) throws ApiException{
+        LOG.info("getUcsComputeBladeListByClassId: {}", ClassId.computeBlade);
+        return client.getUcsXmlApiResponse(
+                UcsXmlApiRequest.getConfigResolveClassRequest(cookie,ClassId.computeBlade.name()),
+                ConfigResolveClassResponseComputeBladeList.class
+        ).computeBlades;
+    }
+
+    public List<ComputeRackUnit> getUcsComputeRackUnitListByClassId(String cookie) throws ApiException{
+        LOG.info("getUcsComputeBladeByClassId: {}" , ClassId.computeRackUnit);
+        return client.getUcsXmlApiResponse(
+                UcsXmlApiRequest.getConfigResolveClassRequest(cookie,ClassId.computeRackUnit.name()),
+                ConfigResolveClassResponseComputeRackUnitList.class
+        ).computeRackUnits;
+    }
+
+    public List<EquipmentChassis> getUcsEquipmentChassisListByClassId(String cookie) throws ApiException{
+        LOG.info("getUcsEquipmentChassisListByClassId: {}", ClassId.equipmentChassis);
+        return client.getUcsXmlApiResponse(
+                UcsXmlApiRequest.getConfigResolveClassRequest(cookie,ClassId.equipmentChassis.name()),
+                ConfigResolveClassResponseEquipmentChassisList.class
+        ).equipmentChasses;
+    }
+
+    public List<EquipmentFex> getUcsEquipmentFexListByClassId(String cookie) throws ApiException{
+        LOG.info("getUcsEquipmentFexListByClassId: {}", ClassId.equipmentFex);
+        return client.getUcsXmlApiResponse(
+                UcsXmlApiRequest.getConfigResolveClassRequest(cookie,ClassId.equipmentFex.name()),
+                ConfigResolveClassResponseEquipmentFexList.class
+        ).equipmentFexes;
+    }
+
+    public List<EquipmentRackEnclosure> getUcsEquipmentRackEnclosureListByClassId(String cookie) throws ApiException{
+        LOG.info("getUcsEquipmentRackEnclosureListByClassId: {}", ClassId.equipmentRackEnclosure);
+        return client.getUcsXmlApiResponse(
+                UcsXmlApiRequest.getConfigResolveClassRequest(cookie,ClassId.equipmentRackEnclosure.name()),
+                ConfigResolveClassResponseEquipmentRackEnclosureList.class
+        ).equipmentRackEnclosures;
+    }
+
+    public List<NetworkElement> getUcsNetworkElementListByClassId(String cookie) throws ApiException{
+        LOG.info("getUcsNetworkElementListByClassId: {}", ClassId.networkElement);
+        return client.getUcsXmlApiResponse(
+                UcsXmlApiRequest.getConfigResolveClassRequest(cookie,ClassId.networkElement.name()),
+                ConfigResolveClassResponseNetworkElementList.class
+        ).networkElements;
+    }
+
 
 }

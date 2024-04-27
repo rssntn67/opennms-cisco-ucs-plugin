@@ -366,7 +366,7 @@ public class ApiClientTest {
         AaaApi loginApi = new AaaApi(credentials,client);
         String token = loginApi.login();
         ConfigApi configApi = new ConfigApi(client);
-        List<NetworkElement> elements = configApi.getUcsElementsByClassId(token,NetworkElement.class);
+        List<NetworkElement> elements = configApi.getUcsNetworkElementListByClassId(token);
         Assert.assertFalse(elements.isEmpty());
         loginApi.logout(token);
     }
@@ -379,7 +379,7 @@ public class ApiClientTest {
         AaaApi loginApi = new AaaApi(credentials,client);
         String token = loginApi.login();
         ConfigApi configApi = new ConfigApi(client);
-        List<EquipmentFex> elements = configApi.getUcsElementsByClassId(token,EquipmentFex.class);
+        List<EquipmentFex> elements = configApi.getUcsEquipmentFexListByClassId(token);
         Assert.assertFalse(elements.isEmpty());
         loginApi.logout(token);
     }
@@ -392,8 +392,9 @@ public class ApiClientTest {
         AaaApi loginApi = new AaaApi(credentials,client);
         String token = loginApi.login();
         ConfigApi configApi = new ConfigApi(client);
-        List<EquipmentChassis> elements = configApi.getUcsElementsByClassId(token,EquipmentChassis.class);
+        List<EquipmentChassis> elements = configApi.getUcsEquipmentChassisListByClassId(token);
         Assert.assertFalse(elements.isEmpty());
+        Assert.assertEquals(2, elements.size());
         loginApi.logout(token);
     }
 
@@ -405,8 +406,9 @@ public class ApiClientTest {
         AaaApi loginApi = new AaaApi(credentials,client);
         String token = loginApi.login();
         ConfigApi configApi = new ConfigApi(client);
-        List<EquipmentRackEnclosure> elements = configApi.getUcsElementsByClassId(token,EquipmentRackEnclosure.class);
+        List<EquipmentRackEnclosure> elements = configApi.getUcsEquipmentRackEnclosureListByClassId(token);
         Assert.assertFalse(elements.isEmpty());
+        Assert.assertEquals(1, elements.size());
         loginApi.logout(token);
     }
 
@@ -418,8 +420,9 @@ public class ApiClientTest {
         AaaApi loginApi = new AaaApi(credentials,client);
         String token = loginApi.login();
         ConfigApi configApi = new ConfigApi(client);
-        List<ComputeBlade> elements = configApi.getUcsElementsByClassId(token,ComputeBlade.class);
+        List<ComputeBlade> elements = configApi.getUcsComputeBladeListByClassId(token);
         Assert.assertFalse(elements.isEmpty());
+        Assert.assertEquals(5, elements.size());
         loginApi.logout(token);
     }
 
@@ -431,8 +434,9 @@ public class ApiClientTest {
         AaaApi loginApi = new AaaApi(credentials,client);
         String token = loginApi.login();
         ConfigApi configApi = new ConfigApi(client);
-        List<ComputeRackUnit> elements = configApi.getUcsElementsByClassId(token, ComputeRackUnit.class);
+        List<ComputeRackUnit> elements = configApi.getUcsComputeRackUnitListByClassId(token);
         Assert.assertFalse(elements.isEmpty());
+        Assert.assertEquals(9,elements.size());
         loginApi.logout(token);
     }
 
@@ -468,17 +472,81 @@ public class ApiClientTest {
     }
 
     @Test
-    public void testApiClientNetwork() throws ApiException {
+    public void testApiClientComputeBladeByDn() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
         ApiClient apiClient = new ApiClient(credentials.url);
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         String token = loginApi.login();
         ConfigApi api = new ConfigApi(apiClient);
-        List<String> dns = api.getDnByClassId(token, ConfigApi.ClassItem.networkItem);
-        for (String dn : dns) {
-            LOG.info("networkItem: {}",dn);
-        }
+        ComputeBlade computeBlade = api.getUcsComputeBladeByDn(token, "sys/chassis-3/blade-3");
+        Assert.assertEquals("sys/chassis-3/blade-3", computeBlade.dn);
+        loginApi.logout(token);
+    }
+
+    @Test
+    public void testApiClientComputeRackUnitByDn() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaApi loginApi = new AaaApi(credentials,apiClient);
+        String token = loginApi.login();
+        ConfigApi api = new ConfigApi(apiClient);
+        ComputeRackUnit computeRackUnit = api.getUcsComputeRackUnitByDn(token, "sys/rack-unit-8");
+        Assert.assertEquals("sys/rack-unit-8", computeRackUnit.dn);
+        loginApi.logout(token);
+    }
+
+    @Test
+    public void testApiEquipmentChassisByDn() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaApi loginApi = new AaaApi(credentials,apiClient);
+        String token = loginApi.login();
+        ConfigApi api = new ConfigApi(apiClient);
+        EquipmentChassis equipment = api.getUcsEquipmentChassisByDn(token, "sys/chassis-4");
+        Assert.assertEquals("sys/chassis-4", equipment.dn);
+        loginApi.logout(token);
+    }
+
+    @Test
+    public void testApiEquipmentFexByDn() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaApi loginApi = new AaaApi(credentials,apiClient);
+        String token = loginApi.login();
+        ConfigApi api = new ConfigApi(apiClient);
+        EquipmentFex equipment = api.getUcsEquipmentFexByDn(token, "sys/fex-2");
+        Assert.assertEquals("sys/fex-2", equipment.dn);
+        loginApi.logout(token);
+    }
+
+    @Test
+    public void testApiEquipmentRackEnclosureByDn() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaApi loginApi = new AaaApi(credentials,apiClient);
+        String token = loginApi.login();
+        ConfigApi api = new ConfigApi(apiClient);
+        EquipmentRackEnclosure equipment = api.getUcsEquipmentRackEnclosureByDn(token, "sys/rack-enclosure-1");
+        Assert.assertEquals("sys/rack-enclosure-1", equipment.dn);
+        loginApi.logout(token);
+    }
+
+    @Test
+    public void testApiNetworkElementByDn() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaApi loginApi = new AaaApi(credentials,apiClient);
+        String token = loginApi.login();
+        ConfigApi api = new ConfigApi(apiClient);
+        NetworkElement equipment = api.getUcsNetworkElementByDn(token, "sys/switch-A");
+        Assert.assertEquals("sys/switch-A", equipment.dn);
+        LOG.info(equipment.model);
         loginApi.logout(token);
     }
 

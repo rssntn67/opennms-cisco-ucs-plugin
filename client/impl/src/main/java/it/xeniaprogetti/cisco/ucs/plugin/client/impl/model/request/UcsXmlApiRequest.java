@@ -24,7 +24,7 @@ public class UcsXmlApiRequest {
     }
 
     public static String getConfigFindDnsByClassIdRequest(String cookie, String classId) {
-        return "<configFindDnsByClassId cookie=\""+cookie+"\" classId=\""+classId+"\"</>";
+        return "<configFindDnsByClassId cookie=\""+cookie+"\" classId=\""+classId+"\" />";
     }
 
     public static String getConfigResolveDnRequest(String cookie, String dn, boolean inHierarchical) {
