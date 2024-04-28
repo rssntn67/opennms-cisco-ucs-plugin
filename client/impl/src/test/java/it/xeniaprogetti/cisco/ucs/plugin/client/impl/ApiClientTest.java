@@ -21,6 +21,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class ApiClientTest {
@@ -259,40 +260,45 @@ public class ApiClientTest {
         ApiClientCredentials credentials = getCredentials();
         ApiClient apiClient = new ApiClient(credentials.url);
         apiClient.setTrustAllCertsClient();
-        AaaApi loginApi = new AaaApi(credentials,apiClient);
-        String cookie = loginApi.login();
-        String xmlRequest = "<configResolveDn dn=\"sys/rack-enclosure-1\" cookie=\""+cookie+"\" inHierarchical=\"false\"/>";
-        Assert.assertEquals(xmlRequest,UcsXmlApiRequest.getConfigResolveDnRequest(cookie,"sys/rack-enclosure-1", false));
-        String xmlString = apiClient.doPost(UcsXmlApiRequest.getConfigResolveDnRequest(cookie,"sys/rack-enclosure-1", false));
+        AaaApi aaaApi = new AaaApi(credentials,apiClient);
+        aaaApi.login();
+        String xmlRequest = "<configResolveDn dn=\"sys/rack-enclosure-1\" cookie=\""+aaaApi.getToken()+"\" inHierarchical=\"false\"/>";
+        Assert.assertEquals(xmlRequest,UcsXmlApiRequest.getConfigResolveDnRequest(aaaApi.getToken(),"sys/rack-enclosure-1", false));
+        String xmlString = apiClient.doPost(UcsXmlApiRequest.getConfigResolveDnRequest(aaaApi.getToken(),"sys/rack-enclosure-1", false));
         System.out.println(xmlString);
-        loginApi.logout(cookie);
+        aaaApi.logout();
     }
 
     @Test
-    public void testAaaLoginApi() {
+    public void testAaaLoginApi() throws InterruptedException, ApiException {
         ApiClientCredentials credentials = getCredentials();
         ApiClient apiClient = new ApiClient(credentials.url);
         apiClient.setTrustAllCertsClient();
-        AaaApi loginApi = new AaaApi(credentials,apiClient);
-        String aaaLoginResponse = null;
-        try {
-            aaaLoginResponse = loginApi.login();
-        } catch (ApiException e) {
-            Assert.fail();
-        }
-        LOG.info("login cookie: {}" ,aaaLoginResponse);
-        String aaaRefreshResponse = null;
-        try {
-            aaaRefreshResponse = loginApi.refresh(aaaLoginResponse);
-        } catch (ApiException e) {
-            Assert.fail();
-        }
-        LOG.info("refresh cookie: {}",  aaaRefreshResponse);
-        try {
-            loginApi.logout(aaaRefreshResponse);
-        } catch (ApiException e) {
-            Assert.fail();
-        }
+        AaaApi aaaApi = new AaaApi(credentials,apiClient);
+        Assert.assertFalse(aaaApi.isValidToken(0));
+
+        LocalDateTime firstValidityTime = aaaApi.getValidityTime();
+        aaaApi.login();
+        LOG.info("login cookie: {}" ,aaaApi.getToken());
+        LOG.info("login now     : {}", LocalDateTime.now());
+        LOG.info("login validity: {}", aaaApi.getValidityTime());
+        Assert.assertTrue(aaaApi.isValidToken(10));
+        Assert.assertTrue(aaaApi.isValidToken(100));
+        Assert.assertTrue(aaaApi.isValidToken(300));
+        Assert.assertTrue(aaaApi.isValidToken(590));
+        Assert.assertFalse(aaaApi.isValidToken(600));
+        Assert.assertTrue(aaaApi.getValidityTime().isAfter(LocalDateTime.now()));
+        Thread.sleep(1000);
+
+        aaaApi.refresh();
+        LOG.info("refresh cookie: {}" ,aaaApi.getToken());
+        LOG.info("refresh now     : {}", LocalDateTime.now());
+        LOG.info("refresh validity: {}", aaaApi.getValidityTime());
+        Assert.assertTrue(aaaApi.isValidToken(30));
+        Assert.assertTrue(aaaApi.getValidityTime().isAfter(firstValidityTime));
+        Thread.sleep(1000);
+        aaaApi.logout();
+        Assert.assertFalse(aaaApi.isValidToken(0));
 
     }
 
@@ -320,56 +326,16 @@ public class ApiClientTest {
     }
 
     @Test
-    public void testApiClientLoginApiWithErrorCode()  {
-
-        ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
-        apiClient.setTrustAllCertsClient();
-        AaaApi loginApi = new AaaApi(credentials,apiClient);
-        String token = null;
-        try {
-            token = loginApi.login();
-            Assert.assertNotNull(token);
-            Assert.assertEquals(47,token.length());
-        } catch (ApiException e) {
-            Assert.fail();
-        }
-        String wrongToken = token.replace("0","1");
-        Assert.assertNotEquals(token,wrongToken);
-        try {
-            loginApi.refresh(wrongToken);
-            Assert.fail();
-        } catch (ApiException e) {
-            Assert.assertEquals(200, e.getCode());
-            Assert.assertEquals(552, e.getErrCode());
-        }
-
-        try {
-            loginApi.logout(wrongToken);
-            Assert.fail();
-        } catch (ApiException e) {
-            Assert.assertEquals(200, e.getCode());
-            Assert.assertEquals(555, e.getErrCode());
-        }
-        try {
-            loginApi.logout(token);
-        } catch (ApiException e) {
-            Assert.fail();
-        }
-
-    }
-
-    @Test
     public void testConfigApiResolveClassNetworkElement() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
         ApiClient client = new ApiClient(credentials.url);
         client.setTrustAllCertsClient();
-        AaaApi loginApi = new AaaApi(credentials,client);
-        String token = loginApi.login();
+        AaaApi aaaApi = new AaaApi(credentials,client);
+        aaaApi.login();
         ConfigApi configApi = new ConfigApi(client);
-        List<NetworkElement> elements = configApi.getUcsNetworkElementListByClassId(token);
+        List<NetworkElement> elements = configApi.getUcsNetworkElementListByClassId(aaaApi.getToken());
         Assert.assertFalse(elements.isEmpty());
-        loginApi.logout(token);
+        aaaApi.logout();
     }
 
     @Test
@@ -378,11 +344,11 @@ public class ApiClientTest {
         ApiClient client = new ApiClient(credentials.url);
         client.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,client);
-        String token = loginApi.login();
+        loginApi.login();
         ConfigApi configApi = new ConfigApi(client);
-        List<EquipmentFex> elements = configApi.getUcsEquipmentFexListByClassId(token);
+        List<EquipmentFex> elements = configApi.getUcsEquipmentFexListByClassId(loginApi.getToken());
         Assert.assertFalse(elements.isEmpty());
-        loginApi.logout(token);
+        loginApi.logout();
     }
 
     @Test
@@ -391,12 +357,12 @@ public class ApiClientTest {
         ApiClient client = new ApiClient(credentials.url);
         client.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,client);
-        String token = loginApi.login();
+        loginApi.login();
         ConfigApi configApi = new ConfigApi(client);
-        List<EquipmentChassis> elements = configApi.getUcsEquipmentChassisListByClassId(token);
+        List<EquipmentChassis> elements = configApi.getUcsEquipmentChassisListByClassId(loginApi.getToken());
         Assert.assertFalse(elements.isEmpty());
         Assert.assertEquals(2, elements.size());
-        loginApi.logout(token);
+        loginApi.logout();
     }
 
     @Test
@@ -405,12 +371,12 @@ public class ApiClientTest {
         ApiClient client = new ApiClient(credentials.url);
         client.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,client);
-        String token = loginApi.login();
+        loginApi.login();
         ConfigApi configApi = new ConfigApi(client);
-        List<EquipmentRackEnclosure> elements = configApi.getUcsEquipmentRackEnclosureListByClassId(token);
+        List<EquipmentRackEnclosure> elements = configApi.getUcsEquipmentRackEnclosureListByClassId(loginApi.getToken());
         Assert.assertFalse(elements.isEmpty());
         Assert.assertEquals(1, elements.size());
-        loginApi.logout(token);
+        loginApi.logout();
     }
 
     @Test
@@ -419,12 +385,12 @@ public class ApiClientTest {
         ApiClient client = new ApiClient(credentials.url);
         client.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,client);
-        String token = loginApi.login();
+        loginApi.login();
         ConfigApi configApi = new ConfigApi(client);
-        List<ComputeBlade> elements = configApi.getUcsComputeBladeListByClassId(token);
+        List<ComputeBlade> elements = configApi.getUcsComputeBladeListByClassId(loginApi.getToken());
         Assert.assertFalse(elements.isEmpty());
         Assert.assertEquals(5, elements.size());
-        loginApi.logout(token);
+        loginApi.logout();
     }
 
     @Test
@@ -433,12 +399,12 @@ public class ApiClientTest {
         ApiClient client = new ApiClient(credentials.url);
         client.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,client);
-        String token = loginApi.login();
+        loginApi.login();
         ConfigApi configApi = new ConfigApi(client);
-        List<ComputeRackUnit> elements = configApi.getUcsComputeRackUnitListByClassId(token);
+        List<ComputeRackUnit> elements = configApi.getUcsComputeRackUnitListByClassId(loginApi.getToken());
         Assert.assertFalse(elements.isEmpty());
         Assert.assertEquals(9,elements.size());
-        loginApi.logout(token);
+        loginApi.logout();
     }
 
 
@@ -448,13 +414,13 @@ public class ApiClientTest {
         ApiClient apiClient = new ApiClient(credentials.url);
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
-        String token = loginApi.login();
+        loginApi.login();
         ConfigApi api = new ConfigApi(apiClient);
-        List<String> dns = api.getDnByClassId(token, UcsEntity.ClassItem.equipmentItem);
+        List<String> dns = api.getDnByClassId(loginApi.getToken(), UcsEntity.ClassItem.equipmentItem);
         for (String dn : dns) {
             LOG.info("equipmentItem: {}",dn);
         }
-        loginApi.logout(token);
+        loginApi.logout();
     }
 
     @Test
@@ -463,13 +429,13 @@ public class ApiClientTest {
         ApiClient apiClient = new ApiClient(credentials.url);
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
-        String token = loginApi.login();
+        loginApi.login();
         ConfigApi api = new ConfigApi(apiClient);
-        List<String> dns = api.getDnByClassId(token, UcsEntity.ClassItem.computeItem);
+        List<String> dns = api.getDnByClassId(loginApi.getToken(), UcsEntity.ClassItem.computeItem);
         for (String dn : dns) {
             LOG.info("computeItem: {}",dn);
         }
-        loginApi.logout(token);
+        loginApi.logout();
     }
 
     @Test
@@ -478,11 +444,11 @@ public class ApiClientTest {
         ApiClient apiClient = new ApiClient(credentials.url);
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
-        String token = loginApi.login();
+        loginApi.login();
         ConfigApi api = new ConfigApi(apiClient);
-        ComputeBlade computeBlade = api.getUcsComputeBladeByDn(token, "sys/chassis-3/blade-3");
+        ComputeBlade computeBlade = api.getUcsComputeBladeByDn(loginApi.getToken(), "sys/chassis-3/blade-3");
         Assert.assertEquals("sys/chassis-3/blade-3", computeBlade.dn);
-        loginApi.logout(token);
+        loginApi.logout();
     }
 
     @Test
@@ -491,11 +457,11 @@ public class ApiClientTest {
         ApiClient apiClient = new ApiClient(credentials.url);
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
-        String token = loginApi.login();
+        loginApi.login();
         ConfigApi api = new ConfigApi(apiClient);
-        ComputeRackUnit computeRackUnit = api.getUcsComputeRackUnitByDn(token, "sys/rack-unit-8");
+        ComputeRackUnit computeRackUnit = api.getUcsComputeRackUnitByDn(loginApi.getToken(), "sys/rack-unit-8");
         Assert.assertEquals("sys/rack-unit-8", computeRackUnit.dn);
-        loginApi.logout(token);
+        loginApi.logout();
     }
 
     @Test
@@ -504,11 +470,11 @@ public class ApiClientTest {
         ApiClient apiClient = new ApiClient(credentials.url);
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
-        String token = loginApi.login();
+        loginApi.login();
         ConfigApi api = new ConfigApi(apiClient);
-        EquipmentChassis equipment = api.getUcsEquipmentChassisByDn(token, "sys/chassis-4");
+        EquipmentChassis equipment = api.getUcsEquipmentChassisByDn(loginApi.getToken(), "sys/chassis-4");
         Assert.assertEquals("sys/chassis-4", equipment.dn);
-        loginApi.logout(token);
+        loginApi.logout();
     }
 
     @Test
@@ -517,11 +483,11 @@ public class ApiClientTest {
         ApiClient apiClient = new ApiClient(credentials.url);
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
-        String token = loginApi.login();
+        loginApi.login();
         ConfigApi api = new ConfigApi(apiClient);
-        EquipmentFex equipment = api.getUcsEquipmentFexByDn(token, "sys/fex-2");
+        EquipmentFex equipment = api.getUcsEquipmentFexByDn(loginApi.getToken(), "sys/fex-2");
         Assert.assertEquals("sys/fex-2", equipment.dn);
-        loginApi.logout(token);
+        loginApi.logout();
     }
 
     @Test
@@ -530,11 +496,11 @@ public class ApiClientTest {
         ApiClient apiClient = new ApiClient(credentials.url);
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
-        String token = loginApi.login();
+        loginApi.login();
         ConfigApi api = new ConfigApi(apiClient);
-        EquipmentRackEnclosure equipment = api.getUcsEquipmentRackEnclosureByDn(token, "sys/rack-enclosure-1");
+        EquipmentRackEnclosure equipment = api.getUcsEquipmentRackEnclosureByDn(loginApi.getToken(), "sys/rack-enclosure-1");
         Assert.assertEquals("sys/rack-enclosure-1", equipment.dn);
-        loginApi.logout(token);
+        loginApi.logout();
     }
 
     @Test
@@ -543,12 +509,12 @@ public class ApiClientTest {
         ApiClient apiClient = new ApiClient(credentials.url);
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
-        String token = loginApi.login();
+        loginApi.login();
         ConfigApi api = new ConfigApi(apiClient);
-        NetworkElement equipment = api.getUcsNetworkElementByDn(token, "sys/switch-A");
+        NetworkElement equipment = api.getUcsNetworkElementByDn(loginApi.getToken(), "sys/switch-A");
         Assert.assertEquals("sys/switch-A", equipment.dn);
         LOG.info(equipment.model);
-        loginApi.logout(token);
+        loginApi.logout();
     }
 
 }

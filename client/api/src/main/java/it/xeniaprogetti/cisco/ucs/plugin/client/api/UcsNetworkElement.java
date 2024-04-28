@@ -159,7 +159,7 @@ public final class UcsNetworkElement extends UcsEntity {
             this.dn = dn;
             return this;
         }
-        
+
         public Builder withAdminEvacState(String adminEvacState) {
             this.adminEvacState = adminEvacState;
             return this;
