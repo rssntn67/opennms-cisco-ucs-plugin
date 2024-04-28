@@ -26,22 +26,31 @@ public class ApiClientCredentials {
      */
     public final Boolean ignoreSslCertificateValidation;
 
+    public final int validity;
+
     private ApiClientCredentials(final Builder builder) {
         this.url = Objects.requireNonNull(builder.url);
         this.username = builder.username;
         this.password = builder.password;
         this.ignoreSslCertificateValidation = builder.ignoreSslCertificateValidation;
+        this.validity = builder.validity;
     }
 
     public static class Builder {
         private String url;
         private String username;
         private String password;
+        private int validity;
 
         private boolean ignoreSslCertificateValidation = false;
 
 
         private Builder() {
+        }
+
+        public Builder withValidity(final int validity) {
+            this.validity = validity;
+            return this;
         }
 
         public Builder withUrl(final String url) {

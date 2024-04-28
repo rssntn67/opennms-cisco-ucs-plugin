@@ -52,6 +52,13 @@ public interface Connection {
     void setPassword(final String password);
 
     /**
+     * This is the timeout to be considered
+     * before a client is to be refreshed
+     * @param validity
+     */
+    void setValidityTime(int validity);
+    int getValidityTime();
+    /**
      * Save the altered connection config in the underlying store.
      */
     void save();

@@ -34,6 +34,7 @@ public class ApiClientTest {
                 .withUsername("pippo")
                 .withPassword("pluto")
                 .withIgnoreSslCertificateValidation(true)
+                .withValidity(0)
                 .build();
     }
     /**

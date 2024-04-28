@@ -197,6 +197,18 @@ public class ConnectionManager {
                     .build();
         }
 
+        @Override
+        public void setValidityTime(int validity) {
+            this.credentials = ApiClientCredentials.builder(this.credentials)
+                    .withValidity(validity)
+                    .build();
+        }
+
+        @Override
+        public int getValidityTime() {
+            return this.credentials.validity;
+        }
+
 
         @Override
         public void save() {

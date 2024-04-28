@@ -10,7 +10,7 @@
     </parent>
     <packaging>pom</packaging>
 
-    <artifactId>opennms-cisco-ucs-plugin-client</artifactId>
+    <artifactId>cisco-ucs-plugin-client</artifactId>
 
     <name>OpenNMS :: Plugins :: Cisco UCS :: Client</name>
 

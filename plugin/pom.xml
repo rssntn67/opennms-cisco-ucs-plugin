@@ -82,7 +82,7 @@
         </dependency>
         <dependency>
             <groupId>it.xeniaprogetti</groupId>
-            <artifactId>opennms-cisco-ucs-plugin-client-api</artifactId>
+            <artifactId>cisco-ucs-plugin-client-api</artifactId>
             <version>0.1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
