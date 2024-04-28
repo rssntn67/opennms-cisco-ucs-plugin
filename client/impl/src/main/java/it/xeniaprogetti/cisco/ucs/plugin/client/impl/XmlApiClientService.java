@@ -5,7 +5,6 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientService;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeBlade;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeRackUnit;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEntity;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentChassis;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentFex;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentRackEnclosure;
@@ -25,7 +24,7 @@ public class XmlApiClientService implements ApiClientService {
 
 
     public XmlApiClientService(ApiClientCredentials credentials) {
-        this.client = XmlApiClientprovider.getApiClient(credentials);
+        this.client = XmlApiClientProvider.getApiClient(credentials);
         this.credentials = credentials;
         this.aaaApi = new AaaApi(credentials, client);
         this.configApi = new ConfigApi(client);
