@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientCredentials;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEntity;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.AaaApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.ConfigApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.handler.ApiClient;
@@ -449,7 +450,7 @@ public class ApiClientTest {
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         String token = loginApi.login();
         ConfigApi api = new ConfigApi(apiClient);
-        List<String> dns = api.getDnByClassId(token, ConfigApi.ClassItem.equipmentItem);
+        List<String> dns = api.getDnByClassId(token, UcsEntity.ClassItem.equipmentItem);
         for (String dn : dns) {
             LOG.info("equipmentItem: {}",dn);
         }
@@ -464,7 +465,7 @@ public class ApiClientTest {
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         String token = loginApi.login();
         ConfigApi api = new ConfigApi(apiClient);
-        List<String> dns = api.getDnByClassId(token, ConfigApi.ClassItem.computeItem);
+        List<String> dns = api.getDnByClassId(token, UcsEntity.ClassItem.computeItem);
         for (String dn : dns) {
             LOG.info("computeItem: {}",dn);
         }
