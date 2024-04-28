@@ -6,10 +6,11 @@
         <feature dependency="true">shell</feature>
         <feature version="${guava.version}" dependency="true">guava</feature>
         <feature version="${opennms.api.version}" dependency="true">opennms-integration-api</feature>
-        <feature version="${okhttp.version}" dependency="true">okhttp</feature>
-        <feature version="${jackson.version}" dependency="true">jackson</feature>
+
         <bundle dependency="true">mvn:org.apache.commons/commons-jexl3/${jexl.version}</bundle>
         <bundle dependency="true">mvn:javax.ws.rs/javax.ws.rs-api/2.1.1</bundle>
+
+        <feature version="${project.version}">opennms-plugins-cisco-ucs-client</feature>
         <bundle>mvn:it.xeniaprogetti/cisco-ucs-plugin/${project.version}</bundle>
     </feature>
 
@@ -23,6 +24,7 @@
         <bundle dependency="true">mvn:com.fasterxml.jackson.core/jackson-databind/${jackson.version}</bundle>
         <bundle dependency="true">mvn:com.fasterxml.jackson.core/jackson-annotations/${jackson.version}</bundle>
         <bundle dependency="true">mvn:com.fasterxml.jackson.core/jackson-core/${jackson.version}</bundle>
+        <bundle dependency="true">mvn:com.fasterxml.jackson.dataformat/jackson-dataformat-xml/${jackson.version}</bundle>
     </feature>
 
     <feature name="guava" description="guava" version="${guava.version}">
@@ -32,11 +34,8 @@
 
     <feature name="opennms-plugins-cisco-ucs-client" description="OpenNMS :: Plugins :: Cisco UCS :: CLient" version="${project.version}">
         <feature dependency="true">aries-blueprint</feature>
-        <feature version="${guava.version}" dependency="true">guava</feature>
+        <feature version="${okhttp.version}" dependency="true">okhttp</feature>
         <feature version="${jackson.version}" dependency="true">jackson</feature>
-        <feature version="${opennms.api.version}" dependency="true">opennms-integration-api</feature>
-
-
         <bundle>mvn:it.xeniaprogetti/cisco-ucs-plugin-client-api/${project.version}</bundle>
         <bundle>mvn:it.xeniaprogetti/cisco-ucs-plugin-client-impl/${project.version}</bundle>
     </feature>
