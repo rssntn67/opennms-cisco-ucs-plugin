@@ -40,6 +40,7 @@ public class ClientManager {
                 .withPassword(connection.getPassword())
                 .withUrl(connection.getUrl())
                 .withIgnoreSslCertificateValidation(connection.isIgnoreSslCertificateValidation())
+                .withValidity(connection.getValidityTime())
                 .build();
     }
 

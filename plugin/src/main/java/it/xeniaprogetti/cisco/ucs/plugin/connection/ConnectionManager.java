@@ -20,7 +20,8 @@ import java.util.stream.Collectors;
 public class ConnectionManager {
 
     private static final String PREFIX = "cucs_connection_";
-    public static final String CUSCM_URL_KEY = "cucsUrl";
+    public static final String CUCS_URL_KEY = "cucsUrl";
+    public static final String CUCS_VALIDITY_KEY = "cucsValidity";
     public static final String IGNORE_SSL_CERTIFICATE_VALIDATION_KEY = "ignoreSslCertificateValidation";
 
     private final RuntimeInfo runtimeInfo;
@@ -71,8 +72,9 @@ public class ConnectionManager {
      * @param username          the username to authenticate the connection
      * @param password          the password to authenticate the connection
      * @param ignoreSslCerticateValidation          ignore Ssl Certificate Validation
+     * @param validity          time in seconds before cucs session need to be refreshed
      */
-    public Connection newConnection(final String alias, final String url, final String username, final String password, final boolean ignoreSslCerticateValidation) {
+    public Connection newConnection(final String alias, final String url, final String username, final String password, final boolean ignoreSslCerticateValidation, final int validity) {
         this.ensureCore();
 
         return new ConnectionImpl(alias, ApiClientCredentials.builder()
@@ -80,6 +82,7 @@ public class ConnectionManager {
                 .withUsername(username)
                 .withPassword(password)
                 .withIgnoreSslCertificateValidation(ignoreSslCerticateValidation)
+                .withValidity(validity)
                 .build());
     }
 
@@ -111,8 +114,12 @@ public class ConnectionManager {
             throw new IllegalStateException("API username is missing");
         }
 
-        if (Strings.isNullOrEmpty(credentials.getAttribute(CUSCM_URL_KEY))) {
-            throw new IllegalStateException("Prism URL is missing");
+        if (Strings.isNullOrEmpty(credentials.getAttribute(CUCS_URL_KEY))) {
+            throw new IllegalStateException("Cisco Ucs Manager URL is missing");
+        }
+
+        if (Strings.isNullOrEmpty(credentials.getAttribute(CUCS_VALIDITY_KEY))) {
+            throw new IllegalStateException("Cisco Ucs Manager validity is missing");
         }
 
         if (Strings.isNullOrEmpty(credentials.getAttribute(IGNORE_SSL_CERTIFICATE_VALIDATION_KEY))) {
@@ -120,17 +127,18 @@ public class ConnectionManager {
         }
 
 
-        final var prismUrl = credentials.getAttribute(CUSCM_URL_KEY);
+        final var cUrl = credentials.getAttribute(CUCS_URL_KEY);
 
         final var username = credentials.getUsername();
         final var password = credentials.getPassword();
         final var ignoreSslCertificateValidation = Boolean.parseBoolean(credentials.getAttribute(IGNORE_SSL_CERTIFICATE_VALIDATION_KEY));
-
+        final var validity = Integer.parseInt(credentials.getAttribute(CUCS_VALIDITY_KEY));
         return ApiClientCredentials.builder()
-                .withUrl(prismUrl)
+                .withUrl(cUrl)
                 .withUsername(username)
                 .withPassword(password)
                 .withIgnoreSslCertificateValidation(ignoreSslCertificateValidation)
+                .withValidity(validity)
                 .build();
         }
 
@@ -223,8 +231,9 @@ public class ConnectionManager {
 
         private Credentials asCredentials() {
             Map<String,String> credentialMap = new HashMap<>();
-            credentialMap.put(CUSCM_URL_KEY, this.credentials.url);
+            credentialMap.put(CUCS_URL_KEY, this.credentials.url);
             credentialMap.put(IGNORE_SSL_CERTIFICATE_VALIDATION_KEY, String.valueOf(this.credentials.ignoreSslCertificateValidation));
+            credentialMap.put(CUCS_VALIDITY_KEY, String.valueOf(this.credentials.validity));
             return new ImmutableCredentials(this.credentials.username, this.credentials.password, credentialMap);
         }
 
@@ -232,11 +241,12 @@ public class ConnectionManager {
         public String toString() {
             return MoreObjects.toStringHelper(this)
                               .add("alias", this.alias)
-                              .add(CUSCM_URL_KEY, this.credentials.url)
+                              .add(CUCS_URL_KEY, this.credentials.url)
                               .add("username", this.credentials.username)
                               .add("password", "******")
                               .add(IGNORE_SSL_CERTIFICATE_VALIDATION_KEY, this.credentials.ignoreSslCertificateValidation)
-                        .toString();
+                              .add(CUCS_VALIDITY_KEY, this.credentials.validity)
+                    .toString();
         }
     }
 

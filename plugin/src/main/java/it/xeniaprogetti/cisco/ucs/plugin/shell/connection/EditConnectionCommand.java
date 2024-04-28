@@ -37,6 +37,9 @@ public class EditConnectionCommand implements Action {
     @Argument(index = 3, name = "password", description = "Nutanix Prism API password", required = true, censor = true)
     public String password = null;
 
+    @Argument(index = 4, name = "validity", description = "Cisco Ucs Manager XML API time in seconds to refresh connection")
+    public int validity = 30;
+
 
     @Override
     public Object execute() throws Exception {
@@ -52,7 +55,7 @@ public class EditConnectionCommand implements Action {
         connection.get().setUsername(username);
         connection.get().setPassword(password);
         connection.get().setIgnoreSslCertificateValidation(ignoreSslCertificateValidation);
-
+        connection.get().setValidityTime(validity);
         System.err.println("updating: " + connection);
 
 

@@ -28,18 +28,20 @@ public class AddConnectionCommand implements Action {
     @Option(name = "-i", aliases = "--ignore-ssl-certificate-validation", description = "Ignore ssl certificate validation")
     boolean ignoreSslCertificateValidation = false;
 
-
     @Argument(name = "alias", description = "Alias", required = true)
     public String alias = null;
 
     @Argument(index = 1, name = "url", description = "Cisco Ucs Manager XML API Url", required = true)
     public String url = null;
 
-    @Argument(index = 2, name = "username", description = "Cisco Ucs Manager XML API API username", required = true)
+    @Argument(index = 2, name = "username", description = "Cisco Ucs Manager XML API username", required = true)
     public String username = null;
 
-    @Argument(index = 3, name = "password", description = "Cisco Ucs Manager XML API API password", required = true, censor = true)
+    @Argument(index = 3, name = "password", description = "Cisco Ucs Manager XML API password", required = true, censor = true)
     public String password = null;
+
+    @Argument(index = 4, name = "validity", description = "Cisco Ucs Manager XML API time in seconds to refresh connection")
+    public int validity = 30;
 
     @Override
     public Object execute() {
@@ -54,7 +56,8 @@ public class AddConnectionCommand implements Action {
                                 this.url,
                                 this.username,
                                 this.password,
-                        this.ignoreSslCertificateValidation
+                        this.ignoreSslCertificateValidation,
+                        this.validity
         );
         System.err.println("saving: " + connection);
 

@@ -28,6 +28,7 @@ public class ListConnectionsCommand implements Action {
                 .column(new Col("username").maxSize(36))
                 .column(new Col("password").maxSize(36))
                 .column(new Col("ignoreSslVal").maxSize(12))
+                .column(new Col("validity").maxSize(4))
                 ;
 
         this.connectionManager.getAliases().stream()
@@ -39,6 +40,7 @@ public class ListConnectionsCommand implements Action {
                                           row.addContent(connection.getUsername());
                                           row.addContent("*****");
                                           row.addContent(connection.isIgnoreSslCertificateValidation());
+                                          row.addContent(connection.getValidityTime());
                                       });
 
         table.print(System.out, true);
