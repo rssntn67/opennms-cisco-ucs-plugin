@@ -9,9 +9,9 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.handler.ApiClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class XmlApiClientprovider implements ApiClientProvider {
+public class XmlApiClientProvider implements ApiClientProvider {
 
-    private static final Logger LOG = LoggerFactory.getLogger(XmlApiClientprovider.class);
+    private static final Logger LOG = LoggerFactory.getLogger(XmlApiClientProvider.class);
 
     protected static ApiClient getApiClient(ApiClientCredentials apiClientCredentials) {
         ApiClient client = new ApiClient(apiClientCredentials.url);
