@@ -290,7 +290,7 @@ public final class UcsNetworkElement extends UcsEntity {
             return this;
         }
 
-        public UcsNetworkElement createUcsNetworkElement() {
+        public UcsNetworkElement build() {
             return new UcsNetworkElement(this);
         }
 

@@ -21,14 +21,12 @@ public class AaaApi {
     private final String password;
     private String token;
     private LocalDateTime validityTime = LocalDateTime.now();
-    private int validity;
 
     public AaaApi(ApiClientCredentials credentials, ApiClient client) {
         Objects.requireNonNull(credentials);
         this.username = credentials.username;
         this.password = Objects.requireNonNull(credentials.password);
         this.client = Objects.requireNonNull(client);
-        this.validity = credentials.validity;
     }
 
     public void login() throws ApiException {
@@ -63,8 +61,12 @@ public class AaaApi {
         this.token = null;
     }
 
-    public boolean isValidToken(long secondsFromNow) {
-        return this.token != null && validityTime.isAfter(LocalDateTime.now().plusSeconds(secondsFromNow).plusSeconds(validity));
+    public boolean isValidTokenAtLeastFor(long secondsFromNow) {
+        return this.token != null && validityTime.isAfter(LocalDateTime.now().plusSeconds(secondsFromNow));
+    }
+
+    public boolean isValidTokenForLessThen(long secondsFromNow) {
+        return this.token != null && validityTime.isAfter(LocalDateTime.now().minusSeconds(secondsFromNow));
     }
 
     public String getToken() {

@@ -30,9 +30,9 @@ public class XmlApiClientProvider implements ApiClientProvider {
         AaaApi api = new AaaApi(credentials,getApiClient(credentials));
         try {
             api.login();
-            LOG.info("validate: {}, {}", credentials, api.isValidToken(0));
+            LOG.info("validate: {}, {}", credentials, api.isValidTokenAtLeastFor(0));
             api.logout();
-            return api.isValidToken(0);
+            return api.isValidTokenAtLeastFor(0);
         } catch (ApiException e) {
             return false;
         }

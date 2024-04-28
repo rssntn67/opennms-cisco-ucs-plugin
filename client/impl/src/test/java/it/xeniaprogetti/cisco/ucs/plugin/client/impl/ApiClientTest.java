@@ -276,18 +276,18 @@ public class ApiClientTest {
         ApiClient apiClient = new ApiClient(credentials.url);
         apiClient.setTrustAllCertsClient();
         AaaApi aaaApi = new AaaApi(credentials,apiClient);
-        Assert.assertFalse(aaaApi.isValidToken(0));
+        Assert.assertFalse(aaaApi.isValidTokenAtLeastFor(0));
 
         LocalDateTime firstValidityTime = aaaApi.getValidityTime();
         aaaApi.login();
         LOG.info("login cookie: {}" ,aaaApi.getToken());
         LOG.info("login now     : {}", LocalDateTime.now());
         LOG.info("login validity: {}", aaaApi.getValidityTime());
-        Assert.assertTrue(aaaApi.isValidToken(10));
-        Assert.assertTrue(aaaApi.isValidToken(100));
-        Assert.assertTrue(aaaApi.isValidToken(300));
-        Assert.assertTrue(aaaApi.isValidToken(590));
-        Assert.assertFalse(aaaApi.isValidToken(600));
+        Assert.assertTrue(aaaApi.isValidTokenAtLeastFor(10));
+        Assert.assertTrue(aaaApi.isValidTokenAtLeastFor(100));
+        Assert.assertTrue(aaaApi.isValidTokenAtLeastFor(300));
+        Assert.assertTrue(aaaApi.isValidTokenAtLeastFor(590));
+        Assert.assertFalse(aaaApi.isValidTokenAtLeastFor(600));
         Assert.assertTrue(aaaApi.getValidityTime().isAfter(LocalDateTime.now()));
         Thread.sleep(1000);
 
@@ -295,11 +295,11 @@ public class ApiClientTest {
         LOG.info("refresh cookie: {}" ,aaaApi.getToken());
         LOG.info("refresh now     : {}", LocalDateTime.now());
         LOG.info("refresh validity: {}", aaaApi.getValidityTime());
-        Assert.assertTrue(aaaApi.isValidToken(30));
+        Assert.assertTrue(aaaApi.isValidTokenAtLeastFor(30));
         Assert.assertTrue(aaaApi.getValidityTime().isAfter(firstValidityTime));
         Thread.sleep(1000);
         aaaApi.logout();
-        Assert.assertFalse(aaaApi.isValidToken(0));
+        Assert.assertFalse(aaaApi.isValidTokenAtLeastFor(0));
 
     }
 

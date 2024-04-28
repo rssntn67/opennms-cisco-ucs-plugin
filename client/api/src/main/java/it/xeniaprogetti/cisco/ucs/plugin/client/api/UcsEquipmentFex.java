@@ -142,7 +142,7 @@ public final class UcsEquipmentFex extends UcsEntity {
                 '}';
     }
 
-    private static class Builder {
+    public static class Builder {
         private Builder() {
 
         }

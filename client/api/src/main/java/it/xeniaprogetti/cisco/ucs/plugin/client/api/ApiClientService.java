@@ -4,6 +4,8 @@ import java.util.List;
 
 public interface ApiClientService {
 
+    void disconnect() throws ApiException;
+
     UcsComputeBlade resolveUcsComputeBladeByDn(String dn) throws ApiException;
     UcsComputeRackUnit resolveUcsComputeRackUnitByDn(String dn) throws ApiException;
     UcsEquipmentChassis resolveUcsEquipmentChassisByDn(String dn) throws ApiException;
