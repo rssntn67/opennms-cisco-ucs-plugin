@@ -150,10 +150,14 @@ public final class UcsComputeBlade extends UcsEntity {
         this.vid = builder.vid;
     }
 
+
     @Override
     public String toString() {
-        return "ComputeBlade{" +
-                "adminPower='" + adminPower + '\'' +
+        return "UcsComputeBlade{" +
+                "dn='" + dn + '\'' +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                ", adminPower='" + adminPower + '\'' +
                 ", adminState='" + adminState + '\'' +
                 ", assetTag='" + assetTag + '\'' +
                 ", assignedToDn='" + assignedToDn + '\'' +
@@ -167,7 +171,6 @@ public final class UcsComputeBlade extends UcsEntity {
                 ", descr='" + descr + '\'' +
                 ", discovery='" + discovery + '\'' +
                 ", discoveryStatus='" + discoveryStatus + '\'' +
-                ", dn='" + dn + '\'' +
                 ", fltAggr=" + fltAggr +
                 ", fsmDescr='" + fsmDescr + '\'' +
                 ", fsmFlags='" + fsmFlags + '\'' +

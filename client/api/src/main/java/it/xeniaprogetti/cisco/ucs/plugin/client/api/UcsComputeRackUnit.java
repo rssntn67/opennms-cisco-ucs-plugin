@@ -163,7 +163,10 @@ public final class UcsComputeRackUnit extends UcsEntity {
     @Override
     public String toString() {
         return "ComputeRackUnit{" +
-                "adminPower='" + adminPower + '\'' +
+                "dn='" + dn + '\'' +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                ", adminPower='" + adminPower + '\'' +
                 ", adminState='" + adminState + '\'' +
                 ", assetTag='" + assetTag + '\'' +
                 ", assignedToDn='" + assignedToDn + '\'' +
@@ -176,7 +179,6 @@ public final class UcsComputeRackUnit extends UcsEntity {
                 ", descr='" + descr + '\'' +
                 ", discovery='" + discovery + '\'' +
                 ", discoveryStatus='" + discoveryStatus + '\'' +
-                ", dn='" + dn + '\'' +
                 ", enclosureId=" + enclosureId +
                 ", fanSpeedConfigStatus='" + fanSpeedConfigStatus + '\'' +
                 ", fanSpeedPolicyFault='" + fanSpeedPolicyFault + '\'' +
@@ -342,357 +344,357 @@ public final class UcsComputeRackUnit extends UcsEntity {
             return this;
         }
 
-        public Builder witAssignedToDn(String assignedToDn) {
+        public Builder withAssignedToDn(String assignedToDn) {
             this.assignedToDn = assignedToDn;
             return this;
         }
 
-        public Builder witAssociation(String association) {
+        public Builder withAssociation(String association) {
             this.association = association;
             return this;
         }
 
-        public Builder witAvailability(String availability) {
+        public Builder withAvailability(String availability) {
             this.availability = availability;
             return this;
         }
 
-        public Builder witAvailableMemory(int availableMemory) {
+        public Builder withAvailableMemory(int availableMemory) {
             this.availableMemory = availableMemory;
             return this;
         }
 
-        public Builder witCheckPoint(String checkPoint) {
+        public Builder withCheckPoint(String checkPoint) {
             this.checkPoint = checkPoint;
             return this;
         }
 
-        public Builder witConnPath(String connPath) {
+        public Builder withConnPath(String connPath) {
             this.connPath = connPath;
             return this;
         }
 
-        public Builder witConnStatus(String connStatus) {
+        public Builder withConnStatus(String connStatus) {
             this.connStatus = connStatus;
             return this;
         }
 
-        public Builder witDescr(String descr) {
+        public Builder withDescr(String descr) {
             this.descr = descr;
             return this;
         }
 
-        public Builder witDiscovery(String discovery) {
+        public Builder withDiscovery(String discovery) {
             this.discovery = discovery;
             return this;
         }
 
-        public Builder witDiscoveryStatus(String discoveryStatus) {
+        public Builder withDiscoveryStatus(String discoveryStatus) {
             this.discoveryStatus = discoveryStatus;
             return this;
         }
 
-        public Builder witEnclosureId(int enclosureId) {
+        public Builder withEnclosureId(int enclosureId) {
             this.enclosureId = enclosureId;
             return this;
         }
 
-        public Builder witFanSpeedConfigStatus(String fanSpeedConfigStatus) {
+        public Builder withFanSpeedConfigStatus(String fanSpeedConfigStatus) {
             this.fanSpeedConfigStatus = fanSpeedConfigStatus;
             return this;
         }
 
-        public Builder witFanSpeedPolicyFault(String fanSpeedPolicyFault) {
+        public Builder withFanSpeedPolicyFault(String fanSpeedPolicyFault) {
             this.fanSpeedPolicyFault = fanSpeedPolicyFault;
             return this;
         }
 
-        public Builder witFltAggr(int fltAggr) {
+        public Builder withFltAggr(int fltAggr) {
             this.fltAggr = fltAggr;
             return this;
         }
 
-        public Builder witFsmDescr(String fsmDescr) {
+        public Builder withFsmDescr(String fsmDescr) {
             this.fsmDescr = fsmDescr;
             return this;
         }
 
-        public Builder witFsmFlags(String fsmFlags) {
+        public Builder withFsmFlags(String fsmFlags) {
             this.fsmFlags = fsmFlags;
             return this;
         }
 
-        public Builder witFsmPrev(String fsmPrev) {
+        public Builder withFsmPrev(String fsmPrev) {
             this.fsmPrev = fsmPrev;
             return this;
         }
 
-        public Builder witFsmProgr(int fsmProgr) {
+        public Builder withFsmProgr(int fsmProgr) {
             this.fsmProgr = fsmProgr;
             return this;
         }
 
-        public Builder witFsmRmtInvErrCode(String fsmRmtInvErrCode) {
+        public Builder withFsmRmtInvErrCode(String fsmRmtInvErrCode) {
             this.fsmRmtInvErrCode = fsmRmtInvErrCode;
             return this;
         }
 
-        public Builder witFsmRmtInvErrDescr(String fsmRmtInvErrDescr) {
+        public Builder withFsmRmtInvErrDescr(String fsmRmtInvErrDescr) {
             this.fsmRmtInvErrDescr = fsmRmtInvErrDescr;
             return this;
         }
 
-        public Builder witFsmRmtInvRslt(String fsmRmtInvRslt) {
+        public Builder withFsmRmtInvRslt(String fsmRmtInvRslt) {
             this.fsmRmtInvRslt = fsmRmtInvRslt;
             return this;
         }
 
-        public Builder witFsmStageDescr(String fsmStageDescr) {
+        public Builder withFsmStageDescr(String fsmStageDescr) {
             this.fsmStageDescr = fsmStageDescr;
             return this;
         }
 
-        public Builder witFsmStamp(Date fsmStamp) {
+        public Builder withFsmStamp(Date fsmStamp) {
             this.fsmStamp = fsmStamp;
             return this;
         }
 
-        public Builder witFsmStatus(String fsmStatus) {
+        public Builder withFsmStatus(String fsmStatus) {
             this.fsmStatus = fsmStatus;
             return this;
         }
 
-        public Builder witFsmTry(int fsmTry) {
+        public Builder withFsmTry(int fsmTry) {
             this.fsmTry = fsmTry;
             return this;
         }
 
-        public Builder witId(int id) {
+        public Builder withId(int id) {
             this.id = id;
             return this;
         }
 
-        public Builder witIntId(int intId) {
+        public Builder withIntId(int intId) {
             this.intId = intId;
             return this;
         }
 
-        public Builder witKmipFault(String kmipFault) {
+        public Builder withKmipFault(String kmipFault) {
             this.kmipFault = kmipFault;
             return this;
         }
 
-        public Builder witKmipFaultDescription(String kmipFaultDescription) {
+        public Builder withKmipFaultDescription(String kmipFaultDescription) {
             this.kmipFaultDescription = kmipFaultDescription;
             return this;
         }
 
-        public Builder witLc(String lc) {
+        public Builder withLc(String lc) {
             this.lc = lc;
             return this;
         }
 
-        public Builder witLcTs(Date lcTs) {
+        public Builder withLcTs(Date lcTs) {
             this.lcTs = lcTs;
             return this;
         }
 
-        public Builder witLocalId(String localId) {
+        public Builder withLocalId(String localId) {
             this.localId = localId;
             return this;
         }
 
-        public Builder witLowVoltageMemory(String lowVoltageMemory) {
+        public Builder withLowVoltageMemory(String lowVoltageMemory) {
             this.lowVoltageMemory = lowVoltageMemory;
             return this;
         }
 
-        public Builder witManagingInst(String managingInst) {
+        public Builder withManagingInst(String managingInst) {
             this.managingInst = managingInst;
             return this;
         }
 
-        public Builder witMemorySpeed(String memorySpeed) {
+        public Builder withMemorySpeed(String memorySpeed) {
             this.memorySpeed = memorySpeed;
             return this;
         }
 
-        public Builder witMfgTime(String mfgTime) {
+        public Builder withMfgTime(String mfgTime) {
             this.mfgTime = mfgTime;
             return this;
         }
 
-        public Builder witModel(String model) {
+        public Builder withModel(String model) {
             this.model = model;
             return this;
         }
 
-        public Builder witName(String name) {
+        public Builder withName(String name) {
             this.name = name;
             return this;
         }
 
-        public Builder witNumOf40GAdaptorsWithOldFw(int numOf40GAdaptorsWithOldFw) {
+        public Builder withNumOf40GAdaptorsWithOldFw(int numOf40GAdaptorsWithOldFw) {
             this.numOf40GAdaptorsWithOldFw = numOf40GAdaptorsWithOldFw;
             return this;
         }
 
-        public Builder witNumOf40GAdaptorsWithUnknownFw(int numOf40GAdaptorsWithUnknownFw) {
+        public Builder withNumOf40GAdaptorsWithUnknownFw(int numOf40GAdaptorsWithUnknownFw) {
             this.numOf40GAdaptorsWithUnknownFw = numOf40GAdaptorsWithUnknownFw;
             return this;
         }
 
-        public Builder witNumOfAdaptors(int numOfAdaptors) {
+        public Builder withNumOfAdaptors(int numOfAdaptors) {
             this.numOfAdaptors = numOfAdaptors;
             return this;
         }
 
-        public Builder witNumOfCores(int numOfCores) {
+        public Builder withNumOfCores(int numOfCores) {
             this.numOfCores = numOfCores;
             return this;
         }
 
-        public Builder witNumOfCoresEnabled(int numOfCoresEnabled) {
+        public Builder withNumOfCoresEnabled(int numOfCoresEnabled) {
             this.numOfCoresEnabled = numOfCoresEnabled;
             return this;
         }
 
-        public Builder witNumOfCpus(int numOfCpus) {
+        public Builder withNumOfCpus(int numOfCpus) {
             this.numOfCpus = numOfCpus;
             return this;
         }
 
-        public Builder witNumOfEthHostIfs(int numOfEthHostIfs) {
+        public Builder withNumOfEthHostIfs(int numOfEthHostIfs) {
             this.numOfEthHostIfs = numOfEthHostIfs;
             return this;
         }
 
-        public Builder witNumOfFcHostIfs(int numOfFcHostIfs) {
+        public Builder withNumOfFcHostIfs(int numOfFcHostIfs) {
             this.numOfFcHostIfs = numOfFcHostIfs;
             return this;
         }
 
-        public Builder witNumOfThreads(int numOfThreads) {
+        public Builder withNumOfThreads(int numOfThreads) {
             this.numOfThreads = numOfThreads;
             return this;
         }
 
-        public Builder witOperPower(String operPower) {
+        public Builder withOperPower(String operPower) {
             this.operPower = operPower;
             return this;
         }
 
-        public Builder witOperPwrTransSrc(String operPwrTransSrc) {
+        public Builder withOperPwrTransSrc(String operPwrTransSrc) {
             this.operPwrTransSrc = operPwrTransSrc;
             return this;
         }
 
-        public Builder witOperQualifier(String operQualifier) {
+        public Builder withOperQualifier(String operQualifier) {
             this.operQualifier = operQualifier;
             return this;
         }
 
-        public Builder witOperQualifierReason(String operQualifierReason) {
+        public Builder withOperQualifierReason(String operQualifierReason) {
             this.operQualifierReason = operQualifierReason;
             return this;
         }
 
-        public Builder witOperState(String operState) {
+        public Builder withOperState(String operState) {
             this.operState = operState;
             return this;
         }
 
-        public Builder witOperability(String operability) {
+        public Builder withOperability(String operability) {
             this.operability = operability;
             return this;
         }
 
-        public Builder witOriginalUuid(String originalUuid) {
+        public Builder withOriginalUuid(String originalUuid) {
             this.originalUuid = originalUuid;
             return this;
         }
 
-        public Builder witPartNumber(String partNumber) {
+        public Builder withPartNumber(String partNumber) {
             this.partNumber = partNumber;
             return this;
         }
 
-        public Builder witPhysicalSecurity(String physicalSecurity) {
+        public Builder withPhysicalSecurity(String physicalSecurity) {
             this.physicalSecurity = physicalSecurity;
             return this;
         }
 
-        public Builder witPolicyLevel(int policyLevel) {
+        public Builder withPolicyLevel(int policyLevel) {
             this.policyLevel = policyLevel;
             return this;
         }
 
-        public Builder witPolicyOwner(String policyOwner) {
+        public Builder withPolicyOwner(String policyOwner) {
             this.policyOwner = policyOwner;
             return this;
         }
 
-        public Builder witPresence(String presence) {
+        public Builder withPresence(String presence) {
             this.presence = presence;
             return this;
         }
 
-        public Builder witRevision(int revision) {
+        public Builder withRevision(int revision) {
             this.revision = revision;
             return this;
         }
 
-        public Builder witSerial(String serial) {
+        public Builder withSerial(String serial) {
             this.serial = serial;
             return this;
         }
 
-        public Builder witServerId(int serverId) {
+        public Builder withServerId(int serverId) {
             this.serverId = serverId;
             return this;
         }
 
-        public Builder witSlotId(int slotId) {
+        public Builder withSlotId(int slotId) {
             this.slotId = slotId;
             return this;
         }
 
-        public Builder witStorageOperQualifier(String storageOperQualifier) {
+        public Builder withStorageOperQualifier(String storageOperQualifier) {
             this.storageOperQualifier = storageOperQualifier;
             return this;
         }
 
-        public Builder witTotalMemory(int totalMemory) {
+        public Builder withTotalMemory(int totalMemory) {
             this.totalMemory = totalMemory;
             return this;
         }
 
-        public Builder witUsrLbl(String usrLbl) {
+        public Builder withUsrLbl(String usrLbl) {
             this.usrLbl = usrLbl;
             return this;
         }
 
-        public Builder witUuid(String uuid) {
+        public Builder withUuid(String uuid) {
             this.uuid = uuid;
             return this;
         }
 
-        public Builder witVendor(String vendor) {
+        public Builder withVendor(String vendor) {
             this.vendor = vendor;
             return this;
         }
 
-        public Builder witVersionHolder(String versionHolder) {
+        public Builder withVersionHolder(String versionHolder) {
             this.versionHolder = versionHolder;
             return this;
         }
 
-        public Builder witVethStatus(String vethStatus) {
+        public Builder withVethStatus(String vethStatus) {
             this.vethStatus = vethStatus;
             return this;
         }
 
-        public Builder witVid(int vid) {
+        public Builder withVid(int vid) {
             this.vid = vid;
             return this;
         }

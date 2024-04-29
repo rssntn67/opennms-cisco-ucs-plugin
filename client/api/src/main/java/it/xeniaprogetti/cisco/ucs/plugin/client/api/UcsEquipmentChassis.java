@@ -45,7 +45,7 @@ public final class UcsEquipmentChassis extends UcsEntity {
     
     public final String fsmRmtInvRslt;
     
-    public final Object fsmStageDescr;
+    public final String fsmStageDescr;
     
     public final Date fsmStamp;
     
@@ -161,7 +161,10 @@ public final class UcsEquipmentChassis extends UcsEntity {
     @Override
     public String toString() {
         return "EquipmentChassis{" +
-                "ackProgressIndicator='" + ackProgressIndicator + '\'' +
+                "dn='" + dn + '\'' +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                ", ackProgressIndicator='" + ackProgressIndicator + '\'' +
                 ", adminState='" + adminState + '\'' +
                 ", assetTag='" + assetTag + '\'' +
                 ", assignedToDn='" + assignedToDn + '\'' +
@@ -237,7 +240,7 @@ public final class UcsEquipmentChassis extends UcsEntity {
         private String fsmRmtInvErrCode;
         private String fsmRmtInvErrDescr;
         private String fsmRmtInvRslt;
-        private Object fsmStageDescr;
+        private String fsmStageDescr;
         private Date fsmStamp;
         private String fsmStatus;
         private int fsmTry;
@@ -265,9 +268,6 @@ public final class UcsEquipmentChassis extends UcsEntity {
         private String vendor;
         private String versionHolder;
         private String vid;
-        private String adminPowerState;
-        private String switchId;
-        private String voltage;
 
         public UcsEquipmentChassis.Builder withDn(String dn) {
             this.dn = dn;
@@ -379,7 +379,7 @@ public final class UcsEquipmentChassis extends UcsEntity {
             return this;
         }
 
-        public UcsEquipmentChassis.Builder withFsmStageDescr(Object fsmStageDescr) {
+        public UcsEquipmentChassis.Builder withFsmStageDescr(String fsmStageDescr) {
             this.fsmStageDescr = fsmStageDescr;
             return this;
         }

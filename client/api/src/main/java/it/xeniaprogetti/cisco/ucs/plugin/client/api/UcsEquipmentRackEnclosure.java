@@ -17,7 +17,7 @@ public final class UcsEquipmentRackEnclosure extends UcsEntity {
     
     public final String operability;
     
-    public final Object partNumber;
+    public final String partNumber;
     
     public final String presence;
     
@@ -54,8 +54,10 @@ public final class UcsEquipmentRackEnclosure extends UcsEntity {
     @Override
     public String toString() {
         return "EquipmentRackEnclosure{" +
-                "assetTag='" + assetTag + '\'' +
-                ", dn='" + dn + '\'' +
+                "dn='" + dn + '\'' +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                ", assetTag='" + assetTag + '\'' +
                 ", fltAggr=" + fltAggr +
                 ", id=" + id +
                 ", mfgTime='" + mfgTime + '\'' +
@@ -80,7 +82,7 @@ public final class UcsEquipmentRackEnclosure extends UcsEntity {
         private String model;
         private String operQualifierReason;
         private String operability;
-        private Object partNumber;
+        private String partNumber;
         private String presence;
         private int revision;
         private String serial;
@@ -130,7 +132,7 @@ public final class UcsEquipmentRackEnclosure extends UcsEntity {
             return this;
         }
 
-        public Builder withPartNumber(Object partNumber) {
+        public Builder withPartNumber(String partNumber) {
             this.partNumber = partNumber;
             return this;
         }

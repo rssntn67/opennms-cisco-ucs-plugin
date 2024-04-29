@@ -1,7 +1,6 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.equipment;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.UcsElement;
 
 import java.util.Date;
@@ -49,7 +48,7 @@ public class EquipmentChassis extends UcsElement {
     @JacksonXmlProperty(isAttribute = true)
     public String fsmRmtInvRslt;
     @JacksonXmlProperty(isAttribute = true)
-    public Object fsmStageDescr;
+    public String fsmStageDescr;
     @JacksonXmlProperty(isAttribute = true)
     public Date fsmStamp;
     @JacksonXmlProperty(isAttribute = true)

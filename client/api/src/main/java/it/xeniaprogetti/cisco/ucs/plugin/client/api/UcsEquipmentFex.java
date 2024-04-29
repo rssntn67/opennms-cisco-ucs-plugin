@@ -107,10 +107,12 @@ public final class UcsEquipmentFex extends UcsEntity {
     @Override
     public String toString() {
         return "EquipmentFex{" +
-                "adminPowerState='" + adminPowerState + '\'' +
+                "dn='" + dn + '\'' +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                ", adminPowerState='" + adminPowerState + '\'' +
                 ", adminState='" + adminState + '\'' +
                 ", configState='" + configState + '\'' +
-                ", dn='" + dn + '\'' +
                 ", fltAggr=" + fltAggr +
                 ", fsmDescr='" + fsmDescr + '\'' +
                 ", fsmPrev='" + fsmPrev + '\'' +

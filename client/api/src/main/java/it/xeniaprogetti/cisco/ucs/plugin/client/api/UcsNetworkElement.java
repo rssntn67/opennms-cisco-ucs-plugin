@@ -92,10 +92,12 @@ public final class UcsNetworkElement extends UcsEntity {
     @Override
     public String toString() {
         return "NetworkElement{" +
-                "adminEvacState='" + adminEvacState + '\'' +
+                "dn='" + dn + '\'' +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                ", adminEvacState='" + adminEvacState + '\'' +
                 ", adminInbandIfState='" + adminInbandIfState + '\'' +
                 ", diffMemory=" + diffMemory +
-                ", dn='" + dn + '\'' +
                 ", expectedMemory=" + expectedMemory +
                 ", fltAggr=" + fltAggr +
                 ", forceEvac='" + forceEvac + '\'' +

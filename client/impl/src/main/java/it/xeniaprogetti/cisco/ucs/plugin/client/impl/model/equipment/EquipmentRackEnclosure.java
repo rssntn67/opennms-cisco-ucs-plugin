@@ -19,7 +19,7 @@ public class EquipmentRackEnclosure extends UcsElement {
     @JacksonXmlProperty(isAttribute = true)
     public String operability;
     @JacksonXmlProperty(isAttribute = true)
-    public Object partNumber;
+    public String partNumber;
     @JacksonXmlProperty(isAttribute = true)
     public String presence;
     @JacksonXmlProperty(isAttribute = true)
