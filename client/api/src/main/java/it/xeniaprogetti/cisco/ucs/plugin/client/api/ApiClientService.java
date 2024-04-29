@@ -13,11 +13,13 @@ public interface ApiClientService {
     UcsEquipmentRackEnclosure resolveUcsEquipmentRackEnclosureByDn(String dn) throws ApiException;
     UcsNetworkElement resolveUcsNetworkElementByDn(String dn) throws ApiException;
 
-    List<UcsComputeBlade> getUcsComputeBladeList(String dn) throws ApiException;
-    List<UcsComputeRackUnit> getUcsComputeRackUnitList(String dn) throws ApiException;
-    List<UcsEquipmentChassis> getUcsEquipmentChassisList(String dn) throws ApiException;
-    List<UcsEquipmentFex> getUcsEquipmentFexList(String dn) throws ApiException;
-    List<UcsEquipmentRackEnclosure> getUcsEquipmentRackEnclosureList(String dn) throws ApiException;
-    List<UcsNetworkElement> getUcsNetworkElementList(String dn) throws ApiException;
+    List<UcsComputeBlade> getUcsComputeBladeList() throws ApiException;
+    List<UcsComputeRackUnit> getUcsComputeRackUnitList() throws ApiException;
+    List<UcsEquipmentChassis> getUcsEquipmentChassisList() throws ApiException;
+    List<UcsEquipmentFex> getUcsEquipmentFexList() throws ApiException;
+    List<UcsEquipmentRackEnclosure> getUcsEquipmentRackEnclosureList() throws ApiException;
+    List<UcsNetworkElement> getUcsNetworkElementList() throws ApiException;
+
+    List<String> findDnByClassItem(UcsEntity.ClassItem classItem) throws ApiException;
 
 }

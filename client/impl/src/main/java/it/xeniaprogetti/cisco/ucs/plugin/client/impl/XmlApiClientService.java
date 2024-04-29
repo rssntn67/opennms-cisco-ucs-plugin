@@ -5,6 +5,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientService;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeBlade;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeRackUnit;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEntity;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentChassis;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentFex;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentRackEnclosure;
@@ -91,7 +92,7 @@ public class XmlApiClientService implements ApiClientService {
     }
 
     @Override
-    public List<UcsComputeBlade> getUcsComputeBladeList(String dn) throws ApiException {
+    public List<UcsComputeBlade> getUcsComputeBladeList() throws ApiException {
         checkCredentials();
         return configApi
                 .getUcsComputeBladeListByClassId(aaaApi.getToken())
@@ -101,7 +102,7 @@ public class XmlApiClientService implements ApiClientService {
     }
 
     @Override
-    public List<UcsComputeRackUnit> getUcsComputeRackUnitList(String dn) throws ApiException {
+    public List<UcsComputeRackUnit> getUcsComputeRackUnitList() throws ApiException {
         checkCredentials();
         return configApi
                 .getUcsComputeRackUnitListByClassId(aaaApi.getToken())
@@ -111,7 +112,7 @@ public class XmlApiClientService implements ApiClientService {
     }
 
     @Override
-    public List<UcsEquipmentChassis> getUcsEquipmentChassisList(String dn) throws ApiException {
+    public List<UcsEquipmentChassis> getUcsEquipmentChassisList() throws ApiException {
         checkCredentials();
         return configApi
                 .getUcsEquipmentChassisListByClassId(aaaApi.getToken())
@@ -121,7 +122,7 @@ public class XmlApiClientService implements ApiClientService {
     }
 
     @Override
-    public List<UcsEquipmentFex> getUcsEquipmentFexList(String dn) throws ApiException {
+    public List<UcsEquipmentFex> getUcsEquipmentFexList() throws ApiException {
         checkCredentials();
         return configApi
                 .getUcsEquipmentFexListByClassId(aaaApi.getToken())
@@ -131,7 +132,7 @@ public class XmlApiClientService implements ApiClientService {
     }
 
     @Override
-    public List<UcsEquipmentRackEnclosure> getUcsEquipmentRackEnclosureList(String dn) throws ApiException {
+    public List<UcsEquipmentRackEnclosure> getUcsEquipmentRackEnclosureList() throws ApiException {
         checkCredentials();
         return configApi
                 .getUcsEquipmentRackEnclosureListByClassId(aaaApi.getToken())
@@ -141,13 +142,19 @@ public class XmlApiClientService implements ApiClientService {
     }
 
     @Override
-    public List<UcsNetworkElement> getUcsNetworkElementList(String dn) throws ApiException {
+    public List<UcsNetworkElement> getUcsNetworkElementList() throws ApiException {
         checkCredentials();
         return configApi
                 .getUcsNetworkElementListByClassId(aaaApi.getToken())
                 .stream()
                 .map(XmlApiClientService::from)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> findDnByClassItem(UcsEntity.ClassItem classItem) throws ApiException{
+        checkCredentials();
+        return configApi.getDnByClassId(aaaApi.getToken(), classItem);
     }
 
     private static UcsComputeBlade from(ComputeBlade compute) {

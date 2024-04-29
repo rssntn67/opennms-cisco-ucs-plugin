@@ -518,4 +518,15 @@ public class ApiClientTest {
         loginApi.logout();
     }
 
+    @Test
+    public void testApiNetworkElementNotExistByDn() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaApi loginApi = new AaaApi(credentials,apiClient);
+        loginApi.login();
+        ConfigApi api = new ConfigApi(apiClient);
+        Assert.assertNull(api.getUcsNetworkElementByDn(loginApi.getToken(), "sys/switch-K"));
+        loginApi.logout();
+    }
 }
