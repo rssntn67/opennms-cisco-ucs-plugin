@@ -6,12 +6,14 @@ public interface ApiClientService {
 
     void disconnect() throws ApiException;
 
-    UcsComputeBlade resolveUcsComputeBladeByDn(String dn) throws ApiException;
-    UcsComputeRackUnit resolveUcsComputeRackUnitByDn(String dn) throws ApiException;
-    UcsEquipmentChassis resolveUcsEquipmentChassisByDn(String dn) throws ApiException;
-    UcsEquipmentFex resolveUcsEquipmentFexByDn(String dn) throws ApiException;
-    UcsEquipmentRackEnclosure resolveUcsEquipmentRackEnclosureByDn(String dn) throws ApiException;
-    UcsNetworkElement resolveUcsNetworkElementByDn(String dn) throws ApiException;
+    String getUcsXmlFromDn(String dn) throws ApiException;
+
+    UcsComputeBlade resolveUcsComputeBladeByResponse(String response) throws ApiException;
+    UcsComputeRackUnit resolveUcsComputeRackUnitByResponse(String response) throws ApiException;
+    UcsEquipmentChassis resolveUcsEquipmentChassisByResponse(String response) throws ApiException;
+    UcsEquipmentFex resolveUcsEquipmentFexByResponse(String response) throws ApiException;
+    UcsEquipmentRackEnclosure resolveUcsEquipmentRackEnclosureByResponse(String response) throws ApiException;
+    UcsNetworkElement resolveUcsNetworkElementByResponse(String response) throws Exception;
 
     List<UcsComputeBlade> getUcsComputeBladeList() throws ApiException;
     List<UcsComputeRackUnit> getUcsComputeRackUnitList() throws ApiException;

@@ -1,6 +1,6 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.api;
 
-public class UcsEntity {
+public abstract class UcsEntity {
     public final String dn;
     public final ClassId classId;
     public final ClassItem classItem;

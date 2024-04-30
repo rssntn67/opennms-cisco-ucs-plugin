@@ -447,7 +447,10 @@ public class ApiClientTest {
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
         ConfigApi api = new ConfigApi(apiClient);
-        ComputeBlade computeBlade = api.getUcsComputeBladeByDn(loginApi.getToken(), "sys/chassis-3/blade-3");
+        ComputeBlade computeBlade =
+                api.getUcsComputeBladeByResponse(
+                        api.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-3/blade-3")
+                );
         Assert.assertEquals("sys/chassis-3/blade-3", computeBlade.dn);
         loginApi.logout();
     }
@@ -460,7 +463,10 @@ public class ApiClientTest {
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
         ConfigApi api = new ConfigApi(apiClient);
-        ComputeRackUnit computeRackUnit = api.getUcsComputeRackUnitByDn(loginApi.getToken(), "sys/rack-unit-8");
+        ComputeRackUnit computeRackUnit =
+                api.getUcsComputeRackUnitByResponse(
+                        api.getUcsEntityByDn(loginApi.getToken(), "sys/rack-unit-8")
+                );
         Assert.assertEquals("sys/rack-unit-8", computeRackUnit.dn);
         loginApi.logout();
     }
@@ -473,7 +479,10 @@ public class ApiClientTest {
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
         ConfigApi api = new ConfigApi(apiClient);
-        EquipmentChassis equipment = api.getUcsEquipmentChassisByDn(loginApi.getToken(), "sys/chassis-4");
+        EquipmentChassis equipment =
+                api.getUcsEquipmentChassisByResponse(
+                        api.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-4")
+                );
         Assert.assertEquals("sys/chassis-4", equipment.dn);
         loginApi.logout();
     }
@@ -486,7 +495,10 @@ public class ApiClientTest {
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
         ConfigApi api = new ConfigApi(apiClient);
-        EquipmentFex equipment = api.getUcsEquipmentFexByDn(loginApi.getToken(), "sys/fex-2");
+        EquipmentFex equipment =
+                api.getUcsEquipmentFexByResponse(
+                        api.getUcsEntityByDn(loginApi.getToken(), "sys/fex-2")
+                );
         Assert.assertEquals("sys/fex-2", equipment.dn);
         loginApi.logout();
     }
@@ -499,7 +511,10 @@ public class ApiClientTest {
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
         ConfigApi api = new ConfigApi(apiClient);
-        EquipmentRackEnclosure equipment = api.getUcsEquipmentRackEnclosureByDn(loginApi.getToken(), "sys/rack-enclosure-1");
+        EquipmentRackEnclosure equipment =
+                api.getUcsEquipmentRackEnclosureByResponse(
+                        api.getUcsEntityByDn(loginApi.getToken(), "sys/rack-enclosure-1")
+                );
         Assert.assertEquals("sys/rack-enclosure-1", equipment.dn);
         loginApi.logout();
     }
@@ -512,9 +527,13 @@ public class ApiClientTest {
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
         ConfigApi api = new ConfigApi(apiClient);
-        NetworkElement equipment = api.getUcsNetworkElementByDn(loginApi.getToken(), "sys/switch-A");
-        Assert.assertEquals("sys/switch-A", equipment.dn);
-        LOG.info(equipment.model);
+        NetworkElement networkElement =
+                api.getUcsNetworkElementByResponse(
+                        api.getUcsEntityByDn(
+                                loginApi.getToken(), "sys/switch-A")
+                );
+        Assert.assertEquals("sys/switch-A", networkElement.dn);
+        LOG.info(networkElement.model);
         loginApi.logout();
     }
 
@@ -526,7 +545,33 @@ public class ApiClientTest {
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
         ConfigApi api = new ConfigApi(apiClient);
-        Assert.assertNull(api.getUcsNetworkElementByDn(loginApi.getToken(), "sys/switch-K"));
+        String response = api.getUcsEntityByDn(loginApi.getToken(), "sys/switch-K");
+        LOG.info("{}", response);
+        Assert.assertNull(api.getUcsNetworkElementByResponse(response));
         loginApi.logout();
     }
+
+    @Test
+    public void testApiExistDnButIsUnsupported() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaApi loginApi = new AaaApi(credentials,apiClient);
+        try {
+            loginApi.login();
+        } catch (ApiException e) {
+            throw new RuntimeException(e);
+        }
+        ConfigApi api = new ConfigApi(apiClient);
+        String response = api.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-4/psu-4");
+        LOG.info("{}", response);
+        try {
+            api.getUcsNetworkElementByResponse(response);
+            Assert.fail();
+        } catch (ApiException e) {
+            LOG.error("ok: {}", e.getMessage(),e);
+        }
+        loginApi.logout();
+    }
+
 }

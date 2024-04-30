@@ -47,49 +47,48 @@ public class ConfigApi {
                 ).dns.stream().map(s -> s.value).collect(Collectors.toList());
     }
 
-    public ComputeBlade getUcsComputeBladeByDn(String cookie, String dn) throws ApiException {
-        LOG.info("getUcsComputeBladeByDn: {}", dn);
-            return client.getUcsXmlApiResponse(UcsXmlApiRequest.getConfigResolveDnRequest(cookie,dn,false),
+    public String getUcsEntityByDn(String cookie, String dn) throws ApiException {
+        LOG.info("getUcsEntityByDn: {}", dn);
+        return client.doPost(UcsXmlApiRequest.getConfigResolveDnRequest(cookie,dn,false));
+    }
+
+    public ComputeBlade getUcsComputeBladeByResponse(String response) throws ApiException {
+            return client.getUcsEntity(response,
                     ConfigResolveDnResponseComputeBlade.class)
                     .outconfig
                     .computeBlade;
     }
 
-    public ComputeRackUnit getUcsComputeRackUnitByDn(String cookie, String dn) throws ApiException {
-        LOG.info("getUcsComputeRackUnitByDn: {}", dn);
-        return client.getUcsXmlApiResponse(UcsXmlApiRequest.getConfigResolveDnRequest(cookie,dn,false),
+    public ComputeRackUnit getUcsComputeRackUnitByResponse(String response) throws ApiException {
+        return client.getUcsEntity(response,
                 ConfigResolveDnResponseComputeRackUnit.class)
                 .outconfig
                 .computeRackUnit;
     }
 
-    public EquipmentChassis getUcsEquipmentChassisByDn(String cookie, String dn) throws ApiException {
-        LOG.info("getUcsEquipmentChassisByDn: {}", dn);
-        return client.getUcsXmlApiResponse(UcsXmlApiRequest.getConfigResolveDnRequest(cookie,dn,false),
+    public EquipmentChassis getUcsEquipmentChassisByResponse(String response) throws ApiException {
+        return client.getUcsEntity(response,
                 ConfigResolveDnResponseEquipmentChassis.class)
                 .outconfig
                 .equipmentChassis;
     }
 
-    public EquipmentFex getUcsEquipmentFexByDn(String cookie, String dn) throws ApiException {
-        LOG.info("getUcsEquipmentFexByDn: {}", dn);
-        return client.getUcsXmlApiResponse(UcsXmlApiRequest.getConfigResolveDnRequest(cookie,dn,false),
+    public EquipmentFex getUcsEquipmentFexByResponse(String response) throws ApiException {
+        return client.getUcsEntity(response,
                 ConfigResolveDnResponseEquipmentFex.class)
                 .outconfig
                 .equipmentFex;
     }
 
-    public EquipmentRackEnclosure getUcsEquipmentRackEnclosureByDn(String cookie, String dn) throws ApiException {
-        LOG.info("getUcsEquipmentRackEnclosureByDn: {}", dn);
-        return client.getUcsXmlApiResponse(UcsXmlApiRequest.getConfigResolveDnRequest(cookie,dn,false),
+    public EquipmentRackEnclosure getUcsEquipmentRackEnclosureByResponse(String response) throws ApiException {
+        return client.getUcsEntity(response,
                 ConfigResolveDnResponseEquipmentRackEnclosure.class)
                 .outconfig
                 .equipmentRackEnclosure;
     }
 
-    public NetworkElement getUcsNetworkElementByDn(String cookie, String dn) throws ApiException {
-        LOG.info("getUcsNetworkElementByDn: {}", dn);
-        return client.getUcsXmlApiResponse(UcsXmlApiRequest.getConfigResolveDnRequest(cookie,dn,false),
+    public NetworkElement getUcsNetworkElementByResponse(String response) throws ApiException {
+        return client.getUcsXmlApiResponse(response,
                 ConfigResolveDnResponseNetworkElement.class)
                 .outconfig
                 .networkElement;
@@ -142,6 +141,4 @@ public class ConfigApi {
                 ConfigResolveClassResponseNetworkElementList.class
         ).networkElements;
     }
-
-
 }

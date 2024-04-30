@@ -29,7 +29,6 @@ public class XmlApiClientService implements ApiClientService {
     private final AaaApi aaaApi;
     private final ConfigApi configApi;
 
-
     public XmlApiClientService(ApiClientCredentials credentials) {
         ApiClient client = XmlApiClientProvider.getApiClient(credentials);
         this.credentials = credentials;
@@ -56,40 +55,41 @@ public class XmlApiClientService implements ApiClientService {
     }
 
     @Override
-    public UcsComputeBlade resolveUcsComputeBladeByDn(String dn) throws ApiException {
+    public String getUcsXmlFromDn(String dn) throws ApiException {
         checkCredentials();
-        return from(configApi.getUcsComputeBladeByDn(aaaApi.getToken(), dn));
+        return configApi.getUcsEntityByDn(aaaApi.getToken(), dn);
     }
 
     @Override
-    public UcsComputeRackUnit resolveUcsComputeRackUnitByDn(String dn) throws ApiException {
-        checkCredentials();
-        return from(configApi.getUcsComputeRackUnitByDn(aaaApi.getToken(), dn));
+    public UcsComputeBlade resolveUcsComputeBladeByResponse(String response) throws ApiException {
+        return from(configApi.getUcsComputeBladeByResponse(response));
     }
 
     @Override
-    public UcsEquipmentChassis resolveUcsEquipmentChassisByDn(String dn) throws ApiException {
-        checkCredentials();
-        return from(configApi.getUcsEquipmentChassisByDn(aaaApi.getToken(), dn));
+    public UcsComputeRackUnit resolveUcsComputeRackUnitByResponse(String response) throws ApiException {
+        return from(configApi.getUcsComputeRackUnitByResponse(response));
     }
 
     @Override
-    public UcsEquipmentFex resolveUcsEquipmentFexByDn(String dn) throws ApiException {
-        checkCredentials();
-        return from(configApi.getUcsEquipmentFexByDn(aaaApi.getToken(), dn));
+    public UcsEquipmentChassis resolveUcsEquipmentChassisByResponse(String response) throws ApiException {
+        return from(configApi.getUcsEquipmentChassisByResponse(response));
     }
 
     @Override
-    public UcsEquipmentRackEnclosure resolveUcsEquipmentRackEnclosureByDn(String dn) throws ApiException {
-        checkCredentials();
-        return from(configApi.getUcsEquipmentRackEnclosureByDn(aaaApi.getToken(), dn));
+    public UcsEquipmentFex resolveUcsEquipmentFexByResponse(String response) throws ApiException {
+        return from(configApi.getUcsEquipmentFexByResponse(response));
     }
 
     @Override
-    public UcsNetworkElement resolveUcsNetworkElementByDn(String dn) throws ApiException {
-        checkCredentials();
-        return from(configApi.getUcsNetworkElementByDn(aaaApi.getToken(), dn));
+    public UcsEquipmentRackEnclosure resolveUcsEquipmentRackEnclosureByResponse(String response) throws ApiException {
+        return from(configApi.getUcsEquipmentRackEnclosureByResponse(response));
     }
+
+    @Override
+    public UcsNetworkElement resolveUcsNetworkElementByResponse(String response) throws ApiException {
+        return from(configApi.getUcsNetworkElementByResponse(response));
+    }
+
 
     @Override
     public List<UcsComputeBlade> getUcsComputeBladeList() throws ApiException {
@@ -158,6 +158,8 @@ public class XmlApiClientService implements ApiClientService {
     }
 
     private static UcsComputeBlade from(ComputeBlade compute) {
+        if (compute == null)
+            return null;
         return UcsComputeBlade.builder()
                 .withDn(compute.dn)
                 .withAdminPower(compute.adminPower)
@@ -233,6 +235,8 @@ public class XmlApiClientService implements ApiClientService {
     }
 
     private static UcsComputeRackUnit from(ComputeRackUnit compute) {
+        if (compute == null)
+            return null;
         return UcsComputeRackUnit.builder()
                 .withDn(compute.dn)
                 .withAdminPower(compute.adminPower)
@@ -313,6 +317,8 @@ public class XmlApiClientService implements ApiClientService {
     }
 
     private static UcsEquipmentChassis from(EquipmentChassis equipment) {
+        if (equipment == null)
+            return null;
         return UcsEquipmentChassis.builder()
                 .withDn(equipment.dn)
                 .withAckProgressIndicator(equipment.ackProgressIndicator)
@@ -368,6 +374,8 @@ public class XmlApiClientService implements ApiClientService {
     }
 
     private static UcsEquipmentFex from(EquipmentFex equipment) {
+        if (equipment == null)
+            return null;
         return UcsEquipmentFex.builder()
                 .withDn(equipment.dn)
                 .withAdminPowerState(equipment.adminPowerState)
@@ -405,6 +413,8 @@ public class XmlApiClientService implements ApiClientService {
     }
 
     private static UcsEquipmentRackEnclosure from(EquipmentRackEnclosure equipment) {
+        if (equipment == null)
+            return null;
         return UcsEquipmentRackEnclosure.builder()
                 .withDn(equipment.dn)
                 .withAssetTag(equipment.assetTag)
@@ -424,6 +434,8 @@ public class XmlApiClientService implements ApiClientService {
     }
 
     private static UcsNetworkElement from(NetworkElement network) {
+        if (network == null)
+            return null;
         return UcsNetworkElement.builder()
                 .withDn(network.dn)
                 .withAdminEvacState(network.adminEvacState)

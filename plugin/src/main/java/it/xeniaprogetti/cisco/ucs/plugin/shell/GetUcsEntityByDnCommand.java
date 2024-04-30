@@ -1,6 +1,7 @@
 package it.xeniaprogetti.cisco.ucs.plugin.shell;
 
 import it.xeniaprogetti.cisco.ucs.plugin.client.ClientManager;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEntity;
 import it.xeniaprogetti.cisco.ucs.plugin.connection.ConnectionManager;
 import org.apache.karaf.shell.api.action.Action;
@@ -44,35 +45,17 @@ public class GetUcsEntityByDnCommand implements Action {
         final var table = new ShellTable()
                 .size(session.getTerminal().getWidth() - 1)
                 .column(new Col("Dn").maxSize(32).bold(true))
-                .column(new Col("ClassId").maxSize(24))
-                .column(new Col("ClassItem").maxSize(24));
+                .column(new Col("Response").maxSize(200));
 
         var service = clientManager.getClient(connection.get());
-        UcsEntity ucsEntity = service.resolveUcsComputeBladeByDn(dn);
-        if (ucsEntity == null) {
-            ucsEntity = service.resolveUcsComputeRackUnitByDn(dn);
-        }
-        if (ucsEntity == null) {
-            ucsEntity = service.resolveUcsEquipmentChassisByDn(dn);
-        }
-        if (ucsEntity == null) {
-            ucsEntity = service.resolveUcsEquipmentFexByDn(dn);
-        }
-        if (ucsEntity == null) {
-            ucsEntity = service.resolveUcsEquipmentRackEnclosureByDn(dn);
-        }
-        if (ucsEntity == null) {
-            ucsEntity = service.resolveUcsNetworkElementByDn(dn);
-        }
-        if (ucsEntity != null) {
-            final var row = table.addRow();
-            row.addContent(ucsEntity.dn);
-            row.addContent(ucsEntity.classId);
-            row.addContent(ucsEntity.classItem);
-        }
+        String response = service.getUcsXmlFromDn(dn);
         service.disconnect();
+        final var row = table.addRow();
+        row.addContent(dn);
+        row.addContent(response.substring(response.indexOf("<outConfig>")+11, response.indexOf("</outConfig>")-12));
         table.print(System.out, true);
 
         return null;
+
     }
 }

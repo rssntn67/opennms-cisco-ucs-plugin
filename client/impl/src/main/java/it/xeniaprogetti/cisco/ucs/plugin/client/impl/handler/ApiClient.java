@@ -113,16 +113,14 @@ public class ApiClient {
         return url;
     }
 
-    public <T extends UcsXmlApiResponse> T getUcsXmlApiResponse(String requestBody, Class<T> clazz) throws ApiException {
-        LOG.debug("getUcsXmlApiResponse: {} cast class: {} ",requestBody, clazz.getSimpleName());
-        String response = doPost(requestBody);
+    public <T extends UcsXmlApiResponse> T getUcsEntity(String response, Class<T> clazz) throws ApiException {
         try {
             T t = mapper.readValue(response, clazz);
             if (t.errorCode > 0) {
-                LOG.error("getUcsXmlApiResponse: failed: with error code: {}, {}", t.errorCode, response);
+                LOG.error("getUcsEntity: failed: with error code: {}, {}", t.errorCode, response);
                 throw new ApiException(
-                        "getUcsXmlApiResponse: server responded with error: " + t.errorCode
-                        ,new RuntimeException("getUcsXmlApiResponse error code: " + t.errorCode)
+                        "getUcsEntity: server responded with error: " + t.errorCode
+                        ,new RuntimeException("getUcsEntity error code: " + t.errorCode)
                         , t.errorCode
                         , response);
             }
@@ -130,14 +128,20 @@ public class ApiClient {
         } catch (JsonProcessingException e) {
             try {
                 ErrorResponse error = mapper.readValue(response, ErrorResponse.class);
-                throw new ApiException("getUcsXmlApiResponse: server responded with error: " + error.invocationResult
-                        ,new RuntimeException("getUcsXmlApiResponse error: " + error.invocationResult)
+                throw new ApiException("getUcsEntity: server responded with error: " + error.invocationResult
+                        ,new RuntimeException("getUcsEntity error: " + error.invocationResult)
                         , error.invocationResult
                         , error.toString());
             } catch (JsonProcessingException ex) {
-                throw new ApiException("getUcsXmlApiResponse: " + ex.getMessage(), ex);
+                throw new ApiException("getUcsEntity: " + ex.getMessage(), ex);
             }
         }
+
+    }
+
+    public <T extends UcsXmlApiResponse> T getUcsXmlApiResponse(String requestBody, Class<T> clazz) throws ApiException {
+        LOG.debug("getUcsXmlApiResponse: {} cast class: {} ",requestBody, clazz.getSimpleName());
+        return getUcsEntity(doPost(requestBody), clazz);
     }
 
 }
