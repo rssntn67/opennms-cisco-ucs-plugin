@@ -28,7 +28,7 @@ public class ApiClientTest {
 
     private final Logger LOG = LoggerFactory.getLogger(ApiClientTest.class);
 
-    private ApiClientCredentials getCredentials() {
+    protected static ApiClientCredentials getCredentials() {
         return ApiClientCredentials.builder()
                 .withUrl("https://10.172.192.15/nuova")
                 .withUsername("pippo")

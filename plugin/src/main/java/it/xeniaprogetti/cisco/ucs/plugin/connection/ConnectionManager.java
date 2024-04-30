@@ -250,7 +250,7 @@ public class ConnectionManager {
         }
     }
 
-    private void ensureCore() {
+    public void ensureCore() {
         if (this.runtimeInfo.getContainer() != Container.OPENNMS) {
             throw new IllegalStateException("Operation only allowed on OpenNMS instance");
         }

@@ -121,12 +121,6 @@
         </dependency>
         <dependency>
             <groupId>it.xeniaprogetti</groupId>
-            <artifactId>cisco-ucs-plugin-client-api</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>it.xeniaprogetti</groupId>
             <artifactId>cisco-ucs-plugin-client-impl</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>

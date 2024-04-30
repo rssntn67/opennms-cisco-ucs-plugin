@@ -114,7 +114,7 @@ public class ApiClient {
     }
 
     public <T extends UcsXmlApiResponse> T getUcsXmlApiResponse(String requestBody, Class<T> clazz) throws ApiException {
-        LOG.debug("getUcsXmlApiResponse: class: {} ", clazz.getSimpleName());
+        LOG.debug("getUcsXmlApiResponse: {} cast class: {} ",requestBody, clazz.getSimpleName());
         String response = doPost(requestBody);
         try {
             T t = mapper.readValue(response, clazz);

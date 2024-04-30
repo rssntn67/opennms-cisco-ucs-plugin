@@ -1,6 +1,7 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.request;
 
-public class UcsXmlApiRequest {
+public class
+UcsXmlApiRequest {
 
 
     public static String getLoginRequest(String inName, String inPassword) {

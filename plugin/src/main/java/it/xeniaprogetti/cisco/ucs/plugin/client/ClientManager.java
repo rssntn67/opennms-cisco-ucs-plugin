@@ -20,6 +20,7 @@ public class ClientManager {
     public ClientManager(ApiClientProvider provider) {
         clientProvider = Objects.requireNonNull(provider);
     }
+
     public Optional<ConnectionValidationError> validate(Connection connection) {
         boolean validated = clientProvider.validate(asApiClientCredentials(connection));
         LOG.info("validate: {} -> {}", connection.getAlias(), validated);

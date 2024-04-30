@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
 
-import com.google.common.base.Strings;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import it.xeniaprogetti.cisco.ucs.plugin.client.ClientManager;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientService;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
@@ -16,8 +16,6 @@ import org.opennms.integration.api.v1.requisition.RequisitionProvider;
 import org.opennms.integration.api.v1.requisition.RequisitionRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class CiscoUcsRequisitionProvider implements RequisitionProvider {
 
@@ -128,7 +126,7 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
 
     @Override
     public final byte[] marshalRequest(final RequisitionRequest request) {
-        final var mapper = new ObjectMapper();
+        final var mapper = new XmlMapper();
         try {
             return mapper.writeValueAsBytes(request);
         } catch (final IOException e) {
@@ -138,7 +136,7 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
 
     @Override
     public final RequisitionRequest unmarshalRequest(final byte[] bytes) {
-        final var mapper = new ObjectMapper();
+        final var mapper = new XmlMapper();
         try {
             return mapper.readValue(bytes, RequisitionRequest.class);
         } catch (final IOException e) {

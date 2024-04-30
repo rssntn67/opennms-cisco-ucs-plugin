@@ -27,14 +27,17 @@ public class XmlApiClientProvider implements ApiClientProvider {
 
     @Override
     public boolean validate(ApiClientCredentials credentials) {
+        LOG.debug("validate: {}", credentials );
         AaaApi api = new AaaApi(credentials,getApiClient(credentials));
+        boolean valid = false;
         try {
             api.login();
-            LOG.info("validate: {}, {}", credentials, api.isValidTokenAtLeastFor(credentials.validity));
+            valid = api.isValid();
+            LOG.info("validate: {}, valid = {}", credentials, valid);
             api.logout();
-            return api.isValidTokenAtLeastFor(credentials.validity);
         } catch (ApiException e) {
             return false;
         }
+        return valid;
     }
 }

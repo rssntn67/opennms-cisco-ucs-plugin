@@ -22,7 +22,7 @@
     </bean>
     <service ref="clientManager" interface="it.xeniaprogetti.cisco.ucs.plugin.client.ClientManager"/>
 
-    <bean id="connectionManager" class="it.xeniaprogetti.cisco.ucs.plugin.connections.ConnectionManager">
+    <bean id="connectionManager" class="it.xeniaprogetti.cisco.ucs.plugin.connection.ConnectionManager">
         <argument>
             <reference interface="org.opennms.integration.api.v1.runtime.RuntimeInfo" availability="optional"/>
         </argument>
@@ -30,13 +30,13 @@
             <reference interface="org.opennms.integration.api.v1.scv.SecureCredentialsVault" availability="optional"/>
         </argument>
     </bean>
-    <service ref="connectionManager" interface="org.opennms.nutanix.connections.ConnectionManager"/>
+    <service ref="connectionManager" interface="it.xeniaprogetti.cisco.ucs.plugin.connection.ConnectionManager"/>
 
     <!-- Build Cisco UCS Manager Requisition Interface -->
     <bean id="ciscoUcsRequisitionProvider" class="it.xeniaprogetti.cisco.ucs.plugin.requisition.CiscoUcsRequisitionProvider">
         <argument ref="nodeDao"/>
         <argument ref="connectionManager"/>
-        <argument ref="clientProvider"/>
+        <argument ref="clientManager"/>
     </bean>
 
     <!-- Build and expose the JAX-RS annotated webhook handler.

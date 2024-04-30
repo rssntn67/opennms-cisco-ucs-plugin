@@ -38,7 +38,8 @@ public class AaaApi {
                 );
         this.token = response.outCookie;
         this.validityTime = LocalDateTime.now().plusSeconds(response.outRefreshPeriod);
-        LOG.debug("login: {} valid until {}", this.token, this.validityTime);
+        LOG.info("login: {} valid until {}", this.token, this.validityTime);
+        LOG.debug("login: {}", response);
     }
 
     public void refresh() throws ApiException {
@@ -50,23 +51,29 @@ public class AaaApi {
                     );
             this.token = response.outCookie;
             this.validityTime = LocalDateTime.now().plusSeconds(response.outRefreshPeriod);
+            LOG.debug("refresh: {}", response);
     }
 
     public void logout() throws ApiException {
         LOG.info("logout: {} from {}", this.username, this.client.getUrl());
-        client.getUcsXmlApiResponse
+        AaaLogoutResponse response = client.getUcsXmlApiResponse
                     (UcsXmlApiRequest.getLogoutRequest(token),
                     AaaLogoutResponse.class
                 );
         this.token = null;
+        LOG.debug("logout: {}", response);
+    }
+
+    public boolean isValid() {
+        return this.validityTime != null && validityTime.isAfter(LocalDateTime.now());
     }
 
     public boolean isValidTokenAtLeastFor(long secondsFromNow) {
-        return this.token != null && validityTime.isAfter(LocalDateTime.now().plusSeconds(secondsFromNow));
+        return this.validityTime != null && validityTime.isAfter(LocalDateTime.now().plusSeconds(secondsFromNow));
     }
 
     public boolean isValidTokenForLessThen(long secondsFromNow) {
-        return this.token != null && validityTime.isAfter(LocalDateTime.now().minusSeconds(secondsFromNow));
+        return this.validityTime != null && validityTime.isAfter(LocalDateTime.now().minusSeconds(secondsFromNow));
     }
 
     public String getToken() {
