@@ -52,7 +52,7 @@ public class GetUcsEntityByDnCommand implements Action {
         service.disconnect();
         final var row = table.addRow();
         row.addContent(dn);
-        row.addContent(response.substring(response.indexOf("<outConfig>")+11, response.indexOf("</outConfig>")-12));
+        row.addContent(response.substring(response.indexOf("<outConfig>")+11, response.indexOf("</outConfig>")));
         table.print(System.out, true);
 
         return null;

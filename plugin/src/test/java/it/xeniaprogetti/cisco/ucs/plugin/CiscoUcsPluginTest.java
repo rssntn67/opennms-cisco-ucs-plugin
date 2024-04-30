@@ -77,4 +77,12 @@ public class CiscoUcsPluginTest {
             }
         };
     }
+
+    @Test
+    public void testSubString() {
+        String alfa = "<configResolveDn dn=\"sys/fex-3\" cookie=\"1714500645/a4e3738f-2017-4170-b9ac-c52211aea725\" response=\"yes\"> <outConfig> </outConfig> </configResolveDn>";
+        System.out.println(alfa.indexOf("<outConfig>")+11);
+        System.out.println(alfa.indexOf("</outConfig>"));
+        System.out.println(alfa.substring(alfa.indexOf("<outConfig>")+11, alfa.indexOf("</outConfig>")));
+    }
 }
