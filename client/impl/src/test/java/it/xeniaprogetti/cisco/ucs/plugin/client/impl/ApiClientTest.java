@@ -14,6 +14,8 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.equipment.EquipmentCh
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.equipment.EquipmentFex;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.equipment.EquipmentRackEnclosure;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.network.NetworkElement;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root.IpPoolPool;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root.LsServer;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.request.UcsXmlApiRequest;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.*;
 import org.junit.Assert;
@@ -410,7 +412,7 @@ public class ApiClientTest {
 
 
     @Test
-    public void testApiClientApiEquipment() throws ApiException {
+    public void testApiClientApiEquipmentItem() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
         ApiClient apiClient = new ApiClient(credentials.url);
         apiClient.setTrustAllCertsClient();
@@ -425,7 +427,7 @@ public class ApiClientTest {
     }
 
     @Test
-    public void testApiClientCompute() throws ApiException {
+    public void testApiClientComputeItem() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
         ApiClient apiClient = new ApiClient(credentials.url);
         apiClient.setTrustAllCertsClient();
@@ -440,7 +442,20 @@ public class ApiClientTest {
     }
 
     @Test
-    public void testApiClientComputeBlade3ByDn() throws ApiException {
+    public void testApiClientIp() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaApi loginApi = new AaaApi(credentials,apiClient);
+        loginApi.login();
+        ConfigApi api = new ConfigApi(apiClient);
+        String ipAddresses = api.getUcsEntityByDn(loginApi.getToken(), "ip",true);
+        System.out.println(ipAddresses);
+        loginApi.logout();
+    }
+
+    @Test
+    public void testApiClientComputeBlade1ByDn() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
         ApiClient apiClient = new ApiClient(credentials.url);
         apiClient.setTrustAllCertsClient();
@@ -449,22 +464,21 @@ public class ApiClientTest {
         ConfigApi api = new ConfigApi(apiClient);
         ComputeBlade computeBlade =
                 api.getUcsComputeBladeByResponse(
-                        api.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-3/blade-3", false)
+                        api.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-3/blade-1", false)
                 );
-        Assert.assertEquals("sys/chassis-3/blade-3", computeBlade.dn);
-        loginApi.logout();
-    }
+        Assert.assertEquals("sys/chassis-3/blade-1", computeBlade.dn);
+        System.out.println(computeBlade.assignedToDn);
+        Assert.assertEquals("org-root/ls-osi01-w01-prd01-lnx13", computeBlade.assignedToDn);
+        String lsServerString = api.getUcsEntityByDn(loginApi.getToken(), computeBlade.assignedToDn, false);
+        LsServer lsServer = apiClient.getUcsEntity(lsServerString, ConfigResolveDnResponseLsServer.class).outconfig.lsServer;
+        Assert.assertEquals(computeBlade.assignedToDn, lsServer.dn);
+        System.out.println(lsServer);
+        String ippoolpoolString = api.getUcsEntityByDn(loginApi.getToken(),lsServer.operExtIPPoolName, true);
+        IpPoolPool ipPoolPool = apiClient.getUcsEntity(ippoolpoolString, ConfigResolveDnResponseIpPoolPool.class).outconfig.ippoolPool;
+        System.out.println(ipPoolPool);
+        Assert.assertFalse(ipPoolPool.ippoolPooled.isEmpty());
+        ipPoolPool.ippoolPooled.forEach(System.out::println);
 
-    @Test
-    public void testApiClientComputeBlade3ByDnHierarchical() throws ApiException {
-        ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
-        apiClient.setTrustAllCertsClient();
-        AaaApi loginApi = new AaaApi(credentials,apiClient);
-        loginApi.login();
-        ConfigApi api = new ConfigApi(apiClient);
-        String computeBlade =
-                        api.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-3/blade-3", true);
         loginApi.logout();
     }
 
@@ -481,8 +495,61 @@ public class ApiClientTest {
                         api.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-3/blade-2", false)
                 );
         Assert.assertEquals("sys/chassis-3/blade-2", computeBlade.dn);
+        System.out.println(computeBlade.assignedToDn);
+        Assert.assertEquals("org-root/ls-osi01-w01-prd01-lnx15", computeBlade.assignedToDn);
+        String assignedXml = api.getUcsEntityByDn(loginApi.getToken(), computeBlade.assignedToDn, false);
+        System.out.println(assignedXml);
+        System.out.println(api.getUcsEntityByDn(loginApi.getToken(),"org-root/ip-pool-BM-KVM-POOL",false));
+        System.out.println(api.getUcsEntityByDn(loginApi.getToken(), computeBlade.assignedToDn+"/ipv4-pooled-addr",false ));
         loginApi.logout();
     }
+
+    @Test
+    public void testApiClientComputeBlade3ByDn() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaApi loginApi = new AaaApi(credentials,apiClient);
+        loginApi.login();
+        ConfigApi api = new ConfigApi(apiClient);
+        ComputeBlade computeBlade =
+                api.getUcsComputeBladeByResponse(
+                        api.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-3/blade-3", false)
+                );
+        Assert.assertEquals("sys/chassis-3/blade-3", computeBlade.dn);
+        Assert.assertEquals("", computeBlade.assignedToDn);
+        loginApi.logout();
+    }
+
+
+    @Test
+    public void testApiClientComputeBlade3ByDnHierarchical() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaApi loginApi = new AaaApi(credentials,apiClient);
+        loginApi.login();
+        ConfigApi api = new ConfigApi(apiClient);
+        String computeBlade =
+                        api.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-3/blade-3", true);
+        System.out.println(computeBlade);
+        loginApi.logout();
+    }
+
+    @Test
+    public void testApiClientComputeBlade1ByDnHierarchical() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaApi loginApi = new AaaApi(credentials,apiClient);
+        loginApi.login();
+        ConfigApi api = new ConfigApi(apiClient);
+        String computeBlade =
+                api.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-3/blade-1", true);
+        System.out.println(computeBlade);
+        loginApi.logout();
+    }
+
 
     @Test
     public void testApiClientComputeBlade2ServiceProfileByDn() throws ApiException {
