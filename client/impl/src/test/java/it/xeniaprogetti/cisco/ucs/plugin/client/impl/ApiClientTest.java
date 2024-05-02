@@ -13,9 +13,13 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.compute.ComputeRackUn
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.equipment.EquipmentChassis;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.equipment.EquipmentFex;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.equipment.EquipmentRackEnclosure;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.ip.IpPoolAddr;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.ip.IpPoolUniverse;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.network.NetworkElement;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root.IpPoolPool;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root.IpPoolPooled;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root.LsServer;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root.VNicIpV4PooledAddr;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.request.UcsXmlApiRequest;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.*;
 import org.junit.Assert;
@@ -24,7 +28,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ApiClientTest {
 
@@ -450,7 +456,31 @@ public class ApiClientTest {
         loginApi.login();
         ConfigApi api = new ConfigApi(apiClient);
         String ipAddresses = api.getUcsEntityByDn(loginApi.getToken(), "ip",true);
-        System.out.println(ipAddresses);
+        IpPoolUniverse ipPoolUniverse = apiClient.getUcsEntity(ipAddresses,ConfigResolveDnResponseIpPoolUniverse.class).outconfig.ippoolUniverse;
+        Set<String> poolDns = new HashSet<>();
+        for (IpPoolAddr pool: ipPoolUniverse.ippoolAddr) {
+            if (pool.assignedToDn.equals("")) {
+                System.out.println("---Not assignedToDn: " + pool.ippoolPoolable.poolDn);
+                continue;
+            }
+            System.out.println("-----start ip-----");
+            System.out.println(pool.assignedToDn);
+            String a = api.getUcsEntityByDn(loginApi.getToken(),pool.assignedToDn,false);
+            VNicIpV4PooledAddr vNicIpV4PooledAddr = apiClient.getUcsEntity(a,ConfigResolveDnResponseVNicIpV4PooledAddr.class).outconfig.vnicIpV4PooledAddr;
+            Assert.assertEquals(pool.id,vNicIpV4PooledAddr.addr);
+            poolDns.add(pool.ippoolPoolable.poolDn);
+            System.out.println(pool.id);
+            System.out.println("-----end ip-----");
+
+        }
+        System.out.println(ipPoolUniverse.ippoolAddr.size());
+        System.out.println(poolDns.size());
+        for (String poolDn: poolDns) {
+
+            String b =api.getUcsEntityByDn(loginApi.getToken(), poolDn,false);
+            IpPoolPooled ipPoolPooled = apiClient.getUcsEntity(b, ConfigResolveDnResponseIpPoolPooled.class).outconfig.ippoolPooled;
+            System.out.println(ipPoolPooled);
+        }
         loginApi.logout();
     }
 
