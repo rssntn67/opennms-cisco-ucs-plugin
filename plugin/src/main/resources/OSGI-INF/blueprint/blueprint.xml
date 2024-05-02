@@ -38,6 +38,7 @@
         <argument ref="connectionManager"/>
         <argument ref="clientManager"/>
     </bean>
+    <service interface="org.opennms.integration.api.v1.requisition.RequisitionProvider" ref="ciscoUcsRequisitionProvider" />
 
     <!-- Build and expose the JAX-RS annotated webhook handler.
          This will automatically mount the endpoint over the REST API. -->

@@ -55,9 +55,9 @@ public class XmlApiClientService implements ApiClientService {
     }
 
     @Override
-    public String getUcsXmlFromDn(String dn) throws ApiException {
+    public String getUcsXmlFromDn(String dn, boolean isHierarchical) throws ApiException {
         checkCredentials();
-        return configApi.getUcsEntityByDn(aaaApi.getToken(), dn);
+        return configApi.getUcsEntityByDn(aaaApi.getToken(), dn, isHierarchical);
     }
 
     @Override

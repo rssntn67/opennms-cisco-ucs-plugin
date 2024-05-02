@@ -1,8 +1,6 @@
 package it.xeniaprogetti.cisco.ucs.plugin.shell;
 
 import it.xeniaprogetti.cisco.ucs.plugin.client.ClientManager;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEntity;
 import it.xeniaprogetti.cisco.ucs.plugin.connection.ConnectionManager;
 import org.apache.karaf.shell.api.action.Action;
 import org.apache.karaf.shell.api.action.Argument;
@@ -48,7 +46,7 @@ public class GetUcsEntityByDnCommand implements Action {
                 .column(new Col("Response").maxSize(200));
 
         var service = clientManager.getClient(connection.get());
-        String response = service.getUcsXmlFromDn(dn);
+        String response = service.getUcsXmlFromDn(dn, false);
         service.disconnect();
         final var row = table.addRow();
         row.addContent(dn);

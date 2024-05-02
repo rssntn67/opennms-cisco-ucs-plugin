@@ -440,7 +440,7 @@ public class ApiClientTest {
     }
 
     @Test
-    public void testApiClientComputeBladeByDn() throws ApiException {
+    public void testApiClientComputeBlade3ByDn() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
         ApiClient apiClient = new ApiClient(credentials.url);
         apiClient.setTrustAllCertsClient();
@@ -449,9 +449,52 @@ public class ApiClientTest {
         ConfigApi api = new ConfigApi(apiClient);
         ComputeBlade computeBlade =
                 api.getUcsComputeBladeByResponse(
-                        api.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-3/blade-3")
+                        api.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-3/blade-3", false)
                 );
         Assert.assertEquals("sys/chassis-3/blade-3", computeBlade.dn);
+        loginApi.logout();
+    }
+
+    @Test
+    public void testApiClientComputeBlade3ByDnHierarchical() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaApi loginApi = new AaaApi(credentials,apiClient);
+        loginApi.login();
+        ConfigApi api = new ConfigApi(apiClient);
+        String computeBlade =
+                        api.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-3/blade-3", true);
+        loginApi.logout();
+    }
+
+    @Test
+    public void testApiClientComputeBlade2ByDn() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaApi loginApi = new AaaApi(credentials,apiClient);
+        loginApi.login();
+        ConfigApi api = new ConfigApi(apiClient);
+        ComputeBlade computeBlade =
+                api.getUcsComputeBladeByResponse(
+                        api.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-3/blade-2", false)
+                );
+        Assert.assertEquals("sys/chassis-3/blade-2", computeBlade.dn);
+        loginApi.logout();
+    }
+
+    @Test
+    public void testApiClientComputeBlade2ServiceProfileByDn() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaApi loginApi = new AaaApi(credentials,apiClient);
+        loginApi.login();
+        ConfigApi api = new ConfigApi(apiClient);
+        String serviceProfile =
+                api.getUcsEntityByDn(loginApi.getToken(),"org-root/ls-osi01-w01-prd01-lnx15", true);
+        LOG.info("{}", serviceProfile);
         loginApi.logout();
     }
 
@@ -465,7 +508,7 @@ public class ApiClientTest {
         ConfigApi api = new ConfigApi(apiClient);
         ComputeRackUnit computeRackUnit =
                 api.getUcsComputeRackUnitByResponse(
-                        api.getUcsEntityByDn(loginApi.getToken(), "sys/rack-unit-8")
+                        api.getUcsEntityByDn(loginApi.getToken(), "sys/rack-unit-8", false)
                 );
         Assert.assertEquals("sys/rack-unit-8", computeRackUnit.dn);
         loginApi.logout();
@@ -481,7 +524,7 @@ public class ApiClientTest {
         ConfigApi api = new ConfigApi(apiClient);
         EquipmentChassis equipment =
                 api.getUcsEquipmentChassisByResponse(
-                        api.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-4")
+                        api.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-4", false)
                 );
         Assert.assertEquals("sys/chassis-4", equipment.dn);
         loginApi.logout();
@@ -497,7 +540,7 @@ public class ApiClientTest {
         ConfigApi api = new ConfigApi(apiClient);
         EquipmentFex equipment =
                 api.getUcsEquipmentFexByResponse(
-                        api.getUcsEntityByDn(loginApi.getToken(), "sys/fex-2")
+                        api.getUcsEntityByDn(loginApi.getToken(), "sys/fex-2", false)
                 );
         Assert.assertEquals("sys/fex-2", equipment.dn);
         loginApi.logout();
@@ -513,7 +556,7 @@ public class ApiClientTest {
         ConfigApi api = new ConfigApi(apiClient);
         EquipmentRackEnclosure equipment =
                 api.getUcsEquipmentRackEnclosureByResponse(
-                        api.getUcsEntityByDn(loginApi.getToken(), "sys/rack-enclosure-1")
+                        api.getUcsEntityByDn(loginApi.getToken(), "sys/rack-enclosure-1", false)
                 );
         Assert.assertEquals("sys/rack-enclosure-1", equipment.dn);
         loginApi.logout();
@@ -530,7 +573,7 @@ public class ApiClientTest {
         NetworkElement networkElement =
                 api.getUcsNetworkElementByResponse(
                         api.getUcsEntityByDn(
-                                loginApi.getToken(), "sys/switch-A")
+                                loginApi.getToken(), "sys/switch-A", false)
                 );
         Assert.assertEquals("sys/switch-A", networkElement.dn);
         LOG.info(networkElement.model);
@@ -545,7 +588,7 @@ public class ApiClientTest {
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
         ConfigApi api = new ConfigApi(apiClient);
-        String response = api.getUcsEntityByDn(loginApi.getToken(), "sys/switch-K");
+        String response = api.getUcsEntityByDn(loginApi.getToken(), "sys/switch-K", false);
         LOG.info("{}", response);
         Assert.assertNull(api.getUcsNetworkElementByResponse(response));
         loginApi.logout();
@@ -563,7 +606,7 @@ public class ApiClientTest {
             throw new RuntimeException(e);
         }
         ConfigApi api = new ConfigApi(apiClient);
-        String response = api.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-4/psu-4");
+        String response = api.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-4/psu-4", false);
         LOG.info("{}", response);
         try {
             api.getUcsNetworkElementByResponse(response);

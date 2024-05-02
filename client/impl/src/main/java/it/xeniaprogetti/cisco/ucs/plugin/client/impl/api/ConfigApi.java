@@ -47,9 +47,9 @@ public class ConfigApi {
                 ).dns.stream().map(s -> s.value).collect(Collectors.toList());
     }
 
-    public String getUcsEntityByDn(String cookie, String dn) throws ApiException {
+    public String getUcsEntityByDn(String cookie, String dn, boolean inHierarchical) throws ApiException {
         LOG.info("getUcsEntityByDn: {}", dn);
-        return client.doPost(UcsXmlApiRequest.getConfigResolveDnRequest(cookie,dn,false));
+        return client.doPost(UcsXmlApiRequest.getConfigResolveDnRequest(cookie,dn,inHierarchical));
     }
 
     public ComputeBlade getUcsComputeBladeByResponse(String response) throws ApiException {

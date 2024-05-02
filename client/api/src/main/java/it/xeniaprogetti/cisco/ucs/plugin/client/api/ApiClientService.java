@@ -6,7 +6,7 @@ public interface ApiClientService {
 
     void disconnect() throws ApiException;
 
-    String getUcsXmlFromDn(String dn) throws ApiException;
+    String getUcsXmlFromDn(String dn, boolean isHierarchical) throws ApiException;
 
     UcsComputeBlade resolveUcsComputeBladeByResponse(String response) throws ApiException;
     UcsComputeRackUnit resolveUcsComputeRackUnitByResponse(String response) throws ApiException;
