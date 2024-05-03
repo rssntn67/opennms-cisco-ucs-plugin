@@ -65,7 +65,7 @@ public class AaaApi {
     }
 
     public boolean isValid() {
-        return this.validityTime != null && validityTime.isAfter(LocalDateTime.now());
+        return this.token != null && this.validityTime != null && validityTime.isAfter(LocalDateTime.now());
     }
 
     public boolean isValidTokenAtLeastFor(long secondsFromNow) {

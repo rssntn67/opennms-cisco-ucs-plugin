@@ -1,10 +1,17 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.impl.model;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+
 import java.nio.file.Paths;
 import java.util.Objects;
 
 public class Dn {
+    @JacksonXmlProperty(isAttribute = true)
     public String value;
+
+    public Dn() {
+
+    }
 
     private Dn(String value) {
         Objects.requireNonNull(value);
