@@ -1,8 +1,10 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.Dn;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.UcsElement;
 
-public class VNicIpV4PooledAddr {
+public class VNicIpV4PooledAddr extends UcsElement {
     @JacksonXmlProperty(isAttribute = true)
     public String addr;
     @JacksonXmlProperty(isAttribute = true)
@@ -19,4 +21,18 @@ public class VNicIpV4PooledAddr {
     public String secDns;
     @JacksonXmlProperty(isAttribute = true)
     public String subnet;
+
+    @Override
+    public String toString() {
+        return "VNicIpV4PooledAddr{" +
+                "addr='" + addr + '\'' +
+                ", defGw='" + defGw + '\'' +
+                ", dn='" + dn + '\'' +
+                ", name='" + name + '\'' +
+                ", operName='" + operName + '\'' +
+                ", primDns='" + primDns + '\'' +
+                ", secDns='" + secDns + '\'' +
+                ", subnet='" + subnet + '\'' +
+                '}';
+    }
 }

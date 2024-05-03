@@ -13,6 +13,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsNetworkElement;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.AaaApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.ConfigApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.handler.ApiClient;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.Dn;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.compute.ComputeBlade;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.compute.ComputeRackUnit;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.equipment.EquipmentChassis;
@@ -57,7 +58,7 @@ public class XmlApiClientService implements ApiClientService {
     @Override
     public String getUcsXmlFromDn(String dn, boolean isHierarchical) throws ApiException {
         checkCredentials();
-        return configApi.getUcsEntityByDn(aaaApi.getToken(), dn, isHierarchical);
+        return configApi.getUcsEntityByDn(aaaApi.getToken(), Dn.getDn(dn), isHierarchical);
     }
 
     @Override

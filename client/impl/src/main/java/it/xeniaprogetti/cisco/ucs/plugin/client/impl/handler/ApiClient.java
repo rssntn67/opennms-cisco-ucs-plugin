@@ -126,6 +126,7 @@ public class ApiClient {
             }
             return t;
         } catch (JsonProcessingException e) {
+            LOG.error("getUcsEntity: Error Processing request: {}", e.getMessage(), e);
             try {
                 ErrorResponse error = mapper.readValue(response, ErrorResponse.class);
                 throw new ApiException("getUcsEntity: server responded with error: " + error.invocationResult

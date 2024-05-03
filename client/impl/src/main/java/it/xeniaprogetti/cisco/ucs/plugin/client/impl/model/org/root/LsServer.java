@@ -29,7 +29,7 @@ public class LsServer extends UcsElement {
     @JacksonXmlProperty(isAttribute = true)
     public String extIPState;
     @JacksonXmlProperty(isAttribute = true)
-    public int fltAggr;
+    public long fltAggr;
     @JacksonXmlProperty(isAttribute = true)
     public String fsmDescr;
     @JacksonXmlProperty(isAttribute = true)

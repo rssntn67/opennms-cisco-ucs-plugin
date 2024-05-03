@@ -2,6 +2,7 @@ package it.xeniaprogetti.cisco.ucs.plugin.client.impl.api;
 
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.handler.ApiClient;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.Dn;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.ip.IpPoolUniverse;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root.IpPoolPool;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root.IpPoolPooled;
@@ -30,33 +31,33 @@ public class IpApi {
     public IpPoolUniverse getIpPoolUniverse(String cookie) throws ApiException {
         return client
                 .getUcsXmlApiResponse(
-                        UcsXmlApiRequest.getConfigResolveDnRequest(cookie,"ip",true)
+                        UcsXmlApiRequest.getConfigResolveDnRequest(cookie,Dn.getDn("ip"),true)
                         , ConfigResolveDnResponseIpPoolUniverse.class
                 ).outconfig.ippoolUniverse;
     }
 
-    public VNicIpV4PooledAddr getVnicVNicIpV4PooledAddr(String cookie, String poolAssignedToDn) throws  ApiException {
+    public VNicIpV4PooledAddr getVnicVNicIpV4PooledAddr(String cookie, Dn poolAssignedToDn) throws  ApiException {
         return client.getUcsXmlApiResponse(
                 UcsXmlApiRequest.getConfigResolveDnRequest(cookie, poolAssignedToDn, false)
                 , ConfigResolveDnResponseVNicIpV4PooledAddr.class
         ).outconfig.vnicIpV4PooledAddr;
     }
 
-    public IpPoolPooled getIpPoolPooled(String cookie, String poolDn) throws ApiException {
+    public IpPoolPooled getIpPoolPooled(String cookie, Dn poolDn) throws ApiException {
         return client.getUcsXmlApiResponse(
                 UcsXmlApiRequest.getConfigResolveDnRequest(cookie, poolDn, false)
                 , ConfigResolveDnResponseIpPoolPooled.class
         ).outconfig.ippoolPooled;
     }
 
-    public LsServer getLsServer(String cookie, String assignedToDn) throws ApiException {
+    public LsServer getLsServer(String cookie, Dn assignedToDn) throws ApiException {
         return client.getUcsXmlApiResponse(
-                UcsXmlApiRequest.getConfigResolveDnRequest(cookie,assignedToDn,false)
+                UcsXmlApiRequest.getConfigResolveDnRequest(cookie, assignedToDn, false)
                 , ConfigResolveDnResponseLsServer.class
         ).outconfig.lsServer;
     }
 
-    public IpPoolPool getIpPoolPool(String cookie, String poolName) throws ApiException {
+    public IpPoolPool getIpPoolPool(String cookie, Dn poolName) throws ApiException {
         return client.getUcsXmlApiResponse(
                 UcsXmlApiRequest.getConfigResolveDnRequest(cookie, poolName,true)
                 , ConfigResolveDnResponseIpPoolPool.class
