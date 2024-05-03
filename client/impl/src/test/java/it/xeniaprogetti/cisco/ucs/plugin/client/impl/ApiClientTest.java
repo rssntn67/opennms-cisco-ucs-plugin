@@ -484,6 +484,34 @@ public class ApiClientTest {
     }
 
     @Test
+    public void testConfigApiChassis3ComputeBlade3WithHierarchy() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaApi loginApi = new AaaApi(credentials,apiClient);
+        loginApi.login();
+        ConfigApi api = new ConfigApi(apiClient);
+        String computeBlade =
+                api.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("sys/chassis-3/blade-3"), true);
+        System.out.println(computeBlade);
+        loginApi.logout();
+    }
+
+    @Test
+    public void testConfigApiChassis3ComputeBlade1WithHierarchy() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaApi loginApi = new AaaApi(credentials,apiClient);
+        loginApi.login();
+        ConfigApi api = new ConfigApi(apiClient);
+        String computeBlade =
+                api.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("sys/chassis-3/blade-1"), true);
+        System.out.println(computeBlade);
+        loginApi.logout();
+    }
+
+    @Test
     public void testIpApi() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
         ApiClient apiClient = new ApiClient(credentials.url);
@@ -539,7 +567,7 @@ public class ApiClientTest {
     }
 
     @Test
-    public void testApiClientComputeBlade1ByDn() throws ApiException {
+    public void testApiClientChasses3ComputeBlade1() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
         ApiClient apiClient = new ApiClient(credentials.url);
         apiClient.setTrustAllCertsClient();
@@ -552,8 +580,40 @@ public class ApiClientTest {
                         configApi.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("sys/chassis-3/blade-1"), false)
                 );
         Assert.assertEquals("sys/chassis-3/blade-1", computeBlade.dn);
-        System.out.println(computeBlade.assignedToDn);
+/*
+        Overall Status	:	OK (Up) -> ok
+
+        Configuration Error	:	not-applicable -> not-applicable
+        Admin State	:	In Service (Up) -> in-service
+        Discovery State	:	Complete (Up) -> complete
+        Avail State	:	Available (Up) -> available
+        Assoc State	:	Associated  (Up) -> associated
+        Power State	:	On          (Up) -> on
+        Slot Status	:	Equipped    (Up) -> equipped
+        Check Point	:	Discovered       -> discovered
+         */
+        System.out.println(computeBlade);
+        Assert.assertEquals("ok", computeBlade.operState); //Overall Status
+
+        Assert.assertEquals("not-applicable", computeBlade.lowVoltageMemory); //Configuration Error
+        Assert.assertEquals("not-applicable", computeBlade.memorySpeed); //Configuration Error
+        Assert.assertEquals("not-applicable", computeBlade.mfgTime); //Configuration Error
+
+        Assert.assertEquals("in-service", computeBlade.adminState); // Admin State
+        Assert.assertEquals("complete", computeBlade.discovery); // Discovery State
+        Assert.assertEquals("unavailable", computeBlade.availability); //Avail State
+        Assert.assertEquals("associated", computeBlade.association); // Association State
+        Assert.assertEquals("on", computeBlade.operPower); // Power State
+        Assert.assertEquals("equipped", computeBlade.presence); //Slot Status
+        Assert.assertEquals("discovered", computeBlade.checkPoint); //CheckPoint
+
+        Assert.assertEquals("operable", computeBlade.operability);
+
         Assert.assertEquals("org-root/ls-osi01-w01-prd01-lnx13", computeBlade.assignedToDn);
+
+        // This means both connections are available
+        Assert.assertEquals(computeBlade.connPath, computeBlade.connStatus);
+
         LsServer lsServer = ipApi.getLsServer(loginApi.getToken(), Dn.getDn(computeBlade.assignedToDn));
         Assert.assertEquals(computeBlade.assignedToDn, lsServer.dn);
         Assert.assertEquals(computeBlade.dn, lsServer.pnDn);
@@ -566,7 +626,7 @@ public class ApiClientTest {
     }
 
     @Test
-    public void testApiClientComputeBlade2ByDn() throws ApiException {
+    public void testApiClientChassis3ComputeBlade2() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
         ApiClient apiClient = new ApiClient(credentials.url);
         apiClient.setTrustAllCertsClient();
@@ -577,18 +637,34 @@ public class ApiClientTest {
                 api.getUcsComputeBladeByResponse(
                         api.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("sys/chassis-3/blade-2"), false)
                 );
+        System.out.println(computeBlade);
+        Assert.assertEquals("ok", computeBlade.operState); //Overall Status
+
+        Assert.assertEquals("not-applicable", computeBlade.lowVoltageMemory); //Configuration Error
+        Assert.assertEquals("not-applicable", computeBlade.memorySpeed); //Configuration Error
+        Assert.assertEquals("not-applicable", computeBlade.mfgTime); //Configuration Error
+
+        Assert.assertEquals("in-service", computeBlade.adminState); // Admin State
+        Assert.assertEquals("complete", computeBlade.discovery); // Discovery State
+        Assert.assertEquals("unavailable", computeBlade.availability); //Avail State
+        Assert.assertEquals("associated", computeBlade.association); // Association State
+        Assert.assertEquals("on", computeBlade.operPower); // Power State
+        Assert.assertEquals("equipped", computeBlade.presence); //Slot Status
+        Assert.assertEquals("discovered", computeBlade.checkPoint); //CheckPoint
+
+        Assert.assertEquals("operable", computeBlade.operability);
+
         Assert.assertEquals("sys/chassis-3/blade-2", computeBlade.dn);
-        System.out.println(computeBlade.assignedToDn);
         Assert.assertEquals("org-root/ls-osi01-w01-prd01-lnx15", computeBlade.assignedToDn);
-        String assignedXml = api.getUcsEntityByDn(loginApi.getToken(), Dn.getDn(computeBlade.assignedToDn), false);
-        System.out.println(assignedXml);
-        System.out.println(api.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("org-root/ip-pool-BM-KVM-POOL"),false));
-        System.out.println(api.getUcsEntityByDn(loginApi.getToken(), Dn.getDn(computeBlade.assignedToDn+"/ipv4-pooled-addr"),false ));
+
+        // This means both connections are available
+        Assert.assertEquals(computeBlade.connPath, computeBlade.connStatus);
+
         loginApi.logout();
     }
 
     @Test
-    public void testApiClientComputeBlade3ByDn() throws ApiException {
+    public void testApiClientChassis3ComputeBlade3() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
         ApiClient apiClient = new ApiClient(credentials.url);
         apiClient.setTrustAllCertsClient();
@@ -599,43 +675,32 @@ public class ApiClientTest {
                 api.getUcsComputeBladeByResponse(
                         api.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("sys/chassis-3/blade-3"), false)
                 );
+        System.out.println(computeBlade);
+
         Assert.assertEquals("sys/chassis-3/blade-3", computeBlade.dn);
-        Assert.assertEquals("", computeBlade.assignedToDn);
+        Assert.assertEquals("discovery-failed", computeBlade.operState); //Overall Status
+
+        Assert.assertEquals("not-applicable", computeBlade.lowVoltageMemory); //Configuration Error
+        Assert.assertEquals("not-applicable", computeBlade.memorySpeed); //Configuration Error
+        Assert.assertEquals("not-applicable", computeBlade.mfgTime); //Configuration Error
+
+        Assert.assertEquals("in-service", computeBlade.adminState); // Admin State
+        Assert.assertEquals("failed", computeBlade.discovery); //Discovery State
+        Assert.assertEquals("unavailable", computeBlade.availability); //Avail State
+        Assert.assertEquals("none", computeBlade.association); // Association State
+        Assert.assertEquals("off", computeBlade.operPower); // Power State
+        Assert.assertEquals("equipped", computeBlade.presence); //Slot Status
+        Assert.assertEquals("deep-checkpoint", computeBlade.checkPoint); //CheckPoint
+
+        Assert.assertEquals("operable", computeBlade.operability);
+
+        // This means both connections are available
+        Assert.assertEquals(computeBlade.connPath, computeBlade.connStatus);
         loginApi.logout();
     }
 
-
     @Test
-    public void testApiClientComputeBlade3ByDnHierarchical() throws ApiException {
-        ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
-        apiClient.setTrustAllCertsClient();
-        AaaApi loginApi = new AaaApi(credentials,apiClient);
-        loginApi.login();
-        ConfigApi api = new ConfigApi(apiClient);
-        String computeBlade =
-                        api.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("sys/chassis-3/blade-3"), true);
-        System.out.println(computeBlade);
-        loginApi.logout();
-    }
-
-    @Test
-    public void testApiClientComputeBlade1ByDnHierarchical() throws ApiException {
-        ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
-        apiClient.setTrustAllCertsClient();
-        AaaApi loginApi = new AaaApi(credentials,apiClient);
-        loginApi.login();
-        ConfigApi api = new ConfigApi(apiClient);
-        String computeBlade =
-                api.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("sys/chassis-3/blade-1"), true);
-        System.out.println(computeBlade);
-        loginApi.logout();
-    }
-
-
-    @Test
-    public void testApiClientComputeBlade2ServiceProfileByDn() throws ApiException {
+    public void testConfigApiServiceProfileByDn() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
         ApiClient apiClient = new ApiClient(credentials.url);
         apiClient.setTrustAllCertsClient();
@@ -649,7 +714,45 @@ public class ApiClientTest {
     }
 
     @Test
-    public void testApiClientComputeRackUnitByDn() throws ApiException {
+    public void testApiClientComputeRackUnit1() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaApi loginApi = new AaaApi(credentials,apiClient);
+        loginApi.login();
+        ConfigApi api = new ConfigApi(apiClient);
+        ComputeRackUnit computeRackUnit =
+                api.getUcsComputeRackUnitByResponse(
+                        api.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("sys/rack-unit-1"), false)
+                );
+        System.out.println(computeRackUnit);
+
+        Assert.assertEquals("unassociated", computeRackUnit.operState); //Overall Status
+
+        Assert.assertEquals("not-applicable", computeRackUnit.lowVoltageMemory); //Configuration Error
+        Assert.assertEquals("not-applicable", computeRackUnit.memorySpeed); //Configuration Error
+        Assert.assertEquals("not-applicable", computeRackUnit.mfgTime); //Configuration Error
+
+        Assert.assertEquals("in-service", computeRackUnit.adminState); // Admin State
+        Assert.assertEquals("complete", computeRackUnit.discovery); // Discovery State
+        Assert.assertEquals("available", computeRackUnit.availability); //Avail State
+        Assert.assertEquals("none", computeRackUnit.association); // Association State
+        Assert.assertEquals("off", computeRackUnit.operPower); // Power State
+        Assert.assertEquals("equipped", computeRackUnit.presence); //Slot Status
+        Assert.assertEquals("discovered", computeRackUnit.checkPoint); //CheckPoint
+
+        Assert.assertEquals("operable", computeRackUnit.operability);
+
+        Assert.assertEquals("sys/rack-unit-1", computeRackUnit.dn);
+
+        // This means both connections are available
+        Assert.assertEquals(computeRackUnit.connPath, computeRackUnit.connStatus);
+
+        loginApi.logout();
+    }
+
+    @Test
+    public void testApiClientComputeRackUnit8() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
         ApiClient apiClient = new ApiClient(credentials.url);
         apiClient.setTrustAllCertsClient();
@@ -660,12 +763,122 @@ public class ApiClientTest {
                 api.getUcsComputeRackUnitByResponse(
                         api.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("sys/rack-unit-8"), false)
                 );
+        System.out.println(computeRackUnit);
+
+        Assert.assertEquals("unassociated", computeRackUnit.operState); //Overall Status
+
+        Assert.assertEquals("not-applicable", computeRackUnit.lowVoltageMemory); //Configuration Error
+        Assert.assertEquals("not-applicable", computeRackUnit.memorySpeed); //Configuration Error
+        Assert.assertEquals("not-applicable", computeRackUnit.mfgTime); //Configuration Error
+
+        Assert.assertEquals("in-service", computeRackUnit.adminState); // Admin State
+        Assert.assertEquals("complete", computeRackUnit.discovery); // Discovery State
+        Assert.assertEquals("available", computeRackUnit.availability); //Avail State
+        Assert.assertEquals("none", computeRackUnit.association); // Association State
+        Assert.assertEquals("off", computeRackUnit.operPower); // Power State
+        Assert.assertEquals("equipped", computeRackUnit.presence); //Slot Status
+        Assert.assertEquals("discovered", computeRackUnit.checkPoint); //CheckPoint
+
+        Assert.assertEquals("operable", computeRackUnit.operability);
+
         Assert.assertEquals("sys/rack-unit-8", computeRackUnit.dn);
+
+        // This means both connections are available
+        Assert.assertEquals(computeRackUnit.connPath, computeRackUnit.connStatus);
+
         loginApi.logout();
     }
 
     @Test
-    public void testApiEquipmentChassisByDn() throws ApiException {
+    public void testApiClientComputeRackUnit9() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaApi loginApi = new AaaApi(credentials,apiClient);
+        loginApi.login();
+        ConfigApi api = new ConfigApi(apiClient);
+        ComputeRackUnit computeRackUnit =
+                api.getUcsComputeRackUnitByResponse(
+                        api.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("sys/rack-unit-9"), false)
+                );
+        System.out.println(computeRackUnit);
+
+        Assert.assertEquals("unassociated", computeRackUnit.operState); //Overall Status
+
+        Assert.assertEquals("not-applicable", computeRackUnit.lowVoltageMemory); //Configuration Error
+        Assert.assertEquals("not-applicable", computeRackUnit.memorySpeed); //Configuration Error
+        Assert.assertEquals("not-applicable", computeRackUnit.mfgTime); //Configuration Error
+
+        Assert.assertEquals("in-service", computeRackUnit.adminState); // Admin State
+        Assert.assertEquals("complete", computeRackUnit.discovery); // Discovery State
+        Assert.assertEquals("available", computeRackUnit.availability); //Avail State
+        Assert.assertEquals("none", computeRackUnit.association); // Association State
+        Assert.assertEquals("off", computeRackUnit.operPower); // Power State
+        Assert.assertEquals("equipped", computeRackUnit.presence); //Slot Status
+        Assert.assertEquals("discovered", computeRackUnit.checkPoint); //CheckPoint
+
+        Assert.assertEquals("operable", computeRackUnit.operability);
+
+        Assert.assertEquals("sys/rack-unit-9", computeRackUnit.dn);
+
+        // This means both connections are available
+        Assert.assertEquals(computeRackUnit.connPath, computeRackUnit.connStatus);
+
+        loginApi.logout();
+    }
+
+    @Test
+    public void testApiEquipmentChassis3() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaApi loginApi = new AaaApi(credentials,apiClient);
+        loginApi.login();
+        ConfigApi api = new ConfigApi(apiClient);
+        EquipmentChassis equipment =
+                api.getUcsEquipmentChassisByResponse(
+                        api.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("sys/chassis-3"), false)
+                );
+        System.out.println(equipment);
+        /*
+        --Chassis
+Overall Status	:	Operable
+
+Configuration Error	:	not-applicable
+Configuration State	:	OK
+Operability	:	Operable
+Power	:	OK
+Thermal	:	OK
+         */
+
+        Assert.assertEquals("operable", equipment.operState); //Overall Status
+
+        Assert.assertEquals("not-applicable", equipment.mfgTime); //Configuration Error
+        Assert.assertEquals("ok", equipment.configState); //Configuration State
+        Assert.assertEquals("operable", equipment.operability); //Operability
+        Assert.assertEquals("ok", equipment.power); // Power
+        Assert.assertEquals("ok", equipment.thermal); // Thermal
+
+
+        Assert.assertEquals("acknowledged", equipment.adminState); // Admin State
+        Assert.assertEquals("undiscovered", equipment.discovery); // Discovery State
+        Assert.assertEquals("unavailable", equipment.availability); //Avail State
+        Assert.assertEquals("none", equipment.association); // Association State
+        Assert.assertEquals("unknown", equipment.presence); //Slot Status
+        Assert.assertEquals("in-service",  equipment.serviceState); //CheckPoint
+
+
+
+        Assert.assertEquals("sys/chassis-3", equipment.dn);
+
+        // This means both connections are available
+        Assert.assertEquals(equipment.connPath, equipment.connStatus);
+
+        loginApi.logout();
+    }
+
+    @Test
+    public void testApiEquipmentChassis4() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
         ApiClient apiClient = new ApiClient(credentials.url);
         apiClient.setTrustAllCertsClient();
@@ -676,12 +889,86 @@ public class ApiClientTest {
                 api.getUcsEquipmentChassisByResponse(
                         api.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("sys/chassis-4"), false)
                 );
+        System.out.println(equipment);
+        /*
+        --Chassis
+Overall Status	:	Operable
+
+Configuration Error	:	not-applicable
+Configuration State	:	OK
+Operability	:	Operable
+Power	:	OK
+Thermal	:	OK
+         */
+
+        Assert.assertEquals("operable", equipment.operState); //Overall Status
+
+        Assert.assertEquals("not-applicable", equipment.mfgTime); //Configuration Error
+        Assert.assertEquals("ok", equipment.configState); //Configuration State
+        Assert.assertEquals("operable", equipment.operability); //Operability
+        Assert.assertEquals("ok", equipment.power); // Power
+        Assert.assertEquals("ok", equipment.thermal); // Thermal
+
+
+        Assert.assertEquals("acknowledged", equipment.adminState); // Admin State
+        Assert.assertEquals("undiscovered", equipment.discovery); // Discovery State
+        Assert.assertEquals("unavailable", equipment.availability); //Avail State
+        Assert.assertEquals("none", equipment.association); // Association State
+        Assert.assertEquals("unknown", equipment.presence); //Slot Status
+        Assert.assertEquals("in-service",  equipment.serviceState); //CheckPoint
+
+
+
         Assert.assertEquals("sys/chassis-4", equipment.dn);
+
+        // This means both connections are available
+        Assert.assertEquals(equipment.connPath, equipment.connStatus);
+
         loginApi.logout();
     }
 
     @Test
-    public void testApiEquipmentFexByDn() throws ApiException {
+    public void testApiEquipmentFex1() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaApi loginApi = new AaaApi(credentials,apiClient);
+        loginApi.login();
+        ConfigApi api = new ConfigApi(apiClient);
+        EquipmentFex equipment =
+                api.getUcsEquipmentFexByResponse(
+                        api.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("sys/fex-1"), false)
+                );
+        System.out.println(equipment);
+        /*
+Overall Status	:	Operable
+Configuration Error	:	not-applicable
+Power	:	N/A
+Voltage	:	N/A
+Thermal	:	N/A
+         */
+        Assert.assertEquals("operable", equipment.operState); //Overall Status
+
+        Assert.assertEquals("unknown", equipment.power); // Power
+        Assert.assertEquals("unknown", equipment.voltage); // Voltage
+        Assert.assertEquals("unknown", equipment.thermal); // Thermal
+
+
+        Assert.assertEquals("un-acknowledged", equipment.configState); //Configuration State
+        Assert.assertEquals("acknowledged", equipment.adminState);
+        Assert.assertEquals("unknown", equipment.presence);
+        Assert.assertEquals("unknown", equipment.operability); //
+
+
+        Assert.assertEquals("sys/fex-1", equipment.dn);
+        Assert.assertEquals(1,equipment.id);
+        Assert.assertEquals("A",equipment.switchId);
+        loginApi.logout();
+    }
+
+
+    @Test
+    public void testApiEquipmentFex2() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
         ApiClient apiClient = new ApiClient(credentials.url);
         apiClient.setTrustAllCertsClient();
@@ -692,7 +979,30 @@ public class ApiClientTest {
                 api.getUcsEquipmentFexByResponse(
                         api.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("sys/fex-2"), false)
                 );
+        System.out.println(equipment);
+        /*
+Overall Status	:	Operable
+Configuration Error	:	not-applicable
+Power	:	N/A
+Voltage	:	N/A
+Thermal	:	N/A
+         */
+        Assert.assertEquals("operable", equipment.operState); //Overall Status
+
+        Assert.assertEquals("unknown", equipment.power); // Power
+        Assert.assertEquals("unknown", equipment.voltage); // Voltage
+        Assert.assertEquals("unknown", equipment.thermal); // Thermal
+
+
+        Assert.assertEquals("un-acknowledged", equipment.configState); //Configuration State
+        Assert.assertEquals("acknowledged", equipment.adminState);
+        Assert.assertEquals("unknown", equipment.presence);
+        Assert.assertEquals("unknown", equipment.operability); //
+
+
         Assert.assertEquals("sys/fex-2", equipment.dn);
+        Assert.assertEquals(2,equipment.id);
+        Assert.assertEquals("B",equipment.switchId);
         loginApi.logout();
     }
 
@@ -768,37 +1078,6 @@ public class ApiClientTest {
     }
 
     /* Server
-Overall Status	:	OK
-Configuration Error	:	not-applicable
-Admin State	:	In Service
-Discovery State	:	Complete
-Avail State	:	Unavailable
-Assoc State	:	Failed
-Power State	:	Off
-Slot Status	:	Equipped
-Check Point	:	Discovered
-
-----
-Overall Status	:	Discovery
-Configuration Error	:	not-applicable
-Admin State	:	In Service
-Discovery State	:	In Progress
-Avail State	:	Unavailable
-Assoc State	:	None
-Power State	:	Off
-Slot Status	:	Equipped
-Check Point	:	Deep Checkpoint
------
-Overall Status	:	Unassociated
-Configuration Error	:	not-applicable
-Admin State	:	In Service
-Discovery State	:	Complete
-Avail State	:	Available
-Assoc State	:	None
-Power State	:	Off
-Slot Status	:	Equipped
-Check Point	:	Discovered
-
 
 FEX
 
@@ -816,24 +1095,8 @@ FC Mode	:	End Host
 Admin Evac Mode	:	Off
 Oper Evac Mode	:	Off
 
-Overall Status	:	Operable
-Thermal	:	N/A
-Ethernet Mode	:	End Host
-FC Mode	:	End Host
-Admin Evac Mode	:	Off
-Oper Evac Mode	:	Off
-
 --Enclosure
 Overall Status	:	Operable
-
---Chassis
-Overall Status	:	Operable
-
-Configuration Error	:	not-applicable
-Configuration State	:	OK
-Operability	:	Operable
-Power	:	OK
-Thermal	:	OK
 
 
      */
