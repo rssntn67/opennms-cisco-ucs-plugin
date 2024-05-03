@@ -27,8 +27,6 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.network.NetworkElemen
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root.IpPoolPooled;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root.LsServer;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -186,18 +184,14 @@ public class XmlApiClientService implements ApiClientService {
             Dn poolDn = Objects.requireNonNull(Dn.getParentDn(Dn.getDn(pool.ippoolPoolable.poolDn)));
             IpPoolPooled ipPoolPooled = ipApi.getIpPoolPooled(aaaApi.getToken(), Dn.getDn(pool.ippoolPoolable.poolDn));
 
-            try {
-                list.add(UcsIpPoolPooled.builder()
-                        .withAddr(InetAddress.getByName(ipPoolPooled.id))
-                        .withDefGw(InetAddress.getByName(ipPoolPooled.defGw))
-                        .withSubnet(InetAddress.getByName(ipPoolPooled.subnet))
-                        .withAssignedDeviceToDn(lsServer.pnDn)
-                        .withAssignedProfileToDn(assignedProfileToDn.value)
-                        .withPoolDn(poolDn.value)
-                        .build());
-            } catch (UnknownHostException e) {
-                throw new RuntimeException(e);
-            }
+            list.add(UcsIpPoolPooled.builder()
+                    .withAddr(ipPoolPooled.id)
+                    .withDefGw(ipPoolPooled.defGw)
+                    .withSubnet(ipPoolPooled.subnet)
+                    .withAssignedDeviceToDn(lsServer.pnDn)
+                    .withAssignedProfileToDn(assignedProfileToDn.value)
+                    .withPoolDn(poolDn.value)
+                    .build());
 
         }
         return Collections.unmodifiableList(list);

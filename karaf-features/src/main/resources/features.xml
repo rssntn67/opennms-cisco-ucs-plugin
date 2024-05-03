@@ -35,6 +35,8 @@
 
     <feature name="opennms-plugins-cisco-ucs-client" description="OpenNMS :: Plugins :: Cisco UCS :: CLient" version="${project.version}">
         <feature dependency="true">aries-blueprint</feature>
+        <feature version="${guava.version}" dependency="true">guava</feature>
+
         <feature version="${jackson.version}" dependency="true">jackson</feature>
         <feature version="${okhttp.version}" dependency="true">okhttp</feature>
         <bundle>mvn:it.xeniaprogetti/cisco-ucs-plugin-client-api/${project.version}</bundle>

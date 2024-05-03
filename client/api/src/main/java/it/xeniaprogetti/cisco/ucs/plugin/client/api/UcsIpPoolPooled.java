@@ -1,14 +1,12 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.api;
 
-import java.net.InetAddress;
-
 public class UcsIpPoolPooled {
     public final String poolDn;
     public final String assignedToProfileDn;
     public final String assignedToDeviceDn;
-    public final InetAddress addr;
-    public final InetAddress defGw;
-    public final InetAddress subnet;
+    public final String addr;
+    public final String defGw;
+    public final String subnet;
 
     public static UcsIpPoolPooled.Builder builder() {
         return new Builder();
@@ -28,9 +26,9 @@ public class UcsIpPoolPooled {
         private String poolDn;
         private String assignedToProfileDn;
         private String assignedToDeviceDn;
-        private InetAddress addr;
-        private InetAddress defGw;
-        private InetAddress subnet;
+        private String addr;
+        private String defGw;
+        private String subnet;
 
         private Builder() {
         }
@@ -54,17 +52,17 @@ public class UcsIpPoolPooled {
             return this;
         }
 
-        public Builder withAddr(InetAddress addr) {
+        public Builder withAddr(String addr) {
             this.addr = addr;
             return this;
         }
 
-        public Builder withDefGw(InetAddress defGw) {
+        public Builder withDefGw(String defGw) {
             this.defGw = defGw;
             return this;
         }
 
-        public Builder withSubnet(InetAddress subnet) {
+        public Builder withSubnet(String subnet) {
             this.subnet = subnet;
             return this;
         }
