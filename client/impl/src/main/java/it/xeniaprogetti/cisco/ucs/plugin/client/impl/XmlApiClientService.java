@@ -9,9 +9,11 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEntity;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentChassis;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentFex;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentRackEnclosure;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsIpPoolPooled;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsNetworkElement;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.AaaApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.ConfigApi;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.IpApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.handler.ApiClient;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.Dn;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.compute.ComputeBlade;
@@ -19,9 +21,18 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.compute.ComputeRackUn
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.equipment.EquipmentChassis;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.equipment.EquipmentFex;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.equipment.EquipmentRackEnclosure;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.ip.IpPoolAddr;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.ip.IpPoolUniverse;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.network.NetworkElement;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root.IpPoolPooled;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root.LsServer;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class XmlApiClientService implements ApiClientService {
@@ -29,12 +40,14 @@ public class XmlApiClientService implements ApiClientService {
     private final ApiClientCredentials credentials;
     private final AaaApi aaaApi;
     private final ConfigApi configApi;
+    private final IpApi ipApi;
 
     public XmlApiClientService(ApiClientCredentials credentials) {
         ApiClient client = XmlApiClientProvider.getApiClient(credentials);
         this.credentials = credentials;
         this.aaaApi = new AaaApi(credentials, client);
         this.configApi = new ConfigApi(client);
+        this.ipApi = new IpApi(client);
     }
 
 
@@ -156,6 +169,38 @@ public class XmlApiClientService implements ApiClientService {
     public List<String> findDnByClassItem(UcsEntity.ClassItem classItem) throws ApiException{
         checkCredentials();
         return configApi.getDnByClassId(aaaApi.getToken(), classItem);
+    }
+
+    @Override
+    public List<UcsIpPoolPooled> findUcsIpPoolPooled() throws ApiException {
+        checkCredentials();
+        IpPoolUniverse ipPoolUniverse = ipApi.getIpPoolUniverse(aaaApi.getToken());
+        List<UcsIpPoolPooled> list = new ArrayList<>();
+        for (IpPoolAddr pool: ipPoolUniverse.ippoolAddr) {
+            if (!pool.assigned.equals("yes"))
+                continue;
+            Dn assignedProfileToDn = Objects.requireNonNull(Dn.getParentDn(Dn.getDn(pool.assignedToDn)));
+            LsServer lsServer = ipApi.getLsServer(aaaApi.getToken(), assignedProfileToDn);
+            if (lsServer.pnDn.isEmpty())
+                continue;
+            Dn poolDn = Objects.requireNonNull(Dn.getParentDn(Dn.getDn(pool.ippoolPoolable.poolDn)));
+            IpPoolPooled ipPoolPooled = ipApi.getIpPoolPooled(aaaApi.getToken(), Dn.getDn(pool.ippoolPoolable.poolDn));
+
+            try {
+                list.add(UcsIpPoolPooled.builder()
+                        .withAddr(InetAddress.getByName(ipPoolPooled.id))
+                        .withDefGw(InetAddress.getByName(ipPoolPooled.defGw))
+                        .withSubnet(InetAddress.getByName(ipPoolPooled.subnet))
+                        .withAssignedDeviceToDn(lsServer.pnDn)
+                        .withAssignedProfileToDn(assignedProfileToDn.value)
+                        .withPoolDn(poolDn.value)
+                        .build());
+            } catch (UnknownHostException e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+        return Collections.unmodifiableList(list);
     }
 
     private static UcsComputeBlade from(ComputeBlade compute) {

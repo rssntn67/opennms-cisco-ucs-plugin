@@ -573,6 +573,38 @@ public class ApiClientTest {
     }
 
     @Test
+    public void willProduceUcsIpPoolTest() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaApi loginApi = new AaaApi(credentials,apiClient);
+        loginApi.login();
+        IpApi ipApi = new IpApi(apiClient);
+        IpPoolUniverse ipPoolUniverse = ipApi.getIpPoolUniverse(loginApi.getToken());
+        for (IpPoolAddr pool: ipPoolUniverse.ippoolAddr) {
+            if (!pool.assigned.equals("yes"))
+                continue;
+            Dn assignedToProfileDn = Objects.requireNonNull(Dn.getParentDn(Dn.getDn(pool.assignedToDn)));
+            Dn poolDn = Objects.requireNonNull(Dn.getParentDn(Dn.getDn(pool.ippoolPoolable.poolDn)));
+            LsServer lsServer = ipApi.getLsServer(loginApi.getToken(), assignedToProfileDn);
+            if (lsServer.pnDn.isEmpty())
+                continue;
+            Dn assignedToDeviceDn = Dn.getDn(lsServer.pnDn);
+            IpPoolPooled ipPoolPooled = ipApi.getIpPoolPooled(loginApi.getToken(), Dn.getDn(pool.ippoolPoolable.poolDn));
+
+
+            System.out.println(ipPoolPooled.id);
+            System.out.println(ipPoolPooled.defGw);
+            System.out.println(ipPoolPooled.subnet);
+            System.out.println(assignedToDeviceDn.value);
+            System.out.println(assignedToProfileDn.value);
+            System.out.println(poolDn.value);
+
+        }
+
+    }
+
+    @Test
     public void testApiClientChasses3ComputeBlade1() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
         ApiClient apiClient = new ApiClient(credentials.url);
