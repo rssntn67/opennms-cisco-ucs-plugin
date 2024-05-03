@@ -221,7 +221,7 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
         final var node = ImmutableRequisitionNode.newBuilder()
                 .setForeignId(ucsElement.dn.replace("/","-"))
                 .setLocation(context.getLocation())
-                .setNodeLabel(ucsElement.id)
+                .setNodeLabel("FabricInterconnectSwitch-"+ucsElement.id)
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("dn")
