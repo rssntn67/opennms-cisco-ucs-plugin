@@ -25,4 +25,6 @@ public interface ApiClientService {
     List<String> findDnByClassItem(UcsEntity.ClassItem classItem) throws ApiException;
 
     List<UcsIpPoolPooled> findUcsIpPoolPooled() throws ApiException;
+
+    List<UcsFault> getFaults();
 }

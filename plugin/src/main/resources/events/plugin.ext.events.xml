@@ -1,19 +1,19 @@
 <events xmlns="http://xmlns.opennms.org/xsd/eventconf">
     <event>
-        <uei>uei.opennms.org/cisco-ucsPlugin/sendEventSuccessful</uei>
-        <event-label>Cisco UCS: Successfully sent event</event-label>
-        <descr>Successfully sent event via REST API for alarm with reduction key: %parm[reductionKey]%</descr>
-        <logmsg dest="logndisplay">Cisco UCS: Successfully sent event for alarm: %parm[reductionKey]%</logmsg>
+        <uei>uei.opennms.org/plugin/cisco/ucs/faultResolved</uei>
+        <event-label>Cisco UCS Plugin: Cisco UCS Alarm Event</event-label>
+        <descr>%parm[descr]%</descr>
+        <logmsg dest="logndisplay">%parm[alertType]% Cisco UCS PluginAlarm: Resolved</logmsg>
         <severity>Normal</severity>
-        <alarm-data reduction-key="%uei%:%parm[reductionKey]%" alarm-type="2"
-                    clear-key="uei.opennms.org/cisco-ucsPlugin/sendEventFailed:%parm[reductionKey]%"/>
+        <alarm-data reduction-key="%uei%:%nodeid%:%parm[reductionKey]%" alarm-type="2"
+                    clear-key="uei.opennms.org/plugin/cisco/ucs/ucs/fault:%nodeid%:%parm[reductionKey]%"/>
     </event>
     <event>
-        <uei>uei.opennms.org/cisco-ucsPlugin/sendEventFailed</uei>
-        <event-label>Cisco UCS: Failed to forward event</event-label>
-        <descr>Failed to sent event via REST API for alarm with reduction key: %parm[reductionKey]%. Message is: %parm[message]%</descr>
-        <logmsg dest="logndisplay">Cisco UCS: Failed to sent event for alarm: %parm[reductionKey]%</logmsg>
-        <severity>Critical</severity>
-        <alarm-data reduction-key="%uei%:%parm[reductionKey]%" alarm-type="1" />
+        <uei>uei.opennms.org/plugin/cisco/ucs/fault</uei>
+        <event-label>Cisco UCS Plugin: Cisco UCS Alarm Event</event-label>
+        <descr>%parm[descr]%</descr>
+        <logmsg dest="logndisplay">%parm[alertType]% Cisco UCS PluginAlarm</logmsg>
+        <severity>Major</severity>
+        <alarm-data reduction-key="%uei%:%nodeid%:%parm[reductionKey]%" alarm-type="1" />
     </event>
 </events>

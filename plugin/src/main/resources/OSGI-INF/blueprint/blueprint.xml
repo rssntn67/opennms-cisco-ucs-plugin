@@ -51,7 +51,7 @@
 
     <!-- Expose our custom event definitions bundled in the .jar -->
     <service interface="org.opennms.integration.api.v1.config.events.EventConfExtension">
-        <bean class="it.xeniaprogetti.cisco.ucs.plugin.EventConfExtension"/>
+        <bean class="it.xeniaprogetti.cisco.ucs.plugin.events.EventConfExtension"/>
     </service>
 
 

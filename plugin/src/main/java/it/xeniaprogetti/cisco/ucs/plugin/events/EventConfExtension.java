@@ -1,4 +1,4 @@
-package it.xeniaprogetti.cisco.ucs.plugin;
+package it.xeniaprogetti.cisco.ucs.plugin.events;
 
 import java.util.List;
 
