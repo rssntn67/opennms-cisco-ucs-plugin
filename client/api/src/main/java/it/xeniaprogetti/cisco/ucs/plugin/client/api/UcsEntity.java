@@ -18,6 +18,7 @@ public abstract class UcsEntity {
     }
 
     public enum ClassId {
+        faultInst("CiscoUcsEntity"),
         equipmentChassis("CiscoUcsEquipment"),
         equipmentFex("CiscoUcsEquipment"),
         equipmentRackEnclosure("CiscoUcsEquipment"),

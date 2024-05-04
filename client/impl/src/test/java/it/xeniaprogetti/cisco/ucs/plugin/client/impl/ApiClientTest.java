@@ -7,6 +7,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEntity;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.AaaApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.ConfigApi;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.FaultApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.IpApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.handler.ApiClient;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.Dn;
@@ -1205,6 +1206,87 @@ Oper Evac Mode	:	Off
         } catch (ApiException e) {
             LOG.error("ok: {}", e.getMessage(),e);
         }
+        loginApi.logout();
+    }
+
+    @Test
+    public void testEventSubscriptionRequest() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaApi loginApi = new AaaApi(credentials,apiClient);
+        loginApi.login();
+        try {
+            apiClient.doPost(UcsXmlApiRequest.getEventSubscriptionRequest(loginApi.getToken()));
+        } catch (ApiException e) {
+            LOG.error("{}", e.getMessage());
+        }
+        loginApi.logout();
+    }
+
+    @Test
+    public void testUcsQueryForFaults() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaApi loginApi = new AaaApi(credentials,apiClient);
+        FaultApi faultApi = new FaultApi(apiClient);
+        loginApi.login();
+        final Set<String> codes = new HashSet<>();
+        final Set<String> severities = new HashSet<>();
+        final Set<String> level1dns = new HashSet<>();
+        final Set<String> level2dns = new HashSet<>();
+        final Set<String> level3dns = new HashSet<>();
+
+        faultApi.getUcsFaults(loginApi.getToken()).forEach(f -> {
+            codes.add(f.code);
+            severities.add(f.severity);
+            if (!f.dn.startsWith("org-root")) {
+                Dn dn = Dn.getDn(f.dn);
+                Dn level1 = Dn.getParentDn(dn);
+                if (level1 != null) {
+                    level1dns.add(level1.value);
+                    Dn level2 = Dn.getParentDn(level1);
+                    if (level2 != null) {
+                        level2dns.add(level2.value);
+                        Dn level3 = Dn.getParentDn(level2);
+                        if (level3 != null) {
+                            level3dns.add(level3.value);
+                        }
+
+                    }
+                }
+        }
+        });
+        loginApi.logout();
+        System.out.println(severities);
+        System.out.println(codes);
+        System.out.println(level3dns);
+        System.out.println(level2dns);
+        System.out.println(level1dns);
+    }
+
+    @Test
+    public void testUcsFabricSanB() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaApi loginApi = new AaaApi(credentials,apiClient);
+        ConfigApi configApi = new ConfigApi(apiClient);
+        loginApi.login();
+        System.out.println(configApi.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("fabric/san/B"),false));
+        loginApi.logout();
+    }
+
+    @Test
+    public void testUcsFabricLanA() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaApi loginApi = new AaaApi(credentials,apiClient);
+        ConfigApi configApi = new ConfigApi(apiClient);
+        loginApi.login();
+        System.out.println(configApi.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("fabric/lan/A"),false));
         loginApi.logout();
     }
 

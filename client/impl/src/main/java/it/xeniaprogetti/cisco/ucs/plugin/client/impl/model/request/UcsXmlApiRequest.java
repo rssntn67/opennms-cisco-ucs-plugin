@@ -35,6 +35,18 @@ UcsXmlApiRequest {
         return "<configResolveDn dn=\""+dn.value+"\" cookie=\""+cookie+"\" inHierarchical=\""+inHierarchical+"\"/>";
     }
 
+    public static String getEventSubscriptionRequest(String cookie) {
+        return "<eventSubscribe cookie=\""+cookie+"\"/>";
+    }
+
+    public static String getEventUnsubscribeRequest(String cookie) {
+        return "<eventUnsubscribe cookie=\""+cookie+"\"/>";
+    }
+
+    public static String getKeepAliveRequest(String cookie) {
+        return "<aaaKeepAlive cookie=\""+cookie+"\"/>";
+    }
+
 }
 
 
