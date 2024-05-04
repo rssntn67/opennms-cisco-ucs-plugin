@@ -18,11 +18,21 @@ public abstract class UcsEntity {
     }
 
     public enum ClassId {
-        equipmentChassis,
-        equipmentFex,
-        equipmentRackEnclosure,
-        networkElement,
-        computeBlade,
-        computeRackUnit
+        equipmentChassis("CiscoUcsEquipment"),
+        equipmentFex("CiscoUcsEquipment"),
+        equipmentRackEnclosure("CiscoUcsEquipment"),
+        networkElement("CiscoUcsFabricInterconnect"),
+        computeBlade("CiscoUcsCompute"),
+        computeRackUnit("CiscoUcsCompute");
+
+        private final String serviceName;
+
+        ClassId(String serviceName) {
+            this.serviceName = serviceName;
+        }
+
+        public String getServiceName() {
+            return this.serviceName;
+        }
     }
 }

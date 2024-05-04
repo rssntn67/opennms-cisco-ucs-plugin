@@ -13,7 +13,7 @@ public interface ApiClientService {
     UcsEquipmentChassis resolveUcsEquipmentChassisByResponse(String response) throws ApiException;
     UcsEquipmentFex resolveUcsEquipmentFexByResponse(String response) throws ApiException;
     UcsEquipmentRackEnclosure resolveUcsEquipmentRackEnclosureByResponse(String response) throws ApiException;
-    UcsNetworkElement resolveUcsNetworkElementByResponse(String response) throws Exception;
+    UcsNetworkElement resolveUcsNetworkElementByResponse(String response) throws ApiException;
 
     List<UcsComputeBlade> getUcsComputeBladeList() throws ApiException;
     List<UcsComputeRackUnit> getUcsComputeRackUnitList() throws ApiException;

@@ -54,4 +54,29 @@
         <bean class="it.xeniaprogetti.cisco.ucs.plugin.EventConfExtension"/>
     </service>
 
+
+    <!-- Poller Configuration -->
+    <service interface="org.opennms.integration.api.v1.pollers.ServicePollerFactory">
+        <bean class="it.xeniaprogetti.cisco.ucs.plugin.pollers.CiscoUcsComputePollerFactory">
+            <argument ref="connectionManager"/>
+            <argument ref="clientManager"/>
+        </bean>
+    </service>
+    <service interface="org.opennms.integration.api.v1.pollers.ServicePollerFactory">
+        <bean class="it.xeniaprogetti.cisco.ucs.plugin.pollers.CiscoUcsEquipmentPollerFactory">
+            <argument ref="connectionManager"/>
+            <argument ref="clientManager"/>
+        </bean>
+    </service>
+    <service interface="org.opennms.integration.api.v1.pollers.ServicePollerFactory">
+        <bean class="it.xeniaprogetti.cisco.ucs.plugin.pollers.CiscoUcsFabricInterconnectPollerFactory">
+            <argument ref="connectionManager"/>
+            <argument ref="clientManager"/>
+        </bean>
+    </service>
+    <!-- Load Configuration file-->
+    <bean id="ciscoUcsPollerConfig" class="it.xeniaprogetti.cisco.ucs.plugin.pollers.CiscoUcsPollerConfigurationExtension"/>
+    <service ref="ciscoUcsPollerConfig"
+             interface="org.opennms.integration.api.v1.config.poller.PollerConfigurationExtension"/>
+
 </blueprint>
