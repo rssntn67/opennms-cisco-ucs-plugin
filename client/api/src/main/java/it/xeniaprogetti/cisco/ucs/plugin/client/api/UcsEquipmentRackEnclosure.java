@@ -31,7 +31,7 @@ public final class UcsEquipmentRackEnclosure extends UcsEntity {
 
 
     public UcsEquipmentRackEnclosure(UcsEquipmentRackEnclosure.Builder builder) {
-        super(builder.dn, ClassId.equipmentRackEnclosure, ClassItem.equipmentItem);
+        super(builder.dn, UcsEnums.ClassId.equipmentRackEnclosure, UcsEnums.ClassItem.equipmentItem);
         this.assetTag = builder.assetTag;
         this.fltAggr = builder.fltAggr;
         this.id = builder.id;
@@ -74,7 +74,7 @@ public final class UcsEquipmentRackEnclosure extends UcsEntity {
     }
 
     public static class Builder {
-        private String dn;
+        private UcsDn dn;
         private String assetTag;
         private int fltAggr;
         private int id;
@@ -93,7 +93,7 @@ public final class UcsEquipmentRackEnclosure extends UcsEntity {
 
         }
         public Builder withDn(String dn) {
-            this.dn = dn;
+            this.dn = UcsDn.getDn(dn);
             return this;
         }
 

@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import it.xeniaprogetti.cisco.ucs.plugin.client.ClientManager;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientService;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEntity;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEnums;
 import it.xeniaprogetti.cisco.ucs.plugin.connection.ConnectionManager;
 import org.opennms.integration.api.v1.pollers.PollerRequest;
 import org.opennms.integration.api.v1.pollers.PollerResult;
@@ -114,8 +114,8 @@ public abstract class CiscoUcsAbstractPoller implements ServicePoller {
         public String getResponse() throws ApiException {
             return client().getUcsXmlFromDn(dn, false);
         }
-        public UcsEntity.ClassId getUcsEntityClassId() {
-            return UcsEntity.ClassId.valueOf(type);
+        public UcsEnums.ClassId getUcsEntityClassId() {
+            return UcsEnums.ClassId.valueOf(type);
         }
 
         public ApiClientService client() throws ApiException {

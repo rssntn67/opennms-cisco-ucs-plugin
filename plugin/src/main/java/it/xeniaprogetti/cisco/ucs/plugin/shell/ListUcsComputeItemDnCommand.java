@@ -1,7 +1,7 @@
 package it.xeniaprogetti.cisco.ucs.plugin.shell;
 
 import it.xeniaprogetti.cisco.ucs.plugin.client.ClientManager;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEntity;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEnums;
 import it.xeniaprogetti.cisco.ucs.plugin.connection.ConnectionManager;
 import org.apache.karaf.shell.api.action.Action;
 import org.apache.karaf.shell.api.action.Argument;
@@ -43,7 +43,7 @@ public class ListUcsComputeItemDnCommand implements Action {
                 .column(new Col("Dn").maxSize(64).bold(true));
 
         var service = clientManager.getClient(connection.get());
-        for (final var dn : service.findDnByClassItem(UcsEntity.ClassItem.computeItem)) {
+        for (final var dn : service.findDnByClassItem(UcsEnums.ClassItem.computeItem)) {
             final var row = table.addRow();
             row.addContent(dn);
         }

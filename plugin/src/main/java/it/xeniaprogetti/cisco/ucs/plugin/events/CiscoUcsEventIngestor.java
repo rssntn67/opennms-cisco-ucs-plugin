@@ -1,11 +1,11 @@
 package it.xeniaprogetti.cisco.ucs.plugin.events;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 import it.xeniaprogetti.cisco.ucs.plugin.client.ClientManager;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientService;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEntity;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDn;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEnums;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsFault;
 import it.xeniaprogetti.cisco.ucs.plugin.connection.ConnectionManager;
 import it.xeniaprogetti.cisco.ucs.plugin.requisition.CiscoUcsRequisitionProvider;
@@ -32,7 +32,6 @@ import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -49,11 +48,14 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
     public static final String CISCO_UCS_ALARM_UEI = "uei.opennms.org/plugin/cisco/ucs/fault";
     public static final String CISCO_UCS_ALARM_RESOLVED_UEI = "uei.opennms.org/plugin/cisco/ucs/faultResolved";
 
-    private final static Map<String, Severity> SEVERITY_MAP = ImmutableMap.<String, Severity>builder()
-            .put("critical", Severity.MAJOR)
-            .put("warning", Severity.MINOR)
-            .put("informational", Severity.WARNING)
-            .put("audit", Severity.NORMAL)
+    private final static Map<UcsFault.Severity, Severity> SEVERITY_MAP = ImmutableMap.<UcsFault.Severity, Severity>builder()
+            .put(UcsFault.Severity.cleared, Severity.CLEARED)
+            .put(UcsFault.Severity.condition, Severity.INDETERMINATE)
+            .put(UcsFault.Severity.info, Severity.NORMAL)
+            .put(UcsFault.Severity.warning, Severity.WARNING)
+            .put(UcsFault.Severity.minor, Severity.MINOR)
+            .put(UcsFault.Severity.major, Severity.MAJOR)
+            .put(UcsFault.Severity.critical, Severity.CRITICAL)
             .build();
 
     private final ConnectionManager connectionManager;
@@ -77,7 +79,7 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
         private final String dn;
         private final String alias;
 
-        private final UcsEntity.ClassId type;
+        private final UcsEnums.ClassId type;
 
         public RequisitionIdentifier(final Node n) {
             final Map<String, String> map = n.getMetaData().stream()
@@ -86,7 +88,7 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
             foreignSource = Objects.requireNonNull(n.getForeignSource());
             dn = Objects.requireNonNull(map.get("dn"));
             alias = Objects.requireNonNull(map.get("alias"));
-            type = Objects.requireNonNull(UcsEntity.ClassId.valueOf(map.get("type")));
+            type = Objects.requireNonNull(UcsEnums.ClassId.valueOf(map.get("type")));
         }
 
         @Override
@@ -113,6 +115,7 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
                                  final EventForwarder eventForwarder,
                                  final long delay,
                                  final int retrieve_days) {
+
         this.connectionManager = Objects.requireNonNull(connectionManager);
         this.clientManager = Objects.requireNonNull(clientManager);
         this.nodeDao = Objects.requireNonNull(nodeDao);
@@ -121,8 +124,8 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
         this.delay = delay;
         this.retrieve_days = retrieve_days;
 
-        LOG.debug("Cisco UCS Event Ingestor is initializing (delay = {}ms).", delay);
-        LOG.debug("Cisco UCS Event Ingestor is initializing (days = {}).", retrieve_days);
+        LOG.debug("Cisco UCS Event Ingestor initializing (delay = {}ms).", delay);
+        LOG.debug("Cisco UCS Event Ingestor initializing (retrieve_days = {}).", retrieve_days);
         ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         scheduledFuture = scheduledExecutorService.scheduleWithFixedDelay(this, this.delay, this.delay, TimeUnit.MILLISECONDS);
     }
@@ -157,26 +160,26 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
                 .map(RequisitionIdentifier::new)
                 .collect(Collectors.toSet());
 
-        Map<String, Set<RequisitionIdentifier>> uuidMap = new HashMap<>();
+        Map<String, Map<UcsDn, RequisitionIdentifier>> dnMap = new HashMap<>();
         for (RequisitionIdentifier ri : requisitionIdentifiers) {
-            if (!uuidMap.containsKey(ri.dn)) {
-                uuidMap.put(ri.dn, new HashSet<>());
+            if (!dnMap.containsKey(ri.alias)) {
+                dnMap.put(ri.alias, new HashMap<>());
             }
-            uuidMap.get(ri.dn).add(ri);
+            dnMap.get(ri.alias).put(UcsDn.getDn(ri.dn),ri);
         }
 
-        Map<String, AlarmType> ntxAlarms =
+        Map<String, AlarmType> ciscoUcsFaults =
                 alarmDao.getAlarms().stream()
                         .filter(a -> a.getReductionKey().startsWith(CISCO_UCS_ALARM_UEI+":"))
                         .collect(Collectors.toMap(a->a.getReductionKey().substring(a.getReductionKey().lastIndexOf(":")+1),
                                 Alarm::getType));
-        LOG.info("run: found {} Cisco UCS alarm on opennms", ntxAlarms.size());
+        LOG.info("run: found {} Cisco UCS fault on opennms", ciscoUcsFaults.size());
         for(final String alias : requisitionIdentifiers.stream().map(ri -> ri.alias).collect(Collectors.toSet())) {
             try {
-                LOG.info("run: process alert for alias: {}", alias);
-                processAlerts(client(alias).getFaults(), uuidMap, ntxAlarms);
+                LOG.info("run: process fault for alias: {}", alias);
+                processAlerts(client(alias).getFaults(), dnMap.get(alias), ciscoUcsFaults);
             } catch (ApiException e) {
-                LOG.error("Cannot process alarms for alias='{}'. {}", alias, e.getMessage(),e);
+                LOG.error("Cannot process fault for alias='{}'. {}", alias, e.getMessage(),e);
             }
         }
 
@@ -185,25 +188,25 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
         LOG.debug("run: events got");
     }
 
-    private void processAlerts(final List<UcsFault> alerts, final Map<String, Set<RequisitionIdentifier>> uuidMap, Map<String,AlarmType> ntxAlarms) {
+    private void processAlerts(final List<UcsFault> ucsFaults, final Map<UcsDn, RequisitionIdentifier> dnMap, Map<String,AlarmType> cucsAlarms) {
         int processed = 0;
         int resolved = 0;
         int ignored = 0;
-        assert alerts != null;
+        assert ucsFaults != null;
         OffsetDateTime before = OffsetDateTime.now().minusDays(retrieve_days);
 
-        for (final UcsFault alert : alerts) {
-            if (alert.created.isBefore(before)) {
+        for (final UcsFault ucsFault : ucsFaults) {
+            if (ucsFault.lastTransition.isBefore(before)) {
                 continue;
             }
-            if (alert.isResolved && ntxAlarms.containsKey(alert.uuid) && ntxAlarms.get(alert.uuid).equals(AlarmType.PROBLEM)) {
-                processAlert(alert, Cisco UCS_ALARM_RESOLVED_UEI, uuidMap);
+            if (ucsFault.severity == UcsFault.Severity.cleared && cucsAlarms.containsKey(String.valueOf(ucsFault.id)) && cucsAlarms.get(String.valueOf(ucsFault.id)).equals(AlarmType.PROBLEM)) {
+                processAlert(ucsFault, CISCO_UCS_ALARM_RESOLVED_UEI, dnMap);
                 resolved++;
-            } else if (!alert.isResolved && !ntxAlarms.containsKey(alert.uuid)){
-                processAlert(alert, Cisco UCS_ALARM_UEI, uuidMap);
+            } else if (ucsFault.severity != UcsFault.Severity.cleared && !cucsAlarms.containsKey(String.valueOf(ucsFault.id))){
+                processAlert(ucsFault, CISCO_UCS_ALARM_UEI, dnMap);
                 processed++;
-            } else if (!alert.isResolved && ntxAlarms.containsKey(alert.uuid) && ntxAlarms.get(alert.uuid).equals(AlarmType.RESOLUTION)){
-                processAlert(alert, Cisco UCS_ALARM_UEI, uuidMap);
+            } else if (ucsFault.severity != UcsFault.Severity.cleared && cucsAlarms.containsKey(String.valueOf(ucsFault.id)) && cucsAlarms.get(String.valueOf(ucsFault.id)).equals(AlarmType.RESOLUTION)){
+                processAlert(ucsFault, CISCO_UCS_ALARM_UEI, dnMap);
                 processed++;
             } else {
                 ignored++;
@@ -212,43 +215,56 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
         LOG.info("{} event raised, {} event resolved, {} events ignored.", processed, resolved, ignored);
 
     }
-    private void processAlert(final Alert alert, final String uei, final Map<String, Set<RequisitionIdentifier>> uuidMap) {
-        alert.affectedEntities.forEach( entity -> {
-            if (uuidMap.containsKey(entity.uuid)) {
-                uuidMap.get(entity.uuid).forEach(ri -> processAlertEntity(ri, alert,entity, uei));
+    private void processAlert(final UcsFault ucsFault, final String uei, final Map<UcsDn, RequisitionIdentifier> dnMap) {
+        for (UcsDn ucsDn: dnMap.keySet()) {
+            if (ucsDn.equals(ucsFault.dn) || ucsDn.isParent(ucsFault.dn)) {
+                processAlertEntity(dnMap.get(ucsDn), ucsFault, uei);
             }
-        });
+        }
 
     }
-    private void processAlertEntity(final RequisitionIdentifier ri, final Alert alert, final Entity entity, final String uei) {
+    private void processAlertEntity(final RequisitionIdentifier ri, final UcsFault ucsFault, final String uei) {
         final Node node = nodeDao.getNodeByCriteria(ri.foreignSource + ":" + ri.dn);
 
         if (node == null) {
-            LOG.warn("Ignoring proxy event #{} since node {} cannot be found.", alert.getClass(), ri.foreignSource + ":" + ri.dn);
+            LOG.warn("Ignoring Ucs Fault event #{} since node {} cannot be found.", ucsFault.getClass(), ri.foreignSource + ":" + ri.dn);
             return;
         }
 
-        Severity severity = SEVERITY_MAP.get(alert.severity);
-        if (alert.isResolved) {
+        Severity severity = SEVERITY_MAP.get(ucsFault.severity);
+        if (ucsFault.severity == UcsFault.Severity.cleared) {
             severity = Severity.NORMAL;
         }
         final ImmutableInMemoryEvent.Builder builder = ImmutableInMemoryEvent.newBuilder()
                 .setUei(uei)
-                .setSource(Cisco UCSEventIngestor.class.getCanonicalName())
+                .setSource(CiscoUcsEventIngestor.class.getCanonicalName())
                 .setNodeId(node.getId())
                 .setSeverity(severity)
                 .setInterface(null);
 
-        builder.addParameter(ImmutableEventParameter.newInstance("msg", alert.message));
-        builder.addParameter(ImmutableEventParameter.newInstance("reductionKey", alert.uuid));
-        builder.addParameter(ImmutableEventParameter.newInstance("descr", alert.descr));
-        builder.addParameter(ImmutableEventParameter.newInstance("severity", alert.severity));
-        builder.addParameter(ImmutableEventParameter.newInstance("alertType", alert.alertType));
-        builder.addParameter(ImmutableEventParameter.newInstance("alertUuid", alert.uuid));
-        builder.addParameter(ImmutableEventParameter.newInstance("entityType", String.valueOf(entity.type)));
-        builder.addParameter(ImmutableEventParameter.newInstance("entityUuid", entity.uuid));
-        builder.addParameter(ImmutableEventParameter.newInstance("entityName", entity.name));
-        builder.setTime(Date.from(alert.creationTime.toInstant()));
+        builder.addParameter(
+                ImmutableEventParameter.newInstance("ack", ucsFault.ack));
+        builder.addParameter(
+                ImmutableEventParameter.newInstance("reductionKey", String.valueOf(ucsFault.id)));
+        builder.addParameter(
+                ImmutableEventParameter.newInstance("cause", ucsFault.cause));
+        builder.addParameter(
+                ImmutableEventParameter.newInstance("lc", ucsFault.lc));
+        builder.addParameter(
+                ImmutableEventParameter.newInstance("code", ucsFault.code));
+        builder.addParameter(
+                ImmutableEventParameter.newInstance("changeSet", ucsFault.changeSet));
+        builder.addParameter(
+                ImmutableEventParameter.newInstance("descr", ucsFault.descr));
+        builder.addParameter(
+                ImmutableEventParameter.newInstance("rule", ucsFault.rule));
+        builder.addParameter(
+                ImmutableEventParameter.newInstance("tags", ucsFault.tags));
+        builder.addParameter(
+                ImmutableEventParameter.newInstance("type", ucsFault.type.name()));
+
+
+        builder.setTime(Date.from(ucsFault.lastTransition.toInstant()));
 
         eventForwarder.sendSync(builder.build());
     }

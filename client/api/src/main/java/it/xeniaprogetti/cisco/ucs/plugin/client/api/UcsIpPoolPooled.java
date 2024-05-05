@@ -1,9 +1,9 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.api;
 
 public class UcsIpPoolPooled {
-    public final String poolDn;
-    public final String assignedToProfileDn;
-    public final String assignedToDeviceDn;
+    public final UcsDn poolDn;
+    public final UcsDn assignedToProfileDn;
+    public final UcsDn assignedToDeviceDn;
     public final String addr;
     public final String defGw;
     public final String subnet;
@@ -23,9 +23,9 @@ public class UcsIpPoolPooled {
 
 
     public static class Builder {
-        private String poolDn;
-        private String assignedToProfileDn;
-        private String assignedToDeviceDn;
+        private UcsDn poolDn;
+        private UcsDn assignedToProfileDn;
+        private UcsDn assignedToDeviceDn;
         private String addr;
         private String defGw;
         private String subnet;
@@ -38,17 +38,17 @@ public class UcsIpPoolPooled {
         }
 
         public Builder withPoolDn(String poolDn) {
-            this.poolDn = poolDn;
+            this.poolDn = UcsDn.getDn(poolDn);
             return this;
         }
 
         public Builder withAssignedProfileToDn(String assignedToProfileDn) {
-            this.assignedToProfileDn = assignedToProfileDn;
+            this.assignedToProfileDn = UcsDn.getDn(assignedToProfileDn);
             return this;
         }
 
         public Builder withAssignedDeviceToDn(String assignedToDeviceDn) {
-            this.assignedToDeviceDn = assignedToDeviceDn;
+            this.assignedToDeviceDn = UcsDn.getDn(assignedToDeviceDn);
             return this;
         }
 

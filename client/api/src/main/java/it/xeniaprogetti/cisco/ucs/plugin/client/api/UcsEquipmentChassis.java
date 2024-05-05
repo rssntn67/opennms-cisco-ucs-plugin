@@ -106,7 +106,7 @@ public final class UcsEquipmentChassis extends UcsEntity {
     }
 
     private UcsEquipmentChassis(UcsEquipmentChassis.Builder builder) {
-        super(builder.dn, ClassId.equipmentChassis, ClassItem.equipmentItem);
+        super(builder.dn, UcsEnums.ClassId.equipmentChassis, UcsEnums.ClassItem.equipmentItem);
         this.ackProgressIndicator = builder.ackProgressIndicator;
         this.adminState = builder.adminState;
         this.assetTag = builder.assetTag;
@@ -161,7 +161,7 @@ public final class UcsEquipmentChassis extends UcsEntity {
     @Override
     public String toString() {
         return "EquipmentChassis{" +
-                "dn='" + dn + '\'' +
+                "dn='" + dn.value + '\'' +
                 ", classId=" + classId +
                 ", classItem=" + classItem +
                 ", ackProgressIndicator='" + ackProgressIndicator + '\'' +
@@ -218,7 +218,7 @@ public final class UcsEquipmentChassis extends UcsEntity {
     }
 
     public static class Builder {
-        private String dn;
+        private UcsDn dn;
         private String ackProgressIndicator;
         private String adminState;
         private String assetTag;
@@ -270,7 +270,7 @@ public final class UcsEquipmentChassis extends UcsEntity {
         private String vid;
 
         public UcsEquipmentChassis.Builder withDn(String dn) {
-            this.dn = dn;
+            this.dn = UcsDn.getDn(dn);
             return this;
         }
 

@@ -1,11 +1,11 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.UcsElement;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.Dn;
 
 import java.util.Date;
 
-public class LsServer extends UcsElement {
+public class LsServer extends Dn {
     @JacksonXmlProperty(isAttribute = true)
     public String agentPolicyName;
     @JacksonXmlProperty(isAttribute = true)

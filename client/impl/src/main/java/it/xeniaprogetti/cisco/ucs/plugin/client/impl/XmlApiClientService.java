@@ -5,17 +5,18 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientService;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeBlade;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeRackUnit;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEntity;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDn;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEnums;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentChassis;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentFex;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentRackEnclosure;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsFault;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsIpPoolPooled;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsNetworkElement;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.AaaApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.ConfigApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.IpApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.handler.ApiClient;
-import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.Dn;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.compute.ComputeBlade;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.compute.ComputeRackUnit;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.equipment.EquipmentChassis;
@@ -69,7 +70,7 @@ public class XmlApiClientService implements ApiClientService {
     @Override
     public String getUcsXmlFromDn(String dn, boolean isHierarchical) throws ApiException {
         checkCredentials();
-        return configApi.getUcsEntityByDn(aaaApi.getToken(), Dn.getDn(dn), isHierarchical);
+        return configApi.getUcsEntityByDn(aaaApi.getToken(), dn, isHierarchical);
     }
 
     @Override
@@ -164,7 +165,7 @@ public class XmlApiClientService implements ApiClientService {
     }
 
     @Override
-    public List<String> findDnByClassItem(UcsEntity.ClassItem classItem) throws ApiException{
+    public List<String> findDnByClassItem(UcsEnums.ClassItem classItem) throws ApiException{
         checkCredentials();
         return configApi.getDnByClassId(aaaApi.getToken(), classItem);
     }
@@ -177,12 +178,12 @@ public class XmlApiClientService implements ApiClientService {
         for (IpPoolAddr pool: ipPoolUniverse.ippoolAddr) {
             if (!pool.assigned.equals("yes"))
                 continue;
-            Dn assignedProfileToDn = Objects.requireNonNull(Dn.getParentDn(Dn.getDn(pool.assignedToDn)));
-            LsServer lsServer = ipApi.getLsServer(aaaApi.getToken(), assignedProfileToDn);
+            UcsDn assignedProfileToDn = Objects.requireNonNull(UcsDn.getParentDn(UcsDn.getDn(pool.assignedToDn)));
+            LsServer lsServer = ipApi.getLsServer(aaaApi.getToken(), assignedProfileToDn.value);
             if (lsServer.pnDn.isEmpty())
                 continue;
-            Dn poolDn = Objects.requireNonNull(Dn.getParentDn(Dn.getDn(pool.ippoolPoolable.poolDn)));
-            IpPoolPooled ipPoolPooled = ipApi.getIpPoolPooled(aaaApi.getToken(), Dn.getDn(pool.ippoolPoolable.poolDn));
+            UcsDn poolDn = Objects.requireNonNull(UcsDn.getParentDn(UcsDn.getDn(pool.ippoolPoolable.poolDn)));
+            IpPoolPooled ipPoolPooled = ipApi.getIpPoolPooled(aaaApi.getToken(), pool.ippoolPoolable.poolDn);
 
             list.add(UcsIpPoolPooled.builder()
                     .withAddr(ipPoolPooled.id)
@@ -195,6 +196,11 @@ public class XmlApiClientService implements ApiClientService {
 
         }
         return Collections.unmodifiableList(list);
+    }
+
+    @Override
+    public List<UcsFault> getFaults() {
+        return List.of();
     }
 
     private static UcsComputeBlade from(ComputeBlade compute) {

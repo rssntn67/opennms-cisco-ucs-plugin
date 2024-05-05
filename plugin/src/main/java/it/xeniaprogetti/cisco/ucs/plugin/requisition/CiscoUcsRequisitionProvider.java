@@ -13,13 +13,15 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientService;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeBlade;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeRackUnit;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDn;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEntity;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEnums;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentChassis;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentFex;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentRackEnclosure;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsIpPoolPooled;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsNetworkElement;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.Utils;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsUtils;
 import it.xeniaprogetti.cisco.ucs.plugin.connection.ConnectionManager;
 import org.opennms.integration.api.v1.config.requisition.Requisition;
 import org.opennms.integration.api.v1.config.requisition.RequisitionInterface;
@@ -126,7 +128,7 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
 
         ApiClientService service = context.client();
 
-        Map<String, List<UcsIpPoolPooled>> dnToIpListMap =  new HashMap<>();
+        Map<UcsDn, List<UcsIpPoolPooled>> dnToIpListMap =  new HashMap<>();
         for (UcsIpPoolPooled ucsIpPoolPooled: service.findUcsIpPoolPooled()) {
             if (!dnToIpListMap.containsKey(ucsIpPoolPooled.assignedToDeviceDn)) {
                 dnToIpListMap.put(ucsIpPoolPooled.assignedToDeviceDn, new ArrayList<>());
@@ -169,7 +171,7 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
 
     private UcsIpPoolPooled getDefaultByEntity(UcsEntity ucsEntity) {
         return UcsIpPoolPooled.builder()
-                .withAssignedDeviceToDn(ucsEntity.dn)
+                .withAssignedDeviceToDn(ucsEntity.dn.value)
                 .withPoolDn("OpenNMS::RequisitionProvider")
                 .withAssignedProfileToDn("")
                 .withAddr("0.0.0.0")
@@ -178,25 +180,25 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
                 .build();
     }
 
-    private RequisitionInterface from(UcsIpPoolPooled ucsIpPoolPooled, UcsEntity.ClassId classId) {
+    private RequisitionInterface from(UcsIpPoolPooled ucsIpPoolPooled, UcsEnums.ClassId classId) {
         final var ucsIpPoolPooledIf = ImmutableRequisitionInterface.newBuilder()
-                .setIpAddress(Objects.requireNonNull(Utils.getValidInetAddress(ucsIpPoolPooled.addr)))
+                .setIpAddress(Objects.requireNonNull(UcsUtils.getValidInetAddress(ucsIpPoolPooled.addr)))
                 .setDescription("UcsIpPoolPooled")
                 .setSnmpPrimary(SnmpPrimaryType.NOT_ELIGIBLE)
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("assignedToDeviceDn")
-                        .setValue(ucsIpPoolPooled.assignedToDeviceDn)
+                        .setValue(ucsIpPoolPooled.assignedToDeviceDn.value)
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("assignedToProfileDn")
-                        .setValue(ucsIpPoolPooled.assignedToProfileDn)
+                        .setValue(ucsIpPoolPooled.assignedToProfileDn.value)
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("poolDn")
-                        .setValue(ucsIpPoolPooled.poolDn)
+                        .setValue(ucsIpPoolPooled.poolDn.value)
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
@@ -209,7 +211,7 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
                         .setValue(ucsIpPoolPooled.subnet)
                         .build())
                 .addMonitoredService("CiscoUcsManagedEntity");
-        if (classId != UcsEntity.ClassId.networkElement) {
+        if (classId != UcsEnums.ClassId.networkElement) {
             ucsIpPoolPooledIf.addMonitoredService(classId.getServiceName());
         }
 
@@ -218,7 +220,7 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
 
     private RequisitionNode from(UcsNetworkElement ucsElement, RequestContext context, List<UcsIpPoolPooled> ipPoolPooledList) {
         final var node = ImmutableRequisitionNode.newBuilder()
-                .setForeignId(ucsElement.dn.replace("/","-"))
+                .setForeignId(ucsElement.dn.value.replace("/","-"))
                 .setLocation(context.getLocation())
                 .setNodeLabel("FabricInterconnectSwitch-"+ucsElement.id)
                 .addCategory("CiscoUcsFabricInterconnectSwitch")
@@ -226,7 +228,7 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("dn")
-                        .setValue(ucsElement.dn)
+                        .setValue(ucsElement.dn.value)
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
@@ -334,7 +336,7 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
                         .setValue(ucsElement.vendor)
                         .build());
         final var oobIf = ImmutableRequisitionInterface.newBuilder()
-                .setIpAddress(Objects.requireNonNull(Utils.getValidInetAddress(ucsElement.oobIfIp)))
+                .setIpAddress(Objects.requireNonNull(UcsUtils.getValidInetAddress(ucsElement.oobIfIp)))
                 .setDescription("oobIfIp")
                 .setSnmpPrimary(SnmpPrimaryType.PRIMARY)
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
@@ -357,12 +359,12 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
                         .setKey("oobIfMask")
                         .setValue(ucsElement.oobIfMask)
                         .build())
-                .addMonitoredService(UcsEntity.ClassId.networkElement.getServiceName())
+                .addMonitoredService(UcsEnums.ClassId.networkElement.getServiceName())
                 .addMonitoredService("CiscoUcsManagedEntity");
         node.addInterface(oobIf.build());
 
         final var inBandIf = ImmutableRequisitionInterface.newBuilder()
-                .setIpAddress(Objects.requireNonNull(Utils.getValidInetAddress(ucsElement.inbandIfIp)))
+                .setIpAddress(Objects.requireNonNull(UcsUtils.getValidInetAddress(ucsElement.inbandIfIp)))
                 .setDescription("inbandIfIp")
                 .setSnmpPrimary(SnmpPrimaryType.NOT_ELIGIBLE)
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
@@ -399,15 +401,15 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
 
     private RequisitionNode from(UcsComputeBlade ucsElement, RequestContext context, List<UcsIpPoolPooled> ipPoolPooledList) {
         final var node = ImmutableRequisitionNode.newBuilder()
-                .setForeignId(ucsElement.dn.replace("/","-"))
+                .setForeignId(ucsElement.dn.value.replace("/","-"))
                 .setLocation(context.getLocation())
-                .setNodeLabel(ucsElement.dn.replace("sys/","").replace("/","-"))
+                .setNodeLabel(ucsElement.dn.value.replace("sys/","").replace("/","-"))
                 .addCategory("CiscoUcsComputeBlade")
                 .addCategory("CiscoUcs")
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("dn")
-                        .setValue(ucsElement.dn)
+                        .setValue(ucsElement.dn.value)
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
@@ -784,15 +786,15 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
 
     private RequisitionNode from(UcsComputeRackUnit ucsElement, RequestContext context, List<UcsIpPoolPooled> ipPoolPooledList) {
         final var node = ImmutableRequisitionNode.newBuilder()
-                .setForeignId(ucsElement.dn.replace("/","-"))
+                .setForeignId(ucsElement.dn.value.replace("/","-"))
                 .setLocation(context.getLocation())
-                .setNodeLabel(ucsElement.dn.replace("sys/","").replace("/","-"))
+                .setNodeLabel(ucsElement.dn.value.replace("sys/","").replace("/","-"))
                 .addCategory("CiscoUcsComputeRackUnit")
                 .addCategory("CiscoUcs")
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("dn")
-                        .setValue(ucsElement.dn)
+                        .setValue(ucsElement.dn.value)
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
@@ -1193,15 +1195,15 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
 
     private RequisitionNode from(UcsEquipmentChassis ucsElement, RequestContext context, List<UcsIpPoolPooled> ipPoolPooledList) {
         final var node = ImmutableRequisitionNode.newBuilder()
-                .setForeignId(ucsElement.dn.replace("/","-"))
+                .setForeignId(ucsElement.dn.value.replace("/","-"))
                 .setLocation(context.getLocation())
-                .setNodeLabel(ucsElement.dn.replace("sys/","").replace("/","-"))
+                .setNodeLabel(ucsElement.dn.value.replace("sys/","").replace("/","-"))
                 .addCategory("CiscoUcsChassis")
                 .addCategory("CiscoUcs")
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("dn")
-                        .setValue(ucsElement.dn)
+                        .setValue(ucsElement.dn.value)
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
@@ -1477,15 +1479,15 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
 
     private RequisitionNode from(UcsEquipmentFex ucsElement, RequestContext context, List<UcsIpPoolPooled> ipPoolPooledList) {
         final var node = ImmutableRequisitionNode.newBuilder()
-                .setForeignId(ucsElement.dn.replace("/","-"))
+                .setForeignId(ucsElement.dn.value.replace("/","-"))
                 .setLocation(context.getLocation())
-                .setNodeLabel(ucsElement.dn.replace("sys/","").replace("/","-"))
+                .setNodeLabel(ucsElement.dn.value.replace("sys/","").replace("/","-"))
                 .addCategory("CiscoUcsFex")
                 .addCategory("CiscoUcs")
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("dn")
-                        .setValue(ucsElement.dn)
+                        .setValue(ucsElement.dn.value)
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
@@ -1671,15 +1673,15 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
 
     private RequisitionNode from(UcsEquipmentRackEnclosure ucsElement, RequestContext context, List<UcsIpPoolPooled> ipPoolPooledList) {
         final var node = ImmutableRequisitionNode.newBuilder()
-                .setForeignId(ucsElement.dn.replace("/","-"))
+                .setForeignId(ucsElement.dn.value.replace("/","-"))
                 .setLocation(context.getLocation())
-                .setNodeLabel(ucsElement.dn.replace("sys/","").replace("/","-"))
+                .setNodeLabel(ucsElement.dn.value.replace("sys/","").replace("/","-"))
                 .addCategory("CiscoUcsRackEnclosure")
                 .addCategory("CiscoUcs")
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("dn")
-                        .setValue(ucsElement.dn)
+                        .setValue(ucsElement.dn.value)
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)

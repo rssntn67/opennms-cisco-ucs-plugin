@@ -1,12 +1,12 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.api;
 
-import java.util.Date;
+import java.time.OffsetDateTime;
 
 public class UcsFault extends UcsEntity {
 
 
     private UcsFault(Builder builder) {
-        super(builder.dn, ClassId.faultInst, ClassItem.otherItem);
+        super(builder.dn, UcsEnums.ClassId.faultInst, UcsEnums.ClassItem.otherItem);
         this.ack = builder.ack;
         this.cause = builder.cause;
         this.changeSet = builder.changeSet;
@@ -27,7 +27,21 @@ public class UcsFault extends UcsEntity {
     }
 
     public enum Severity {
-        critical, major, minor, warning, cleared, info;
+        critical, major, minor, warning, condition, info, cleared;
+    }
+
+    public enum Type {
+        generic,
+        equipment,
+        environmental,
+        management,
+        fsm,
+        sysdebug,
+        configuration,
+        server,
+        network,
+        connectivity,
+        operational
     }
 
     public static Builder builder() {
@@ -38,11 +52,11 @@ public class UcsFault extends UcsEntity {
     public final String cause;
     public final String changeSet;
     public final String code;
-    public final Date created;
+    public final OffsetDateTime created;
     public final String descr;
     public final Severity highestSeverity;
     public final long id;
-    public final Date lastTransition;
+    public final OffsetDateTime lastTransition;
     public final String lc;
     public final int occur;
     public final Severity origSeverity;
@@ -50,23 +64,23 @@ public class UcsFault extends UcsEntity {
     public final String rule;
     public final Severity severity;
     public final String tags;
-    public final String type;
+    public final Type type;
 
     public static class Builder {
         private Builder() {
 
         }
 
-        private String dn;
+        private UcsDn dn;
         private String ack;
         private String cause;
         private String changeSet;
         private String code;
-        private Date created;
+        private OffsetDateTime created;
         private String descr;
         private Severity highestSeverity;
         private long id;
-        private Date lastTransition;
+        private OffsetDateTime lastTransition;
         private String lc;
         private int occur;
         private Severity origSeverity;
@@ -74,10 +88,10 @@ public class UcsFault extends UcsEntity {
         private String rule;
         private Severity severity;
         private String tags;
-        private String type;
+        private Type type;
 
         public Builder withDn(String dn) {
-            this.dn = dn;
+            this.dn = UcsDn.getDn(dn);
             return this;
         }
 
@@ -101,7 +115,7 @@ public class UcsFault extends UcsEntity {
             return this;
         }
 
-        public Builder withCreated(Date created) {
+        public Builder withCreated(OffsetDateTime created) {
             this.created = created;
             return this;
         }
@@ -121,7 +135,7 @@ public class UcsFault extends UcsEntity {
             return this;
         }
 
-        public Builder withLastTransition(Date lastTransition) {
+        public Builder withLastTransition(OffsetDateTime lastTransition) {
             this.lastTransition = lastTransition;
             return this;
         }
@@ -161,7 +175,7 @@ public class UcsFault extends UcsEntity {
             return this;
         }
 
-        public Builder withType(String type) {
+        public Builder withType(Type type) {
             this.type = type;
             return this;
         }

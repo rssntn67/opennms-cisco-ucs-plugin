@@ -1,9 +1,9 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.network;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.UcsElement;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.Dn;
 
-public class NetworkElement extends UcsElement {
+public class NetworkElement extends Dn {
     @JacksonXmlProperty(isAttribute = true)
     public String adminEvacState;
     @JacksonXmlProperty(isAttribute = true)

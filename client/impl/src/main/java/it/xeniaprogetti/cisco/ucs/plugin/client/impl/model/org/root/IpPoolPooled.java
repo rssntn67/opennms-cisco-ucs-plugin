@@ -1,9 +1,9 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.UcsElement;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.Dn;
 
-public class IpPoolPooled extends UcsElement {
+public class IpPoolPooled extends Dn {
     @JacksonXmlProperty(isAttribute = true)
     public String assigned;
     @JacksonXmlProperty(isAttribute = true)

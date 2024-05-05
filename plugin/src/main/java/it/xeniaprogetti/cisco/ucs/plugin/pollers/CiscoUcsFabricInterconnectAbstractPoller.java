@@ -2,7 +2,7 @@ package it.xeniaprogetti.cisco.ucs.plugin.pollers;
 
 import it.xeniaprogetti.cisco.ucs.plugin.client.ClientManager;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEntity;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEnums;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsNetworkElement;
 import it.xeniaprogetti.cisco.ucs.plugin.connection.ConnectionManager;
 import org.opennms.integration.api.v1.pollers.PollerResult;
@@ -24,7 +24,7 @@ public abstract class CiscoUcsFabricInterconnectAbstractPoller extends CiscoUcsA
     public CompletableFuture<PollerResult> poll(final Context context) throws ApiException {
         String response = context.getResponse();
         final var type = context.getUcsEntityClassId();
-        if (type == UcsEntity.ClassId.networkElement) {
+        if (type == UcsEnums.ClassId.networkElement) {
             return CompletableFuture
                 .completedFuture(
                     this.poll(

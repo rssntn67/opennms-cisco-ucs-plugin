@@ -1,10 +1,10 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.equipment;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.UcsElement;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.Dn;
 
 import java.util.Date;
-public class EquipmentChassis extends UcsElement {
+public class EquipmentChassis extends Dn {
     @JacksonXmlProperty(isAttribute = true)
     public String ackProgressIndicator;
     @JacksonXmlProperty(isAttribute = true)

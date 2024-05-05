@@ -5,7 +5,7 @@ import com.google.common.net.InetAddresses;
 
 import java.net.InetAddress;
 
-public class Utils {
+public class UcsUtils {
     public static InetAddress getValidInetAddress(final String ip) {
         if (Strings.isNullOrEmpty(ip)) {
             return null;

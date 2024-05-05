@@ -70,7 +70,7 @@ public final class UcsEquipmentFex extends UcsEntity {
     }
 
     private UcsEquipmentFex(UcsEquipmentFex.Builder builder) {
-        super(builder.dn, ClassId.equipmentFex,ClassItem.equipmentItem);
+        super(builder.dn, UcsEnums.ClassId.equipmentFex, UcsEnums.ClassItem.equipmentItem);
         this.adminPowerState = builder.adminPowerState;
         this.adminState = builder.adminState;
         this.configState = builder.configState;
@@ -107,7 +107,7 @@ public final class UcsEquipmentFex extends UcsEntity {
     @Override
     public String toString() {
         return "EquipmentFex{" +
-                "dn='" + dn + '\'' +
+                "dn='" + dn.value + '\'' +
                 ", classId=" + classId +
                 ", classItem=" + classItem +
                 ", adminPowerState='" + adminPowerState + '\'' +
@@ -148,7 +148,7 @@ public final class UcsEquipmentFex extends UcsEntity {
         private Builder() {
 
         }
-        private String dn;
+        private UcsDn dn;
         private String adminPowerState;
         private String adminState;
         private String configState;
@@ -182,7 +182,7 @@ public final class UcsEquipmentFex extends UcsEntity {
         private String voltage;
 
         public Builder withDn(String dn) {
-            this.dn = dn;
+            this.dn = UcsDn.getDn(dn);
             return this;
         }
 

@@ -4,13 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientCredentials;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEntity;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDn;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEnums;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.AaaApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.ConfigApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.FaultApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.IpApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.handler.ApiClient;
-import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.Dn;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.compute.ComputeBlade;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.compute.ComputeRackUnit;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.equipment.EquipmentChassis;
@@ -286,8 +286,8 @@ public class ApiClientTest {
         AaaApi aaaApi = new AaaApi(credentials,apiClient);
         aaaApi.login();
         String xmlRequest = "<configResolveDn dn=\"sys/rack-enclosure-1\" cookie=\""+aaaApi.getToken()+"\" inHierarchical=\"false\"/>";
-        Assert.assertEquals(xmlRequest,UcsXmlApiRequest.getConfigResolveDnRequest(aaaApi.getToken(),Dn.getDn("sys/rack-enclosure-1"), false));
-        String xmlString = apiClient.doPost(UcsXmlApiRequest.getConfigResolveDnRequest(aaaApi.getToken(),Dn.getDn("sys/rack-enclosure-1"), false));
+        Assert.assertEquals(xmlRequest,UcsXmlApiRequest.getConfigResolveDnRequest(aaaApi.getToken(),"sys/rack-enclosure-1", false));
+        String xmlString = apiClient.doPost(UcsXmlApiRequest.getConfigResolveDnRequest(aaaApi.getToken(),"sys/rack-enclosure-1", false));
         System.out.println(xmlString);
         aaaApi.logout();
     }
@@ -295,24 +295,24 @@ public class ApiClientTest {
     @Test
     public void dnClassTest() {
         String value = "sys/rack-enclosure-1";
-        Dn dn = Dn.getDn(value);
+        UcsDn dn = UcsDn.getDn(value);
         Assert.assertEquals(value, dn.value);
-        Dn updn = Dn.getParentDn(dn);
+        UcsDn updn = UcsDn.getParentDn(dn);
         Assert.assertNotNull(updn);
         Assert.assertEquals("sys", updn.value);
-        Assert.assertTrue(Dn.isRootDn(updn));
-        Assert.assertNull(Dn.getParentDn(updn));
+        Assert.assertTrue(UcsDn.isRootDn(updn));
+        Assert.assertNull(UcsDn.getParentDn(updn));
         String org = "org-root/ls-osi01-w01-prd01-lnx19/ipv4-pooled-addr";
-        Dn orgDn =  Dn.getDn(org);
-        Assert.assertFalse(Dn.isRootDn(orgDn));
-        Dn ls = Dn.getParentDn(orgDn);
+        UcsDn orgDn =  UcsDn.getDn(org);
+        Assert.assertFalse(UcsDn.isRootDn(orgDn));
+        UcsDn ls = UcsDn.getParentDn(orgDn);
         Assert.assertNotNull(ls);
         Assert.assertEquals("org-root/ls-osi01-w01-prd01-lnx19", ls.value);
-        Assert.assertFalse(Dn.isRootDn(ls));
-        Dn rootDn = Dn.getParentDn(ls);
+        Assert.assertFalse(UcsDn.isRootDn(ls));
+        UcsDn rootDn = UcsDn.getParentDn(ls);
         Assert.assertNotNull(rootDn);
         Assert.assertEquals("org-root", rootDn.value);
-        Assert.assertTrue(Dn.isRootDn(rootDn));
+        Assert.assertTrue(UcsDn.isRootDn(rootDn));
     }
 
     @Test
@@ -462,7 +462,7 @@ public class ApiClientTest {
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
         ConfigApi api = new ConfigApi(apiClient);
-        List<String> dns = api.getDnByClassId(loginApi.getToken(), UcsEntity.ClassItem.equipmentItem);
+        List<String> dns = api.getDnByClassId(loginApi.getToken(), UcsEnums.ClassItem.equipmentItem);
         for (String dn : dns) {
             LOG.info("equipmentItem: {}",dn);
         }
@@ -477,7 +477,7 @@ public class ApiClientTest {
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
         ConfigApi api = new ConfigApi(apiClient);
-        List<String> dns = api.getDnByClassId(loginApi.getToken(), UcsEntity.ClassItem.computeItem);
+        List<String> dns = api.getDnByClassId(loginApi.getToken(), UcsEnums.ClassItem.computeItem);
         for (String dn : dns) {
             LOG.info("computeItem: {}",dn);
         }
@@ -499,7 +499,7 @@ public class ApiClientTest {
         loginApi.login();
         ConfigApi api = new ConfigApi(apiClient);
         String computeBlade =
-                api.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("sys/chassis-3/blade-3"), true);
+                api.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-3/blade-3", true);
         System.out.println(computeBlade);
         loginApi.logout();
     }
@@ -513,7 +513,7 @@ public class ApiClientTest {
         loginApi.login();
         ConfigApi api = new ConfigApi(apiClient);
         String computeBlade =
-                api.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("sys/chassis-3/blade-1"), true);
+                api.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-3/blade-1", true);
         System.out.println(computeBlade);
         loginApi.logout();
     }
@@ -529,8 +529,8 @@ public class ApiClientTest {
         IpPoolUniverse ipPoolUniverse = ipApi.getIpPoolUniverse(loginApi.getToken());
         Set<String> pools = new HashSet<>();
         for (IpPoolAddr pool: ipPoolUniverse.ippoolAddr) {
-            IpPoolPooled ipPoolPooled = ipApi.getIpPoolPooled(loginApi.getToken(), Dn.getDn(pool.ippoolPoolable.poolDn));
-            String parentipoolpollable = Objects.requireNonNull(Dn.getParentDn(Dn.getDn(pool.ippoolPoolable.poolDn))).value;
+            IpPoolPooled ipPoolPooled = ipApi.getIpPoolPooled(loginApi.getToken(), pool.ippoolPoolable.poolDn);
+            String parentipoolpollable = Objects.requireNonNull(UcsDn.getParentDn(UcsDn.getDn(pool.ippoolPoolable.poolDn))).value;
             pools.add(parentipoolpollable);
             Assert.assertEquals(0, pool.globalAssignedCnt);
             Assert.assertEquals(0, pool.globalDefinedCnt);
@@ -539,13 +539,13 @@ public class ApiClientTest {
                 System.out.println("---Not assignedToDn: " + pool.ippoolPoolable.poolDn);
                 continue;
             }
-            VNicIpV4PooledAddr vNicIpV4PooledAddr = ipApi.getVnicVNicIpV4PooledAddr(loginApi.getToken(), Dn.getDn(pool.assignedToDn));
+            VNicIpV4PooledAddr vNicIpV4PooledAddr = ipApi.getVnicVNicIpV4PooledAddr(loginApi.getToken(), pool.assignedToDn);
             Assert.assertEquals(ipPoolPooled.defGw, vNicIpV4PooledAddr.defGw);
             Assert.assertEquals(ipPoolPooled.subnet, vNicIpV4PooledAddr.subnet);
             Assert.assertEquals(ipPoolPooled.id, vNicIpV4PooledAddr.addr);
             Assert.assertNotNull(ipPoolPooled.id);
             Assert.assertEquals(pool.id,vNicIpV4PooledAddr.addr);
-            LsServer lsServer = ipApi.getLsServer(loginApi.getToken(), Dn.getParentDn(Dn.getDn(pool.assignedToDn)));
+            LsServer lsServer = ipApi.getLsServer(loginApi.getToken(), Objects.requireNonNull(UcsDn.getParentDn(UcsDn.getDn(pool.assignedToDn))).value);
             if (!lsServer.pnDn.isEmpty()) {
                 System.out.println("-----ip assigned-----");
                 System.out.println("pool.assignedToDn:" + pool.assignedToDn);
@@ -557,7 +557,7 @@ public class ApiClientTest {
             }
         }
         for (String pool: pools) {
-            IpPoolPool ipPoolPool = ipApi.getIpPoolPool(loginApi.getToken(), Dn.getDn(pool));
+            IpPoolPool ipPoolPool = ipApi.getIpPoolPool(loginApi.getToken(), pool);
             System.out.println("---pool----");
             System.out.println(ipPoolPool.name);
             System.out.println("ipPoolPool.size:"+ipPoolPool.size);
@@ -585,13 +585,13 @@ public class ApiClientTest {
         for (IpPoolAddr pool: ipPoolUniverse.ippoolAddr) {
             if (!pool.assigned.equals("yes"))
                 continue;
-            Dn assignedToProfileDn = Objects.requireNonNull(Dn.getParentDn(Dn.getDn(pool.assignedToDn)));
-            Dn poolDn = Objects.requireNonNull(Dn.getParentDn(Dn.getDn(pool.ippoolPoolable.poolDn)));
-            LsServer lsServer = ipApi.getLsServer(loginApi.getToken(), assignedToProfileDn);
+            UcsDn assignedToProfileDn = Objects.requireNonNull(UcsDn.getParentDn(UcsDn.getDn(pool.assignedToDn)));
+            UcsDn poolDn = Objects.requireNonNull(UcsDn.getParentDn(UcsDn.getDn(pool.ippoolPoolable.poolDn)));
+            LsServer lsServer = ipApi.getLsServer(loginApi.getToken(), assignedToProfileDn.value);
             if (lsServer.pnDn.isEmpty())
                 continue;
-            Dn assignedToDeviceDn = Dn.getDn(lsServer.pnDn);
-            IpPoolPooled ipPoolPooled = ipApi.getIpPoolPooled(loginApi.getToken(), Dn.getDn(pool.ippoolPoolable.poolDn));
+            UcsDn assignedToDeviceDn = UcsDn.getDn(lsServer.pnDn);
+            IpPoolPooled ipPoolPooled = ipApi.getIpPoolPooled(loginApi.getToken(), pool.ippoolPoolable.poolDn);
 
 
             System.out.println(ipPoolPooled.id);
@@ -616,7 +616,7 @@ public class ApiClientTest {
         IpApi ipApi = new IpApi(apiClient);
         ComputeBlade computeBlade =
                 configApi.getUcsComputeBladeByResponse(
-                        configApi.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("sys/chassis-3/blade-1"), false)
+                        configApi.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-3/blade-1", false)
                 );
         Assert.assertEquals("sys/chassis-3/blade-1", computeBlade.dn);
 /*
@@ -653,11 +653,11 @@ public class ApiClientTest {
         // This means both connections are available
         Assert.assertEquals(computeBlade.connPath, computeBlade.connStatus);
 
-        LsServer lsServer = ipApi.getLsServer(loginApi.getToken(), Dn.getDn(computeBlade.assignedToDn));
+        LsServer lsServer = ipApi.getLsServer(loginApi.getToken(), computeBlade.assignedToDn);
         Assert.assertEquals(computeBlade.assignedToDn, lsServer.dn);
         Assert.assertEquals(computeBlade.dn, lsServer.pnDn);
         System.out.println(lsServer);
-        IpPoolPool ipPoolPool = ipApi.getIpPoolPool(loginApi.getToken(), Dn.getDn(lsServer.operExtIPPoolName));
+        IpPoolPool ipPoolPool = ipApi.getIpPoolPool(loginApi.getToken(), lsServer.operExtIPPoolName);
         Assert.assertFalse(ipPoolPool.ippoolPooled.isEmpty());
         ipPoolPool.ippoolPooled.forEach(System.out::println);
 
@@ -674,7 +674,7 @@ public class ApiClientTest {
         ConfigApi api = new ConfigApi(apiClient);
         ComputeBlade computeBlade =
                 api.getUcsComputeBladeByResponse(
-                        api.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("sys/chassis-3/blade-2"), false)
+                        api.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-3/blade-2", false)
                 );
         System.out.println(computeBlade);
         Assert.assertEquals("ok", computeBlade.operState); //Overall Status
@@ -712,7 +712,7 @@ public class ApiClientTest {
         ConfigApi api = new ConfigApi(apiClient);
         ComputeBlade computeBlade =
                 api.getUcsComputeBladeByResponse(
-                        api.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("sys/chassis-3/blade-3"), false)
+                        api.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-3/blade-3", false)
                 );
         System.out.println(computeBlade);
 
@@ -747,7 +747,7 @@ public class ApiClientTest {
         loginApi.login();
         ConfigApi api = new ConfigApi(apiClient);
         String serviceProfile =
-                api.getUcsEntityByDn(loginApi.getToken(),Dn.getDn("org-root/ls-osi01-w01-prd01-lnx15"), true);
+                api.getUcsEntityByDn(loginApi.getToken(),"org-root/ls-osi01-w01-prd01-lnx15", true);
         LOG.info("{}", serviceProfile);
         loginApi.logout();
     }
@@ -762,7 +762,7 @@ public class ApiClientTest {
         ConfigApi api = new ConfigApi(apiClient);
         ComputeRackUnit computeRackUnit =
                 api.getUcsComputeRackUnitByResponse(
-                        api.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("sys/rack-unit-1"), false)
+                        api.getUcsEntityByDn(loginApi.getToken(), "sys/rack-unit-1", false)
                 );
         System.out.println(computeRackUnit);
 
@@ -800,7 +800,7 @@ public class ApiClientTest {
         ConfigApi api = new ConfigApi(apiClient);
         ComputeRackUnit computeRackUnit =
                 api.getUcsComputeRackUnitByResponse(
-                        api.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("sys/rack-unit-8"), false)
+                        api.getUcsEntityByDn(loginApi.getToken(), "sys/rack-unit-8", false)
                 );
         System.out.println(computeRackUnit);
 
@@ -838,7 +838,7 @@ public class ApiClientTest {
         ConfigApi api = new ConfigApi(apiClient);
         ComputeRackUnit computeRackUnit =
                 api.getUcsComputeRackUnitByResponse(
-                        api.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("sys/rack-unit-9"), false)
+                        api.getUcsEntityByDn(loginApi.getToken(), "sys/rack-unit-9", false)
                 );
         System.out.println(computeRackUnit);
 
@@ -876,7 +876,7 @@ public class ApiClientTest {
         ConfigApi api = new ConfigApi(apiClient);
         EquipmentChassis equipment =
                 api.getUcsEquipmentChassisByResponse(
-                        api.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("sys/chassis-3"), false)
+                        api.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-3", false)
                 );
         System.out.println(equipment);
         /*
@@ -926,7 +926,7 @@ Thermal	:	OK
         ConfigApi api = new ConfigApi(apiClient);
         EquipmentChassis equipment =
                 api.getUcsEquipmentChassisByResponse(
-                        api.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("sys/chassis-4"), false)
+                        api.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-4", false)
                 );
         System.out.println(equipment);
         /*
@@ -976,7 +976,7 @@ Thermal	:	OK
         ConfigApi api = new ConfigApi(apiClient);
         EquipmentFex equipment =
                 api.getUcsEquipmentFexByResponse(
-                        api.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("sys/fex-1"), false)
+                        api.getUcsEntityByDn(loginApi.getToken(), "sys/fex-1", false)
                 );
         System.out.println(equipment);
         /*
@@ -1016,7 +1016,7 @@ Thermal	:	N/A
         ConfigApi api = new ConfigApi(apiClient);
         EquipmentFex equipment =
                 api.getUcsEquipmentFexByResponse(
-                        api.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("sys/fex-2"), false)
+                        api.getUcsEntityByDn(loginApi.getToken(), "sys/fex-2", false)
                 );
         System.out.println(equipment);
         /*
@@ -1055,7 +1055,7 @@ Thermal	:	N/A
         ConfigApi api = new ConfigApi(apiClient);
         EquipmentRackEnclosure equipment =
                 api.getUcsEquipmentRackEnclosureByResponse(
-                        api.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("sys/rack-enclosure-1"), false)
+                        api.getUcsEntityByDn(loginApi.getToken(), "sys/rack-enclosure-1", false)
                 );
         System.out.println(equipment);
         Assert.assertEquals("operable", equipment.operability); //Overall Status
@@ -1077,7 +1077,7 @@ Thermal	:	N/A
         NetworkElement networkElement =
                 api.getUcsNetworkElementByResponse(
                         api.getUcsEntityByDn(
-                                loginApi.getToken(), Dn.getDn("sys/switch-A"), false)
+                                loginApi.getToken(), "sys/switch-A", false)
                 );
         /*
 Overall Status	:	Operable
@@ -1122,7 +1122,7 @@ Oper Evac Mode	:	Off
         NetworkElement networkElement =
                 api.getUcsNetworkElementByResponse(
                         api.getUcsEntityByDn(
-                                loginApi.getToken(), Dn.getDn("sys/switch-B"), false)
+                                loginApi.getToken(), "sys/switch-B", false)
                 );
         /*
 Overall Status	:	Operable
@@ -1166,7 +1166,7 @@ Oper Evac Mode	:	Off
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
         ConfigApi api = new ConfigApi(apiClient);
-        String response = api.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("sys/switch-A"), true);
+        String response = api.getUcsEntityByDn(loginApi.getToken(), "sys/switch-A", true);
         LOG.info("{}", response);
         System.out.println(response);
         loginApi.logout();
@@ -1180,7 +1180,7 @@ Oper Evac Mode	:	Off
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
         ConfigApi api = new ConfigApi(apiClient);
-        String response = api.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("sys/switch-K"), false);
+        String response = api.getUcsEntityByDn(loginApi.getToken(), "sys/switch-K", false);
         LOG.info("{}", response);
         Assert.assertNull(api.getUcsNetworkElementByResponse(response));
         loginApi.logout();
@@ -1198,7 +1198,7 @@ Oper Evac Mode	:	Off
             throw new RuntimeException(e);
         }
         ConfigApi api = new ConfigApi(apiClient);
-        String response = api.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("sys/chassis-4/psu-4"), false);
+        String response = api.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-4/psu-4", false);
         LOG.info("{}", response);
         try {
             api.getUcsNetworkElementByResponse(response);
@@ -1242,14 +1242,16 @@ Oper Evac Mode	:	Off
             codes.add(f.code);
             severities.add(f.severity);
             if (!f.dn.startsWith("org-root")) {
-                Dn dn = Dn.getDn(f.dn);
-                Dn level1 = Dn.getParentDn(dn);
+                UcsDn dn = UcsDn.getDn(f.dn);
+                UcsDn level1 = UcsDn.getParentDn(dn);
                 if (level1 != null) {
+                    Assert.assertTrue(level1.isParent(dn));
+                    Assert.assertTrue(dn.isChild(level1));
                     level1dns.add(level1.value);
-                    Dn level2 = Dn.getParentDn(level1);
+                    UcsDn level2 = UcsDn.getParentDn(level1);
                     if (level2 != null) {
                         level2dns.add(level2.value);
-                        Dn level3 = Dn.getParentDn(level2);
+                        UcsDn level3 = UcsDn.getParentDn(level2);
                         if (level3 != null) {
                             level3dns.add(level3.value);
                         }
@@ -1274,7 +1276,7 @@ Oper Evac Mode	:	Off
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         ConfigApi configApi = new ConfigApi(apiClient);
         loginApi.login();
-        System.out.println(configApi.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("fabric/san/B"),false));
+        System.out.println(configApi.getUcsEntityByDn(loginApi.getToken(), "fabric/san/B",false));
         loginApi.logout();
     }
 
@@ -1286,7 +1288,7 @@ Oper Evac Mode	:	Off
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         ConfigApi configApi = new ConfigApi(apiClient);
         loginApi.login();
-        System.out.println(configApi.getUcsEntityByDn(loginApi.getToken(), Dn.getDn("fabric/lan/A"),false));
+        System.out.println(configApi.getUcsEntityByDn(loginApi.getToken(), "fabric/lan/A",false));
         loginApi.logout();
     }
 

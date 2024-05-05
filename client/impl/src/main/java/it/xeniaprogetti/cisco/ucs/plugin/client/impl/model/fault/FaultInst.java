@@ -1,11 +1,11 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.fault;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.UcsElement;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.Dn;
 
 import java.util.Date;
 
-public class FaultInst extends UcsElement {
+public class FaultInst extends Dn {
 
     @JacksonXmlProperty(isAttribute = true)
     public String ack;

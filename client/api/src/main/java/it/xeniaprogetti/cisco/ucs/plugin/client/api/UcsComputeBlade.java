@@ -78,7 +78,7 @@ public final class UcsComputeBlade extends UcsEntity {
     }
 
     private UcsComputeBlade(Builder builder) {
-        super(builder.dn, ClassId.computeBlade, ClassItem.computeItem);
+        super(builder.dn, UcsEnums.ClassId.computeBlade, UcsEnums.ClassItem.computeItem);
         this.adminPower = builder.adminPower;
         this.adminState = builder.adminState;
         this.assetTag = builder.assetTag;
@@ -154,7 +154,7 @@ public final class UcsComputeBlade extends UcsEntity {
     @Override
     public String toString() {
         return "UcsComputeBlade{" +
-                "dn='" + dn + '\'' +
+                "dn='" + dn.value + '\'' +
                 ", classId=" + classId +
                 ", classItem=" + classItem +
                 ", adminPower='" + adminPower + '\'' +
@@ -230,7 +230,7 @@ public final class UcsComputeBlade extends UcsEntity {
     }
 
     public static class Builder {
-        private String dn;
+        private UcsDn dn;
         private String adminPower;
         private String adminState;
         private String assetTag;
@@ -306,7 +306,7 @@ public final class UcsComputeBlade extends UcsEntity {
         }
 
         public Builder withDn(String dn) {
-            this.dn = dn;
+            this.dn = UcsDn.getDn(dn);
             return this;
         }
 

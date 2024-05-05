@@ -60,7 +60,7 @@ public final class UcsNetworkElement extends UcsEntity {
     }
 
     public UcsNetworkElement(UcsNetworkElement.Builder builder) {
-        super(builder.dn, ClassId.networkElement, ClassItem.otherItem);
+        super(builder.dn, UcsEnums.ClassId.networkElement, UcsEnums.ClassItem.otherItem);
         this.adminEvacState = builder.adminEvacState;
         this.adminInbandIfState = builder.adminInbandIfState;
         this.diffMemory = builder.diffMemory;
@@ -92,7 +92,7 @@ public final class UcsNetworkElement extends UcsEntity {
     @Override
     public String toString() {
         return "NetworkElement{" +
-                "dn='" + dn + '\'' +
+                "dn='" + dn.value + '\'' +
                 ", classId=" + classId +
                 ", classItem=" + classItem +
                 ", adminEvacState='" + adminEvacState + '\'' +
@@ -125,7 +125,7 @@ public final class UcsNetworkElement extends UcsEntity {
     }
 
     public static class Builder {
-        private String dn;
+        private UcsDn dn;
         private String adminEvacState;
         private String adminInbandIfState;
         private int diffMemory;
@@ -158,7 +158,7 @@ public final class UcsNetworkElement extends UcsEntity {
         }
 
         public Builder withDn(String dn) {
-            this.dn = dn;
+            this.dn = UcsDn.getDn(dn);
             return this;
         }
 

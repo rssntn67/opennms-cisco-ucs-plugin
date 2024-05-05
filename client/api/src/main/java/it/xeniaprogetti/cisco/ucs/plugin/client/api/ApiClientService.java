@@ -22,7 +22,7 @@ public interface ApiClientService {
     List<UcsEquipmentRackEnclosure> getUcsEquipmentRackEnclosureList() throws ApiException;
     List<UcsNetworkElement> getUcsNetworkElementList() throws ApiException;
 
-    List<String> findDnByClassItem(UcsEntity.ClassItem classItem) throws ApiException;
+    List<String> findDnByClassItem(UcsEnums.ClassItem classItem) throws ApiException;
 
     List<UcsIpPoolPooled> findUcsIpPoolPooled() throws ApiException;
 
