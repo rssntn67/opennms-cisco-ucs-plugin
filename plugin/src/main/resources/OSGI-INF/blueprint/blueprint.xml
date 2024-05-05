@@ -12,8 +12,9 @@
             <cm:property name="events.retrieve.days" value="3" />
         </cm:default-properties>
     </cm:property-placeholder>
-
     <reference id="nodeDao" interface="org.opennms.integration.api.v1.dao.NodeDao" availability="optional"/>
+    <reference id="alarmDao" interface="org.opennms.integration.api.v1.dao.AlarmDao" availability="optional"/>
+    <reference id="eventForwarder" interface="org.opennms.integration.api.v1.events.EventForwarder" availability="optional"/>
     <reference id="clientProvider" interface="it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientProvider" />
 
     <!-- Pull in service implementations from the OSGi registry -->
@@ -50,6 +51,17 @@
     </service>
 
     <!-- Expose our custom event definitions bundled in the .jar -->
+    <bean id="ciscoUcsEventService" class="it.xeniaprogetti.cisco.ucs.plugin.events.CiscoUcsEventIngestor" destroy-method="destroy">
+        <argument ref="connectionManager"/>
+        <argument ref="clientManager"/>
+        <argument ref="nodeDao"/>
+        <argument ref="alarmDao"/>
+        <argument ref="eventForwarder"/>
+        <argument value="${events.delay}"/>
+        <argument value="${events.retrieve.days}"/>
+    </bean>
+    <service interface="org.opennms.integration.api.v1.health.HealthCheck" ref="ciscoUcsEventService"/>
+
     <service interface="org.opennms.integration.api.v1.config.events.EventConfExtension">
         <bean class="it.xeniaprogetti.cisco.ucs.plugin.events.EventConfExtension"/>
     </service>

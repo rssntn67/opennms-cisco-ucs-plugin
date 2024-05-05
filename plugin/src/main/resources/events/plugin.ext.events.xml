@@ -3,7 +3,7 @@
         <uei>uei.opennms.org/plugin/cisco/ucs/faultResolved</uei>
         <event-label>Cisco UCS Plugin: Cisco UCS Alarm Event</event-label>
         <descr>%parm[descr]%</descr>
-        <logmsg dest="logndisplay">%parm[alertType]% Cisco UCS PluginAlarm: Resolved</logmsg>
+        <logmsg dest="logndisplay">Resolved! Cisco UCS PluginAlarm %parm[type]%, %parm[code]%, %parm[rule]%</logmsg>
         <severity>Normal</severity>
         <alarm-data reduction-key="%uei%:%nodeid%:%parm[reductionKey]%" alarm-type="2"
                     clear-key="uei.opennms.org/plugin/cisco/ucs/ucs/fault:%nodeid%:%parm[reductionKey]%"/>
@@ -12,7 +12,7 @@
         <uei>uei.opennms.org/plugin/cisco/ucs/fault</uei>
         <event-label>Cisco UCS Plugin: Cisco UCS Alarm Event</event-label>
         <descr>%parm[descr]%</descr>
-        <logmsg dest="logndisplay">%parm[alertType]% Cisco UCS PluginAlarm</logmsg>
+        <logmsg dest="logndisplay">Cisco UCS PluginAlarm %parm[type]%, %parm[code]%, %parm[rule]%</logmsg>
         <severity>Major</severity>
         <alarm-data reduction-key="%uei%:%nodeid%:%parm[reductionKey]%" alarm-type="1" />
     </event>
