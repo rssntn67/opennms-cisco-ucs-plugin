@@ -8,7 +8,7 @@ import org.apache.karaf.shell.api.action.Command;
 import org.apache.karaf.shell.api.action.lifecycle.Reference;
 import org.apache.karaf.shell.api.action.lifecycle.Service;
 
-@Command(scope = "opennms-nutanix", name = "connection-validate", description = "Validate a connection", detailedDescription = "Validate an existing connection to a Cisco UCS Manager XML API")
+@Command(scope = "opennms-cucs", name = "connection-validate", description = "Validate a connection", detailedDescription = "Validate an existing connection to a Cisco UCS Manager XML API")
 @Service
 public class ValidateConnectionCommand implements Action {
 
