@@ -1,7 +1,7 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.api;
 
 public class UcsEnums {
-    public enum namingClassId {
+    public enum NamingClassId {
         aaaAuthMethod,
         aaaAuthRealm,
         aaaConfig,

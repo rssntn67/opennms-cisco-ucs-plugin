@@ -26,7 +26,7 @@ UcsXmlApiRequest {
                 "</configResolveClass>";
     }
 
-    public static String getConfigFindDnsByClassIdRequest(String cookie, UcsEnums.ClassItem classId) {
+    public static String getConfigFindDnsByClassIdRequest(String cookie, UcsEnums.NamingClassId classId) {
         return "<configFindDnsByClassId cookie=\""+cookie+"\" classId=\""+classId.name()+"\" />";
     }
 

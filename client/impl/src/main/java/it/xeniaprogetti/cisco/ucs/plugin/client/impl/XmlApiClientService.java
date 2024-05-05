@@ -170,9 +170,9 @@ public class XmlApiClientService implements ApiClientService {
     }
 
     @Override
-    public List<String> findDnByClassItem(UcsEnums.ClassItem classItem) throws ApiException{
+    public List<String> findDnByClassItem(UcsEnums.NamingClassId classId) throws ApiException{
         checkCredentials();
-        return configApi.getDnByClassId(aaaApi.getToken(), classItem);
+        return configApi.getDnByClassId(aaaApi.getToken(), classId);
     }
 
     @Override

@@ -13,9 +13,9 @@ import org.apache.karaf.shell.api.console.Session;
 import org.apache.karaf.shell.support.table.Col;
 import org.apache.karaf.shell.support.table.ShellTable;
 
-@Command(scope = "opennms-cucs", name = "list-ucs-equipment-item-dn", description = "List Ucs Compute Item", detailedDescription = "List all DN Compute Item")
+@Command(scope = "opennms-cucs", name = "list-ucs-compute-item-dn", description = "List Ucs Compute Item", detailedDescription = "List all DN Compute Item")
 @Service
-public class ListUcsEquipmentItemDnCommand implements Action {
+public class ListUcsDnsByClassIdCommand implements Action {
 
     @Reference
     private ConnectionManager connectionManager;
@@ -30,6 +30,10 @@ public class ListUcsEquipmentItemDnCommand implements Action {
     @Completion(AliasCompleter.class)
     private String alias = null;
 
+    @Argument(index = 1, name = "classId", description = "classId", required = true)
+    @Completion(ClassIdCompleter.class)
+    private String classId = null;
+
     @Override
     public Object execute() throws Exception {
         final var connection = this.connectionManager.getConnection(this.alias);
@@ -43,7 +47,7 @@ public class ListUcsEquipmentItemDnCommand implements Action {
                 .column(new Col("Dn").maxSize(64).bold(true));
 
         var service = clientManager.getClient(connection.get());
-        for (final var dn : service.findDnByClassItem(UcsEnums.ClassItem.equipmentItem)) {
+        for (final var dn : service.findDnByClassItem(UcsEnums.NamingClassId.valueOf(classId))) {
             final var row = table.addRow();
             row.addContent(dn);
         }

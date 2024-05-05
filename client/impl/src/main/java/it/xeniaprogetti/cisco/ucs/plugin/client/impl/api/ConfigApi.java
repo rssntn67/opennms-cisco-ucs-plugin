@@ -39,12 +39,12 @@ public class ConfigApi {
         this.client = Objects.requireNonNull(client);
     }
 
-    public List<String> getDnByClassId(String cookie, UcsEnums.ClassItem item) throws ApiException {
+    public List<String> getDnByClassId(String cookie, UcsEnums.NamingClassId item) throws ApiException {
         LOG.info("getDnByClassId: {}", item);
         return client.getUcsXmlApiResponse(
                             UcsXmlApiRequest.getConfigFindDnsByClassIdRequest(cookie,item),
                             ConfigFindDnsByClassIdResponse.class
-                ).dns.stream().map(s -> s.dn).collect(Collectors.toList());
+                ).dns.stream().map(s -> s.value).collect(Collectors.toList());
     }
 
     public String getUcsEntityByDn(String cookie, String dn, boolean inHierarchical) throws ApiException {

@@ -462,7 +462,7 @@ public class ApiClientTest {
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
         ConfigApi api = new ConfigApi(apiClient);
-        List<String> dns = api.getDnByClassId(loginApi.getToken(), UcsEnums.ClassItem.equipmentItem);
+        List<String> dns = api.getDnByClassId(loginApi.getToken(), UcsEnums.NamingClassId.equipmentItem);
         for (String dn : dns) {
             LOG.info("equipmentItem: {}",dn);
         }
@@ -477,7 +477,7 @@ public class ApiClientTest {
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
         ConfigApi api = new ConfigApi(apiClient);
-        List<String> dns = api.getDnByClassId(loginApi.getToken(), UcsEnums.ClassItem.computeItem);
+        List<String> dns = api.getDnByClassId(loginApi.getToken(), UcsEnums.NamingClassId.computeItem);
         for (String dn : dns) {
             LOG.info("computeItem: {}",dn);
         }
