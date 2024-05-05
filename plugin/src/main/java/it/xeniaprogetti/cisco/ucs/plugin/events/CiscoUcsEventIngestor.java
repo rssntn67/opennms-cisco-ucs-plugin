@@ -5,6 +5,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.ClientManager;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientService;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDn;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDnComparator;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEnums;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsFault;
 import it.xeniaprogetti.cisco.ucs.plugin.connection.ConnectionManager;
@@ -30,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -216,10 +218,19 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
 
     }
     private void processAlert(final UcsFault ucsFault, final String uei, final Map<UcsDn, RequisitionIdentifier> dnMap) {
-        for (UcsDn ucsDn: dnMap.keySet()) {
-            if (ucsDn.equals(ucsFault.dn) || ucsDn.isParent(ucsFault.dn)) {
+        List<UcsDn> list = new ArrayList<>(dnMap.keySet());
+        list.sort(new UcsDnComparator());
+        boolean parsed = false;
+        for (UcsDn ucsDn: list ) {
+            if (ucsDn.isParent(ucsFault.dn)) {
                 processAlertEntity(dnMap.get(ucsDn), ucsFault, uei);
+                LOG.info("DN {} found for {}",ucsDn.value, ucsFault);
+                parsed = true;
+                break;
             }
+        }
+        if (!parsed) {
+            LOG.info("no DN found for {}", ucsFault);
         }
 
     }

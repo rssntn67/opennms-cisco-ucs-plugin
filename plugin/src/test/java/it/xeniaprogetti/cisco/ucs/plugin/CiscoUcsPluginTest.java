@@ -1,9 +1,10 @@
 package it.xeniaprogetti.cisco.ucs.plugin;
 
 import it.xeniaprogetti.cisco.ucs.plugin.client.ClientManager;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDn;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDnComparator;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.XmlApiClientProvider;
 import it.xeniaprogetti.cisco.ucs.plugin.connection.Connection;
-import it.xeniaprogetti.cisco.ucs.plugin.connection.ConnectionManager;
 import org.junit.Assert;
 import org.junit.Test;
 import org.opennms.integration.api.v1.runtime.Container;
@@ -12,9 +13,33 @@ import org.opennms.integration.api.v1.runtime.Version;
 import org.opennms.integration.api.v1.scv.Credentials;
 import org.opennms.integration.api.v1.scv.SecureCredentialsVault;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class CiscoUcsPluginTest {
+
+    @Test
+    public void testUcsDnSorting() {
+
+        UcsDn chassis3 = UcsDn.getDn("sys/chassis-3");
+        UcsDn blade1 = UcsDn.getDn("sys/chassis-3/blade-1");
+        UcsDn chassis4 = UcsDn.getDn("sys/chassis-4");
+        UcsDn blade2 = UcsDn.getDn("sys/chassis-4/blade-2");
+
+        List<UcsDn> ucsDnList = new ArrayList<>();
+        ucsDnList.add(chassis4);
+        ucsDnList.add(blade1);
+        ucsDnList.add(blade2);
+        ucsDnList.add(chassis3);
+
+        System.out.println(ucsDnList);
+
+        ucsDnList.sort(new UcsDnComparator());
+        System.out.println(ucsDnList);
+    }
 
     @Test
     public void testValidate() {
