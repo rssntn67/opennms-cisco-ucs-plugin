@@ -15,6 +15,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsIpPoolPooled;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsNetworkElement;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.AaaApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.ConfigApi;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.FaultApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.IpApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.handler.ApiClient;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.compute.ComputeBlade;
@@ -22,12 +23,14 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.compute.ComputeRackUn
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.equipment.EquipmentChassis;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.equipment.EquipmentFex;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.equipment.EquipmentRackEnclosure;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.fault.FaultInst;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.ip.IpPoolAddr;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.ip.IpPoolUniverse;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.network.NetworkElement;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root.IpPoolPooled;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root.LsServer;
 
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -40,6 +43,7 @@ public class XmlApiClientService implements ApiClientService {
     private final AaaApi aaaApi;
     private final ConfigApi configApi;
     private final IpApi ipApi;
+    private final FaultApi faultApi;
 
     public XmlApiClientService(ApiClientCredentials credentials) {
         ApiClient client = XmlApiClientProvider.getApiClient(credentials);
@@ -47,6 +51,7 @@ public class XmlApiClientService implements ApiClientService {
         this.aaaApi = new AaaApi(credentials, client);
         this.configApi = new ConfigApi(client);
         this.ipApi = new IpApi(client);
+        this.faultApi = new FaultApi(client);
     }
 
 
@@ -199,10 +204,33 @@ public class XmlApiClientService implements ApiClientService {
     }
 
     @Override
-    public List<UcsFault> getFaults() {
-        return List.of();
+    public List<UcsFault> getFaults() throws ApiException{
+        checkCredentials();
+        return faultApi.getUcsFaults(aaaApi.getToken()).stream().map(XmlApiClientService::from).collect(Collectors.toList());
     }
 
+    private static UcsFault from(FaultInst faultInst) {
+        return UcsFault.builder()
+                .withAck(faultInst.ack)
+                .withCause(faultInst.cause)
+                .withChangeSet(faultInst.changeSet)
+                .withCode(faultInst.code)
+                .withCreated(faultInst.created.toInstant().atOffset(ZoneOffset.UTC))
+                .withDescr(faultInst.descr)
+                .withDn(faultInst.dn)
+                .withHighestSeverity(UcsFault.Severity.valueOf(faultInst.highestSeverity))
+                .withId(faultInst.id)
+                .withLastTransition(faultInst.lastTransition.toInstant().atOffset(ZoneOffset.UTC))
+                .withLc(faultInst.lc)
+                .withPrevSeverity(UcsFault.Severity.valueOf(faultInst.prevSeverity))
+                .withOccur(faultInst.occur)
+                .withOrigSeverity(UcsFault.Severity.valueOf(faultInst.origSeverity))
+                .withSeverity(UcsFault.Severity.valueOf(faultInst.severity))
+                .withRule(faultInst.rule)
+                .withTags(faultInst.tags)
+                .withType(UcsFault.Type.valueOf(faultInst.type))
+                .build();
+    }
     private static UcsComputeBlade from(ComputeBlade compute) {
         if (compute == null)
             return null;

@@ -26,5 +26,5 @@ public interface ApiClientService {
 
     List<UcsIpPoolPooled> findUcsIpPoolPooled() throws ApiException;
 
-    List<UcsFault> getFaults();
+    List<UcsFault> getFaults() throws ApiException;
 }

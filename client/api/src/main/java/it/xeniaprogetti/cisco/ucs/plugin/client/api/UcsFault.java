@@ -27,7 +27,7 @@ public class UcsFault extends UcsEntity {
     }
 
     public enum Severity {
-        critical, major, minor, warning, condition, info, cleared;
+        critical, major, minor, warning, condition, info, cleared
     }
 
     public enum Type {
