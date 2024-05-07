@@ -13,7 +13,7 @@ import org.apache.karaf.shell.api.console.Session;
 import org.apache.karaf.shell.support.table.Col;
 import org.apache.karaf.shell.support.table.ShellTable;
 
-@Command(scope = "opennms-cucs", name = "list-ucs-dn-by-classId", description = "List Ucs Compute Dn by classId", detailedDescription = "List all DN Compute Item")
+@Command(scope = "opennms-cucs", name = "list-ucs-dn-by-class", description = "List Ucs Compute Dn by classId", detailedDescription = "List all DN Compute Item")
 @Service
 public class ListUcsDnsByClassIdCommand implements Action {
 
