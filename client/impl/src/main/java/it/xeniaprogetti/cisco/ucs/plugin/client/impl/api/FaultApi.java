@@ -27,4 +27,11 @@ public class FaultApi {
         ).faultInsts;
     }
 
+    public List<FaultInst> getUcsFaultsByFilter(String cookie, UcsXmlApiRequest.InFilter filter) throws ApiException {
+        LOG.info("getUcsFaultsByFilter: {} {}", filter, UcsEnums.ClassId.faultInst);
+        return client.getUcsXmlApiResponse(
+                UcsXmlApiRequest.getConfigResolveClassRequest(cookie,filter,UcsEnums.NamingClassId.faultInst),
+                ConfigResolveClassResponseFaultInstList.class).faultInsts;
+    }
+
 }

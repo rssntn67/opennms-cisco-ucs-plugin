@@ -30,6 +30,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.network.NetworkElemen
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root.IpPoolPooled;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root.LsServer;
 
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -215,12 +216,12 @@ public class XmlApiClientService implements ApiClientService {
                 .withCause(faultInst.cause)
                 .withChangeSet(faultInst.changeSet)
                 .withCode(faultInst.code)
-                .withCreated(faultInst.created.toInstant().atOffset(ZoneOffset.UTC))
+                .withCreated(faultInst.created.toInstant().atOffset(ZoneOffset.systemDefault().getRules().getOffset(LocalDateTime.now())))
                 .withDescr(faultInst.descr)
                 .withDn(faultInst.dn)
                 .withHighestSeverity(UcsFault.Severity.valueOf(faultInst.highestSeverity))
                 .withId(faultInst.id)
-                .withLastTransition(faultInst.lastTransition.toInstant().atOffset(ZoneOffset.UTC))
+                .withLastTransition(faultInst.lastTransition.toInstant().atOffset(ZoneOffset.systemDefault().getRules().getOffset(LocalDateTime.now())))
                 .withLc(faultInst.lc)
                 .withPrevSeverity(UcsFault.Severity.valueOf(faultInst.prevSeverity))
                 .withOccur(faultInst.occur)

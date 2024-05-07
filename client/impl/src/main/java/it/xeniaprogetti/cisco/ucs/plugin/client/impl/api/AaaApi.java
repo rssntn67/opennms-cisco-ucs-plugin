@@ -29,6 +29,10 @@ public class AaaApi {
         this.client = Objects.requireNonNull(client);
     }
 
+    public void keepAlive() throws ApiException {
+        LOG.info("keepAlive: {} to {}", this.username, this.client.getUrl());
+        client.doPost(UcsXmlApiRequest.getKeepAliveRequest(this.token));
+    }
     public void login() throws ApiException {
         LOG.info("login: {} to {}", this.username, this.client.getUrl());
         AaaLoginResponse response =

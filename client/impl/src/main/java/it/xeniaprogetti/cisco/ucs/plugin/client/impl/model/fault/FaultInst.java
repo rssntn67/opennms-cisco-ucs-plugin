@@ -45,7 +45,8 @@ public class FaultInst extends Dn {
     @Override
     public String toString() {
         return "FaultInst{" +
-                "ack='" + ack + '\'' +
+                "dn='" + dn + '\'' +
+                ", ack='" + ack + '\'' +
                 ", cause='" + cause + '\'' +
                 ", changeSet='" + changeSet + '\'' +
                 ", code='" + code + '\'' +

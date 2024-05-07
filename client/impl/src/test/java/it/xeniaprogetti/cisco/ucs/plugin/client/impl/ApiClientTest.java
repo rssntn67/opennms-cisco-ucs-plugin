@@ -16,6 +16,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.compute.ComputeRackUn
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.equipment.EquipmentChassis;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.equipment.EquipmentFex;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.equipment.EquipmentRackEnclosure;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.fault.FaultInst;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.ip.IpPoolAddr;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.ip.IpPoolUniverse;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.network.NetworkElement;
@@ -39,6 +40,9 @@ import org.slf4j.LoggerFactory;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -1216,11 +1220,152 @@ Oper Evac Mode	:	Off
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
+        loginApi.keepAlive();
         try {
             apiClient.doPost(UcsXmlApiRequest.getEventSubscriptionRequest(loginApi.getToken()));
         } catch (ApiException e) {
             LOG.error("{}", e.getMessage());
         }
+        loginApi.logout();
+    }
+
+    @Test
+    public void testEventUnSubscriptionRequest() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaApi loginApi = new AaaApi(credentials,apiClient);
+        loginApi.login();
+        try {
+            apiClient.doPost(UcsXmlApiRequest.getEventUnsubscribeRequest(loginApi.getToken()));
+        } catch (ApiException e) {
+            LOG.error("{}", e.getMessage());
+        }
+        loginApi.logout();
+    }
+
+    @Test
+    public void inFilterTest() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaApi loginApi = new AaaApi(credentials, apiClient);
+        loginApi.login();
+        UcsXmlApiRequest.InFilter eqFilter = UcsXmlApiRequest.getEqFilter(UcsEnums.NamingClassId.lsServer, "assocState", "associated");
+        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), eqFilter, UcsEnums.NamingClassId.lsServer ));
+        UcsXmlApiRequest.InFilter neFilter = UcsXmlApiRequest.getNeFilter(UcsEnums.NamingClassId.lsServer, "assignState", "assigned");
+        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), neFilter, UcsEnums.NamingClassId.lsServer ));
+        UcsXmlApiRequest.InFilter gtFilter = UcsXmlApiRequest.getGtFilter(UcsEnums.NamingClassId.memoryArray, "currCapacity", 1024);
+        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), gtFilter, UcsEnums.NamingClassId.memoryArray ));
+        UcsXmlApiRequest.InFilter geFilter = UcsXmlApiRequest.getGeFilter(UcsEnums.NamingClassId.memoryArray, "currCapacity", 2048);
+        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), geFilter, UcsEnums.NamingClassId.memoryArray ));
+        UcsXmlApiRequest.InFilter ltFilter = UcsXmlApiRequest.getLtFilter(UcsEnums.NamingClassId.memoryArray, "currCapacity", 1024);
+        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), ltFilter, UcsEnums.NamingClassId.memoryArray ));
+        UcsXmlApiRequest.InFilter leFilter = UcsXmlApiRequest.getLeFilter(UcsEnums.NamingClassId.memoryArray, "currCapacity", 2048);
+        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), leFilter, UcsEnums.NamingClassId.memoryArray ));
+        UcsXmlApiRequest.InFilter wCardFilter = UcsXmlApiRequest.getWCardFilter(UcsEnums.NamingClassId.adaptorUnit, "serial","QCI1.*");
+        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), wCardFilter, UcsEnums.NamingClassId.adaptorUnit ));
+        UcsXmlApiRequest.InFilter anyBitFilter = UcsXmlApiRequest.getAnyBitFilter(UcsEnums.NamingClassId.computeItem, "connStatus","A,B");
+        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), anyBitFilter, UcsEnums.NamingClassId.computeItem ));
+        UcsXmlApiRequest.InFilter allBitFilter = UcsXmlApiRequest.getAllBitFilter(UcsEnums.NamingClassId.lsServer, "configQualifier", "vnic-capacity,vhba-capacity");
+        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), allBitFilter, UcsEnums.NamingClassId.lsServer ));
+
+        UcsXmlApiRequest.InFilter andEq1Filter = UcsXmlApiRequest.getEqFilter(UcsEnums.NamingClassId.uuidpoolAddr, "owner","pool");
+        UcsXmlApiRequest.InFilter andEq2Filter = UcsXmlApiRequest.getEqFilter(UcsEnums.NamingClassId.uuidpoolAddr, "assigned","yes");
+        UcsXmlApiRequest.InFilter andFilter = UcsXmlApiRequest.getAndFilter(andEq1Filter,andEq2Filter);
+        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), andFilter, UcsEnums.NamingClassId.uuidpoolAddr ));
+
+
+        UcsXmlApiRequest.InFilter orEq1Filter = UcsXmlApiRequest.getEqFilter(UcsEnums.NamingClassId.computeItem, "slotId", "1");
+        UcsXmlApiRequest.InFilter orEq2Filter = UcsXmlApiRequest.getEqFilter(UcsEnums.NamingClassId.computeItem, "slotId", "8");
+        UcsXmlApiRequest.InFilter orFilter = UcsXmlApiRequest.getOrFilter(orEq1Filter,orEq2Filter);
+        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), orFilter, UcsEnums.NamingClassId.computeItem ));
+
+        UcsXmlApiRequest.InFilter betweenFilter = UcsXmlApiRequest.getBetweenFilter(UcsEnums.NamingClassId.memoryArray, "populated", 1, 5);
+        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), betweenFilter, UcsEnums.NamingClassId.memoryArray ));
+
+        UcsXmlApiRequest.InFilter notFilter = UcsXmlApiRequest.getNotFilter(UcsXmlApiRequest.getAnyBitFilter(UcsEnums.NamingClassId.computeItem,"connStatus","unknown"));
+        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), notFilter, UcsEnums.NamingClassId.computeItem ));
+
+        UcsXmlApiRequest.InFilter compositeFilter = UcsXmlApiRequest
+                .getAndFilter(orFilter,
+                        UcsXmlApiRequest
+                                .getNotFilter(UcsXmlApiRequest.getEqFilter(UcsEnums.NamingClassId.computeItem, "chassisId", "5")));
+        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), compositeFilter, UcsEnums.NamingClassId.computeItem ));
+
+        loginApi.logout();
+
+    }
+
+    @Test
+    public void testUcsQueryForFaultsWithFilter() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaApi loginApi = new AaaApi(credentials, apiClient);
+        FaultApi faultApi = new FaultApi(apiClient);
+        loginApi.login();
+        String filterMajorString = "<eq class=\"faultInst\" property=\"highestSeverity\" value=\"major\" />";
+        UcsXmlApiRequest.InFilter filterMajor = UcsXmlApiRequest.getEqFilter(UcsEnums.NamingClassId.faultInst, "highestSeverity", "major");
+        Assert.assertEquals(filterMajorString, filterMajor.xml);
+        List<FaultInst> faults = faultApi.getUcsFaultsByFilter(loginApi.getToken(), filterMajor);
+        System.out.println(faults.size());
+        faults.forEach(f-> Assert.assertEquals("major", f.highestSeverity));
+
+        String filterCriticalString = "<eq class=\"faultInst\" property=\"highestSeverity\" value=\"critical\" />";
+        UcsXmlApiRequest.InFilter filterCritical = UcsXmlApiRequest.getEqFilter(UcsEnums.NamingClassId.faultInst, "highestSeverity", "critical");
+        Assert.assertEquals(filterCriticalString, filterCritical.xml);
+        faults = faultApi.getUcsFaultsByFilter(loginApi.getToken(), filterCritical);
+        System.out.println(faults.size());
+        faults.forEach(f-> Assert.assertEquals("critical", f.highestSeverity));
+
+        String wCard1String = "<wcard class=\"faultInst\" property=\"lastTransition\" value=\"2024-05-07T.*\" />";
+        UcsXmlApiRequest.InFilter wCard1 = UcsXmlApiRequest.getWCardFilter(UcsEnums.NamingClassId.faultInst, "lastTransition","2024-05-07T.*");
+        Assert.assertEquals(wCard1String,wCard1.xml);
+
+        String wCard2String = "<wcard class=\"faultInst\" property=\"lastTransition\" value=\"2024-05-06T.*\" />";
+        UcsXmlApiRequest.InFilter wCard2 = UcsXmlApiRequest.getWCardFilter(UcsEnums.NamingClassId.faultInst, "lastTransition","2024-05-06T.*");
+        Assert.assertEquals(wCard2String,wCard2.xml);
+
+        String wCard3String = "<wcard class=\"faultInst\" property=\"lastTransition\" value=\"2024-05-05T.*\" />";
+        UcsXmlApiRequest.InFilter wCard3 = UcsXmlApiRequest.getWCardFilter(UcsEnums.NamingClassId.faultInst, "lastTransition","2024-05-05T.*");
+        Assert.assertEquals(wCard3String,wCard3.xml);
+
+        String wCardOrFilterString =
+                "<or>\n" + wCard1String +"\n" + wCard2String + "\n" + wCard3String + "\n</or>";
+        UcsXmlApiRequest.InFilter wCardFilter = UcsXmlApiRequest.getOrFilter(wCard1,wCard2,wCard3);
+        Assert.assertEquals(wCardOrFilterString, wCardFilter.xml);
+
+        faults = faultApi.getUcsFaultsByFilter(loginApi.getToken(), wCardFilter);
+        System.out.println(faults.size());
+        faults.forEach(System.out::println);
+        faults.forEach(f -> {
+            LocalDateTime now = LocalDateTime.now();
+            ZoneId zone = ZoneOffset.systemDefault();
+            OffsetDateTime time = f.lastTransition.toInstant().atOffset(zone.getRules().getOffset(now));
+            System.out.println(f.lastTransition);
+            System.out.println(time);
+            Assert.assertEquals(2024,time.getYear());
+            Assert.assertEquals(5,time.getMonth().getValue());
+            Assert.assertTrue(5 <= time.getDayOfMonth() && time.getDayOfMonth() <=7);
+        });
+        loginApi.logout();
+    }
+
+    @Test
+    public void testUcsQueryForFaultsInstanceDn() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaApi loginApi = new AaaApi(credentials, apiClient);
+        loginApi.login();
+        ConfigApi configApi = new ConfigApi(apiClient);
+        List<String> faultsDn = configApi.getDnByClassId(loginApi.getToken(), UcsEnums.NamingClassId.faultInst);
+        System.out.println(faultsDn.size());
+        String faultDn = faultsDn.get(350);
+        System.out.println(faultDn);
+        String response = configApi.getUcsEntityByDn(loginApi.getToken(), faultDn, false);
+        System.out.println(response);
         loginApi.logout();
     }
 
@@ -1233,39 +1378,53 @@ Oper Evac Mode	:	Off
         FaultApi faultApi = new FaultApi(apiClient);
         loginApi.login();
         final Set<String> codes = new HashSet<>();
+        final Set<String> causes = new HashSet<>();
+        final Set<String> rules = new HashSet<>();
+        final Set<String> tags = new HashSet<>();
+        final Set<String> types = new HashSet<>();
         final Set<String> severities = new HashSet<>();
-        final Set<String> level1dns = new HashSet<>();
-        final Set<String> level2dns = new HashSet<>();
-        final Set<String> level3dns = new HashSet<>();
+        final Set<String> roots = new HashSet<>();
 
         faultApi.getUcsFaults(loginApi.getToken()).forEach(f -> {
             codes.add(f.code);
             severities.add(f.severity);
-            if (!f.dn.startsWith("org-root")) {
-                UcsDn dn = UcsDn.getDn(f.dn);
-                UcsDn level1 = UcsDn.getParentDn(dn);
-                if (level1 != null) {
-                    Assert.assertTrue(level1.isParent(dn));
-                    Assert.assertTrue(dn.isChild(level1));
-                    level1dns.add(level1.value);
-                    UcsDn level2 = UcsDn.getParentDn(level1);
-                    if (level2 != null) {
-                        level2dns.add(level2.value);
-                        UcsDn level3 = UcsDn.getParentDn(level2);
-                        if (level3 != null) {
-                            level3dns.add(level3.value);
-                        }
+            tags.add(f.tags);
+            rules.add(f.rule);
+            causes.add(f.cause);
+            types.add(f.type);
+            UcsDn dn = UcsDn.getDn(f.dn);
+            System.out.println(dn.value);
+            while (UcsDn.getParentDn(dn) != null) {
+                dn = UcsDn.getParentDn(dn);
+                assert dn != null;
+            }
+            roots.add(dn.value);
 
-                    }
-                }
-        }
         });
         loginApi.logout();
         System.out.println(severities);
         System.out.println(codes);
-        System.out.println(level3dns);
-        System.out.println(level2dns);
-        System.out.println(level1dns);
+        System.out.println(causes);
+        System.out.println(rules);
+        System.out.println(tags);
+        System.out.println(types);
+        System.out.println(roots);
+    }
+
+    @Test
+    public void testFabricHierarchy() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaApi loginApi = new AaaApi(credentials,apiClient);
+        ConfigApi configApi = new ConfigApi(apiClient);
+        loginApi.login();
+        configApi.getDnByClassId(loginApi.getToken(), UcsEnums.NamingClassId.fabricEp).forEach(System.out::println);
+        System.out.println(configApi.getUcsEntityByDn(loginApi.getToken(), "fabric",false));
+        configApi.getDnByClassId(loginApi.getToken(), UcsEnums.NamingClassId.fabricFcSan).forEach(System.out::println);
+        System.out.println(configApi.getUcsEntityByDn(loginApi.getToken(), "fabric/san/A",true));
+        System.out.println(configApi.getUcsEntityByDn(loginApi.getToken(), "fabric/san/B",true));
+        loginApi.logout();
     }
 
     @Test
