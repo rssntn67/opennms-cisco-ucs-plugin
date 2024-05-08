@@ -20,7 +20,7 @@ UcsXmlApiRequest {
         return "<aaaLogout inCookie=\""+inCookie+"\"/>";
     }
     public static String getRefreshRequest(String inName, String inPassword, String inCookie) {
-        return "<aaaRefresh inName=\""+inName+"\" inPassword="+inPassword+"\" inCookie=\""+inCookie+"\"/>";
+        return "<aaaRefresh inName=\""+inName+"\" inPassword=\""+inPassword+"\" inCookie=\""+inCookie+"\"/>";
     }
 
     public static String getConfigResolveClassRequest(String cookie, UcsEnums.ClassId classId) {
