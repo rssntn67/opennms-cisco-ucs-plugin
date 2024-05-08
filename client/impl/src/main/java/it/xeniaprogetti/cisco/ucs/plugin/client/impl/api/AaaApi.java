@@ -33,6 +33,7 @@ public class AaaApi {
         LOG.info("keepAlive: {} to {}", this.username, this.client.getUrl());
         client.doPost(UcsXmlApiRequest.getKeepAliveRequest(this.token));
     }
+
     public void login() throws ApiException {
         LOG.info("login: {} to {}", this.username, this.client.getUrl());
         AaaLoginResponse response =
@@ -69,15 +70,11 @@ public class AaaApi {
     }
 
     public boolean isValid() {
-        return this.token != null && this.validityTime != null && validityTime.isAfter(LocalDateTime.now());
-    }
-
-    public boolean isValidTokenAtLeastFor(long secondsFromNow) {
-        return this.validityTime != null && validityTime.isAfter(LocalDateTime.now().plusSeconds(secondsFromNow));
+        return this.token != null && validityTime.isAfter(LocalDateTime.now());
     }
 
     public boolean isValidTokenForLessThen(long secondsFromNow) {
-        return this.validityTime != null && validityTime.isAfter(LocalDateTime.now().minusSeconds(secondsFromNow));
+        return validityTime.isBefore(LocalDateTime.now().minusSeconds(secondsFromNow));
     }
 
     public String getToken() {

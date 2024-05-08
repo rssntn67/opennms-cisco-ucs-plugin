@@ -61,8 +61,7 @@ public class XmlApiClientService implements ApiClientService {
     private void checkCredentials() throws ApiException {
         if (aaaApi.getToken() == null) {
             aaaApi.login();
-        } else if (aaaApi.isValidTokenAtLeastFor(1)
-                && aaaApi.isValidTokenForLessThen(credentials.validity)) {
+        } else if (aaaApi.isValidTokenForLessThen(credentials.validity)) {
             aaaApi.refresh();
         } else if (aaaApi.isValidTokenForLessThen(0)) {
             aaaApi.login();
