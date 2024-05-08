@@ -34,8 +34,6 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.request.UcsXmlApiRequ
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

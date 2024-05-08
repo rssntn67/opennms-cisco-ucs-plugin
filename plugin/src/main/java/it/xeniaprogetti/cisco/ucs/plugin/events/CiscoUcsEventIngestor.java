@@ -179,7 +179,11 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
         for(final String alias : requisitionIdentifiers.stream().map(ri -> ri.alias).collect(Collectors.toSet())) {
             try {
                 LOG.info("run: process fault for alias: {}", alias);
-                processAlerts(client(alias).findAllUcsFaults(), dnMap.get(alias), ciscoUcsFaults);
+                processAlerts(
+                    client(alias).findUcsFaultsFromDate(OffsetDateTime.now().minusDays(retrieve_days)),
+                    dnMap.get(alias),
+                    ciscoUcsFaults
+                );
             } catch (ApiException e) {
                 LOG.error("Cannot process fault for alias='{}'. {}", alias, e.getMessage(),e);
             }
@@ -195,12 +199,8 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
         int resolved = 0;
         int ignored = 0;
         assert ucsFaults != null;
-        OffsetDateTime before = OffsetDateTime.now().minusDays(retrieve_days);
 
         for (final UcsFault ucsFault : ucsFaults) {
-            if (ucsFault.lastTransition.isBefore(before)) {
-                continue;
-            }
             if (ucsFault.severity == UcsFault.Severity.cleared && cucsAlarms.containsKey(String.valueOf(ucsFault.id)) && cucsAlarms.get(String.valueOf(ucsFault.id)).equals(AlarmType.PROBLEM)) {
                 processAlert(ucsFault, CISCO_UCS_ALARM_RESOLVED_UEI, dnMap);
                 resolved++;
