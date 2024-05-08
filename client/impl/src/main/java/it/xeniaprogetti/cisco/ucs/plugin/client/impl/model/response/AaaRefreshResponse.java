@@ -26,7 +26,7 @@ public class AaaRefreshResponse extends UcsXmlApiResponse {
     @JacksonXmlProperty(isAttribute = true)
     public String outPasswdExpiryStatus;
     @JacksonXmlProperty(isAttribute = true)
-    public int outPasswdExpiryDuration;
+    public long outPasswdExpiryDuration;
 
     @Override
     public String toString() {

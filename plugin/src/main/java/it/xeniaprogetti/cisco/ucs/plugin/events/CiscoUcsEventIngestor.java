@@ -179,7 +179,7 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
         for(final String alias : requisitionIdentifiers.stream().map(ri -> ri.alias).collect(Collectors.toSet())) {
             try {
                 LOG.info("run: process fault for alias: {}", alias);
-                processAlerts(client(alias).getFaults(), dnMap.get(alias), ciscoUcsFaults);
+                processAlerts(client(alias).findAllUcsFaults(), dnMap.get(alias), ciscoUcsFaults);
             } catch (ApiException e) {
                 LOG.error("Cannot process fault for alias='{}'. {}", alias, e.getMessage(),e);
             }

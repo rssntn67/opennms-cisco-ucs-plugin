@@ -1272,13 +1272,13 @@ Oper Evac Mode	:	Off
 
         UcsXmlApiRequest.InFilter andEq1Filter = UcsXmlApiRequest.getEqFilter(UcsEnums.NamingClassId.uuidpoolAddr, "owner","pool");
         UcsXmlApiRequest.InFilter andEq2Filter = UcsXmlApiRequest.getEqFilter(UcsEnums.NamingClassId.uuidpoolAddr, "assigned","yes");
-        UcsXmlApiRequest.InFilter andFilter = UcsXmlApiRequest.getAndFilter(andEq1Filter,andEq2Filter);
+        UcsXmlApiRequest.InFilter andFilter = UcsXmlApiRequest.getAndFilter(new UcsXmlApiRequest.InFilter[] {andEq1Filter,andEq2Filter});
         apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), andFilter, UcsEnums.NamingClassId.uuidpoolAddr ));
 
 
         UcsXmlApiRequest.InFilter orEq1Filter = UcsXmlApiRequest.getEqFilter(UcsEnums.NamingClassId.computeItem, "slotId", "1");
         UcsXmlApiRequest.InFilter orEq2Filter = UcsXmlApiRequest.getEqFilter(UcsEnums.NamingClassId.computeItem, "slotId", "8");
-        UcsXmlApiRequest.InFilter orFilter = UcsXmlApiRequest.getOrFilter(orEq1Filter,orEq2Filter);
+        UcsXmlApiRequest.InFilter orFilter = UcsXmlApiRequest.getOrFilter(new UcsXmlApiRequest.InFilter[] {orEq1Filter,orEq2Filter});
         apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), orFilter, UcsEnums.NamingClassId.computeItem ));
 
         UcsXmlApiRequest.InFilter betweenFilter = UcsXmlApiRequest.getBetweenFilter(UcsEnums.NamingClassId.memoryArray, "populated", 1, 5);
@@ -1288,9 +1288,9 @@ Oper Evac Mode	:	Off
         apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), notFilter, UcsEnums.NamingClassId.computeItem ));
 
         UcsXmlApiRequest.InFilter compositeFilter = UcsXmlApiRequest
-                .getAndFilter(orFilter,
+                .getAndFilter(new UcsXmlApiRequest.InFilter[] {orFilter,
                         UcsXmlApiRequest
-                                .getNotFilter(UcsXmlApiRequest.getEqFilter(UcsEnums.NamingClassId.computeItem, "chassisId", "5")));
+                                .getNotFilter(UcsXmlApiRequest.getEqFilter(UcsEnums.NamingClassId.computeItem, "chassisId", "5"))});
         apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), compositeFilter, UcsEnums.NamingClassId.computeItem ));
 
         loginApi.logout();
@@ -1333,7 +1333,7 @@ Oper Evac Mode	:	Off
 
         String wCardOrFilterString =
                 "<or>\n" + wCard1String +"\n" + wCard2String + "\n" + wCard3String + "\n</or>";
-        UcsXmlApiRequest.InFilter wCardFilter = UcsXmlApiRequest.getOrFilter(wCard1,wCard2,wCard3);
+        UcsXmlApiRequest.InFilter wCardFilter = UcsXmlApiRequest.getOrFilter(new UcsXmlApiRequest.InFilter[]{wCard1,wCard2,wCard3});
         Assert.assertEquals(wCardOrFilterString, wCardFilter.xml);
 
         faults = faultApi.getUcsFaultsByFilter(loginApi.getToken(), wCardFilter);
@@ -1449,6 +1449,21 @@ Oper Evac Mode	:	Off
         loginApi.login();
         System.out.println(configApi.getUcsEntityByDn(loginApi.getToken(), "fabric/lan/A",false));
         loginApi.logout();
+    }
+
+    @Test
+    public void testDateTimeFormatter() {
+        final OffsetDateTime to = OffsetDateTime.now();
+        final OffsetDateTime from = to.minusDays(3);
+        System.out.println(from);
+        System.out.println(to);
+        OffsetDateTime cur = from;
+        while (cur.isBefore(to)) {
+            System.out.println(cur.toString().substring(0,cur.toString().indexOf("T")+1)+".*");
+            cur = cur.plusDays(1);
+        }
+        System.out.println(to.toString().substring(0,to.toString().indexOf("T")+1)+".*");
+
     }
 
 }

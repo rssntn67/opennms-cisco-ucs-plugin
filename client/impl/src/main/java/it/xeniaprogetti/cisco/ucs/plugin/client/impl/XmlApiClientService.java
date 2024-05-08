@@ -29,9 +29,13 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.ip.IpPoolUniverse;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.network.NetworkElement;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root.IpPoolPooled;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root.LsServer;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.request.UcsXmlApiRequest;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -205,9 +209,40 @@ public class XmlApiClientService implements ApiClientService {
     }
 
     @Override
-    public List<UcsFault> getFaults() throws ApiException{
+    public List<UcsFault> findAllUcsFaults() throws ApiException{
         checkCredentials();
         return faultApi.getUcsFaults(aaaApi.getToken()).stream().map(XmlApiClientService::from).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UcsFault> findUcsFaultsFromDate(final OffsetDateTime from) throws ApiException {
+        List<UcsXmlApiRequest.InFilter> filters = new ArrayList<>();
+        OffsetDateTime to = OffsetDateTime.now();
+        OffsetDateTime cur = from;
+        while (cur.isBefore(to)) {
+            filters.add(
+                UcsXmlApiRequest.getWCardFilter(
+                    UcsEnums.NamingClassId.faultInst,
+                "lastTransition",
+                        cur.toString().substring(0,cur.toString().indexOf("T")+1)+".*")
+            );
+            cur = from.plusDays(1);
+        }
+        filters.add(
+                UcsXmlApiRequest.getWCardFilter(
+                        UcsEnums.NamingClassId.faultInst,
+                        "lastTransition",
+                        to.toString().substring(0,to.toString().indexOf("T")+1)+".*")
+        );
+        UcsXmlApiRequest.InFilter filter = UcsXmlApiRequest.getOrFilter(filters.toArray(new UcsXmlApiRequest.InFilter[0]));
+        checkCredentials();
+        return faultApi
+                .getUcsFaultsByFilter(aaaApi.getToken(), filter)
+                .stream()
+                .map(XmlApiClientService::from)
+                .filter(ucsFault ->
+                        ucsFault.lastTransition.isAfter(from) && ucsFault.lastTransition.isBefore(to))
+                .collect(Collectors.toList());
     }
 
     private static UcsFault from(FaultInst faultInst) {

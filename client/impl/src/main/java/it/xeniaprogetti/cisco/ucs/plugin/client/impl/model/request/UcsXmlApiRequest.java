@@ -78,7 +78,7 @@ UcsXmlApiRequest {
         return new InFilter("<not>\n"+filter.xml +"\n</not>");
     }
 
-    public static InFilter getAndFilter(InFilter... filters) {
+    public static InFilter getAndFilter(InFilter[] filters) {
         StringBuilder xml = new StringBuilder("<and>\n");
         for (InFilter filter: filters) {
             xml.append(filter.xml).append("\n");
@@ -87,7 +87,7 @@ UcsXmlApiRequest {
         return new InFilter(xml.toString());
     }
 
-    public static InFilter getOrFilter(InFilter... filters) {
+    public static InFilter getOrFilter(InFilter[] filters) {
         StringBuilder xml = new StringBuilder("<or>\n");
         for (InFilter filter: filters) {
             xml.append(filter.xml).append("\n");

@@ -1,5 +1,6 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.api;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 public interface ApiClientService {
@@ -26,5 +27,6 @@ public interface ApiClientService {
 
     List<UcsIpPoolPooled> findUcsIpPoolPooled() throws ApiException;
 
-    List<UcsFault> getFaults() throws ApiException;
+    List<UcsFault> findAllUcsFaults() throws ApiException;
+    List<UcsFault> findUcsFaultsFromDate(final OffsetDateTime from) throws ApiException;
 }
