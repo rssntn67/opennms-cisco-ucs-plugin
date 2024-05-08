@@ -15,7 +15,6 @@
             <plugin>
                 <groupId>org.apache.karaf.tooling</groupId>
                 <artifactId>karaf-maven-plugin</artifactId>
-                <version>${karaf.version}</version>
                 <extensions>true</extensions>
                 <executions>
                     <execution>
@@ -25,7 +24,7 @@
                         </goals>
                         <configuration>
                             <featuresFile>mvn:it.xeniaprogetti/karaf-features/${project.version}/xml</featuresFile>
-                            <finalName>opennms-cisco-ucs-plugin</finalName>
+                            <finalName>opennms-cisco-ucs-plugin-${project.version}</finalName>
                             <ignoreDependencyFlag>true</ignoreDependencyFlag>
                             <archive>
                               <manifestEntries>
