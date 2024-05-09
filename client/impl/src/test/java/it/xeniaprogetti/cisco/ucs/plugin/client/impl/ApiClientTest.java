@@ -60,7 +60,7 @@ public class ApiClientTest {
                 .withUsername("pippo")
                 .withPassword("pluto")
                 .withIgnoreSslCertificateValidation(true)
-                .withValidity(0)
+                .withValidity(30)
                 .build();
     }
     /**
@@ -326,23 +326,19 @@ public class ApiClientTest {
         apiClient.setTrustAllCertsClient();
         AaaApi aaaApi = new AaaApi(credentials,apiClient);
         Assert.assertFalse(aaaApi.isValid());
-        Assert.assertFalse(aaaApi.isValidTokenForLessThen(10));
 
         aaaApi.login();
         LOG.info("login cookie: {}" ,aaaApi.getToken());
         LOG.info("login now     : {}", LocalDateTime.now());
         LOG.info("login validity: {}", aaaApi.getValidityTime());
-        Assert.assertFalse(aaaApi.isValidTokenForLessThen(10));
-        Assert.assertFalse(aaaApi.isValidTokenForLessThen(599));
-        Assert.assertTrue(aaaApi.isValidTokenForLessThen(600));
-
-        Assert.assertTrue(aaaApi.getValidityTime().isAfter(LocalDateTime.now()));
-        Thread.sleep(10000);
-        Assert.assertFalse(aaaApi.isValidTokenForLessThen(590));
+        Assert.assertFalse(aaaApi.isValidTokenAtLeastFor(600));
+        Assert.assertTrue(aaaApi.isValidTokenAtLeastFor(599));
+        Thread.sleep(100000);
+        Assert.assertFalse(aaaApi.isValidTokenAtLeastFor(500));
+        Assert.assertTrue(aaaApi.isValidTokenAtLeastFor(499));
 
         aaaApi.refresh();
-        Assert.assertFalse(aaaApi.isValidTokenForLessThen(599));
-        Assert.assertTrue(aaaApi.isValidTokenForLessThen(600));
+        Assert.assertTrue(aaaApi.isValidTokenAtLeastFor(599));
         LOG.info("refresh cookie: {}" ,aaaApi.getToken());
         LOG.info("refresh now     : {}", LocalDateTime.now());
         LOG.info("refresh validity: {}", aaaApi.getValidityTime());

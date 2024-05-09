@@ -30,6 +30,8 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.network.NetworkElemen
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root.IpPoolPooled;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root.LsServer;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.request.UcsXmlApiRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -42,6 +44,7 @@ import java.util.stream.Collectors;
 
 public class XmlApiClientService implements ApiClientService {
 
+    Logger LOG = LoggerFactory.getLogger(XmlApiClientService.class);
     private final ApiClientCredentials credentials;
     private final AaaApi aaaApi;
     private final ConfigApi configApi;
@@ -58,15 +61,20 @@ public class XmlApiClientService implements ApiClientService {
     }
 
 
-    private void checkCredentials() throws ApiException {
+    protected void checkCredentials() throws ApiException {
         if (aaaApi.getToken() == null) {
             aaaApi.login();
-        } else if (aaaApi.isValidTokenForLessThen(credentials.validity)) {
+            LOG.debug("checkCredentials: login! first");
+        } else if (aaaApi.isValid() && !aaaApi.isValidTokenAtLeastFor(credentials.validity)) {
             aaaApi.refresh();
-        } else if (aaaApi.isValidTokenForLessThen(0)) {
+            LOG.debug("checkCredentials: refreshed token: previous token was valid for less then {} seconds", credentials.validity);
+        } else if (!aaaApi.isValid()) {
+            aaaApi.logout();
+            LOG.debug("checkCredentials: logout! token is no more valid");
             aaaApi.login();
+            LOG.debug("checkCredentials: new login!");
         }
-
+        LOG.info("checkCredentials: token is valid for at least {} seconds", credentials.validity);
     }
 
     @Override

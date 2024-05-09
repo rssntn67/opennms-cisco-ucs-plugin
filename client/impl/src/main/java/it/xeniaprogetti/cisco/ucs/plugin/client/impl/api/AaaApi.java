@@ -70,11 +70,11 @@ public class AaaApi {
     }
 
     public boolean isValid() {
-        return this.token != null && validityTime.isAfter(LocalDateTime.now());
+        return validityTime.isAfter(LocalDateTime.now());
     }
 
-    public boolean isValidTokenForLessThen(long secondsFromNow) {
-        return validityTime.isBefore(LocalDateTime.now().minusSeconds(secondsFromNow));
+    public boolean isValidTokenAtLeastFor(long secondsFromNow) {
+        return validityTime.isAfter(LocalDateTime.now().plusSeconds(secondsFromNow));
     }
 
     public String getToken() {
