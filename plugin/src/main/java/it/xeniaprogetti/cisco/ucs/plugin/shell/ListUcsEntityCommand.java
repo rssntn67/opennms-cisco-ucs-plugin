@@ -80,8 +80,8 @@ public class ListUcsEntityCommand implements Action {
             row.addContent(e.classId);
             row.addContent(e.classItem);
         }
-        service.disconnect();
         table.print(System.out, true);
+        service.disconnect();
 
         return null;
     }

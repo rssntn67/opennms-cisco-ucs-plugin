@@ -2,8 +2,6 @@ package it.xeniaprogetti.cisco.ucs.plugin.pollers;
 
 import it.xeniaprogetti.cisco.ucs.plugin.client.ClientManager;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeBlade;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeRackUnit;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentChassis;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentFex;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentRackEnclosure;
@@ -27,15 +25,14 @@ public abstract class CiscoUcsEquipmentAbstractPoller extends CiscoUcsAbstractPo
 
     @Override
     public CompletableFuture<PollerResult> poll(final Context context) throws ApiException {
-        String response = context.getResponse();
         final var type = context.getUcsEntityClassId();
         switch (type) {
             case equipmentChassis:
-                return CompletableFuture.completedFuture(this.poll(context.client().resolveUcsEquipmentChassisByResponse(response)));
+                return CompletableFuture.completedFuture(this.poll(context.client().resolveUcsEquipmentChassisByResponse(context.getResponse())));
             case equipmentFex:
-                return CompletableFuture.completedFuture(this.poll(context.client().resolveUcsEquipmentFexByResponse(response)));
+                return CompletableFuture.completedFuture(this.poll(context.client().resolveUcsEquipmentFexByResponse(context.getResponse())));
             case equipmentRackEnclosure:
-                return CompletableFuture.completedFuture(this.poll(context.client().resolveUcsEquipmentRackEnclosureByResponse(response)));
+                return CompletableFuture.completedFuture(this.poll(context.client().resolveUcsEquipmentRackEnclosureByResponse(context.getResponse())));
             default:
                 return CompletableFuture.completedFuture(ImmutablePollerResult.newBuilder()
                         .setStatus(Status.Unknown)

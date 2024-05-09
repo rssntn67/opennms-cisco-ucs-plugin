@@ -51,8 +51,8 @@ public class ListUcsDnsByClassIdCommand implements Action {
             final var row = table.addRow();
             row.addContent(dn);
         }
-        service.disconnect();
         table.print(System.out, true);
+        service.disconnect();
 
         return null;
     }

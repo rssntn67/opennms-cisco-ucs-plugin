@@ -22,14 +22,13 @@ public abstract class CiscoUcsFabricInterconnectAbstractPoller extends CiscoUcsA
 
     @Override
     public CompletableFuture<PollerResult> poll(final Context context) throws ApiException {
-        String response = context.getResponse();
         final var type = context.getUcsEntityClassId();
         if (type == UcsEnums.ClassId.networkElement) {
             return CompletableFuture
                 .completedFuture(
                     this.poll(
                         context.client()
-                            .resolveUcsNetworkElementByResponse(response)
+                            .resolveUcsNetworkElementByResponse(context.getResponse())
                     )
                 );
         }

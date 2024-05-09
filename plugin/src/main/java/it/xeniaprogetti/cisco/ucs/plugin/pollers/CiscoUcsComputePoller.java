@@ -3,7 +3,6 @@ package it.xeniaprogetti.cisco.ucs.plugin.pollers;
 import it.xeniaprogetti.cisco.ucs.plugin.client.ClientManager;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeBlade;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeRackUnit;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEntity;
 import it.xeniaprogetti.cisco.ucs.plugin.connection.ConnectionManager;
 import org.opennms.integration.api.v1.pollers.PollerResult;
 import org.opennms.integration.api.v1.pollers.Status;
@@ -48,6 +47,4 @@ public class CiscoUcsComputePoller extends CiscoUcsComputeAbstractPoller {
                 .setStatus(Status.Up)
                 .build();
     }
-
-
 }

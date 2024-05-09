@@ -1,8 +1,6 @@
 package it.xeniaprogetti.cisco.ucs.plugin.pollers;
 
 import it.xeniaprogetti.cisco.ucs.plugin.client.ClientManager;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeBlade;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeRackUnit;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentChassis;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentFex;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentRackEnclosure;

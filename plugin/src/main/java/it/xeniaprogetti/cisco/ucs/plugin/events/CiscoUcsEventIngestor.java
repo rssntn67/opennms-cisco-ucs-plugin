@@ -141,6 +141,7 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
     private ApiClientService client(String alias) throws ApiException {
         var connection =  connectionManager.getConnection(alias);
         if (connection.isEmpty()) {
+            LOG.error("client: No connection available for alias {}", alias);
             throw new ApiException("No connection for alias", new NullPointerException("No connection found for "+ alias));
         }
         return clientManager.getClient(connection.get());
@@ -177,15 +178,27 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
                                 Alarm::getType));
         LOG.info("run: found {} Cisco UCS fault on opennms", ciscoUcsFaults.size());
         for(final String alias : requisitionIdentifiers.stream().map(ri -> ri.alias).collect(Collectors.toSet())) {
+            ApiClientService service = null;
+            try {
+                service = client(alias);
+            } catch (ApiException e) {
+                continue;
+            }
             try {
                 LOG.info("run: process fault for alias: {}", alias);
                 processAlerts(
-                    client(alias).findUcsFaultsFromDate(OffsetDateTime.now().minusDays(retrieve_days)),
+                    service.findUcsFaultsFromDate(OffsetDateTime.now().minusDays(retrieve_days)),
                     dnMap.get(alias),
                     ciscoUcsFaults
                 );
             } catch (ApiException e) {
                 LOG.error("Cannot process fault for alias='{}'. {}", alias, e.getMessage(),e);
+            } finally {
+                try {
+                    service.disconnect();
+                } catch (ApiException e) {
+                    LOG.error("Cannot Disconnect from Service: {}", e.getMessage(),e);
+                }
             }
         }
 

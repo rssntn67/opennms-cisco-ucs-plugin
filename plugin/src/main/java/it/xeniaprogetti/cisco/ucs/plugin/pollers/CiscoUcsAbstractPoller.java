@@ -100,8 +100,9 @@ public abstract class CiscoUcsAbstractPoller implements ServicePoller {
         public final String alias;
         public final String type;
         public final String dn;
+        public final ApiClientService client;
 
-        public Context(final PollerRequest request) {
+        public Context(final PollerRequest request) throws ApiException {
             this.request = Objects.requireNonNull(request);
             this.alias = Objects.requireNonNull(this.request.getPollerAttributes().get(ALIAS_KEY),
                     "Missing attribute: " + ALIAS_KEY);
@@ -109,21 +110,25 @@ public abstract class CiscoUcsAbstractPoller implements ServicePoller {
                     "Missing attribute: " + DN_KEY);
             this.type = Objects.requireNonNull(this.request.getPollerAttributes().get(TYPE_KEY),
                     "Missing attribute: " + TYPE_KEY);
-        }
-
-        public String getResponse() throws ApiException {
-            return client().getUcsXmlFromDn(dn, false);
-        }
-        public UcsEnums.ClassId getUcsEntityClassId() {
-            return UcsEnums.ClassId.valueOf(type);
-        }
-
-        public ApiClientService client() throws ApiException {
             var connection =  CiscoUcsAbstractPoller.this.connectionManager.getConnection(alias);
             if (connection.isEmpty()) {
                 throw new ApiException("No connection for alias", new NullPointerException("No connection found for "+ alias));
             }
-            return CiscoUcsAbstractPoller.this.clientManager.getClient(connection.get());
+            client = CiscoUcsAbstractPoller.this.clientManager.getClient(connection.get());
+
+        }
+
+        public ApiClientService client() {
+            return client;
+        }
+        public String getResponse() throws ApiException {
+            var response = client.getUcsXmlFromDn(dn, false);
+            client.disconnect();
+            return response;
+        }
+
+        public UcsEnums.ClassId getUcsEntityClassId() {
+            return UcsEnums.ClassId.valueOf(type);
         }
     }
 }

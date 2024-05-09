@@ -115,7 +115,7 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
             return handleRequest(new RequestContext(request));
         } catch (ApiException e) {
             LOG.error("getRequisition: Cisco UCS Manager communication failed", e);
-            throw new RuntimeException("Cisco UCS Manager prism communication failed", e);
+            throw new RuntimeException("Cisco UCS Manager communication failed", e);
         }
     }
 
@@ -166,6 +166,7 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
                     .forEach(element -> requisition.addNode(from(element, context, dnToIpListMap.get(element.dn))));
         }
 
+        service.disconnect();
         return requisition.build();
     }
 
@@ -1798,18 +1799,20 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
 
     public class RequestContext {
         private final Request request;
+        private final ApiClientService client;
 
-        public RequestContext(final Request request) {
+        public RequestContext(final Request request) throws ApiException {
             this.request = Objects.requireNonNull(request);
-        }
-
-        public ApiClientService client() throws ApiException {
             var connection =  connectionManager.getConnection(request.alias);
             if (connection.isEmpty()) {
                 throw new ApiException("No connection for alias", new NullPointerException("No connection found for "+ request.alias));
             }
-           LOG.info("client: requesting Alias {}", request.alias);
-           return clientManager.getClient(connection.get());
+            LOG.info("client: requesting Alias {}", request.alias);
+            this.client = clientManager.getClient(connection.get());
+        }
+
+        public ApiClientService client() {
+           return client;
         }
 
         public String getAlias() {
