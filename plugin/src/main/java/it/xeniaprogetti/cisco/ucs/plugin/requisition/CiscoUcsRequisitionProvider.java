@@ -20,6 +20,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentChassis;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentFex;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentRackEnclosure;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsIpPoolPooled;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsManager;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsNetworkElement;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsUtils;
 import it.xeniaprogetti.cisco.ucs.plugin.connection.ConnectionManager;
@@ -128,6 +129,7 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
 
         ApiClientService service = context.client();
 
+        requisition.addNode(from(service.getUcsManager(), context));
         Map<UcsDn, List<UcsIpPoolPooled>> dnToIpListMap =  new HashMap<>();
         for (UcsIpPoolPooled ucsIpPoolPooled: service.findUcsIpPoolPooled()) {
             if (!dnToIpListMap.containsKey(ucsIpPoolPooled.assignedToDeviceDn)) {
@@ -168,6 +170,44 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
 
         service.disconnect();
         return requisition.build();
+    }
+
+    private RequisitionNode from(UcsManager ucsManager, RequestContext context) {
+        return ImmutableRequisitionNode.newBuilder()
+                .setForeignId(ucsManager.dn.value.replace("/","-"))
+                .setLocation(context.getLocation())
+                .setNodeLabel(ucsManager.label)
+                .addCategory("CiscoUcsManager")
+                .addCategory("CiscoUcs")
+                .addMetaData(ImmutableRequisitionMetaData.newBuilder()
+                        .setContext(CISCO_UCS_METADATA_CONTEXT)
+                        .setKey("dn")
+                        .setValue(ucsManager.dn.value)
+                        .build())
+                .addMetaData(ImmutableRequisitionMetaData.newBuilder()
+                        .setContext(CISCO_UCS_METADATA_CONTEXT)
+                        .setKey("alias")
+                        .setValue(context.getAlias())
+                        .build())
+                .addMetaData(ImmutableRequisitionMetaData.newBuilder()
+                        .setContext(CISCO_UCS_METADATA_CONTEXT)
+                        .setKey("type")
+                        .setValue(ucsManager.classId.name())
+                        .build())
+                .addMetaData(ImmutableRequisitionMetaData.newBuilder()
+                        .setContext(CISCO_UCS_METADATA_CONTEXT)
+                        .setKey("item")
+                        .setValue(ucsManager.classItem.name())
+                        .build())
+                .addInterface(
+                        ImmutableRequisitionInterface
+                                .newBuilder()
+                                .setIpAddress(ucsManager.address)
+                                .setDescription("UcsManagerAddress")
+                                .setSnmpPrimary(SnmpPrimaryType.PRIMARY)
+                                .addMonitoredService("CiscoUcsManager")
+                                .build())
+                .build();
     }
 
     private UcsIpPoolPooled getDefaultByEntity(UcsEntity ucsEntity) {

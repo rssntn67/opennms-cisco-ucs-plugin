@@ -29,4 +29,6 @@ public interface ApiClientService {
 
     List<UcsFault> findAllUcsFaults() throws ApiException;
     List<UcsFault> findUcsFaultsFromDate(final OffsetDateTime from) throws ApiException;
+
+    UcsManager getUcsManager() throws ApiException;
 }

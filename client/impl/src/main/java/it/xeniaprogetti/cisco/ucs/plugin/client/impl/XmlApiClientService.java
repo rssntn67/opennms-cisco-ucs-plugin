@@ -12,7 +12,9 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentFex;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentRackEnclosure;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsFault;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsIpPoolPooled;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsManager;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsNetworkElement;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsUtils;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.AaaApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.ConfigApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.FaultApi;
@@ -248,6 +250,15 @@ public class XmlApiClientService implements ApiClientService {
                 .filter(ucsFault ->
                         ucsFault.lastTransition.isAfter(from) && ucsFault.lastTransition.isBefore(to))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public UcsManager getUcsManager() throws ApiException {
+        return UcsManager
+                .builder()
+                .witLabel(UcsUtils.getLabelFromCredentials(this.credentials))
+                .withAddress(UcsUtils.getIpAddressFromCredentials(this.credentials)).
+                build();
     }
 
     private static UcsFault from(FaultInst faultInst) {

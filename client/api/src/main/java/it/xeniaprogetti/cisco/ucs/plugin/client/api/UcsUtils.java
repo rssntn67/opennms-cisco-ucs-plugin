@@ -11,6 +11,7 @@ import java.net.UnknownHostException;
 
 public class UcsUtils {
 
+    public final static String UCS_MANAGER_DN = "org-root";
     public final static String UCS_DN_KEY = "dn";
     public final static String UCS_FABRIC_LAN_KEY = "fabric-lan-dn";
     public final static String UCS_FABRIC_SAN_KEY = "fabric-san-dn";
@@ -32,6 +33,14 @@ public class UcsUtils {
             return true;
         } catch (MalformedURLException | URISyntaxException e) {
             return false;
+        }
+    }
+
+    public static String getLabelFromCredentials(ApiClientCredentials credentials) throws ApiException {
+        try {
+            return (new URL(credentials.url).getHost());
+        } catch ( MalformedURLException e) {
+            throw new ApiException(e.getMessage(),e);
         }
     }
 

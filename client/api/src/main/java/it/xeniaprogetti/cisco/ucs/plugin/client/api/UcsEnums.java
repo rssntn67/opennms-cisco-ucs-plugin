@@ -1110,6 +1110,7 @@ public class UcsEnums {
 
     public enum ClassId {
         faultInst("CiscoUcsEntity"),
+        ucsManager("CiscoUcsManager"),
         equipmentChassis("CiscoUcsEquipment"),
         equipmentFex("CiscoUcsEquipment"),
         equipmentRackEnclosure("CiscoUcsEquipment"),
