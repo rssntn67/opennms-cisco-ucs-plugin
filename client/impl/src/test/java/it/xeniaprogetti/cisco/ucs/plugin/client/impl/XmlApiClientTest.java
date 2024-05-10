@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 public class XmlApiClientTest {
 
@@ -77,6 +78,19 @@ public class XmlApiClientTest {
         service.findUcsFaultsFromDate(OffsetDateTime.now().minusDays(3)).forEach(System.out::println);
         LOG.info("findAllUcsFaults: {}", OffsetDateTime.now());
         service.findAllUcsFaults().forEach(System.out::println);
+        service.disconnect();
+    }
+
+    @Test
+    public void testXmlClientServiceForStats() throws ApiException {
+        XmlApiClientService service = new XmlApiClientService(getCredentials(30));
+        List<String> statsItemList = service.findDnByClassItem(UcsEnums.NamingClassId.statsItem);
+        System.out.println(statsItemList.size());
+        statsItemList.forEach(System.out::println);
+
+        System.out.println(
+                service.getUcsXmlFromDn("sys/switch-B/slot-1/switch-ether/port-106/tx-stats", false)
+        );
         service.disconnect();
     }
 }
