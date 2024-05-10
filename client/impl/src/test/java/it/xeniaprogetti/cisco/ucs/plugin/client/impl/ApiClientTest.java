@@ -1413,6 +1413,7 @@ Oper Evac Mode	:	Off
         ConfigApi configApi = new ConfigApi(apiClient);
         List<String> faultsDn = configApi.getDnByClassId(loginApi.getToken(), UcsEnums.NamingClassId.faultInst);
         System.out.println(faultsDn.size());
+        faultsDn.forEach(System.out::println);
         String faultDn = faultsDn.get(350);
         System.out.println(faultDn);
         String response = configApi.getUcsEntityByDn(loginApi.getToken(), faultDn, false);
