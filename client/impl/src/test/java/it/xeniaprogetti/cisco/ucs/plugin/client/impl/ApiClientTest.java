@@ -6,6 +6,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientCredentials;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDn;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEnums;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsUtils;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.AaaApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.ConfigApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.FaultApi;
@@ -39,6 +40,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigInteger;
+import java.net.InetAddress;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
@@ -63,6 +68,56 @@ public class ApiClientTest {
                 .withValidity(30)
                 .build();
     }
+
+    @Test
+    public void testGetIpAddressFromUrl() {
+        ApiClientCredentials credentials = getCredentials();
+        Assert.assertTrue(UcsUtils.validate(credentials));
+        InetAddress ip = null;
+        try {
+            ip = UcsUtils.getIpAddressFromCredentials(credentials);
+            LOG.info("{}", ip.getHostAddress());
+        } catch (ApiException e) {
+            Assert.fail();
+        }
+
+    }
+
+    @Test
+    public void testGetIpAddressFromExternal() {
+        ApiClientCredentials credentials = ApiClientCredentials.builder()
+                .withUrl("https://www.arsinfo.it/nuova")
+                .withUsername("pippo")
+                .withPassword("pluto")
+                .withIgnoreSslCertificateValidation(true)
+                .withValidity(30)
+                .build();
+
+        Assert.assertTrue(UcsUtils.validate(credentials));
+        InetAddress ip = null;
+        try {
+            ip = UcsUtils.getIpAddressFromCredentials(credentials);
+            LOG.info("{}", ip.getHostAddress());
+        } catch (ApiException e) {
+            Assert.fail();
+        }
+
+    }
+
+    @Test
+    public void testValidationUrlError() {
+        ApiClientCredentials credentials = ApiClientCredentials.builder()
+                .withUrl("httpqs://www.arsinfo.it/nuova")
+                .withUsername("pippo")
+                .withPassword("pluto")
+                .withIgnoreSslCertificateValidation(true)
+                .withValidity(30)
+                .build();
+
+        Assert.assertFalse(UcsUtils.validate(credentials));
+
+    }
+
     /**
      * Verifies that the object is serialized to XML as expected.
      */

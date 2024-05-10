@@ -4,6 +4,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientCredentials;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientProvider;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientService;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsUtils;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.AaaApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.handler.ApiClient;
 import org.slf4j.Logger;
@@ -29,6 +30,9 @@ public class XmlApiClientProvider implements ApiClientProvider {
     public boolean validate(ApiClientCredentials credentials) {
         LOG.debug("validate: {}", credentials );
         AaaApi api = new AaaApi(credentials,getApiClient(credentials));
+        if (!UcsUtils.validate(credentials)) {
+            return false;
+        }
         boolean valid = false;
         try {
             api.login();
