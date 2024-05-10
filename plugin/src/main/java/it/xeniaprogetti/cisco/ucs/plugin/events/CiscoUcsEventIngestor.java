@@ -8,6 +8,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDn;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDnComparator;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEnums;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsFault;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsUtils;
 import it.xeniaprogetti.cisco.ucs.plugin.connection.ConnectionManager;
 import it.xeniaprogetti.cisco.ucs.plugin.requisition.CiscoUcsRequisitionProvider;
 import org.opennms.integration.api.v1.config.events.AlarmType;
@@ -79,6 +80,8 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
     private static class RequisitionIdentifier {
         private final String foreignSource;
         private final String dn;
+        private String fabricLanDn;
+        private String fabricSanDn;
         private final String alias;
 
         private final UcsEnums.ClassId type;
@@ -88,9 +91,14 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
                     .filter(metaData -> Objects.equals(metaData.getContext(), CiscoUcsRequisitionProvider.CISCO_UCS_METADATA_CONTEXT))
                     .collect(Collectors.toMap(MetaData::getKey, MetaData::getValue));
             foreignSource = Objects.requireNonNull(n.getForeignSource());
-            dn = Objects.requireNonNull(map.get("dn"));
+            dn = Objects.requireNonNull(map.get(UcsUtils.UCS_DN_KEY));
             alias = Objects.requireNonNull(map.get("alias"));
             type = Objects.requireNonNull(UcsEnums.ClassId.valueOf(map.get("type")));
+            if (type == UcsEnums.ClassId.networkElement) {
+                fabricLanDn = map.get(UcsUtils.UCS_FABRIC_LAN_KEY);
+                fabricSanDn = map.get(UcsUtils.UCS_FABRIC_SAN_KEY);
+            }
+
         }
 
         @Override
@@ -169,6 +177,12 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
                 dnMap.put(ri.alias, new HashMap<>());
             }
             dnMap.get(ri.alias).put(UcsDn.getDn(ri.dn),ri);
+            if (ri.fabricSanDn != null) {
+                dnMap.get(ri.alias).put(UcsDn.getDn(ri.fabricSanDn),ri);
+            }
+            if (ri.fabricLanDn != null) {
+                dnMap.get(ri.alias).put(UcsDn.getDn(ri.fabricLanDn),ri);
+            }
         }
 
         Map<String, AlarmType> ciscoUcsFaults =

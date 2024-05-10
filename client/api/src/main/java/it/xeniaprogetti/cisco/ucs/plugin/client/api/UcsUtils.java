@@ -10,6 +10,10 @@ import java.net.URL;
 import java.net.UnknownHostException;
 
 public class UcsUtils {
+
+    public final static String UCS_DN_KEY = "dn";
+    public final static String UCS_FABRIC_LAN_KEY = "fabric-lan-dn";
+    public final static String UCS_FABRIC_SAN_KEY = "fabric-san-dn";
     public static InetAddress getValidInetAddress(final String ip) {
         if (Strings.isNullOrEmpty(ip)) {
             return null;
