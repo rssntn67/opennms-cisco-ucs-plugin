@@ -458,6 +458,7 @@ public class UcsEnums {
         equipmentPsuInputStatsHist,
         equipmentPsuStats,
         equipmentPsuStatsHist,
+        equipmentRackEnclosure,
         equipmentRackUnitCapProvider,
         equipmentRackUnitFanStats,
         equipmentRackUnitFanStatsHist,

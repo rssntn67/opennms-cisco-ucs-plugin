@@ -231,7 +231,7 @@ public class XmlApiClientService implements ApiClientService {
                 "lastTransition",
                         cur.toString().substring(0,cur.toString().indexOf("T")+1)+".*")
             );
-            cur = from.plusDays(1);
+            cur = cur.plusDays(1);
         }
         filters.add(
                 UcsXmlApiRequest.getWCardFilter(

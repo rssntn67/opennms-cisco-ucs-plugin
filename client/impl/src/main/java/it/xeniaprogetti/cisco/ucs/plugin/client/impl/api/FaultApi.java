@@ -20,15 +20,15 @@ public class FaultApi {
     }
 
     public List<FaultInst> getUcsFaults(String cookie) throws ApiException {
-        LOG.info("getUcsFaults: {}", UcsEnums.ClassId.faultInst);
+        LOG.info("getUcsFaults: {}", UcsEnums.NamingClassId.faultInst);
         return client.getUcsXmlApiResponse(
-                UcsXmlApiRequest.getConfigResolveClassRequest(cookie, UcsEnums.ClassId.faultInst),
+                UcsXmlApiRequest.getConfigResolveClassRequest(cookie, UcsEnums.NamingClassId.faultInst),
                 ConfigResolveClassResponseFaultInstList.class
         ).faultInsts;
     }
 
     public List<FaultInst> getUcsFaultsByFilter(String cookie, UcsXmlApiRequest.InFilter filter) throws ApiException {
-        LOG.info("getUcsFaultsByFilter: {} {}", filter, UcsEnums.ClassId.faultInst);
+        LOG.info("getUcsFaultsByFilter: {} {}", filter, UcsEnums.NamingClassId.faultInst);
         return client.getUcsXmlApiResponse(
                 UcsXmlApiRequest.getConfigResolveClassRequest(cookie,filter,UcsEnums.NamingClassId.faultInst),
                 ConfigResolveClassResponseFaultInstList.class).faultInsts;

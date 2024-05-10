@@ -23,16 +23,6 @@ UcsXmlApiRequest {
         return "<aaaRefresh inName=\""+inName+"\" inPassword=\""+inPassword+"\" inCookie=\""+inCookie+"\"/>";
     }
 
-    public static String getConfigResolveClassRequest(String cookie, UcsEnums.ClassId classId) {
-        return "<configResolveClass\n" +
-                "    cookie=\""+cookie+"\"\n" +
-                "    classId=\""+classId.name()+"\"\n" +
-                "    inHierarchical=\"false\">\n" +
-                "    <inFilter>\n" +
-                "    </inFilter>\n" +
-                "</configResolveClass>";
-    }
-
     public static InFilter getEqFilter(UcsEnums.NamingClassId classId, String property, String value) {
         return new InFilter("<eq class=\"" + classId.name() +"\" property=\""+property+"\" value=\"" + value + "\" />");
     }
@@ -102,6 +92,16 @@ UcsXmlApiRequest {
                 "    classId=\""+classId.name()+"\"\n" +
                 "    inHierarchical=\"false\">\n" +
                 "    <inFilter>\n" + filter.xml+
+                "    </inFilter>\n" +
+                "</configResolveClass>";
+    }
+
+    public static String getConfigResolveClassRequest(String cookie, UcsEnums.NamingClassId classId) {
+        return "<configResolveClass\n" +
+                "    cookie=\""+cookie+"\"\n" +
+                "    classId=\""+classId.name()+"\"\n" +
+                "    inHierarchical=\"false\">\n" +
+                "    <inFilter>\n" +
                 "    </inFilter>\n" +
                 "</configResolveClass>";
     }

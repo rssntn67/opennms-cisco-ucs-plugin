@@ -21,6 +21,17 @@ public class UcsIpPoolPooled {
         this.poolDn = builder.poolDn;
     }
 
+    @Override
+    public String toString() {
+        return "UcsIpPoolPooled{" +
+                "poolDn=" + poolDn +
+                ", assignedToProfileDn=" + assignedToProfileDn +
+                ", assignedToDeviceDn=" + assignedToDeviceDn +
+                ", addr='" + addr + '\'' +
+                ", defGw='" + defGw + '\'' +
+                ", subnet='" + subnet + '\'' +
+                '}';
+    }
 
     public static class Builder {
         private UcsDn poolDn;

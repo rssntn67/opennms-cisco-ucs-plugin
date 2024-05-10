@@ -54,7 +54,7 @@ public class ApiClientTest {
 
     private final Logger LOG = LoggerFactory.getLogger(ApiClientTest.class);
 
-    protected static ApiClientCredentials getCredentials() {
+    private static ApiClientCredentials getCredentials() {
         return ApiClientCredentials.builder()
                 .withUrl("https://10.172.192.15/nuova")
                 .withUsername("pippo")
@@ -1415,11 +1415,25 @@ Oper Evac Mode	:	Off
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         ConfigApi configApi = new ConfigApi(apiClient);
         loginApi.login();
+        System.out.println("->"+UcsEnums.NamingClassId.fabricEp);
         configApi.getDnByClassId(loginApi.getToken(), UcsEnums.NamingClassId.fabricEp).forEach(System.out::println);
-        System.out.println(configApi.getUcsEntityByDn(loginApi.getToken(), "fabric",false));
+        System.out.println("--------");
+        System.out.println("->"+UcsEnums.NamingClassId.fabricSan);
+        configApi.getDnByClassId(loginApi.getToken(), UcsEnums.NamingClassId.fabricSan).forEach(System.out::println);
+        System.out.println("--------");
+        System.out.println("->"+UcsEnums.NamingClassId.fabricFcSan);
         configApi.getDnByClassId(loginApi.getToken(), UcsEnums.NamingClassId.fabricFcSan).forEach(System.out::println);
+        System.out.println("--------");
+        System.out.println("->"+UcsEnums.NamingClassId.fabricLan);
+        configApi.getDnByClassId(loginApi.getToken(), UcsEnums.NamingClassId.fabricLan).forEach(System.out::println);
+        System.out.println("--------");
+        System.out.println("->"+UcsEnums.NamingClassId.fabricEthLan);
+        configApi.getDnByClassId(loginApi.getToken(), UcsEnums.NamingClassId.fabricEthLan).forEach(System.out::println);
+        System.out.println("--------");
         System.out.println(configApi.getUcsEntityByDn(loginApi.getToken(), "fabric/san/A",true));
-        System.out.println(configApi.getUcsEntityByDn(loginApi.getToken(), "fabric/san/B",true));
+        System.out.println("--------");
+        System.out.println(configApi.getUcsEntityByDn(loginApi.getToken(), "fabric/lan/A",true));
+        System.out.println("--------");
         loginApi.logout();
     }
 

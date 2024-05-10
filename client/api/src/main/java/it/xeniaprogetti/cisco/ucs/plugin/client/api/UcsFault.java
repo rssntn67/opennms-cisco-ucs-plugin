@@ -66,6 +66,29 @@ public class UcsFault extends UcsEntity {
     public final String tags;
     public final Type type;
 
+    @Override
+    public String toString() {
+        return "UcsFault{" +
+                "ack='" + ack + '\'' +
+                ", cause='" + cause + '\'' +
+                ", changeSet='" + changeSet + '\'' +
+                ", code='" + code + '\'' +
+                ", created=" + created +
+                ", descr='" + descr + '\'' +
+                ", highestSeverity=" + highestSeverity +
+                ", id=" + id +
+                ", lastTransition=" + lastTransition +
+                ", lc='" + lc + '\'' +
+                ", occur=" + occur +
+                ", origSeverity=" + origSeverity +
+                ", prevSeverity=" + prevSeverity +
+                ", rule='" + rule + '\'' +
+                ", severity=" + severity +
+                ", tags='" + tags + '\'' +
+                ", type=" + type +
+                '}';
+    }
+
     public static class Builder {
         private Builder() {
 
