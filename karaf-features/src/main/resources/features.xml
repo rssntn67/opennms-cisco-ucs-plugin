@@ -12,7 +12,7 @@
         <bundle dependency="true">mvn:javax.ws.rs/javax.ws.rs-api/2.1.1</bundle>
 
         <feature version="${project.version}">opennms-plugins-cisco-ucs-client</feature>
-        <bundle>mvn:it.xeniaprogetti/cisco-ucs-plugin/${project.version}</bundle>
+        <bundle>mvn:it.xeniaprogetti.cucs/cisco-ucs-plugin/${project.version}</bundle>
     </feature>
 
     <feature name="okhttp" description="okhttp" version="${okhttp.version}">
@@ -39,8 +39,8 @@
 
         <feature version="${jackson.version}" dependency="true">jackson</feature>
         <feature version="${okhttp.version}" dependency="true">okhttp</feature>
-        <bundle>mvn:it.xeniaprogetti/cisco-ucs-plugin-client-api/${project.version}</bundle>
-        <bundle>mvn:it.xeniaprogetti/cisco-ucs-plugin-client-impl/${project.version}</bundle>
+        <bundle>mvn:it.xeniaprogetti.cucs/cisco-ucs-plugin-client-api/${project.version}</bundle>
+        <bundle>mvn:it.xeniaprogetti.cucs/cisco-ucs-plugin-client-impl/${project.version}</bundle>
     </feature>
 
 </features>
