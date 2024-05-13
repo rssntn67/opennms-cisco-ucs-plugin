@@ -65,7 +65,7 @@ public class ComputeRackUnit extends Dn {
     @JacksonXmlProperty(isAttribute = true)
     public int id;
     @JacksonXmlProperty(isAttribute = true)
-    public int intId;
+    public String intId;
     @JacksonXmlProperty(isAttribute = true)
     public String kmipFault;
     @JacksonXmlProperty(isAttribute = true)

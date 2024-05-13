@@ -32,7 +32,7 @@ public final class UcsComputeRackUnit extends UcsEntity {
     public final String fsmStatus;
     public final int fsmTry;
     public final int id;
-    public final int intId;
+    public final String intId;
     public final String kmipFault;
     public final String kmipFaultDescription;
     public final String lc;
@@ -274,7 +274,7 @@ public final class UcsComputeRackUnit extends UcsEntity {
         private String fsmStatus;
         private int fsmTry;
         private int id;
-        private int intId;
+        private String intId;
         private String kmipFault;
         private String kmipFaultDescription;
         private String lc;
@@ -474,7 +474,7 @@ public final class UcsComputeRackUnit extends UcsEntity {
             return this;
         }
 
-        public Builder withIntId(int intId) {
+        public Builder withIntId(String intId) {
             this.intId = intId;
             return this;
         }
