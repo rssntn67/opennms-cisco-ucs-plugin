@@ -44,7 +44,7 @@ public class ListUcsDnsByClassIdCommand implements Action {
 
         final var table = new ShellTable()
                 .size(session.getTerminal().getWidth() - 1)
-                .column(new Col("Dn").maxSize(64).bold(true));
+                .column(new Col("Dn").maxSize(128).bold(true));
 
         var service = clientManager.getClient(connection.get());
         for (final var dn : service.findDnByClassItem(UcsEnums.NamingClassId.valueOf(classId))) {
