@@ -29,7 +29,7 @@ public final class UcsComputeBlade extends UcsEntity {
     public final Date fsmStamp;
     public final String fsmStatus;
     public final int fsmTry;
-    public final int intId;
+    public final String intId;
     public final String kmipFault;
     public final String kmipFaultDescription;
     public final String lc;
@@ -257,7 +257,7 @@ public final class UcsComputeBlade extends UcsEntity {
         private Date fsmStamp;
         private String fsmStatus;
         private int fsmTry;
-        private int intId;
+        private String intId;
         private String kmipFault;
         private String kmipFaultDescription;
         private String lc;
@@ -440,7 +440,7 @@ public final class UcsComputeBlade extends UcsEntity {
             return this;
         }
 
-        public Builder withIntId(int intId) {
+        public Builder withIntId(String intId) {
             this.intId = intId;
             return this;
         }

@@ -115,7 +115,6 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
         try {
             return handleRequest(new RequestContext(request));
         } catch (ApiException e) {
-            LOG.error("getRequisition: Cisco UCS Manager communication failed", e);
             throw new RuntimeException("Cisco UCS Manager communication failed", e);
         }
     }

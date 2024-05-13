@@ -59,7 +59,7 @@ public class ComputeBlade extends Dn {
     @JacksonXmlProperty(isAttribute = true)
     public int fsmTry;
     @JacksonXmlProperty(isAttribute = true)
-    public int intId;
+    public String intId;
     @JacksonXmlProperty(isAttribute = true)
     public String kmipFault;
     @JacksonXmlProperty(isAttribute = true)

@@ -126,14 +126,15 @@ public class ApiClient {
             }
             return t;
         } catch (JsonProcessingException e) {
-            LOG.error("getUcsEntity: Error Processing request: {}", e.getMessage(), e);
+            LOG.error("getUcsEntity: Error Processing response: {}", e.getMessage(), e);
             try {
                 ErrorResponse error = mapper.readValue(response, ErrorResponse.class);
                 throw new ApiException("getUcsEntity: server responded with error: " + error.invocationResult
-                        ,new RuntimeException("getUcsEntity error: " + error.invocationResult)
+                        ,new RuntimeException("getUcsEntity: response error: " + error.invocationResult)
                         , error.invocationResult
                         , error.toString());
             } catch (JsonProcessingException ex) {
+                LOG.error("getUcsEntity: Cisco UCS Manager communication failed: Error processing Response: {}", ex.getMessage(), ex);
                 throw new ApiException("getUcsEntity: " + ex.getMessage(), ex);
             }
         }
