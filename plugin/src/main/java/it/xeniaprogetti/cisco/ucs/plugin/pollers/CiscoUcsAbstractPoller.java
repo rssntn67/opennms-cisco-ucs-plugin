@@ -5,7 +5,13 @@ import com.google.common.collect.ImmutableMap;
 import it.xeniaprogetti.cisco.ucs.plugin.client.ClientManager;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientService;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeBlade;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeRackUnit;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEnums;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentChassis;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentFex;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentRackEnclosure;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsNetworkElement;
 import it.xeniaprogetti.cisco.ucs.plugin.connection.ConnectionManager;
 import org.opennms.integration.api.v1.pollers.PollerRequest;
 import org.opennms.integration.api.v1.pollers.PollerResult;
@@ -34,7 +40,48 @@ public abstract class CiscoUcsAbstractPoller implements ServicePoller {
         this.clientManager = Objects.requireNonNull(clientManager);
     }
 
-    protected abstract CompletableFuture<PollerResult> poll(final Context context) throws ApiException;
+    protected abstract PollerResult poll(final UcsComputeBlade computeBlade) throws ApiException;
+    protected abstract PollerResult poll(final UcsComputeRackUnit computeRackUnit) throws ApiException;
+    protected abstract PollerResult poll(final UcsEquipmentChassis equipmentChassis) throws ApiException;
+    protected abstract PollerResult poll(final UcsEquipmentFex equipmentFex) throws ApiException;
+    protected abstract PollerResult poll(final UcsEquipmentRackEnclosure equipmentRackEnclosure) throws ApiException;
+    protected abstract PollerResult poll(final UcsNetworkElement networkElement) throws ApiException;
+
+
+    public CompletableFuture<PollerResult> poll(final Context context) throws ApiException {
+        final var type = context.getUcsEntityClassId();
+        switch (type) {
+            case computeBlade:
+                var computeBladeStatus = CompletableFuture.completedFuture(this.poll(context.getUcsComputeBlade()));
+                context.disconnect();
+                return computeBladeStatus;
+            case computeRackUnit:
+                var computeRackUnitStatus = CompletableFuture.completedFuture(this.poll(context.getUcsComputeRackUnit()));
+                context.disconnect();
+                return computeRackUnitStatus;
+            case equipmentChassis:
+                var equipmentChassisStatus =  CompletableFuture.completedFuture(this.poll(context.getUcsEquipmentChassis()));
+                context.disconnect();
+                return equipmentChassisStatus;
+            case equipmentFex:
+                var equipmentFexStatus =  CompletableFuture.completedFuture(this.poll(context.getUcsEquipmentFex()));
+                context.disconnect();
+                return equipmentFexStatus;
+            case equipmentRackEnclosure:
+                var equipmentRackEnclosureStatus = CompletableFuture.completedFuture(this.poll(context.getUcsEquipmentRackEnclosure()));
+                context.disconnect();
+                return equipmentRackEnclosureStatus;
+            case networkElement:
+                var networkElementStatus =  CompletableFuture.completedFuture(this.poll(context.getUcsNetworkElement()));
+                context.disconnect();
+                return networkElementStatus;
+            default:
+                return CompletableFuture.completedFuture(ImmutablePollerResult.newBuilder()
+                        .setStatus(Status.Unknown)
+                        .setReason("No supported UCS Entity: " + type)
+                        .build());
+        }
+    }
 
     @Override
     public final CompletableFuture<PollerResult> poll(final PollerRequest pollerRequest) {
@@ -121,10 +168,33 @@ public abstract class CiscoUcsAbstractPoller implements ServicePoller {
         public ApiClientService client() {
             return client;
         }
-        public String getResponse() throws ApiException {
-            var response = client.getUcsXmlFromDn(dn, false);
+
+        public void disconnect() throws ApiException {
             client.disconnect();
-            return response;
+        }
+
+        public UcsNetworkElement getUcsNetworkElement() throws ApiException {
+            return client.resolveUcsNetworkElementByResponse(client.getUcsXmlFromDn(dn,false));
+        }
+
+        public UcsComputeBlade getUcsComputeBlade() throws ApiException {
+            return client.resolveUcsComputeBladeByResponse(client.getUcsXmlFromDn(dn,false));
+        }
+
+        public UcsComputeBlade getUcsComputeRackUnit() throws ApiException {
+            return client.resolveUcsComputeBladeByResponse(client.getUcsXmlFromDn(dn,false));
+        }
+
+        public UcsEquipmentChassis getUcsEquipmentChassis() throws ApiException {
+            return client.resolveUcsEquipmentChassisByResponse(client.getUcsXmlFromDn(dn,false));
+        }
+
+        public UcsEquipmentFex getUcsEquipmentFex() throws ApiException {
+            return client.resolveUcsEquipmentFexByResponse(client.getUcsXmlFromDn(dn,false));
+        }
+
+        public UcsEquipmentRackEnclosure getUcsEquipmentRackEnclosure() throws ApiException {
+            return client.resolveUcsEquipmentRackEnclosureByResponse(client.getUcsXmlFromDn(dn,false));
         }
 
         public UcsEnums.ClassId getUcsEntityClassId() {

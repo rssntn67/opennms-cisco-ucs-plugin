@@ -69,19 +69,7 @@
 
     <!-- Poller Configuration -->
     <service interface="org.opennms.integration.api.v1.pollers.ServicePollerFactory">
-        <bean class="it.xeniaprogetti.cisco.ucs.plugin.pollers.CiscoUcsComputePollerFactory">
-            <argument ref="connectionManager"/>
-            <argument ref="clientManager"/>
-        </bean>
-    </service>
-    <service interface="org.opennms.integration.api.v1.pollers.ServicePollerFactory">
-        <bean class="it.xeniaprogetti.cisco.ucs.plugin.pollers.CiscoUcsEquipmentPollerFactory">
-            <argument ref="connectionManager"/>
-            <argument ref="clientManager"/>
-        </bean>
-    </service>
-    <service interface="org.opennms.integration.api.v1.pollers.ServicePollerFactory">
-        <bean class="it.xeniaprogetti.cisco.ucs.plugin.pollers.CiscoUcsFabricInterconnectPollerFactory">
+        <bean class="it.xeniaprogetti.cisco.ucs.plugin.pollers.CiscoUcsPollerFactory">
             <argument ref="connectionManager"/>
             <argument ref="clientManager"/>
         </bean>

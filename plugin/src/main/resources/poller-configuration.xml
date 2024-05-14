@@ -35,12 +35,12 @@
     </package>
 
     <monitor service="CiscoUcsCompute"
-             class-name="it.xeniaprogetti.cisco.ucs.plugin.pollers.CiscoUcsComputePoller"/>
+             class-name="it.xeniaprogetti.cisco.ucs.plugin.pollers.CiscoUcsPoller"/>
 
     <monitor service="CiscoUcsEquipment"
-             class-name="it.xeniaprogetti.cisco.ucs.plugin.pollers.CiscoUcsEquipmentPoller"/>
+             class-name="it.xeniaprogetti.cisco.ucs.plugin.pollers.CiscoUcsPoller"/>
 
     <monitor service="CiscoUcsFabricInterconnect"
-             class-name="it.xeniaprogetti.cisco.ucs.plugin.pollers.CiscoUcsFabricInterconnectPoller"/>
+             class-name="it.xeniaprogetti.cisco.ucs.plugin.pollers.CiscoUcsPoller"/>
 
 </poller-configuration>
