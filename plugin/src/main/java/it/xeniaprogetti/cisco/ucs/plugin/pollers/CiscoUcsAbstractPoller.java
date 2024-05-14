@@ -165,10 +165,6 @@ public abstract class CiscoUcsAbstractPoller implements ServicePoller {
 
         }
 
-        public ApiClientService client() {
-            return client;
-        }
-
         public void disconnect() throws ApiException {
             client.disconnect();
         }
@@ -181,8 +177,8 @@ public abstract class CiscoUcsAbstractPoller implements ServicePoller {
             return client.resolveUcsComputeBladeByResponse(client.getUcsXmlFromDn(dn,false));
         }
 
-        public UcsComputeBlade getUcsComputeRackUnit() throws ApiException {
-            return client.resolveUcsComputeBladeByResponse(client.getUcsXmlFromDn(dn,false));
+        public UcsComputeRackUnit getUcsComputeRackUnit() throws ApiException {
+            return client.resolveUcsComputeRackUnitByResponse(client.getUcsXmlFromDn(dn,false));
         }
 
         public UcsEquipmentChassis getUcsEquipmentChassis() throws ApiException {
