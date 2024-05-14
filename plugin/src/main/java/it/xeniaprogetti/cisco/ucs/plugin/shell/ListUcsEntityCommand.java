@@ -39,44 +39,44 @@ public class ListUcsEntityCommand implements Action {
 
         final var table = new ShellTable()
                 .size(session.getTerminal().getWidth() - 1)
-                .column(new Col("Dn").maxSize(32).bold(true))
-                .column(new Col("ClassId").maxSize(24))
-                .column(new Col("ClassItem").maxSize(24));
+                .column(new Col("Dn").maxSize(128).bold(true))
+                .column(new Col("ClassId").maxSize(12))
+                .column(new Col("ClassItem").maxSize(12));
 
         var service = clientManager.getClient(connection.get());
         for (final var ne : service.getUcsNetworkElementList()) {
             final var row = table.addRow();
-            row.addContent(ne.dn);
+            row.addContent(ne.dn.value);
             row.addContent(ne.classId);
             row.addContent(ne.classItem);
         }
         for (final var cb : service.getUcsComputeBladeList()) {
             final var row = table.addRow();
-            row.addContent(cb.dn);
+            row.addContent(cb.dn.value);
             row.addContent(cb.classId);
             row.addContent(cb.classItem);
         }
         for (final var cru : service.getUcsComputeRackUnitList()) {
             final var row = table.addRow();
-            row.addContent(cru.dn);
+            row.addContent(cru.dn.value);
             row.addContent(cru.classId);
             row.addContent(cru.classItem);
         }
         for (final var e : service.getUcsEquipmentChassisList()) {
             final var row = table.addRow();
-            row.addContent(e.dn);
+            row.addContent(e.dn.value);
             row.addContent(e.classId);
             row.addContent(e.classItem);
         }
         for (final var e : service.getUcsEquipmentFexList()) {
             final var row = table.addRow();
-            row.addContent(e.dn);
+            row.addContent(e.dn.value);
             row.addContent(e.classId);
             row.addContent(e.classItem);
         }
         for (final var e : service.getUcsEquipmentRackEnclosureList()) {
             final var row = table.addRow();
-            row.addContent(e.dn);
+            row.addContent(e.dn.value);
             row.addContent(e.classId);
             row.addContent(e.classItem);
         }

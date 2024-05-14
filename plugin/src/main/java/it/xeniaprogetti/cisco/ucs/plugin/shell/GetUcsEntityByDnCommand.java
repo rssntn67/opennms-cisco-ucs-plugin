@@ -42,8 +42,8 @@ public class GetUcsEntityByDnCommand implements Action {
 
         final var table = new ShellTable()
                 .size(session.getTerminal().getWidth() - 1)
-                .column(new Col("Dn").maxSize(32).bold(true))
-                .column(new Col("Response").maxSize(200));
+                .column(new Col("Dn").maxSize(128).bold(true))
+                .column(new Col("Response").maxSize(500));
 
         var service = clientManager.getClient(connection.get());
         String response = service.getUcsXmlFromDn(dn, false);
