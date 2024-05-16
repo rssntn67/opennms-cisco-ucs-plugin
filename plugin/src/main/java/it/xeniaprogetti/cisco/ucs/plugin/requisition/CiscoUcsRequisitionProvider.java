@@ -266,7 +266,7 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
             try {
                 nodeLabel = InetAddress.getByName(networkElement.oobIfIp).getHostAddress();
             } catch (UnknownHostException e) {
-                LOG.info("cannot resolve name address for {}", networkElement.oobIfIp);
+                LOG.info("from:UcsNetworkElement: cannot resolve name address for {}:{}", networkElement.dn.value,networkElement.oobIfIp);
             }
         }
         final var node = ImmutableRequisitionNode.newBuilder()
@@ -461,26 +461,29 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
         return node.build();
     }
 
-    private RequisitionNode from(UcsComputeBlade ucsElement, RequestContext context, List<UcsIpPoolPooled> ipPoolPooledList) {
-        String comment = ucsElement.dn.value.replace("sys/","").replace("/","-");
-        String nodeLabel = comment;
-        if (!ipPoolPooledList.isEmpty()) {
-            for (UcsIpPoolPooled ucsIpPoolPooled: ipPoolPooledList) {
-                if (ucsIpPoolPooled.addr.equals("0.0.0.0"))
-                    continue;
-                try {
-                    nodeLabel = InetAddress.getByName(ucsIpPoolPooled.addr).getHostAddress();
-                } catch (UnknownHostException e) {
-                    LOG.info("cannot resolve name address for {}", ucsIpPoolPooled.addr);
-                }
+    private String getNodeLabelFromPool(List<UcsIpPoolPooled> pooleds, String defaultLabel) {
+        if (pooleds == null || pooleds.isEmpty())
+            return defaultLabel;
+        for (UcsIpPoolPooled ucsIpPoolPooled: pooleds) {
+            if (ucsIpPoolPooled.addr.equals("0.0.0.0"))
+                continue;
+            try {
+                return InetAddress.getByName(ucsIpPoolPooled.addr).getHostAddress();
+            } catch (UnknownHostException e) {
+                LOG.info("getNodeLabel: cannot resolve name address for {}", ucsIpPoolPooled.addr);
             }
 
         }
+        return defaultLabel;
+    }
+    private RequisitionNode from(UcsComputeBlade ucsElement, RequestContext context, List<UcsIpPoolPooled> ipPoolPooledList) {
+        String defaultLabel = ucsElement.dn.value.replace("sys/","").replace("/","-");
+        String nodeLabel = getNodeLabelFromPool(ipPoolPooledList, defaultLabel);
         final var node = ImmutableRequisitionNode.newBuilder()
                 .setForeignId(ucsElement.dn.value.replace("/","-"))
                 .setLocation(context.getLocation())
                 .setNodeLabel(nodeLabel)
-                .addAsset("comment", comment)
+                .addAsset("comment", defaultLabel)
                 .addAsset("description", "Cisco UCS Compute Blade")
                 .addCategory("CiscoUcsComputeBlade")
                 .addCategory("CiscoUcs")
@@ -848,42 +851,29 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("vid")
                         .setValue(ucsElement.vid)
-                        .build())
-                ;
+                        .build());
 
-        if (!ipPoolPooledList.isEmpty()) {
+        if (ipPoolPooledList == null || ipPoolPooledList.isEmpty()) {
+            node.addInterface(from(getDefaultByEntity(ucsElement), ucsElement.classId));
+        } else {
             for (UcsIpPoolPooled ucsIpPoolPooled: ipPoolPooledList) {
                 node.addInterface(from(ucsIpPoolPooled, ucsElement.classId));
             }
-        } else {
-            node.addInterface(from(getDefaultByEntity(ucsElement), ucsElement.classId));
         }
 
         return node.build();
     }
 
     private RequisitionNode from(UcsComputeRackUnit ucsElement, RequestContext context, List<UcsIpPoolPooled> ipPoolPooledList) {
-        String comment = ucsElement.dn.value.replace("sys/","").replace("/","-");
-        String nodeLabel = comment;
-        if (!ipPoolPooledList.isEmpty()) {
-            for (UcsIpPoolPooled ucsIpPoolPooled: ipPoolPooledList) {
-                if (ucsIpPoolPooled.addr.equals("0.0.0.0"))
-                    continue;
-                try {
-                    nodeLabel = InetAddress.getByName(ucsIpPoolPooled.addr).getHostAddress();
-                } catch (UnknownHostException e) {
-                    LOG.info("cannot resolve name address for {}", ucsIpPoolPooled.addr);
-                }
-            }
-
-        }
+        String defaultLabel = ucsElement.dn.value.replace("sys/","").replace("/","-");
+        String nodeLabel = getNodeLabelFromPool(ipPoolPooledList,defaultLabel);
         final var node = ImmutableRequisitionNode.newBuilder()
                 .setForeignId(ucsElement.dn.value.replace("/","-"))
                 .setLocation(context.getLocation())
                 .setNodeLabel(nodeLabel)
                 .addCategory("CiscoUcsComputeRackUnit")
                 .addCategory("CiscoUcs")
-                .addAsset("comment", comment)
+                .addAsset("comment", defaultLabel)
                 .addAsset("description", "Cisco UCS Compute Rack Unit")
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
@@ -1277,23 +1267,27 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
                         .build())
                 ;
 
-        if (!ipPoolPooledList.isEmpty()) {
+        if (ipPoolPooledList == null || ipPoolPooledList.isEmpty()) {
+            node.addInterface(from(getDefaultByEntity(ucsElement), ucsElement.classId));
+        } else {
             for (UcsIpPoolPooled ucsIpPoolPooled: ipPoolPooledList) {
                 node.addInterface(from(ucsIpPoolPooled, ucsElement.classId));
             }
-        } else {
-            node.addInterface(from(getDefaultByEntity(ucsElement), ucsElement.classId));
         }
         return node.build();
     }
 
     private RequisitionNode from(UcsEquipmentChassis ucsElement, RequestContext context, List<UcsIpPoolPooled> ipPoolPooledList) {
+        String defaultLabel = ucsElement.dn.value.replace("sys/","").replace("/","-");
+        String nodeLabel = getNodeLabelFromPool(ipPoolPooledList,defaultLabel);
         final var node = ImmutableRequisitionNode.newBuilder()
                 .setForeignId(ucsElement.dn.value.replace("/","-"))
                 .setLocation(context.getLocation())
-                .setNodeLabel(ucsElement.dn.value.replace("sys/","").replace("/","-"))
+                .setNodeLabel(nodeLabel)
                 .addCategory("CiscoUcsChassis")
                 .addCategory("CiscoUcs")
+                .addAsset("comment", defaultLabel)
+                .addAsset("description", "Cisco UCS Equipment Chassis")
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("dn")
@@ -1560,24 +1554,28 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
                         .setValue(ucsElement.vid)
                         .build());
 
-        if (ipPoolPooledList != null && !ipPoolPooledList.isEmpty()) {
+        if (ipPoolPooledList == null || ipPoolPooledList.isEmpty()) {
+            node.addInterface(from(getDefaultByEntity(ucsElement), ucsElement.classId));
+        } else {
             for (UcsIpPoolPooled ucsIpPoolPooled: ipPoolPooledList) {
                 node.addInterface(from(ucsIpPoolPooled, ucsElement.classId));
             }
-        } else {
-            node.addInterface(from(getDefaultByEntity(ucsElement),ucsElement.classId));
         }
 
         return node.build();
     }
 
     private RequisitionNode from(UcsEquipmentFex ucsElement, RequestContext context, List<UcsIpPoolPooled> ipPoolPooledList) {
+        String defaultLabel = ucsElement.dn.value.replace("sys/","").replace("/","-");
+        String nodeLabel = getNodeLabelFromPool(ipPoolPooledList,defaultLabel);
         final var node = ImmutableRequisitionNode.newBuilder()
                 .setForeignId(ucsElement.dn.value.replace("/","-"))
                 .setLocation(context.getLocation())
-                .setNodeLabel(ucsElement.dn.value.replace("sys/","").replace("/","-"))
+                .setNodeLabel(nodeLabel)
                 .addCategory("CiscoUcsFex")
                 .addCategory("CiscoUcs")
+                .addAsset("comment", defaultLabel)
+                .addAsset("description", "Cisco UCS Equipment Fex")
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("dn")
@@ -1754,24 +1752,28 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
                         .setValue(ucsElement.voltage)
                         .build());
 
-        if (ipPoolPooledList != null && !ipPoolPooledList.isEmpty()) {
+        if (ipPoolPooledList == null || ipPoolPooledList.isEmpty()) {
+            node.addInterface(from(getDefaultByEntity(ucsElement),ucsElement.classId));
+        } else {
             for (UcsIpPoolPooled ucsIpPoolPooled: ipPoolPooledList) {
                 node.addInterface(from(ucsIpPoolPooled, ucsElement.classId));
             }
-        } else {
-            node.addInterface(from(getDefaultByEntity(ucsElement),ucsElement.classId));
         }
 
         return node.build();
     }
 
     private RequisitionNode from(UcsEquipmentRackEnclosure ucsElement, RequestContext context, List<UcsIpPoolPooled> ipPoolPooledList) {
+        String defaultLabel = ucsElement.dn.value.replace("sys/","").replace("/","-");
+        String nodeLabel = getNodeLabelFromPool(ipPoolPooledList,defaultLabel);
         final var node = ImmutableRequisitionNode.newBuilder()
                 .setForeignId(ucsElement.dn.value.replace("/","-"))
                 .setLocation(context.getLocation())
-                .setNodeLabel(ucsElement.dn.value.replace("sys/","").replace("/","-"))
+                .setNodeLabel(nodeLabel)
                 .addCategory("CiscoUcsRackEnclosure")
                 .addCategory("CiscoUcs")
+                .addAsset("comment", defaultLabel)
+                .addAsset("description", "Cisco UCS Equipment Rack Enclosure")
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("dn")
@@ -1858,12 +1860,12 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
                         .setValue(String.valueOf(ucsElement.vid))
                         .build());
 
-        if (ipPoolPooledList != null && !ipPoolPooledList.isEmpty()) {
+        if (ipPoolPooledList == null || ipPoolPooledList.isEmpty()) {
+            node.addInterface(from(getDefaultByEntity(ucsElement), ucsElement.classId));
+        } else {
             for (UcsIpPoolPooled ucsIpPoolPooled: ipPoolPooledList) {
                 node.addInterface(from(ucsIpPoolPooled, ucsElement.classId));
             }
-        } else {
-            node.addInterface(from(getDefaultByEntity(ucsElement), ucsElement.classId));
         }
 
         return node.build();
