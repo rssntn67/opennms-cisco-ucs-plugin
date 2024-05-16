@@ -1,6 +1,8 @@
 package it.xeniaprogetti.cisco.ucs.plugin.requisition;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -258,27 +260,37 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
         return ucsIpPoolPooledIf.build();
     }
 
-    private RequisitionNode from(UcsNetworkElement ucsElement, RequestContext context, List<UcsIpPoolPooled> ipPoolPooledList) {
+    private RequisitionNode from(UcsNetworkElement networkElement, RequestContext context, List<UcsIpPoolPooled> ipPoolPooledList) {
+        String nodeLabel = "Switch-"+networkElement.id;
+        if (!networkElement.oobIfIp.equals("0.0.0.0")) {
+            try {
+                nodeLabel = InetAddress.getByName(networkElement.oobIfIp).getHostAddress();
+            } catch (UnknownHostException e) {
+                LOG.info("cannot resolve name address for {}", networkElement.oobIfIp);
+            }
+        }
         final var node = ImmutableRequisitionNode.newBuilder()
-                .setForeignId(ucsElement.dn.value.replace("/","-"))
+                .setForeignId(networkElement.dn.value.replace("/","-"))
                 .setLocation(context.getLocation())
-                .setNodeLabel("FabricInterconnectSwitch-"+ucsElement.id)
+                .setNodeLabel(nodeLabel)
+                .addAsset("comment", "Fabric Interconnect Switch-"+networkElement.id)
+                .addAsset("description", "Cisco UCS Network Element")
                 .addCategory("CiscoUcsFabricInterconnectSwitch")
                 .addCategory("CiscoUcs")
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("dn")
-                        .setValue(ucsElement.dn.value)
+                        .setValue(networkElement.dn.value)
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey(UcsUtils.UCS_FABRIC_LAN_KEY)
-                        .setValue("fabric/lan/"+ucsElement.id)
+                        .setValue("fabric/lan/"+networkElement.id)
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey(UcsUtils.UCS_FABRIC_SAN_KEY)
-                        .setValue("fabric/san/"+ucsElement.id)
+                        .setValue("fabric/san/"+networkElement.id)
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
@@ -288,161 +300,161 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("type")
-                        .setValue(ucsElement.classId.name())
+                        .setValue(networkElement.classId.name())
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("item")
-                        .setValue(ucsElement.classItem.name())
+                        .setValue(networkElement.classItem.name())
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("adminEvacState")
-                        .setValue(ucsElement.adminEvacState)
+                        .setValue(networkElement.adminEvacState)
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("adminInbandIfState")
-                        .setValue(ucsElement.adminInbandIfState)
+                        .setValue(networkElement.adminInbandIfState)
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("diffMemory")
-                        .setValue(String.valueOf(ucsElement.diffMemory))
+                        .setValue(String.valueOf(networkElement.diffMemory))
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("expectedMemory")
-                        .setValue(String.valueOf(ucsElement.expectedMemory))
+                        .setValue(String.valueOf(networkElement.expectedMemory))
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("fltAggr")
-                        .setValue(String.valueOf(ucsElement.fltAggr))
+                        .setValue(String.valueOf(networkElement.fltAggr))
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("forceEvac")
-                        .setValue(ucsElement.forceEvac)
+                        .setValue(networkElement.forceEvac)
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("id")
-                        .setValue(ucsElement.id)
+                        .setValue(networkElement.id)
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("inventoryStatus")
-                        .setValue(ucsElement.inventoryStatus)
+                        .setValue(networkElement.inventoryStatus)
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("minActiveFan")
-                        .setValue(String.valueOf(ucsElement.minActiveFan))
+                        .setValue(String.valueOf(networkElement.minActiveFan))
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("model")
-                        .setValue(ucsElement.model)
+                        .setValue(networkElement.model)
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("operEvacState")
-                        .setValue(ucsElement.operEvacState)
+                        .setValue(networkElement.operEvacState)
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("operability")
-                        .setValue(ucsElement.operability)
+                        .setValue(networkElement.operability)
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("revision")
-                        .setValue(String.valueOf(ucsElement.revision))
+                        .setValue(String.valueOf(networkElement.revision))
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("serial")
-                        .setValue(ucsElement.serial)
+                        .setValue(networkElement.serial)
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("shutdownFanRemoveal")
-                        .setValue(ucsElement.shutdownFanRemoveal)
+                        .setValue(networkElement.shutdownFanRemoveal)
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("thermal")
-                        .setValue(ucsElement.thermal)
+                        .setValue(networkElement.thermal)
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("totalMemory")
-                        .setValue(String.valueOf(ucsElement.totalMemory))
+                        .setValue(String.valueOf(networkElement.totalMemory))
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("vendor")
-                        .setValue(ucsElement.vendor)
+                        .setValue(networkElement.vendor)
                         .build());
         final var oobIf = ImmutableRequisitionInterface.newBuilder()
-                .setIpAddress(Objects.requireNonNull(UcsUtils.getValidInetAddress(ucsElement.oobIfIp)))
+                .setIpAddress(Objects.requireNonNull(UcsUtils.getValidInetAddress(networkElement.oobIfIp)))
                 .setDescription("oobIfIp")
                 .setSnmpPrimary(SnmpPrimaryType.PRIMARY)
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("oobIfGw")
-                        .setValue(ucsElement.oobIfGw)
+                        .setValue(networkElement.oobIfGw)
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("oobIfIp")
-                        .setValue(ucsElement.oobIfIp)
+                        .setValue(networkElement.oobIfIp)
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("oobIfMac")
-                        .setValue(ucsElement.oobIfMac)
+                        .setValue(networkElement.oobIfMac)
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("oobIfMask")
-                        .setValue(ucsElement.oobIfMask)
+                        .setValue(networkElement.oobIfMask)
                         .build())
                 .addMonitoredService(UcsEnums.ClassId.networkElement.getServiceName())
                 .addMonitoredService("CiscoUcsManagedEntity");
         node.addInterface(oobIf.build());
 
         final var inBandIf = ImmutableRequisitionInterface.newBuilder()
-                .setIpAddress(Objects.requireNonNull(UcsUtils.getValidInetAddress(ucsElement.inbandIfIp)))
+                .setIpAddress(Objects.requireNonNull(UcsUtils.getValidInetAddress(networkElement.inbandIfIp)))
                 .setDescription("inbandIfIp")
                 .setSnmpPrimary(SnmpPrimaryType.NOT_ELIGIBLE)
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("inbandIfGw")
-                        .setValue(ucsElement.inbandIfGw)
+                        .setValue(networkElement.inbandIfGw)
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("inbandIfIp")
-                        .setValue(ucsElement.inbandIfIp)
+                        .setValue(networkElement.inbandIfIp)
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("inbandIfMask")
-                        .setValue(ucsElement.inbandIfMask)
+                        .setValue(networkElement.inbandIfMask)
                         .build())
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("inbandIfVnet")
-                        .setValue(String.valueOf(ucsElement.inbandIfVnet))
+                        .setValue(String.valueOf(networkElement.inbandIfVnet))
                         .build())
                 .addMonitoredService("CiscoUcsManagedEntity");
         node.addInterface(inBandIf.build());
 
         if (ipPoolPooledList != null && !ipPoolPooledList.isEmpty()) {
             for (UcsIpPoolPooled ucsIpPoolPooled: ipPoolPooledList) {
-                node.addInterface(from(ucsIpPoolPooled, ucsElement.classId));
+                node.addInterface(from(ucsIpPoolPooled, networkElement.classId));
             }
         }
 
@@ -450,10 +462,26 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
     }
 
     private RequisitionNode from(UcsComputeBlade ucsElement, RequestContext context, List<UcsIpPoolPooled> ipPoolPooledList) {
+        String comment = ucsElement.dn.value.replace("sys/","").replace("/","-");
+        String nodeLabel = comment;
+        if (!ipPoolPooledList.isEmpty()) {
+            for (UcsIpPoolPooled ucsIpPoolPooled: ipPoolPooledList) {
+                if (ucsIpPoolPooled.addr.equals("0.0.0.0"))
+                    continue;
+                try {
+                    nodeLabel = InetAddress.getByName(ucsIpPoolPooled.addr).getHostAddress();
+                } catch (UnknownHostException e) {
+                    LOG.info("cannot resolve name address for {}", ucsIpPoolPooled.addr);
+                }
+            }
+
+        }
         final var node = ImmutableRequisitionNode.newBuilder()
                 .setForeignId(ucsElement.dn.value.replace("/","-"))
                 .setLocation(context.getLocation())
-                .setNodeLabel(ucsElement.dn.value.replace("sys/","").replace("/","-"))
+                .setNodeLabel(nodeLabel)
+                .addAsset("comment", comment)
+                .addAsset("description", "Cisco UCS Compute Blade")
                 .addCategory("CiscoUcsComputeBlade")
                 .addCategory("CiscoUcs")
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
@@ -823,7 +851,7 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
                         .build())
                 ;
 
-        if (ipPoolPooledList != null && !ipPoolPooledList.isEmpty()) {
+        if (!ipPoolPooledList.isEmpty()) {
             for (UcsIpPoolPooled ucsIpPoolPooled: ipPoolPooledList) {
                 node.addInterface(from(ucsIpPoolPooled, ucsElement.classId));
             }
@@ -835,12 +863,28 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
     }
 
     private RequisitionNode from(UcsComputeRackUnit ucsElement, RequestContext context, List<UcsIpPoolPooled> ipPoolPooledList) {
+        String comment = ucsElement.dn.value.replace("sys/","").replace("/","-");
+        String nodeLabel = comment;
+        if (!ipPoolPooledList.isEmpty()) {
+            for (UcsIpPoolPooled ucsIpPoolPooled: ipPoolPooledList) {
+                if (ucsIpPoolPooled.addr.equals("0.0.0.0"))
+                    continue;
+                try {
+                    nodeLabel = InetAddress.getByName(ucsIpPoolPooled.addr).getHostAddress();
+                } catch (UnknownHostException e) {
+                    LOG.info("cannot resolve name address for {}", ucsIpPoolPooled.addr);
+                }
+            }
+
+        }
         final var node = ImmutableRequisitionNode.newBuilder()
                 .setForeignId(ucsElement.dn.value.replace("/","-"))
                 .setLocation(context.getLocation())
-                .setNodeLabel(ucsElement.dn.value.replace("sys/","").replace("/","-"))
+                .setNodeLabel(nodeLabel)
                 .addCategory("CiscoUcsComputeRackUnit")
                 .addCategory("CiscoUcs")
+                .addAsset("comment", comment)
+                .addAsset("description", "Cisco UCS Compute Rack Unit")
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
                         .setContext(CISCO_UCS_METADATA_CONTEXT)
                         .setKey("dn")
@@ -1233,7 +1277,7 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
                         .build())
                 ;
 
-        if (ipPoolPooledList != null && !ipPoolPooledList.isEmpty()) {
+        if (!ipPoolPooledList.isEmpty()) {
             for (UcsIpPoolPooled ucsIpPoolPooled: ipPoolPooledList) {
                 node.addInterface(from(ucsIpPoolPooled, ucsElement.classId));
             }

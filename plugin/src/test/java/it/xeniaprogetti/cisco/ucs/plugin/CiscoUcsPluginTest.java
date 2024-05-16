@@ -13,6 +13,8 @@ import org.opennms.integration.api.v1.runtime.Version;
 import org.opennms.integration.api.v1.scv.Credentials;
 import org.opennms.integration.api.v1.scv.SecureCredentialsVault;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -110,4 +112,17 @@ public class CiscoUcsPluginTest {
         System.out.println(alfa.indexOf("</outConfig>"));
         System.out.println(alfa.substring(alfa.indexOf("<outConfig>")+11, alfa.indexOf("</outConfig>")));
     }
+
+    @Test
+    public void getHostByNameTest() throws UnknownHostException {
+        InetAddress ia = InetAddress.getByName("51.210.12.134");
+        System.out.println(ia.getHostName());
+        System.out.println(ia.getHostAddress());
+        System.out.println(ia.getCanonicalHostName());
+        InetAddress na = InetAddress.getByName("10.1.1.1");
+        System.out.println(na.getHostName());
+        System.out.println(na.getHostAddress());
+        System.out.println(na.getCanonicalHostName());
+    }
+
 }
