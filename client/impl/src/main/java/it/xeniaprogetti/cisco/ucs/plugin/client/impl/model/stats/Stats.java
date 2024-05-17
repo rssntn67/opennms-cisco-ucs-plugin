@@ -10,6 +10,7 @@ public class Stats extends Dn  {
     public long intervals;
     @JacksonXmlProperty(isAttribute = true)
     public String suspect;
+    @JacksonXmlProperty(isAttribute = true)
     public String thresholded;
     @JacksonXmlProperty(isAttribute = true)
     public Date timeCollected;

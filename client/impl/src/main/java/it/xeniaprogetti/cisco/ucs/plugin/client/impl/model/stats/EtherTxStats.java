@@ -34,8 +34,6 @@ public class EtherTxStats extends Stats  {
     @JacksonXmlProperty(isAttribute = true)
     public long multicastPacketsDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public String suspect;
-    @JacksonXmlProperty(isAttribute = true)
     public double totalBytes;
     @JacksonXmlProperty(isAttribute = true)
     public long totalBytesDelta;

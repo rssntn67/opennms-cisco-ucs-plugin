@@ -44,8 +44,6 @@ public class AdaptorEthPortStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
     public long pppPacketsDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public String suspect;
-    @JacksonXmlProperty(isAttribute = true)
     public long totalPackets;
     @JacksonXmlProperty(isAttribute = true)
     public long totalPacketsDelta;
