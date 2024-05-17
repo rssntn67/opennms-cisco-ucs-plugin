@@ -2,7 +2,7 @@ package it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
-public class EtherTxStats extends Stats  {
+public class EtherRxStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
     public long broadcastPackets;
     @JacksonXmlProperty(isAttribute = true)
