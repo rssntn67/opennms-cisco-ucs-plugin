@@ -264,7 +264,8 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
         String nodeLabel = "Switch-"+networkElement.id;
         if (!networkElement.oobIfIp.equals("0.0.0.0")) {
             try {
-                nodeLabel = InetAddress.getByName(networkElement.oobIfIp).getHostAddress();
+                nodeLabel = InetAddress.getByName(networkElement.oobIfIp).getHostName();
+                LOG.info("from:UcsNetworkElement: resolved {} for address {}", nodeLabel, networkElement.oobIfIp);
             } catch (UnknownHostException e) {
                 LOG.info("from:UcsNetworkElement: cannot resolve name address for {}:{}", networkElement.dn.value,networkElement.oobIfIp);
             }
