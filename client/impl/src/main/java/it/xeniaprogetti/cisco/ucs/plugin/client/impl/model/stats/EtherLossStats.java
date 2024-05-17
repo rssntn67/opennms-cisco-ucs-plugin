@@ -2,96 +2,86 @@ package it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
-public class EtherErrStats extends Stats {
+public class EtherLossStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
-    public long align;
+    public long SQETest;
     @JacksonXmlProperty(isAttribute = true)
-    public long alignDelta;
+    public long SQETestDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public long alignDeltaAvg;
+    public long SQETestDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public long alignDeltaMax;
+    public long SQETestDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public long alignDeltaMin;
+    public long SQETestDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public long deferredTx;
+    public long carrierSense;
     @JacksonXmlProperty(isAttribute = true)
-    public long deferredTxDelta;
+    public long carrierSenseDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public long deferredTxDeltaAvg;
+    public long carrierSenseDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public long deferredTxDeltaMax;
+    public long carrierSenseDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public long deferredTxDeltaMin;
+    public long carrierSenseDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public long fcs;
+    public long excessCollision;
     @JacksonXmlProperty(isAttribute = true)
-    public long fcsDelta;
+    public long excessCollisionDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public long fcsDeltaAvg;
+    public long excessCollisionDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public long fcsDeltaMax;
+    public long excessCollisionDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public long fcsDeltaMin;
+    public long excessCollisionDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public long intMacRx;
+    public long giants;
     @JacksonXmlProperty(isAttribute = true)
-    public long intMacRxDelta;
+    public long giantsDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public long intMacRxDeltaAvg;
+    public long giantsDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public long intMacRxDeltaMax;
+    public long giantsDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public long intMacRxDeltaMin;
+    public long giantsDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public long intMacTx;
+    public long lateCollision;
     @JacksonXmlProperty(isAttribute = true)
-    public long intMacTxDelta;
+    public long lateCollisionDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public long intMacTxDeltaAvg;
+    public long lateCollisionDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public long intMacTxDeltaMax;
+    public long lateCollisionDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public long intMacTxDeltaMin;
+    public long lateCollisionDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public long outDiscard;
+    public long multiCollision;
     @JacksonXmlProperty(isAttribute = true)
-    public long outDiscardDelta;
+    public long multiCollisionDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public long outDiscardDeltaAvg;
+    public long multiCollisionDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public long outDiscardDeltaMax;
+    public long multiCollisionDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public long outDiscardDeltaMin;
+    public long multiCollisionDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public long rcv;
+    public long singleCollision;
     @JacksonXmlProperty(isAttribute = true)
-    public long rcvDelta;
+    public long singleCollisionDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public long rcvDeltaAvg;
+    public long singleCollisionDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public long rcvDeltaMax;
+    public long singleCollisionDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public long rcvDeltaMin;
+    public long singleCollisionDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public long underSize;
+    public long symbol;
     @JacksonXmlProperty(isAttribute = true)
-    public long underSizeDelta;
+    public long symbolDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public long underSizeDeltaAvg;
+    public long symbolDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public long underSizeDeltaMax;
+    public long symbolDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public long underSizeDeltaMin;
-    @JacksonXmlProperty(isAttribute = true)
-    public long xmit;
-    @JacksonXmlProperty(isAttribute = true)
-    public long xmitDelta;
-    @JacksonXmlProperty(isAttribute = true)
-    public long xmitDeltaAvg;
-    @JacksonXmlProperty(isAttribute = true)
-    public long xmitDeltaMax;
-    @JacksonXmlProperty(isAttribute = true)
-    public long xmitDeltaMin;
+    public long symbolDeltaMin;
 }
 
