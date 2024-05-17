@@ -461,14 +461,17 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
         return node.build();
     }
 
-    private String getNodeLabelFromPool(List<UcsIpPoolPooled> pooleds, String defaultLabel) {
-        if (pooleds == null || pooleds.isEmpty())
+    private String getNodeLabelFromPool(final List<UcsIpPoolPooled> pooled, final String defaultLabel) {
+        if (pooled == null || pooled.isEmpty())
             return defaultLabel;
-        for (UcsIpPoolPooled ucsIpPoolPooled: pooleds) {
-            if (ucsIpPoolPooled.addr.equals("0.0.0.0"))
+        for (UcsIpPoolPooled ucsIpPoolPooled: pooled) {
+            if (ucsIpPoolPooled.addr.equals("0.0.0.0")) {
                 continue;
+            }
             try {
-                return InetAddress.getByName(ucsIpPoolPooled.addr).getHostAddress();
+                String nodeLabel =  InetAddress.getByName(ucsIpPoolPooled.addr).getHostName();
+                LOG.info("getNodeLabel: resolved name {}, for address {}",nodeLabel, ucsIpPoolPooled.addr);
+                return nodeLabel;
             } catch (UnknownHostException e) {
                 LOG.info("getNodeLabel: cannot resolve name address for {}", ucsIpPoolPooled.addr);
             }
