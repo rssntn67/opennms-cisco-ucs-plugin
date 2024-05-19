@@ -1532,4 +1532,16 @@ Oper Evac Mode	:	Off
 
     }
 
+    @Test
+    public void testSwitchSystat() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        AaaApi loginApi = new AaaApi(credentials,apiClient);
+        ConfigApi configApi = new ConfigApi(apiClient);
+        loginApi.login();
+        System.out.println(configApi.getUcsEntityByDn(loginApi.getToken(), "sys/switch-A/sysstats",false));
+        loginApi.logout();
+    }
+
 }

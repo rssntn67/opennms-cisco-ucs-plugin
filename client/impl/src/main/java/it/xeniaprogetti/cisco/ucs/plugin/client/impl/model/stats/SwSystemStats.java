@@ -2,7 +2,7 @@ package it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
-public class X extends Stats {
+public class SwSystemStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
     public String CorrectableParityError;
     @JacksonXmlProperty(isAttribute = true)
