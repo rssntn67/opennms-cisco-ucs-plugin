@@ -1108,7 +1108,8 @@ public class UcsEnums {
     public enum ClassItem {
         equipmentItem,
         computeItem,
-        otherItem
+        otherItem,
+        statsItem
     }
 
     public enum ClassId {
@@ -1120,6 +1121,7 @@ public class UcsEnums {
         networkElement("CiscoUcsFabricInterconnect"),
         computeBlade("CiscoUcsCompute"),
         computeRackUnit("CiscoUcsCompute");
+
 
         private final String serviceName;
 
