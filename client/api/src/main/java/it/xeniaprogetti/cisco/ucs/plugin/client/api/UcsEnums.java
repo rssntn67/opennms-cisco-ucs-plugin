@@ -1148,7 +1148,8 @@ public class UcsEnums {
         swCardEnvStats("CiscoUcsStats"),
         swEnvStats("CiscoUcsStats"),
         swSystemStats("CiscoUcsStats"),
-        memoryErrorStats("CiscoUcsStats");
+        memoryErrorStats("CiscoUcsStats"),
+        equipmentFanStats("CiscoUcsStats")        ;
 
 
         private final String serviceName;

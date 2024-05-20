@@ -13,7 +13,7 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 public class UcsCollector implements ServiceCollector {
-    private Map<UcsDn, Set<UcsEnums.NamingClassId>> collectionItemMap = new HashMap<>();
+    private final Map<UcsDn, Set<UcsEnums.NamingClassId>> collectionItemMap = new HashMap<>();
 
 
     @Override
@@ -33,6 +33,16 @@ public class UcsCollector implements ServiceCollector {
         collectionItemMap.get(UcsDn.getDn("sys/chassis-*/blade-*")).add(UcsEnums.NamingClassId.processorErrorStats);
         collectionItemMap.get(UcsDn.getDn("sys/chassis-*/blade-*")).add(UcsEnums.NamingClassId.memoryUnitEnvStats);
         collectionItemMap.get(UcsDn.getDn("sys/chassis-*/blade-*")).add(UcsEnums.NamingClassId.memoryErrorStats);
+        collectionItemMap.get(UcsDn.getDn("sys/chassis-*/blade-*")).add(UcsEnums.NamingClassId.computePCIeFatalCompletionStats);
+        collectionItemMap.get(UcsDn.getDn("sys/chassis-*/blade-*")).add(UcsEnums.NamingClassId.computePCIeFatalProtocolStats);
+        collectionItemMap.get(UcsDn.getDn("sys/chassis-*/blade-*")).add(UcsEnums.NamingClassId.computePCIeFatalReceiveStats);
+        collectionItemMap.get(UcsDn.getDn("sys/chassis-*/blade-*")).add(UcsEnums.NamingClassId.computePCIeFatalStats);
+        collectionItemMap.get(UcsDn.getDn("sys/chassis-*/blade-*")).add(UcsEnums.NamingClassId.computeMbPowerStats);
+        collectionItemMap.get(UcsDn.getDn("sys/chassis-*/blade-*")).add(UcsEnums.NamingClassId.computeMbTempStats);
+        collectionItemMap.get(UcsDn.getDn("sys/chassis-*/blade-*")).add(UcsEnums.NamingClassId.storageDiskEnvStats);
+        collectionItemMap.get(UcsDn.getDn("sys/chassis-*/blade-*")).add(UcsEnums.NamingClassId.storageSsdHealthStats);
+        collectionItemMap.put(UcsDn.getDn("sys/chassis-*"), new HashSet<>());
+        collectionItemMap.get(UcsDn.getDn("sys/chassis-*")).add(UcsEnums.NamingClassId.equipmentFanStats);
 
     }
 
