@@ -2,7 +2,7 @@ package it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
-public class EquipmentFanStats {
+public class EquipmentFanStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
     public int speed;
     @JacksonXmlProperty(isAttribute = true)

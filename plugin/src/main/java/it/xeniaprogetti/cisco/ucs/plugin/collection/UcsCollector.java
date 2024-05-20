@@ -43,6 +43,7 @@ public class UcsCollector implements ServiceCollector {
         collectionItemMap.get(UcsDn.getDn("sys/chassis-*/blade-*")).add(UcsEnums.NamingClassId.storageSsdHealthStats);
         collectionItemMap.put(UcsDn.getDn("sys/chassis-*"), new HashSet<>());
         collectionItemMap.get(UcsDn.getDn("sys/chassis-*")).add(UcsEnums.NamingClassId.equipmentFanStats);
+        collectionItemMap.get(UcsDn.getDn("sys/chassis-*")).add(UcsEnums.NamingClassId.equipmentFanModuleStats);
 
     }
 
