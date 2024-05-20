@@ -1147,7 +1147,8 @@ public class UcsEnums {
         storageSsdHealthStats("CiscoUcsStats"),
         swCardEnvStats("CiscoUcsStats"),
         swEnvStats("CiscoUcsStats"),
-        swSystemStats("CiscoUcsStats");
+        swSystemStats("CiscoUcsStats"),
+        memoryErrorStats("CiscoUcsStats");
 
 
         private final String serviceName;
