@@ -1139,6 +1139,7 @@ public class UcsEnums {
         etherRxStats("CiscoUcsStats"),
         etherTxStats("CiscoUcsStats"),
         fcStats("CiscoUcsStats"),
+        fcErrStats("CiscoUcsStats"),
         memoryUnitEnvStats("CiscoUcsStats"),
         processorEnvStats("CiscoUcsStats"),
         processorErrorStats("CiscoUcsStats"),
