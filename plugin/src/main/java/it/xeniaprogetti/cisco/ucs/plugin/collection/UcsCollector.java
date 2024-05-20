@@ -52,6 +52,7 @@ public class UcsCollector implements ServiceCollector {
         collectionItemMap.get(UcsDn.getDn("sys/chassis-*")).add(UcsEnums.NamingClassId.etherRxStats);
         collectionItemMap.get(UcsDn.getDn("sys/chassis-*")).add(UcsEnums.NamingClassId.etherTxStats);
         collectionItemMap.get(UcsDn.getDn("sys/chassis-*")).add(UcsEnums.NamingClassId.equipmentIOCardStats);
+        collectionItemMap.get(UcsDn.getDn("sys/chassis-*")).add(UcsEnums.NamingClassId.equipmentChassisStats);
 
     }
 

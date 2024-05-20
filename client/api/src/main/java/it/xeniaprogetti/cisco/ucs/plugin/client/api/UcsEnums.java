@@ -1152,7 +1152,8 @@ public class UcsEnums {
         equipmentFanStats("CiscoUcsStats"),
         equipmentFanModuleStats("CiscoUcsStats"),
         equipmentPsuStats("CiscoUcsStats"),
-        equipmentIOCardStats("CiscoUcsStats");
+        equipmentIOCardStats("CiscoUcsStats"),
+        equipmentChassisStats("CiscoUcsStats");
 
 
         private final String serviceName;
