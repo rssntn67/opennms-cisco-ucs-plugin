@@ -44,6 +44,14 @@ public class UcsCollector implements ServiceCollector {
         collectionItemMap.put(UcsDn.getDn("sys/chassis-*"), new HashSet<>());
         collectionItemMap.get(UcsDn.getDn("sys/chassis-*")).add(UcsEnums.NamingClassId.equipmentFanStats);
         collectionItemMap.get(UcsDn.getDn("sys/chassis-*")).add(UcsEnums.NamingClassId.equipmentFanModuleStats);
+        collectionItemMap.get(UcsDn.getDn("sys/chassis-*")).add(UcsEnums.NamingClassId.equipmentPsuStats);
+        collectionItemMap.get(UcsDn.getDn("sys/chassis-*")).add(UcsEnums.NamingClassId.etherNiErrStats);
+        collectionItemMap.get(UcsDn.getDn("sys/chassis-*")).add(UcsEnums.NamingClassId.etherErrStats);
+        collectionItemMap.get(UcsDn.getDn("sys/chassis-*")).add(UcsEnums.NamingClassId.etherLossStats);
+        collectionItemMap.get(UcsDn.getDn("sys/chassis-*")).add(UcsEnums.NamingClassId.etherPauseStats);
+        collectionItemMap.get(UcsDn.getDn("sys/chassis-*")).add(UcsEnums.NamingClassId.etherRxStats);
+        collectionItemMap.get(UcsDn.getDn("sys/chassis-*")).add(UcsEnums.NamingClassId.etherTxStats);
+        collectionItemMap.get(UcsDn.getDn("sys/chassis-*")).add(UcsEnums.NamingClassId.equipmentIOCardStats);
 
     }
 
