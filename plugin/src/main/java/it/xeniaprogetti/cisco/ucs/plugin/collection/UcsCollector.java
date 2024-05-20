@@ -53,6 +53,19 @@ public class UcsCollector implements ServiceCollector {
         collectionItemMap.get(UcsDn.getDn("sys/chassis-*")).add(UcsEnums.NamingClassId.etherTxStats);
         collectionItemMap.get(UcsDn.getDn("sys/chassis-*")).add(UcsEnums.NamingClassId.equipmentIOCardStats);
         collectionItemMap.get(UcsDn.getDn("sys/chassis-*")).add(UcsEnums.NamingClassId.equipmentChassisStats);
+        collectionItemMap.put(UcsDn.getDn("sys/switch-*"), new HashSet<>());
+        collectionItemMap.get(UcsDn.getDn("sys/switch-*")).add(UcsEnums.NamingClassId.swCardEnvStats);
+        collectionItemMap.get(UcsDn.getDn("sys/switch-*")).add(UcsEnums.NamingClassId.swEnvStats);
+        collectionItemMap.get(UcsDn.getDn("sys/switch-*")).add(UcsEnums.NamingClassId.equipmentNetworkElementFanStats);
+        collectionItemMap.get(UcsDn.getDn("sys/switch-*")).add(UcsEnums.NamingClassId.equipmentPsuInputStats);
+        collectionItemMap.get(UcsDn.getDn("sys/switch-*")).add(UcsEnums.NamingClassId.etherErrStats);
+        collectionItemMap.get(UcsDn.getDn("sys/switch-*")).add(UcsEnums.NamingClassId.etherLossStats);
+        collectionItemMap.get(UcsDn.getDn("sys/switch-*")).add(UcsEnums.NamingClassId.etherPauseStats);
+        collectionItemMap.get(UcsDn.getDn("sys/switch-*")).add(UcsEnums.NamingClassId.etherRxStats);
+        collectionItemMap.get(UcsDn.getDn("sys/switch-*")).add(UcsEnums.NamingClassId.etherTxStats);
+        collectionItemMap.get(UcsDn.getDn("sys/switch-*")).add(UcsEnums.NamingClassId.fcErrStats);
+        collectionItemMap.get(UcsDn.getDn("sys/switch-*")).add(UcsEnums.NamingClassId.fcStats);
+        collectionItemMap.get(UcsDn.getDn("sys/switch-*")).add(UcsEnums.NamingClassId.swSystemStats);
 
     }
 

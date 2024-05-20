@@ -440,6 +440,7 @@ public class UcsEnums {
         equipmentMemoryUnitDiscoveryModifierDef,
         equipmentMgmtCapProvider,
         equipmentMgmtExtCapProvider,
+        equipmentNetworkElementFanStats,
         equipmentPOST,
         equipmentPOSTCode,
         equipmentPOSTCodeContainer,
@@ -911,6 +912,7 @@ public class UcsEnums {
         swBorderPc,
         swCIoEp,
         swDomain,
+        swCardEnvStats,
         swEnvStats,
         swEnvStatsHist,
         swEstcEp,
@@ -1153,7 +1155,8 @@ public class UcsEnums {
         equipmentFanModuleStats("CiscoUcsStats"),
         equipmentPsuStats("CiscoUcsStats"),
         equipmentIOCardStats("CiscoUcsStats"),
-        equipmentChassisStats("CiscoUcsStats");
+        equipmentChassisStats("CiscoUcsStats"),
+        equipmentNetworkElementFanStats("CiscoUcsStats");
 
 
         private final String serviceName;
