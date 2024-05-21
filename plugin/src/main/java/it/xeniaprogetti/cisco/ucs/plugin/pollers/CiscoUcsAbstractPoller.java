@@ -31,9 +31,9 @@ public abstract class CiscoUcsAbstractPoller implements ServicePoller {
     private final ClientManager clientManager;
     private final ConnectionManager connectionManager;
 
-    private final static String ALIAS_KEY = "alias";
-    private final static String DN_KEY = "dn";
-    private final static String TYPE_KEY = "type";
+    public final static String ALIAS_KEY = "alias";
+    public final static String DN_KEY = "dn";
+    public final static String TYPE_KEY = "type";
 
     protected CiscoUcsAbstractPoller(final ConnectionManager connectionManager, final ClientManager clientManager) {
         this.connectionManager = Objects.requireNonNull(connectionManager);
