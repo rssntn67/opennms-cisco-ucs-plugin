@@ -2,6 +2,8 @@ package it.xeniaprogetti.cisco.ucs.plugin.client.api;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public interface ApiClientService {
 
@@ -31,4 +33,8 @@ public interface ApiClientService {
     List<UcsFault> findUcsFaultsFromDate(final OffsetDateTime from) throws ApiException;
 
     UcsManager getUcsManager() throws ApiException;
+
+    UcsNetworkElementStats getNetworkElementStats(Map<String, Set<UcsEnums.NamingClassId>> collectMap);
+    UcsEquipmentStats getUcsEquipmentStats(Map<String, Set<UcsEnums.NamingClassId>> collectMap);
+    UcsComputeStats getUcsComputeStats(Map<String, Set<UcsEnums.NamingClassId>> collectMap);
 }

@@ -1,5 +1,6 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.api;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class UcsEquipmentNetworkElementFanStats extends UcsStats {
@@ -14,9 +15,7 @@ public class UcsEquipmentNetworkElementFanStats extends UcsStats {
     public final int drivePercentageMax;
     public final int drivePercentageMin;
     public final int speed;
-    public final int speedAvg;
-    public final int speedMax;
-    public final int speedMin;
+    public final Aggregate speedAgg;
 
     private UcsEquipmentNetworkElementFanStats(Builder builder) {
         super(builder.dn, UcsEnums.ClassId.equipmentNetworkElementFanStats, UcsEnums.ClassItem.statsItem, builder.intervals, builder.suspect, builder.thresholded, builder.timeCollected, builder.update);
@@ -26,9 +25,11 @@ public class UcsEquipmentNetworkElementFanStats extends UcsStats {
         drivePercentageMax = builder.drivePercentageMax;
         drivePercentageMin = builder.drivePercentageMin;
         speed = builder.speed;
-        speedAvg = builder.speedAvg;
-        speedMax = builder.speedMax;
-        speedMin = builder.speedMin;
+        speedAgg = Aggregate.builder()
+                .withMax(BigDecimal.valueOf(builder.speedMax))
+                .withAverage(BigDecimal.valueOf(builder.speedAvg))
+                .withMin(BigDecimal.valueOf(builder.speedMin))
+                .build();
     }
 
     public static class Builder {
