@@ -1,5 +1,6 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.api;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class UcsSwSystemStats extends UcsStats {
@@ -21,17 +22,11 @@ public class UcsSwSystemStats extends UcsStats {
     public final String kernelMemTotalMax;
     public final String kernelMemTotalMin;
     public final double load;
-    public final double loadAvg;
-    public final double loadMax;
-    public final double loadMin;
+    public final Aggregate loadAgg;
     public final int memAvailable;
-    public final int memAvailableAvg;
-    public final int memAvailableMax;
-    public final int memAvailableMin;
+    public final Aggregate memAvailableAgg;
     public final int memCached;
-    public final int memCachedAvg;
-    public final int memCachedMax;
-    public final int memCachedMin;
+    public final Aggregate memCachedAgg;
 
     private UcsSwSystemStats(Builder builder) {
         super(builder.dn, UcsEnums.ClassId.swSystemStats, UcsEnums.ClassItem.statsItem, builder.intervals, builder.suspect, builder.thresholded, builder.timeCollected, builder.update);
@@ -48,17 +43,23 @@ public class UcsSwSystemStats extends UcsStats {
         kernelMemTotalMax = builder.kernelMemTotalMax;
         kernelMemTotalMin = builder.kernelMemTotalMin;
         load = builder.load;
-        loadAvg = builder.loadAvg;
-        loadMax = builder.loadMax;
-        loadMin = builder.loadMin;
+        loadAgg = Aggregate.builder()
+                .withAverage(BigDecimal.valueOf(builder.loadAvg))
+                .withMin(BigDecimal.valueOf(builder.loadMin))
+                .withMax(BigDecimal.valueOf(builder.loadMax))
+                .build();
         memAvailable = builder.memAvailable;
-        memAvailableAvg = builder.memAvailableAvg;
-        memAvailableMax = builder.memAvailableMax;
-        memAvailableMin = builder.memAvailableMin;
+        memAvailableAgg = Aggregate.builder()
+                .withAverage(BigDecimal.valueOf(builder.memAvailableAvg))
+                .withMin(BigDecimal.valueOf(builder.memAvailableMin))
+                .withMax(BigDecimal.valueOf(builder.memAvailableMax))
+                .build();
         memCached = builder.memCached;
-        memCachedAvg = builder.memCachedAvg;
-        memCachedMax = builder.memCachedMax;
-        memCachedMin = builder.memCachedMin;
+        memCachedAgg = Aggregate.builder()
+                .withAverage(BigDecimal.valueOf(builder.memCachedAvg))
+                .withMin(BigDecimal.valueOf(builder.memCachedMin))
+                .withMax(BigDecimal.valueOf(builder.memCachedMax))
+                .build();
     }
 
     public static class Builder {

@@ -4,12 +4,18 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.ClientManager;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientService;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEnums;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsNetworkElement;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsNetworkElementStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsUtils;
 import it.xeniaprogetti.cisco.ucs.plugin.collection.AbstractUcsServiceCollector;
 import it.xeniaprogetti.cisco.ucs.plugin.connection.ConnectionManager;
 import org.opennms.integration.api.v1.collectors.CollectionRequest;
 import org.opennms.integration.api.v1.collectors.CollectionSet;
+import org.opennms.integration.api.v1.collectors.resource.NodeResource;
+import org.opennms.integration.api.v1.collectors.resource.immutables.ImmutableCollectionSetResource;
+import org.opennms.integration.api.v1.collectors.resource.immutables.ImmutableNodeResource;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -52,12 +58,51 @@ public class UcsNetworkElementCollector extends AbstractUcsServiceCollector {
     }
 
     @Override
-    public CompletableFuture<CollectionSet> collect(CollectionRequest collectionRequest, Map<String, Object> map) {
+    public CompletableFuture<CollectionSet> collect(CollectionRequest request, Map<String, Object> attributes) {
+        Map<String, Set<UcsEnums.NamingClassId>> requestMap = new HashMap<>();
+        var dn = attributes.get(UcsUtils.UCS_DN_KEY).toString();
+        requestMap.put(
+                dn,
+                collectionItemMap.get(UcsEnums.ClassId.networkElement).get(UcsUtils.UCS_DN_KEY)
+        );
+        if (attributes.containsKey(UcsUtils.UCS_FABRIC_LAN_KEY))
+            requestMap.put(
+                    attributes.get(UcsUtils.UCS_FABRIC_LAN_KEY).toString(),
+                    collectionItemMap.get(UcsEnums.ClassId.networkElement).get(UcsUtils.UCS_FABRIC_LAN_KEY)
+            );
+        if (attributes.containsKey(UcsUtils.UCS_FABRIC_SAN_KEY))
+            requestMap.put(
+                    attributes.get(UcsUtils.UCS_FABRIC_SAN_KEY).toString(),
+                    collectionItemMap.get(UcsEnums.ClassId.networkElement).get(UcsUtils.UCS_FABRIC_SAN_KEY)
+            );
+        ApiClientService client;
         try {
-            ApiClientService client = getClient(map);
+            client = getClient(attributes);
         } catch (ApiException e) {
-            throw new RuntimeException(e);
+            return  CompletableFuture.failedFuture(e);        }
+
+        UcsNetworkElement ucsNetworkElement;
+        final ImmutableNodeResource nodeResource = ImmutableNodeResource.newBuilder().setNodeId(request.getNodeId()).build();
+        try {
+            ucsNetworkElement = client.resolveUcsNetworkElementByResponse(client.getUcsXmlFromDn(dn, false));
+        } catch (ApiException e) {
+            return  CompletableFuture.failedFuture(e);
         }
+
+        UcsNetworkElementStats stats = null;
+        try {
+            stats = client.getNetworkElementStats(requestMap);
+        } catch (ApiException e) {
+            return createFailedCollectionSet(nodeResource, Instant.now().toEpochMilli());
+        }
+
+        final ImmutableCollectionSetResource.Builder<NodeResource> networkElementAttrBuilder =
+                ImmutableCollectionSetResource.newBuilder(NodeResource.class).setResource(nodeResource);
+
+        addAggregate(networkElementAttrBuilder, "ucsSwEnvStats","mainBoardOutlet1Agg", stats.ucsSwEnvStats.mainBoardOutlet1Agg);
+        addAggregate(networkElementAttrBuilder, "ucsSwEnvStats","mainBoardOutlet2Agg", stats.ucsSwEnvStats.mainBoardOutlet2Agg);
+        addNumAttr(networkElementAttrBuilder,"ucsSwEnvStats", "mainBoardOutlet1", stats.ucsSwEnvStats.mainBoardOutlet1);
+        addNumAttr(networkElementAttrBuilder,"ucsSwEnvStats", "mainBoardOutlet2", stats.ucsSwEnvStats.mainBoardOutlet2);
         return null;
     }
 }

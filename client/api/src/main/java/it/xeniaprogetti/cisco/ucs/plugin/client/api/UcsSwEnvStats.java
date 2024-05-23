@@ -1,5 +1,8 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.api;
 
+import org.checkerframework.checker.units.qual.A;
+
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class UcsSwEnvStats extends UcsStats {
@@ -29,13 +32,9 @@ public class UcsSwEnvStats extends UcsStats {
     public final String fanCtrlrInlet4Max;
     public final String fanCtrlrInlet4Min;
     public final double mainBoardOutlet1;
-    public final double mainBoardOutlet1Avg;
-    public final double mainBoardOutlet1Max;
-    public final double mainBoardOutlet1Min;
+    public final Aggregate mainBoardOutlet1Agg;
     public final double mainBoardOutlet2;
-    public final double mainBoardOutlet2Avg;
-    public final double mainBoardOutlet2Max;
-    public final double mainBoardOutlet2Min;
+    public final Aggregate mainBoardOutlet2Agg;
     public final String psuCtrlrInlet1;
     public final String psuCtrlrInlet1Avg;
     public final String psuCtrlrInlet1Max;
@@ -76,13 +75,17 @@ public class UcsSwEnvStats extends UcsStats {
         fanCtrlrInlet4Max = builder.fanCtrlrInlet4Max;
         fanCtrlrInlet4Min = builder.fanCtrlrInlet4Min;
         mainBoardOutlet1 = builder.mainBoardOutlet1;
-        mainBoardOutlet1Avg = builder.mainBoardOutlet1Avg;
-        mainBoardOutlet1Max = builder.mainBoardOutlet1Max;
-        mainBoardOutlet1Min = builder.mainBoardOutlet1Min;
+        mainBoardOutlet1Agg = Aggregate.builder()
+                .withMin(BigDecimal.valueOf(builder.mainBoardOutlet1Min))
+                .withAverage(BigDecimal.valueOf(builder.mainBoardOutlet1Avg))
+                .withMax(BigDecimal.valueOf(builder.mainBoardOutlet1Max))
+                .build();
         mainBoardOutlet2 = builder.mainBoardOutlet2;
-        mainBoardOutlet2Avg = builder.mainBoardOutlet2Avg;
-        mainBoardOutlet2Max = builder.mainBoardOutlet2Max;
-        mainBoardOutlet2Min = builder.mainBoardOutlet2Min;
+        mainBoardOutlet2Agg = Aggregate.builder()
+                .withMin(BigDecimal.valueOf(builder.mainBoardOutlet2Min))
+                .withAverage(BigDecimal.valueOf(builder.mainBoardOutlet2Avg))
+                .withMax(BigDecimal.valueOf(builder.mainBoardOutlet2Max))
+                .build();
         psuCtrlrInlet1 = builder.psuCtrlrInlet1;
         psuCtrlrInlet1Avg = builder.psuCtrlrInlet1Avg;
         psuCtrlrInlet1Max = builder.psuCtrlrInlet1Max;
