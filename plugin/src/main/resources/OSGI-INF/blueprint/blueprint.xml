@@ -79,4 +79,30 @@
     <service ref="ciscoUcsPollerConfig"
              interface="org.opennms.integration.api.v1.config.poller.PollerConfigurationExtension"/>
 
+
+    <!-- Collection Configuration -->
+    <service interface="org.opennms.integration.api.v1.collectors.ServiceCollectorFactory">
+        <bean class="it.xeniaprogetti.cisco.ucs.plugin.collection.compute.UcsComputeCollectorFactory">
+            <argument ref="clientManager"/>
+            <argument ref="connectionManager"/>
+        </bean>
+    </service>
+    <service interface="org.opennms.integration.api.v1.collectors.ServiceCollectorFactory">
+        <bean class="it.xeniaprogetti.cisco.ucs.plugin.collection.equipment.UcsEquipmentCollectorFactory">
+            <argument ref="clientManager"/>
+            <argument ref="connectionManager"/>
+        </bean>
+    </service>
+    <service interface="org.opennms.integration.api.v1.collectors.ServiceCollectorFactory">
+        <bean class="it.xeniaprogetti.cisco.ucs.plugin.collection.network.UcsNetworkElementCollectorFactory">
+            <argument ref="clientManager"/>
+            <argument ref="connectionManager"/>
+        </bean>
+    </service>
+    <!-- Load Configuration file-->
+    <bean id="ciscoUcsCollectorConfig" class="it.xeniaprogetti.cisco.ucs.plugin.collection.UcsCollectorConfigurationExtension"/>
+    <service ref="ciscoUcsCollectorConfig"
+             interface="org.opennms.integration.api.v1.config.collector.CollectorConfigurationExtension"/>
+
+
 </blueprint>

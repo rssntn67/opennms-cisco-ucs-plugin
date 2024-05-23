@@ -25,12 +25,13 @@ abstract public class AbstractUcsCollectorFactory<T extends AbstractUcsServiceCo
     @Override
     public Map<String, Object> getRuntimeAttributes(CollectionRequest collectionRequest, Map<String, Object> parameters) {
         final var alias = Objects.requireNonNull(parameters.get(CiscoUcsAbstractPoller.ALIAS_KEY), "Missing property: " + CiscoUcsAbstractPoller.ALIAS_KEY);
-        final var connection = this.connectionManager.getConnection(Objects.toString(alias))
-                .orElseThrow(() -> new NullPointerException("Connection not found for alias: " + alias));
-
+        final var dn = Objects.requireNonNull(parameters.get(CiscoUcsAbstractPoller.DN_KEY), "Missing property: " + CiscoUcsAbstractPoller.DN_KEY);
+        final var type = Objects.requireNonNull(parameters.get(CiscoUcsAbstractPoller.TYPE_KEY), "Missing property: " + CiscoUcsAbstractPoller.TYPE_KEY);
         final var runtimeAttributes = new HashMap<>(parameters);
 
-        runtimeAttributes.put(CiscoUcsAbstractPoller.DN_KEY, Objects.requireNonNull(parameters.get(CiscoUcsAbstractPoller.DN_KEY),""));
+        runtimeAttributes.put(CiscoUcsAbstractPoller.ALIAS_KEY, alias);
+        runtimeAttributes.put(CiscoUcsAbstractPoller.DN_KEY, dn);
+        runtimeAttributes.put(CiscoUcsAbstractPoller.TYPE_KEY, type);
 
         return runtimeAttributes;
     }

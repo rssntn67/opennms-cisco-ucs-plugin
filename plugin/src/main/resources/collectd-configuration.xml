@@ -1,0 +1,29 @@
+<collector-configuration xmlns="http://xmlns.opennms.org/xsd/config/collector/api">
+   <package name="UCS">
+      <filter> 1 = 1 </filter>
+      <service name="CiscoUcsCompute" interval="300000">
+         <parameter key="alias" value="${cisco-ucs:alias}"/>
+         <parameter key="dn" value="${cisco-ucs:dn}"/>
+         <parameter key="type" value="${cisco-ucs:type}"/>
+      </service>
+
+      <service name="CiscoUcsEquipment" interval="300000">
+         <parameter key="alias" value="${cisco-ucs:alias}"/>
+         <parameter key="dn" value="${cisco-ucs:dn}"/>
+         <parameter key="type" value="${cisco-ucs:type}"/>
+      </service>
+
+      <service name="CiscoUcsFabricInterconnect" interval="300000">
+         <parameter key="alias" value="${cisco-ucs:alias}"/>
+         <parameter key="dn" value="${cisco-ucs:dn}"/>
+         <parameter key="fabric-lan-dn" value="${cisco-ucs:fabric-lan-dn}"/>
+         <parameter key="fabric-san-dn" value="${cisco-ucs:fabric-san-dn}"/>
+         <parameter key="type" value="${cisco-ucs:type}"/>
+      </service>
+
+   </package>
+
+   <collector service="CiscoUcsCompute" class-name="it.xeniaprogetti.cisco.ucs.plugin.collection.compute.UcsComputeCollector"/>
+   <collector service="CiscoUcsEquipment" class-name="it.xeniaprogetti.cisco.ucs.plugin.collection.equipment.UcsEquipmentCollector"/>
+   <collector service="CiscoUcsFabricInterconnect" class-name="it.xeniaprogetti.cisco.ucs.plugin.collection.network.UcsNetworkElementCollector"/>
+</collector-configuration>
