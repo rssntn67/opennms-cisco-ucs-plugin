@@ -105,4 +105,9 @@
              interface="org.opennms.integration.api.v1.config.collector.CollectorConfigurationExtension"/>
 
 
+    <!-- Load Graphs -->
+    <service interface="org.opennms.integration.api.v1.config.datacollection.graphs.GraphPropertiesExtension">
+        <bean class="it.xeniaprogetti.cisco.ucs.plugin.graphs.CiscoUcsGraphPropertiesExtension"/>
+    </service>
+
 </blueprint>

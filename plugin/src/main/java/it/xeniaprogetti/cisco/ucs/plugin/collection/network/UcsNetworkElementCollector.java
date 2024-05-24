@@ -92,10 +92,10 @@ public class UcsNetworkElementCollector extends AbstractUcsServiceCollector {
         final ImmutableCollectionSetResource.Builder<NodeResource> networkElementAttrBuilder =
                 ImmutableCollectionSetResource.newBuilder(NodeResource.class).setResource(nodeResource);
 
-        addAggregate(networkElementAttrBuilder, "ucsSwEnvStats","mainBoardOutlet1Agg", stats.ucsSwEnvStats.mainBoardOutlet1Agg);
-        addAggregate(networkElementAttrBuilder, "ucsSwEnvStats","mainBoardOutlet2Agg", stats.ucsSwEnvStats.mainBoardOutlet2Agg);
-        addNumAttr(networkElementAttrBuilder,"ucsSwEnvStats", "mainBoardOutlet1", stats.ucsSwEnvStats.mainBoardOutlet1);
-        addNumAttr(networkElementAttrBuilder,"ucsSwEnvStats", "mainBoardOutlet2", stats.ucsSwEnvStats.mainBoardOutlet2);
+        addAggregate(networkElementAttrBuilder, "ucsSwEnvStats","MainBoardOutlet1Agg", stats.ucsSwEnvStats.mainBoardOutlet1Agg);
+        addAggregate(networkElementAttrBuilder, "ucsSwEnvStats","MainBoardOutlet2Agg", stats.ucsSwEnvStats.mainBoardOutlet2Agg);
+        addNumAttr(networkElementAttrBuilder,"ucsSwEnvStats", "MainBoardOutlet1", stats.ucsSwEnvStats.mainBoardOutlet1);
+        addNumAttr(networkElementAttrBuilder,"ucsSwEnvStats", "MainBoardOutlet2", stats.ucsSwEnvStats.mainBoardOutlet2);
         return null;
     }
 }
