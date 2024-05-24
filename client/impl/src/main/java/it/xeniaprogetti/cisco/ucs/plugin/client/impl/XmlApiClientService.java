@@ -273,6 +273,7 @@ public class XmlApiClientService implements ApiClientService {
 
     @Override
     public UcsNetworkElementStats getNetworkElementStats(Map<String, Set<UcsEnums.NamingClassId>> collectMap) throws ApiException {
+        checkCredentials();
         UcsSwEnvStats swEnvStats = null;
         for (String dn: collectMap.keySet()) {
             for (UcsEnums.NamingClassId classid: collectMap.get(dn)) {
