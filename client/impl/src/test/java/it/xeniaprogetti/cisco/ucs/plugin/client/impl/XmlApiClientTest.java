@@ -3,13 +3,18 @@ package it.xeniaprogetti.cisco.ucs.plugin.client.impl;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientCredentials;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEnums;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsNetworkElementStats;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.OffsetDateTime;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class XmlApiClientTest {
 
@@ -93,4 +98,20 @@ public class XmlApiClientTest {
         );
         service.disconnect();
     }
+
+    @Test
+    public void testXmlClientServiceForSwEnvStats() throws ApiException {
+        XmlApiClientService service = new XmlApiClientService(getCredentials(30));
+        Map<String, Set<UcsEnums.NamingClassId>> requestMap = new HashMap<>();
+        requestMap.put("sys/switch-A", new HashSet<>());
+        requestMap.get("sys/switch-A").add(UcsEnums.NamingClassId.swEnvStats);
+        UcsNetworkElementStats ucsNetworkElementStats = service.getNetworkElementStats(requestMap);
+        Assert.assertNotNull(ucsNetworkElementStats.ucsSwEnvStats);
+        service.disconnect();
+        System.out.println(ucsNetworkElementStats.ucsSwEnvStats.mainBoardOutlet1);
+        System.out.println(ucsNetworkElementStats.ucsSwEnvStats.mainBoardOutlet2);
+        System.out.println(ucsNetworkElementStats.ucsSwEnvStats.mainBoardOutlet1Agg);
+        System.out.println(ucsNetworkElementStats.ucsSwEnvStats.mainBoardOutlet2Agg);
+    }
+
 }

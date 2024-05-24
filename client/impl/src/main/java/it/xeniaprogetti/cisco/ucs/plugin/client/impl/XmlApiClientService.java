@@ -273,6 +273,7 @@ public class XmlApiClientService implements ApiClientService {
 
     @Override
     public UcsNetworkElementStats getNetworkElementStats(Map<String, Set<UcsEnums.NamingClassId>> collectMap) throws ApiException {
+        LOG.debug("getNetworkElementStats: {}", collectMap);
         checkCredentials();
         UcsSwEnvStats swEnvStats = null;
         for (String dn: collectMap.keySet()) {
@@ -283,6 +284,7 @@ public class XmlApiClientService implements ApiClientService {
                             "dn",
                             dn+".*");
                     swEnvStats =  from(statsApi.getSwEnvStats(aaaApi.getToken(), filter ).get(0));
+                    LOG.debug("getNetworkElementStats: {}", swEnvStats);
                 }
             }
         }
@@ -293,6 +295,12 @@ public class XmlApiClientService implements ApiClientService {
 
     private UcsSwEnvStats from(SwEnvStats swEnvStats) {
         return UcsSwEnvStats.builder()
+                .withDn(swEnvStats.dn)
+                .withIntervals(swEnvStats.intervals)
+                .withSuspect(swEnvStats.suspect)
+                .withThresholded(swEnvStats.thresholded)
+                .withTimeCollected(swEnvStats.timeCollected)
+                .withUpdate(swEnvStats.update)
                 .withmainBoardOutlet1(swEnvStats.mainBoardOutlet1)
                 .withmainBoardOutlet2(swEnvStats.mainBoardOutlet2)
                 .withmainBoardOutlet1Avg(swEnvStats.mainBoardOutlet1Avg)

@@ -11,8 +11,11 @@ import it.xeniaprogetti.cisco.ucs.plugin.connection.ConnectionManager;
 import org.opennms.integration.api.v1.collectors.CollectionRequest;
 import org.opennms.integration.api.v1.collectors.CollectionSet;
 import org.opennms.integration.api.v1.collectors.resource.NodeResource;
+import org.opennms.integration.api.v1.collectors.resource.immutables.ImmutableCollectionSet;
 import org.opennms.integration.api.v1.collectors.resource.immutables.ImmutableCollectionSetResource;
 import org.opennms.integration.api.v1.collectors.resource.immutables.ImmutableNodeResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -23,6 +26,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class UcsNetworkElementCollector extends AbstractUcsServiceCollector {
     private final Map<UcsEnums.ClassId, Map<String,Set<UcsEnums.NamingClassId>>> collectionItemMap = new HashMap<>();
+    private final static Logger LOG = LoggerFactory.getLogger(UcsNetworkElementCollector.class);
 
     public UcsNetworkElementCollector(ClientManager clientManager, ConnectionManager connectionManager) {
         super(clientManager, connectionManager);
@@ -78,24 +82,35 @@ public class UcsNetworkElementCollector extends AbstractUcsServiceCollector {
         try {
             client = getClient(attributes);
         } catch (ApiException e) {
-            return  CompletableFuture.failedFuture(e);        }
+            LOG.error("collect: {}", requestMap, e );
+            return  CompletableFuture.failedFuture(e);
+        }
 
         final ImmutableNodeResource nodeResource = ImmutableNodeResource.newBuilder().setNodeId(request.getNodeId()).build();
 
-        UcsNetworkElementStats stats = null;
+        UcsNetworkElementStats stats;
         try {
             stats = client.getNetworkElementStats(requestMap);
+            client.disconnect();
         } catch (ApiException e) {
+            LOG.error("collect: {}", requestMap, e );
             return createFailedCollectionSet(nodeResource, Instant.now().toEpochMilli());
         }
 
         final ImmutableCollectionSetResource.Builder<NodeResource> networkElementAttrBuilder =
                 ImmutableCollectionSetResource.newBuilder(NodeResource.class).setResource(nodeResource);
 
+        networkElementAttrBuilder.addStringAttribute(createStringAttribute("ucsSwEnvStats", "dn", stats.ucsSwEnvStats.dn.value));
         addAggregate(networkElementAttrBuilder, "ucsSwEnvStats","MainBoardOutlet1Agg", stats.ucsSwEnvStats.mainBoardOutlet1Agg);
         addAggregate(networkElementAttrBuilder, "ucsSwEnvStats","MainBoardOutlet2Agg", stats.ucsSwEnvStats.mainBoardOutlet2Agg);
         addNumAttr(networkElementAttrBuilder,"ucsSwEnvStats", "MainBoardOutlet1", stats.ucsSwEnvStats.mainBoardOutlet1);
         addNumAttr(networkElementAttrBuilder,"ucsSwEnvStats", "MainBoardOutlet2", stats.ucsSwEnvStats.mainBoardOutlet2);
-        return null;
+
+        final ImmutableCollectionSet.Builder resultBuilder = ImmutableCollectionSet.newBuilder();
+        resultBuilder.addCollectionSetResource(networkElementAttrBuilder.build());
+
+        return CompletableFuture.completedFuture(resultBuilder.setStatus(CollectionSet.Status.SUCCEEDED)
+                .setTimestamp(stats.ucsSwEnvStats.timeCollected.getTime()).build());
+
     }
 }
