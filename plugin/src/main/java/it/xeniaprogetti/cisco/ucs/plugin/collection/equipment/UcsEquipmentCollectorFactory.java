@@ -3,7 +3,6 @@ package it.xeniaprogetti.cisco.ucs.plugin.collection.equipment;
 
 import it.xeniaprogetti.cisco.ucs.plugin.client.ClientManager;
 import it.xeniaprogetti.cisco.ucs.plugin.collection.AbstractUcsCollectorFactory;
-import it.xeniaprogetti.cisco.ucs.plugin.collection.compute.UcsComputeCollector;
 import it.xeniaprogetti.cisco.ucs.plugin.connection.ConnectionManager;
 
 public class UcsEquipmentCollectorFactory extends AbstractUcsCollectorFactory<UcsEquipmentCollector> {
@@ -19,7 +18,7 @@ public class UcsEquipmentCollectorFactory extends AbstractUcsCollectorFactory<Uc
 
     @Override
     public String getCollectorClassName() {
-        return UcsComputeCollector.class.getCanonicalName();
+        return UcsEquipmentCollector.class.getCanonicalName();
     }
 
 }
