@@ -5,20 +5,25 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientService;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeBlade;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeRackUnit;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDn;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEnums;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentChassis;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentFex;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentRackEnclosure;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsFault;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsIpPoolPooled;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsManager;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsNetworkElement;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsNetworkElementStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsSwEnvStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsUtils;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.AaaApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.ConfigApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.FaultApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.IpApi;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.StatsApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.handler.ApiClient;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.compute.ComputeBlade;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.compute.ComputeRackUnit;
@@ -32,6 +37,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.network.NetworkElemen
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root.IpPoolPooled;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root.LsServer;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.request.UcsXmlApiRequest;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.SwEnvStats;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +47,9 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class XmlApiClientService implements ApiClientService {
@@ -52,6 +60,7 @@ public class XmlApiClientService implements ApiClientService {
     private final ConfigApi configApi;
     private final IpApi ipApi;
     private final FaultApi faultApi;
+    private final StatsApi statsApi;
 
     public XmlApiClientService(ApiClientCredentials credentials) {
         ApiClient client = XmlApiClientProvider.getApiClient(credentials);
@@ -60,6 +69,7 @@ public class XmlApiClientService implements ApiClientService {
         this.configApi = new ConfigApi(client);
         this.ipApi = new IpApi(client);
         this.faultApi = new FaultApi(client);
+        this.statsApi = new StatsApi(client);
     }
 
 
@@ -259,6 +269,48 @@ public class XmlApiClientService implements ApiClientService {
                 .witLabel(UcsUtils.getLabelFromCredentials(this.credentials))
                 .withAddress(UcsUtils.getIpAddressFromCredentials(this.credentials)).
                 build();
+    }
+
+    @Override
+    public UcsNetworkElementStats getNetworkElementStats(Map<String, Set<UcsEnums.NamingClassId>> collectMap) throws ApiException {
+        UcsSwEnvStats swEnvStats = null;
+        for (String dn: collectMap.keySet()) {
+            for (UcsEnums.NamingClassId classid: collectMap.get(dn)) {
+                if (classid == UcsEnums.NamingClassId.swEnvStats) {
+                    UcsXmlApiRequest.InFilter filter = UcsXmlApiRequest.getWCardFilter(
+                            UcsEnums.NamingClassId.swEnvStats,
+                            "dn",
+                            dn+".*");
+                    swEnvStats =  from(statsApi.getSwEnvStats(aaaApi.getToken(), filter ).get(0));
+                }
+            }
+        }
+        return UcsNetworkElementStats.builder()
+                .withUcsSwEnvStats(swEnvStats)
+                .build();
+    }
+
+    private UcsSwEnvStats from(SwEnvStats swEnvStats) {
+        return UcsSwEnvStats.builder()
+                .withmainBoardOutlet1(swEnvStats.mainBoardOutlet1)
+                .withmainBoardOutlet2(swEnvStats.mainBoardOutlet2)
+                .withmainBoardOutlet1Avg(swEnvStats.mainBoardOutlet1Avg)
+                .withmainBoardOutlet2Avg(swEnvStats.mainBoardOutlet2Avg)
+                .withmainBoardOutlet1Max(swEnvStats.mainBoardOutlet1Max)
+                .withmainBoardOutlet2Max(swEnvStats.mainBoardOutlet2Max)
+                .withmainBoardOutlet1Min(swEnvStats.mainBoardOutlet1Min)
+                .withmainBoardOutlet2Min(swEnvStats.mainBoardOutlet2Min)
+                .build();
+    }
+
+    @Override
+    public UcsEquipmentStats getUcsEquipmentStats(Map<String, Set<UcsEnums.NamingClassId>> collectMap) throws ApiException {
+        throw  new ApiException("not Supported", new UnsupportedOperationException());
+    }
+
+    @Override
+    public UcsComputeStats getUcsComputeStats(Map<String, Set<UcsEnums.ClassId>> collectMap) throws ApiException {
+        throw  new ApiException("not Supported", new UnsupportedOperationException());
     }
 
     private static UcsFault from(FaultInst faultInst) {

@@ -4,7 +4,6 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.ClientManager;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientService;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEnums;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsNetworkElement;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsNetworkElementStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsUtils;
 import it.xeniaprogetti.cisco.ucs.plugin.collection.AbstractUcsServiceCollector;
@@ -81,13 +80,7 @@ public class UcsNetworkElementCollector extends AbstractUcsServiceCollector {
         } catch (ApiException e) {
             return  CompletableFuture.failedFuture(e);        }
 
-        UcsNetworkElement ucsNetworkElement;
         final ImmutableNodeResource nodeResource = ImmutableNodeResource.newBuilder().setNodeId(request.getNodeId()).build();
-        try {
-            ucsNetworkElement = client.resolveUcsNetworkElementByResponse(client.getUcsXmlFromDn(dn, false));
-        } catch (ApiException e) {
-            return  CompletableFuture.failedFuture(e);
-        }
 
         UcsNetworkElementStats stats = null;
         try {

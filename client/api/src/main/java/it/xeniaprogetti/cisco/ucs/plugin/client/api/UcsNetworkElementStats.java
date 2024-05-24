@@ -7,7 +7,8 @@ public class UcsNetworkElementStats {
     public final UcsSwEnvStats ucsSwEnvStats;
     public final UcsSwCardEnvStats ucsSwCardEnvStats;
     public final UcsSwSystemStats ucsSwSystemStats;
-    public Builder builder() {
+
+    public static Builder builder() {
         return new Builder();
     }
 

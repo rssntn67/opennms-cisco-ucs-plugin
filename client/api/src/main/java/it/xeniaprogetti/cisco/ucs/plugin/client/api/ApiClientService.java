@@ -3,7 +3,6 @@ package it.xeniaprogetti.cisco.ucs.plugin.client.api;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 public interface ApiClientService {
@@ -38,12 +37,5 @@ public interface ApiClientService {
     UcsNetworkElementStats getNetworkElementStats(Map<String, Set<UcsEnums.NamingClassId>> collectMap) throws ApiException;
     UcsEquipmentStats getUcsEquipmentStats(Map<String, Set<UcsEnums.NamingClassId>> collectMap) throws ApiException;
     UcsComputeStats getUcsComputeStats(Map<String, Set<UcsEnums.ClassId>> collectMap) throws ApiException;
-
-    Optional<UcsNetworkElement> getUcsNetworkElementByDn(String dn);
-    Optional<UcsComputeBlade> getUcsComputeBladeByDn(String dn);
-    Optional<UcsComputeRackUnit> getUcsComputeRackUnitByDn(String dn);
-    Optional<UcsEquipmentChassis> getUcsEquipmentChassisByDn(String dn);
-    Optional<UcsEquipmentFex> getUcsEquipmentFexByDn(String dn);
-    Optional<UcsEquipmentRackEnclosure> getUcsEquipmentRackEnclosureByDn(String dn);
-
+    
 }
