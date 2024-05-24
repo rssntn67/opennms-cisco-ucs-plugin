@@ -11,12 +11,12 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.equipment.EquipmentRa
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.network.NetworkElement;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.request.UcsXmlApiRequest;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigFindDnsByClassIdResponse;
-import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigResolveClassResponseComputeBladeList;
-import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigResolveClassResponseComputeRackUnitList;
-import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigResolveClassResponseEquipmentChassisList;
-import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigResolveClassResponseEquipmentFexList;
-import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigResolveClassResponseEquipmentRackEnclosureList;
-import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigResolveClassResponseNetworkElementList;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigResolveClassResponseComputeBlade;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigResolveClassResponseComputeRackUnit;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigResolveClassResponseEquipmentChassis;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigResolveClassResponseEquipmentFex;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigResolveClassResponseEquipmentRackEnclosure;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigResolveClassResponseNetworkElement;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigResolveDnResponseComputeBlade;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigResolveDnResponseComputeRackUnit;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigResolveDnResponseEquipmentChassis;
@@ -98,7 +98,7 @@ public class ConfigApi {
         LOG.info("getUcsComputeBladeListByClassId: {}", UcsEnums.NamingClassId.computeBlade);
         return client.getUcsXmlApiResponse(
                 UcsXmlApiRequest.getConfigResolveClassRequest(cookie, UcsEnums.NamingClassId.computeBlade),
-                ConfigResolveClassResponseComputeBladeList.class
+                ConfigResolveClassResponseComputeBlade.class
         ).computeBlades;
     }
 
@@ -106,7 +106,7 @@ public class ConfigApi {
         LOG.info("getUcsComputeBladeByClassId: {}" , UcsEnums.NamingClassId.computeRackUnit);
         return client.getUcsXmlApiResponse(
                 UcsXmlApiRequest.getConfigResolveClassRequest(cookie, UcsEnums.NamingClassId.computeRackUnit),
-                ConfigResolveClassResponseComputeRackUnitList.class
+                ConfigResolveClassResponseComputeRackUnit.class
         ).computeRackUnits;
     }
 
@@ -114,7 +114,7 @@ public class ConfigApi {
         LOG.info("getUcsEquipmentChassisListByClassId: {}", UcsEnums.NamingClassId.equipmentChassis);
         return client.getUcsXmlApiResponse(
                 UcsXmlApiRequest.getConfigResolveClassRequest(cookie, UcsEnums.NamingClassId.equipmentChassis),
-                ConfigResolveClassResponseEquipmentChassisList.class
+                ConfigResolveClassResponseEquipmentChassis.class
         ).equipmentChasses;
     }
 
@@ -122,7 +122,7 @@ public class ConfigApi {
         LOG.info("getUcsEquipmentFexListByClassId: {}", UcsEnums.NamingClassId.equipmentFex);
         return client.getUcsXmlApiResponse(
                 UcsXmlApiRequest.getConfigResolveClassRequest(cookie, UcsEnums.NamingClassId.equipmentFex),
-                ConfigResolveClassResponseEquipmentFexList.class
+                ConfigResolveClassResponseEquipmentFex.class
         ).equipmentFexes;
     }
 
@@ -130,7 +130,7 @@ public class ConfigApi {
         LOG.info("getUcsEquipmentRackEnclosureListByClassId: {}", UcsEnums.NamingClassId.equipmentRackEnclosure);
         return client.getUcsXmlApiResponse(
                 UcsXmlApiRequest.getConfigResolveClassRequest(cookie, UcsEnums.NamingClassId.equipmentRackEnclosure),
-                ConfigResolveClassResponseEquipmentRackEnclosureList.class
+                ConfigResolveClassResponseEquipmentRackEnclosure.class
         ).equipmentRackEnclosures;
     }
 
@@ -138,7 +138,7 @@ public class ConfigApi {
         LOG.info("getUcsNetworkElementListByClassId: {}", UcsEnums.NamingClassId.networkElement);
         return client.getUcsXmlApiResponse(
                 UcsXmlApiRequest.getConfigResolveClassRequest(cookie, UcsEnums.NamingClassId.networkElement),
-                ConfigResolveClassResponseNetworkElementList.class
+                ConfigResolveClassResponseNetworkElement.class
         ).networkElements;
     }
 }

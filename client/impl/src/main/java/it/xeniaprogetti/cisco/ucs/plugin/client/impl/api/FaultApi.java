@@ -5,7 +5,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEnums;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.handler.ApiClient;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.fault.FaultInst;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.request.UcsXmlApiRequest;
-import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigResolveClassResponseFaultInstList;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigResolveClassResponseFaultInst;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +23,7 @@ public class FaultApi {
         LOG.info("getUcsFaults: {}", UcsEnums.NamingClassId.faultInst);
         return client.getUcsXmlApiResponse(
                 UcsXmlApiRequest.getConfigResolveClassRequest(cookie, UcsEnums.NamingClassId.faultInst),
-                ConfigResolveClassResponseFaultInstList.class
+                ConfigResolveClassResponseFaultInst.class
         ).faultInsts;
     }
 
@@ -31,7 +31,7 @@ public class FaultApi {
         LOG.info("getUcsFaultsByFilter: {} {}", filter, UcsEnums.NamingClassId.faultInst);
         return client.getUcsXmlApiResponse(
                 UcsXmlApiRequest.getConfigResolveClassRequest(cookie,filter,UcsEnums.NamingClassId.faultInst),
-                ConfigResolveClassResponseFaultInstList.class).faultInsts;
+                ConfigResolveClassResponseFaultInst.class).faultInsts;
     }
 
 }

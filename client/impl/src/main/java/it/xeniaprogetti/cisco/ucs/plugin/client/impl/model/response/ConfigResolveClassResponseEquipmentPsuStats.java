@@ -1,18 +1,18 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
-import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.compute.ComputeBlade;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentPsuStats;
 
 import java.util.List;
 
-public class ConfigResolveClassResponseComputeBladeList extends ConfigResolveClassResponse {
+public class ConfigResolveClassResponseEquipmentPsuStats extends ConfigResolveClassResponse {
     @JacksonXmlElementWrapper(localName = "outConfigs")
-    public List<ComputeBlade> computeBlades;
+    public List<EquipmentPsuStats> equipmentPsuStats;
 
     @Override
     public String toString() {
-        return "ConfigResolveClassResponseComputeBladeList{" +
-                "computeBlades=" + computeBlades +
+        return "ConfigResolveClassResponseEquipmentPsuStats{" +
+                "equipmentPsuStats=" + equipmentPsuStats +
                 ", classId='" + classId + '\'' +
                 '}';
     }

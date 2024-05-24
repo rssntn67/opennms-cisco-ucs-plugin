@@ -5,7 +5,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.equipment.EquipmentRa
 
 import java.util.List;
 
-public class ConfigResolveClassResponseEquipmentRackEnclosureList extends ConfigResolveClassResponse {
+public class ConfigResolveClassResponseEquipmentRackEnclosure extends ConfigResolveClassResponse {
     @JacksonXmlElementWrapper(localName = "outConfigs")
     public List<EquipmentRackEnclosure> equipmentRackEnclosures;
 

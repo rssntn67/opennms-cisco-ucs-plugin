@@ -5,7 +5,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.equipment.EquipmentCh
 
 import java.util.List;
 
-public class ConfigResolveClassResponseEquipmentChassisList extends ConfigResolveClassResponse {
+public class ConfigResolveClassResponseEquipmentChassis extends ConfigResolveClassResponse {
     @JacksonXmlElementWrapper(localName = "outConfigs")
     public List<EquipmentChassis> equipmentChasses;
 
