@@ -318,7 +318,7 @@ public class XmlApiClientService implements ApiClientService {
     }
 
     @Override
-    public UcsComputeStats getUcsComputeStats(Map<String, Set<UcsEnums.ClassId>> collectMap) throws ApiException {
+    public UcsComputeStats getUcsComputeStats(Map<String, Set<UcsEnums.NamingClassId>> collectMap) throws ApiException {
         throw  new ApiException("not Supported", new UnsupportedOperationException());
     }
 
