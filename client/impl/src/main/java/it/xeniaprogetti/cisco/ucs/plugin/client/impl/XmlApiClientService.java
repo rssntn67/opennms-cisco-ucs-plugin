@@ -318,10 +318,10 @@ public class XmlApiClientService implements ApiClientService {
     public UcsEquipmentStats getUcsEquipmentStats(Map<String, Set<UcsEnums.NamingClassId>> collectMap) throws ApiException {
         LOG.debug("getUcsEquipmentStats: {}", collectMap);
         checkCredentials();
-        UcsEquipmentChassisStats ucsEquipmentChassisStats;
+        UcsEquipmentChassisStats ucsEquipmentChassisStats = null;
         for (String dn: collectMap.keySet()) {
-            for (UcsEnums.NamingClassId classid: collectMap.get(dn)) {
-                if (classid == UcsEnums.NamingClassId.equipmentChassisStats) {
+            for (UcsEnums.NamingClassId classId: collectMap.get(dn)) {
+                if (classId == UcsEnums.NamingClassId.equipmentChassisStats) {
                     UcsXmlApiRequest.InFilter filter = UcsXmlApiRequest.getWCardFilter(
                             UcsEnums.NamingClassId.equipmentChassisStats,
                             "dn",
@@ -331,7 +331,9 @@ public class XmlApiClientService implements ApiClientService {
                 }
             }
         }
-        throw  new ApiException("not Supported", new UnsupportedOperationException());
+        return UcsEquipmentStats.builder()
+                .withUcsEquipmentChassisStats(ucsEquipmentChassisStats)
+                .build();
     }
 
     private UcsEquipmentChassisStats from(EquipmentChassisStats equipmentChassisStats) {

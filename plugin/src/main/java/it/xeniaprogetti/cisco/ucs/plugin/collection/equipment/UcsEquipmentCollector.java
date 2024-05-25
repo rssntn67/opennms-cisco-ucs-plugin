@@ -78,13 +78,21 @@ public class UcsEquipmentCollector extends AbstractUcsServiceCollector {
             return createFailedCollectionSet(nodeResource, Instant.now().toEpochMilli());
         }
 
-        final ImmutableCollectionSetResource.Builder<NodeResource> networkElementAttrBuilder =
+        final ImmutableCollectionSetResource.Builder<NodeResource> equipmentAttrBuilder =
                 ImmutableCollectionSetResource.newBuilder(NodeResource.class).setResource(nodeResource);
-        final ImmutableCollectionSet.Builder resultBuilder = ImmutableCollectionSet.newBuilder();
-        resultBuilder.addCollectionSetResource(networkElementAttrBuilder.build());
+        equipmentAttrBuilder.addStringAttribute(createStringAttribute("ucsEquipmentChassisStats", "ucsEquipmentChassisStats.dn", stats.ucsEquipmentChassisStats.dn.value));
+        addNumAttr(equipmentAttrBuilder, "ucsEquipmentChassisStats", "ChassisI2CErrors", stats.ucsEquipmentChassisStats.ChassisI2CErrors);
+        addNumAttr(equipmentAttrBuilder, "ucsEquipmentChassisStats", "inputPower", stats.ucsEquipmentChassisStats.inputPower);
+        addNumAttr(equipmentAttrBuilder, "ucsEquipmentChassisStats", "outputPower", stats.ucsEquipmentChassisStats.outputPower);
+        addAggregate(equipmentAttrBuilder, "ucsEquipmentChassisStats", "ChassisI2CErrors", stats.ucsEquipmentChassisStats.ChassisI2CErrorsAgg);
+        addAggregate(equipmentAttrBuilder, "ucsEquipmentChassisStats", "inputPower", stats.ucsEquipmentChassisStats.inputPowerAgg);
+        addAggregate(equipmentAttrBuilder, "ucsEquipmentChassisStats", "outputPower", stats.ucsEquipmentChassisStats.outputPowerAgg);
 
-        //return CompletableFuture.completedFuture(resultBuilder.setStatus(CollectionSet.Status.SUCCEEDED)
-        //        .setTimestamp().build());
-        return null;
+        final ImmutableCollectionSet.Builder resultBuilder = ImmutableCollectionSet.newBuilder();
+        resultBuilder.addCollectionSetResource(equipmentAttrBuilder.build());
+
+        return CompletableFuture.completedFuture(resultBuilder.setStatus(CollectionSet.Status.SUCCEEDED)
+                .setTimestamp(stats.ucsEquipmentChassisStats.timeCollected.getTime()).build());
+
     }
 }
