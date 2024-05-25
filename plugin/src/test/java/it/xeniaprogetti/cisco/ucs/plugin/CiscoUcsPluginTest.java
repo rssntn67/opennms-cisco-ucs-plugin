@@ -1,18 +1,26 @@
 package it.xeniaprogetti.cisco.ucs.plugin;
 
 import it.xeniaprogetti.cisco.ucs.plugin.client.ClientManager;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.Aggregate;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDn;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDnComparator;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.XmlApiClientProvider;
+import it.xeniaprogetti.cisco.ucs.plugin.collection.AbstractUcsServiceCollector;
 import it.xeniaprogetti.cisco.ucs.plugin.connection.Connection;
 import org.junit.Assert;
 import org.junit.Test;
+import org.opennms.integration.api.v1.collectors.CollectionSet;
+import org.opennms.integration.api.v1.collectors.resource.NodeResource;
+import org.opennms.integration.api.v1.collectors.resource.immutables.ImmutableCollectionSet;
+import org.opennms.integration.api.v1.collectors.resource.immutables.ImmutableCollectionSetResource;
+import org.opennms.integration.api.v1.collectors.resource.immutables.ImmutableNodeResource;
 import org.opennms.integration.api.v1.runtime.Container;
 import org.opennms.integration.api.v1.runtime.RuntimeInfo;
 import org.opennms.integration.api.v1.runtime.Version;
 import org.opennms.integration.api.v1.scv.Credentials;
 import org.opennms.integration.api.v1.scv.SecureCredentialsVault;
 
+import java.math.BigDecimal;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -20,6 +28,10 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static it.xeniaprogetti.cisco.ucs.plugin.collection.AbstractUcsServiceCollector.addAggregate;
+import static it.xeniaprogetti.cisco.ucs.plugin.collection.AbstractUcsServiceCollector.addNumAttr;
+import static it.xeniaprogetti.cisco.ucs.plugin.collection.AbstractUcsServiceCollector.createStringAttribute;
 
 public class CiscoUcsPluginTest {
 
@@ -123,6 +135,35 @@ public class CiscoUcsPluginTest {
         System.out.println(na.getHostName());
         System.out.println(na.getHostAddress());
         System.out.println(na.getCanonicalHostName());
+    }
+
+    @Test
+    public void testAbstractCollectorMethods() {
+        Aggregate aggregate = Aggregate
+                .builder()
+                .withMin(BigDecimal.valueOf(32.37328))
+                .withMax(BigDecimal.valueOf(32.37328))
+                .withAverage(BigDecimal.valueOf(32.37328))
+                .build();
+        double value = 32.37328;
+        final ImmutableNodeResource nodeResource = ImmutableNodeResource.newBuilder().setNodeId(101).build();
+        final ImmutableCollectionSetResource.Builder<NodeResource> collectionSetBuilder =
+                ImmutableCollectionSetResource.newBuilder(NodeResource.class).setResource(nodeResource);
+
+        collectionSetBuilder.addStringAttribute(createStringAttribute("test", "test.dn", "abc/pppp"));
+        addAggregate(collectionSetBuilder, "test","MainBoardOutlet1Agg", aggregate);
+        addNumAttr(collectionSetBuilder,"test", "MainBoardOutlet1", value);
+
+        final ImmutableCollectionSet.Builder resultBuilder = ImmutableCollectionSet.newBuilder();
+        resultBuilder.addCollectionSetResource(collectionSetBuilder.build());
+
+        CollectionSet collectionSet = resultBuilder
+                .setStatus(CollectionSet.Status.SUCCEEDED)
+                .setTimestamp(System.currentTimeMillis() / 1000L)
+                .build()
+                ;
+        System.out.println(collectionSet);
+
     }
 
 }
