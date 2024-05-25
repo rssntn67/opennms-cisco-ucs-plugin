@@ -9,6 +9,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDn;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEnums;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentChassis;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentChassisStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentFex;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentRackEnclosure;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentStats;
@@ -37,6 +38,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.network.NetworkElemen
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root.IpPoolPooled;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root.LsServer;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.request.UcsXmlApiRequest;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentChassisStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.SwEnvStats;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -314,7 +316,45 @@ public class XmlApiClientService implements ApiClientService {
 
     @Override
     public UcsEquipmentStats getUcsEquipmentStats(Map<String, Set<UcsEnums.NamingClassId>> collectMap) throws ApiException {
+        LOG.debug("getUcsEquipmentStats: {}", collectMap);
+        checkCredentials();
+        UcsEquipmentChassisStats ucsEquipmentChassisStats;
+        for (String dn: collectMap.keySet()) {
+            for (UcsEnums.NamingClassId classid: collectMap.get(dn)) {
+                if (classid == UcsEnums.NamingClassId.equipmentChassisStats) {
+                    UcsXmlApiRequest.InFilter filter = UcsXmlApiRequest.getWCardFilter(
+                            UcsEnums.NamingClassId.equipmentChassisStats,
+                            "dn",
+                            dn+".*");
+                    ucsEquipmentChassisStats =  from(statsApi.getEquipmentChassisStats(aaaApi.getToken(), filter ).get(0));
+                    LOG.debug("getUcsEquipmentStats: {}", ucsEquipmentChassisStats);
+                }
+            }
+        }
         throw  new ApiException("not Supported", new UnsupportedOperationException());
+    }
+
+    private UcsEquipmentChassisStats from(EquipmentChassisStats equipmentChassisStats) {
+        return UcsEquipmentChassisStats.builder()
+                .withDn(equipmentChassisStats.dn)
+                .withIntervals(equipmentChassisStats.intervals)
+                .withSuspect(equipmentChassisStats.suspect)
+                .withThresholded(equipmentChassisStats.thresholded)
+                .withTimeCollected(equipmentChassisStats.timeCollected)
+                .withUpdate(equipmentChassisStats.update)
+                .withChassisI2CErrors(equipmentChassisStats.ChassisI2CErrors)
+                .withChassisI2CErrorsAvg(equipmentChassisStats.ChassisI2CErrorsAvg)
+                .withChassisI2CErrorsMax(equipmentChassisStats.ChassisI2CErrorsMax)
+                .withChassisI2CErrorsMin(equipmentChassisStats.ChassisI2CErrorsMin)
+                .withinputPower(equipmentChassisStats.inputPower)
+                .withinputPowerAvg(equipmentChassisStats.inputPowerAvg)
+                .withinputPowerMax(equipmentChassisStats.inputPowerMax)
+                .withinputPowerMin(equipmentChassisStats.inputPowerMin)
+                .withoutputPower(equipmentChassisStats.outputPower)
+                .withoutputPowerAvg(equipmentChassisStats.outputPowerAvg)
+                .withoutputPowerMax(equipmentChassisStats.outputPowerMax)
+                .withoutputPowerMin(equipmentChassisStats.outputPowerMin)
+                .build();
     }
 
     @Override

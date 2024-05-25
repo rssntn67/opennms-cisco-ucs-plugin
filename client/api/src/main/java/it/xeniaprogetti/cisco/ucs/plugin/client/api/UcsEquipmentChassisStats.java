@@ -1,5 +1,6 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.api;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class UcsEquipmentChassisStats extends UcsStats {
@@ -9,32 +10,32 @@ public class UcsEquipmentChassisStats extends UcsStats {
     }
 
     public final int ChassisI2CErrors;
-    public final int ChassisI2CErrorsAvg;
-    public final int ChassisI2CErrorsMax;
-    public final int ChassisI2CErrorsMin;
+    public final Aggregate ChassisI2CErrorsAgg;
     public final double inputPower;
-    public final double inputPowerAvg;
-    public final double inputPowerMax;
-    public final double inputPowerMin;
+    public final Aggregate inputPowerAgg;
     public final double outputPower;
-    public final double outputPowerAvg;
-    public final double outputPowerMax;
-    public final double outputPowerMin;
+    public final Aggregate outputPowerAgg;
 
     private UcsEquipmentChassisStats(Builder builder) {
         super(builder.dn, UcsEnums.ClassId.equipmentChassisStats, UcsEnums.ClassItem.statsItem, builder.intervals, builder.suspect, builder.thresholded, builder.timeCollected, builder.update);
         ChassisI2CErrors = builder.ChassisI2CErrors;
-        ChassisI2CErrorsAvg = builder.ChassisI2CErrorsAvg;
-        ChassisI2CErrorsMax = builder.ChassisI2CErrorsMax;
-        ChassisI2CErrorsMin = builder.ChassisI2CErrorsMin;
+        ChassisI2CErrorsAgg = Aggregate.builder()
+                .withAverage(BigDecimal.valueOf(builder.ChassisI2CErrorsAvg))
+                .withMax(BigDecimal.valueOf(builder.ChassisI2CErrorsMax))
+                .withMin(BigDecimal.valueOf(builder.ChassisI2CErrorsMin))
+                .build();
         inputPower = builder.inputPower;
-        inputPowerAvg = builder.inputPowerAvg;
-        inputPowerMax = builder.inputPowerMax;
-        inputPowerMin = builder.inputPowerMin;
+        inputPowerAgg = Aggregate.builder()
+                .withAverage(BigDecimal.valueOf(builder.inputPowerAvg))
+                .withMax(BigDecimal.valueOf(builder.inputPowerMax))
+                .withMin(BigDecimal.valueOf(builder.inputPowerMin))
+                .build();
         outputPower = builder.outputPower;
-        outputPowerAvg = builder.outputPowerAvg;
-        outputPowerMax = builder.outputPowerMax;
-        outputPowerMin = builder.outputPowerMin;
+        outputPowerAgg = Aggregate.builder()
+                .withAverage(BigDecimal.valueOf(builder.outputPowerAvg))
+                .withMax(BigDecimal.valueOf(builder.outputPowerMax))
+                .withMin(BigDecimal.valueOf(builder.outputPowerMin))
+                .build();
     }
 
     public static class Builder {
