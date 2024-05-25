@@ -7,12 +7,12 @@ import java.util.List;
 
 public class ConfigResolveClassResponseProcessorErrorStats extends ConfigResolveClassResponse {
     @JacksonXmlElementWrapper(localName = "outConfigs")
-    public List<ProcessorErrorStats> processorErrorStats;
+    public List<ProcessorErrorStats> stats;
 
     @Override
     public String toString() {
         return "ConfigResolveClassResponseProcessorErrorStats{" +
-                "processorErrorStats=" + processorErrorStats +
+                "processorErrorStats=" + stats +
                 ", classId='" + classId + '\'' +
                 '}';
     }

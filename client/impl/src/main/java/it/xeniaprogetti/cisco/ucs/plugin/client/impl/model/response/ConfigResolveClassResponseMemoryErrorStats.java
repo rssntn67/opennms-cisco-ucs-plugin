@@ -7,12 +7,12 @@ import java.util.List;
 
 public class ConfigResolveClassResponseMemoryErrorStats extends ConfigResolveClassResponse {
     @JacksonXmlElementWrapper(localName = "outConfigs")
-    public List<MemoryErrorStats> memoryErrorStats;
+    public List<MemoryErrorStats> stats;
 
     @Override
     public String toString() {
         return "ConfigResolveClassResponseMemoryErrorStats{" +
-                "memoryErrorStats=" + memoryErrorStats +
+                "memoryErrorStats=" + stats +
                 ", classId='" + classId + '\'' +
                 '}';
     }

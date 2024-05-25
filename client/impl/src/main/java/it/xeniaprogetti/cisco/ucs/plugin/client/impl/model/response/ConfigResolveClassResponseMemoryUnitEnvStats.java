@@ -7,12 +7,12 @@ import java.util.List;
 
 public class ConfigResolveClassResponseMemoryUnitEnvStats extends ConfigResolveClassResponse {
     @JacksonXmlElementWrapper(localName = "outConfigs")
-    public List<MemoryUnitEnvStats> memoryUnitEnvStats;
+    public List<MemoryUnitEnvStats> stats;
 
     @Override
     public String toString() {
         return "ConfigResolveClassResponseMemoryUnitEnvStats{" +
-                "memoryUnitEnvStats=" + memoryUnitEnvStats +
+                "memoryUnitEnvStats=" + stats +
                 ", classId='" + classId + '\'' +
                 '}';
     }

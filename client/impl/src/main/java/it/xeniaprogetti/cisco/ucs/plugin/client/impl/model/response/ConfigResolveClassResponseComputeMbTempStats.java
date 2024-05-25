@@ -7,12 +7,12 @@ import java.util.List;
 
 public class ConfigResolveClassResponseComputeMbTempStats extends ConfigResolveClassResponse {
     @JacksonXmlElementWrapper(localName = "outConfigs")
-    public List<ComputeMbTempStats> computeMbTempStats;
+    public List<ComputeMbTempStats> stats;
 
     @Override
     public String toString() {
         return "ConfigResolveClassResponseComputeMbTempStats{" +
-                "computeMbTempStats=" + computeMbTempStats +
+                "computeMbTempStats=" + stats +
                 ", classId='" + classId + '\'' +
                 '}';
     }

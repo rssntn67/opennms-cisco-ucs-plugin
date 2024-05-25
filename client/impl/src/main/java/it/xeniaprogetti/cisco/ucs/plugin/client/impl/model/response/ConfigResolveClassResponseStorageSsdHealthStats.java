@@ -5,14 +5,14 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.StorageSsdHealt
 
 import java.util.List;
 
-public class ConfigResolveClassResponseStorageSsdHealthEnvStats extends ConfigResolveClassResponse {
+public class ConfigResolveClassResponseStorageSsdHealthStats extends ConfigResolveClassResponse {
     @JacksonXmlElementWrapper(localName = "outConfigs")
-    public List<StorageSsdHealthStats> storageSsdHealthStats;
+    public List<StorageSsdHealthStats> stats;
 
     @Override
     public String toString() {
         return "ConfigResolveClassResponseStorageSsdHealthStats{" +
-                "storageSsdHealthStats=" + storageSsdHealthStats +
+                "storageSsdHealthStats=" + stats +
                 ", classId='" + classId + '\'' +
                 '}';
     }

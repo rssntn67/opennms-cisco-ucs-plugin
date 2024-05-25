@@ -7,12 +7,12 @@ import java.util.List;
 
 public class ConfigResolveClassResponseFcErrStats extends ConfigResolveClassResponse {
     @JacksonXmlElementWrapper(localName = "outConfigs")
-    public List<FcErrStats> fcErrStats;
+    public List<FcErrStats> stats;
 
     @Override
     public String toString() {
         return "ConfigResolveClassResponseFcErrStats{" +
-                "fcErrStats=" + fcErrStats +
+                "fcErrStats=" + stats +
                 ", classId='" + classId + '\'' +
                 '}';
     }

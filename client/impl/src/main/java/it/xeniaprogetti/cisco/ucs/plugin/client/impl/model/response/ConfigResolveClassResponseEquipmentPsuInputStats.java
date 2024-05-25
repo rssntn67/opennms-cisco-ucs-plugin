@@ -7,12 +7,12 @@ import java.util.List;
 
 public class ConfigResolveClassResponseEquipmentPsuInputStats extends ConfigResolveClassResponse {
     @JacksonXmlElementWrapper(localName = "outConfigs")
-    public List<EquipmentPsuInputStats> equipmentPsuInputStats;
+    public List<EquipmentPsuInputStats> stats;
 
     @Override
     public String toString() {
         return "ConfigResolveClassResponseEquipmentPsuInputStats{" +
-                "equipmentPsuInputStats=" + equipmentPsuInputStats +
+                "equipmentPsuInputStats=" + stats +
                 ", classId='" + classId + '\'' +
                 '}';
     }

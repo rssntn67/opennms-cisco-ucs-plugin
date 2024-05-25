@@ -7,12 +7,12 @@ import java.util.List;
 
 public class ConfigResolveClassResponseComputePCIeFatalStats extends ConfigResolveClassResponse {
     @JacksonXmlElementWrapper(localName = "outConfigs")
-    public List<ComputePCIeFatalStats> computePCIeFatalStats;
+    public List<ComputePCIeFatalStats> stats;
 
     @Override
     public String toString() {
         return "ConfigResolveClassResponseComputePCIeFatalStats{" +
-                "computePCIeFatalStats=" + computePCIeFatalStats +
+                "computePCIeFatalStats=" + stats +
                 ", classId='" + classId + '\'' +
                 '}';
     }

@@ -7,12 +7,12 @@ import java.util.List;
 
 public class ConfigResolveClassResponseStorageDiskEnvStats extends ConfigResolveClassResponse {
     @JacksonXmlElementWrapper(localName = "outConfigs")
-    public List<StorageDiskEnvStats> storageDiskEnvStats;
+    public List<StorageDiskEnvStats> stats;
 
     @Override
     public String toString() {
         return "ConfigResolveClassResponseStorageDiskEnvStats{" +
-                "storageDiskEnvStats=" + storageDiskEnvStats +
+                "storageDiskEnvStats=" + stats +
                 ", classId='" + classId + '\'' +
                 '}';
     }
