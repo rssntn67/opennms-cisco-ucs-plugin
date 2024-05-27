@@ -3,7 +3,6 @@ package it.xeniaprogetti.cisco.ucs.plugin.collection.equipment;
 import it.xeniaprogetti.cisco.ucs.plugin.client.ClientManager;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientService;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEnums;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsUtils;

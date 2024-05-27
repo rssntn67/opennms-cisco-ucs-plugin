@@ -1,5 +1,6 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.api;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class UcsProcessorEnvStats extends UcsStats {
@@ -13,9 +14,7 @@ public class UcsProcessorEnvStats extends UcsStats {
     public final String inputCurrentMax;
     public final String inputCurrentMin;
     public final double temperature;
-    public final double temperatureAvg;
-    public final double temperatureMax;
-    public final double temperatureMin;
+    public final Aggregate temperatureAgg;
 
     private UcsProcessorEnvStats(Builder builder) {
         super(builder.dn, UcsEnums.ClassId.processorEnvStats, UcsEnums.ClassItem.statsItem, builder.intervals, builder.suspect, builder.thresholded, builder.timeCollected, builder.update);
@@ -24,9 +23,11 @@ public class UcsProcessorEnvStats extends UcsStats {
         inputCurrentMax = builder.inputCurrentMax;
         inputCurrentMin = builder.inputCurrentMin;
         temperature = builder.temperature;
-        temperatureAvg = builder.temperatureAvg;
-        temperatureMax = builder.temperatureMax;
-        temperatureMin = builder.temperatureMin;
+        temperatureAgg = Aggregate.builder()
+                .withMin(BigDecimal.valueOf(builder.temperatureMin))
+                .withMax(BigDecimal.valueOf(builder.temperatureMax))
+                .withAverage(BigDecimal.valueOf(builder.temperatureAvg))
+                .build();
     }
 
     public static class Builder {

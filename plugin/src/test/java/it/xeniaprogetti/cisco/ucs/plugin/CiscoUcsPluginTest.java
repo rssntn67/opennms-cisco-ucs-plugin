@@ -5,7 +5,6 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.Aggregate;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDn;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDnComparator;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.XmlApiClientProvider;
-import it.xeniaprogetti.cisco.ucs.plugin.collection.AbstractUcsServiceCollector;
 import it.xeniaprogetti.cisco.ucs.plugin.connection.Connection;
 import org.junit.Assert;
 import org.junit.Test;
@@ -24,9 +23,8 @@ import java.math.BigDecimal;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import static it.xeniaprogetti.cisco.ucs.plugin.collection.AbstractUcsServiceCollector.addAggregate;
@@ -163,6 +161,20 @@ public class CiscoUcsPluginTest {
                 .build()
                 ;
         System.out.println(collectionSet);
+
+    }
+
+    @Test
+    public void testProcessorDnExtraction() {
+        UcsDn statDn = UcsDn.getDn("sys/chassis-1/blade-1/board/cpu-1/env-stats");
+        UcsDn processorDn = UcsDn.getParentDn(statDn);
+        assert processorDn != null;
+        String processorId = processorDn.value.replace("/","-");
+        System.out.println(processorId);
+        UcsDn boardDn = UcsDn.getParentDn(processorDn);
+        assert boardDn != null;
+        String processorName = processorDn.value.replace(boardDn.value, "").replace("/","");
+        System.out.println(processorName);
 
     }
 

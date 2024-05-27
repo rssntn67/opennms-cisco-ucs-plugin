@@ -1,7 +1,6 @@
 package it.xeniaprogetti.cisco.ucs.plugin;
 
 import it.xeniaprogetti.cisco.ucs.plugin.connection.ConnectionManager;
-import org.opennms.integration.api.v1.runtime.Container;
 import org.opennms.integration.api.v1.runtime.RuntimeInfo;
 import org.opennms.integration.api.v1.scv.SecureCredentialsVault;
 

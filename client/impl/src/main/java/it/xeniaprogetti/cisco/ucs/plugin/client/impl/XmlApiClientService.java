@@ -18,6 +18,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsIpPoolPooled;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsManager;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsNetworkElement;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsNetworkElementStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsProcessorEnvStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsSwEnvStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsUtils;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.AaaApi;
@@ -39,6 +40,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root.IpPoolPooled
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root.LsServer;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.request.UcsXmlApiRequest;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentChassisStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ProcessorEnvStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.SwEnvStats;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -361,7 +363,39 @@ public class XmlApiClientService implements ApiClientService {
 
     @Override
     public UcsComputeStats getUcsComputeStats(Map<String, Set<UcsEnums.NamingClassId>> collectMap) throws ApiException {
-        throw  new ApiException("not Supported", new UnsupportedOperationException());
+        LOG.debug("getUcsComputeStats: {}", collectMap);
+        checkCredentials();
+        final List<UcsProcessorEnvStats> ucsProcessorEnvStats = new ArrayList<>();
+        for (String dn: collectMap.keySet()) {
+            for (UcsEnums.NamingClassId classId: collectMap.get(dn)) {
+                if (classId == UcsEnums.NamingClassId.processorEnvStats) {
+                    UcsXmlApiRequest.InFilter filter = UcsXmlApiRequest.getWCardFilter(
+                            UcsEnums.NamingClassId.processorEnvStats,
+                            "dn",
+                            dn+".*");
+                    statsApi.getProcessorEnvStats(aaaApi.getToken(), filter ).forEach(p -> ucsProcessorEnvStats.add(from(p)));
+                    LOG.debug("getUcsComputeStats: size {}", ucsProcessorEnvStats.size());
+                }
+            }
+        }
+        return UcsComputeStats.builder()
+                .withUcsProcessorEnvStats(ucsProcessorEnvStats)
+                .build();
+    }
+
+    private UcsProcessorEnvStats from(ProcessorEnvStats processorEnvStats) {
+        return UcsProcessorEnvStats.builder()
+                .withDn(processorEnvStats.dn)
+                .withIntervals(processorEnvStats.intervals)
+                .withSuspect(processorEnvStats.suspect)
+                .withThresholded(processorEnvStats.thresholded)
+                .withTimeCollected(processorEnvStats.timeCollected)
+                .withUpdate(processorEnvStats.update)
+                .withtemperature(processorEnvStats.temperature)
+                .withtemperatureMin(processorEnvStats.temperatureMin)
+                .withtemperatureMax(processorEnvStats.temperatureMax)
+                .withtemperatureAvg(processorEnvStats.temperatureAvg)
+                .build();
     }
 
     private static UcsFault from(FaultInst faultInst) {
