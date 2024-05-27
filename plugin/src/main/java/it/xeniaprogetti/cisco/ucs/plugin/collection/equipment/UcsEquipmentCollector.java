@@ -58,7 +58,7 @@ public class UcsEquipmentCollector extends AbstractUcsServiceCollector {
         var dn = attributes.get(UcsUtils.UCS_DN_KEY).toString();
         requestMap.put(
                 dn,
-                collectionItemMap.get(UcsEnums.ClassId.networkElement).get(UcsUtils.UCS_DN_KEY)
+                collectionItemMap.get(UcsEnums.ClassId.equipmentChassis).get(UcsUtils.UCS_DN_KEY)
         );
         ApiClientService client;
         try {
