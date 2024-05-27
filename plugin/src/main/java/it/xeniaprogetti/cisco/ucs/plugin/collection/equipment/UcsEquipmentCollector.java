@@ -82,11 +82,11 @@ public class UcsEquipmentCollector extends AbstractUcsServiceCollector {
                 ImmutableCollectionSetResource.newBuilder(NodeResource.class).setResource(nodeResource);
         equipmentAttrBuilder.addStringAttribute(createStringAttribute("ucsEquipmentChassisStats", "ucsEquipmentChassisStats.dn", stats.ucsEquipmentChassisStats.dn.value));
         addNumAttr(equipmentAttrBuilder, "ucsEquipmentChassisStats", "ChassisI2CErrors", stats.ucsEquipmentChassisStats.ChassisI2CErrors);
-        addNumAttr(equipmentAttrBuilder, "ucsEquipmentChassisStats", "inputPower", stats.ucsEquipmentChassisStats.inputPower);
-        addNumAttr(equipmentAttrBuilder, "ucsEquipmentChassisStats", "outputPower", stats.ucsEquipmentChassisStats.outputPower);
+        addNumAttr(equipmentAttrBuilder, "ucsEquipmentChassisStats", "InputPower", stats.ucsEquipmentChassisStats.inputPower);
+        addNumAttr(equipmentAttrBuilder, "ucsEquipmentChassisStats", "OutputPower", stats.ucsEquipmentChassisStats.outputPower);
         addAggregate(equipmentAttrBuilder, "ucsEquipmentChassisStats", "ChassisI2CErrors", stats.ucsEquipmentChassisStats.ChassisI2CErrorsAgg);
-        addAggregate(equipmentAttrBuilder, "ucsEquipmentChassisStats", "inputPower", stats.ucsEquipmentChassisStats.inputPowerAgg);
-        addAggregate(equipmentAttrBuilder, "ucsEquipmentChassisStats", "outputPower", stats.ucsEquipmentChassisStats.outputPowerAgg);
+        addAggregate(equipmentAttrBuilder, "ucsEquipmentChassisStats", "InputPower", stats.ucsEquipmentChassisStats.inputPowerAgg);
+        addAggregate(equipmentAttrBuilder, "ucsEquipmentChassisStats", "OutputPower", stats.ucsEquipmentChassisStats.outputPowerAgg);
 
         final ImmutableCollectionSet.Builder resultBuilder = ImmutableCollectionSet.newBuilder();
         resultBuilder.addCollectionSetResource(equipmentAttrBuilder.build());
