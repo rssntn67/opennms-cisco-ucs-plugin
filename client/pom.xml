@@ -6,7 +6,7 @@
     <parent>
         <artifactId>opennms-cisco-ucs-plugin</artifactId>
         <groupId>it.xeniaprogetti.cucs</groupId>
-        <version>0.4.3-SNAPSHOT</version>
+        <version>0.4.4-SNAPSHOT</version>
     </parent>
     <packaging>pom</packaging>
 
