@@ -4,6 +4,8 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientCredentials;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientService;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeBlade;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeMbPowerStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeMbTempStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeRackUnit;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDn;
@@ -39,6 +41,8 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.network.NetworkElemen
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root.IpPoolPooled;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root.LsServer;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.request.UcsXmlApiRequest;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ComputeMbPowerStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ComputeMbTempStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentChassisStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ProcessorEnvStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.SwEnvStats;
@@ -366,20 +370,79 @@ public class XmlApiClientService implements ApiClientService {
         LOG.debug("getUcsComputeStats: {}", collectMap);
         checkCredentials();
         final List<UcsProcessorEnvStats> ucsProcessorEnvStats = new ArrayList<>();
+        UcsComputeMbTempStats ucsComputeMbTempStats = null;
+        UcsComputeMbPowerStats ucsComputeMbPowerStats = null;
         for (String dn: collectMap.keySet()) {
             for (UcsEnums.NamingClassId classId: collectMap.get(dn)) {
-                if (classId == UcsEnums.NamingClassId.processorEnvStats) {
-                    UcsXmlApiRequest.InFilter filter = UcsXmlApiRequest.getWCardFilter(
-                            UcsEnums.NamingClassId.processorEnvStats,
-                            "dn",
-                            dn+".*");
-                    statsApi.getProcessorEnvStats(aaaApi.getToken(), filter ).forEach(p -> ucsProcessorEnvStats.add(from(p)));
-                    LOG.debug("getUcsComputeStats: size {}", ucsProcessorEnvStats.size());
+                UcsXmlApiRequest.InFilter filter = UcsXmlApiRequest.getWCardFilter(
+                        classId,
+                        "dn",
+                        dn+".*");
+                switch (classId) {
+                    case processorEnvStats:
+                        statsApi.getProcessorEnvStats(aaaApi.getToken(), filter ).forEach(p -> ucsProcessorEnvStats.add(from(p)));
+                        LOG.debug("getUcsComputeStats: getUcsComputeStats.size = {}", ucsProcessorEnvStats.size());
+                        break;
+                    case computeMbPowerStats:
+                        ucsComputeMbPowerStats =  from(statsApi.getComputeMbPowerStats(aaaApi.getToken(), filter ).get(0));
+                        LOG.debug("getUcsComputeStats: ucsComputeMbPowerStats {}", ucsComputeMbPowerStats);
+                        break;
+                    case computeMbTempStats:
+                        ucsComputeMbTempStats =  from(statsApi.getComputeMbTempStats(aaaApi.getToken(), filter ).get(0));
+                        LOG.debug("getUcsComputeStats: ucsComputeMbPowerStats {}", ucsComputeMbPowerStats);
+                        break;
+
+                    default:
+                        break;
                 }
             }
         }
         return UcsComputeStats.builder()
                 .withUcsProcessorEnvStats(ucsProcessorEnvStats)
+                .withUcsComputeMbPowerStats(ucsComputeMbPowerStats)
+                .withUcsComputeTempStats(ucsComputeMbTempStats)
+                .build();
+    }
+
+    private UcsComputeMbTempStats from(ComputeMbTempStats computeMbTempStats) {
+        return UcsComputeMbTempStats.builder()
+                .withDn(computeMbTempStats.dn)
+                .withIntervals(computeMbTempStats.intervals)
+                .withSuspect(computeMbTempStats.suspect)
+                .withThresholded(computeMbTempStats.thresholded)
+                .withTimeCollected(computeMbTempStats.timeCollected)
+                .withUpdate(computeMbTempStats.update)
+                .withfmTempSenIo(computeMbTempStats.fmTempSenIo)
+                .withfmTempSenIoAvg(computeMbTempStats.fmTempSenIoAvg)
+                .withfmTempSenIoMax(computeMbTempStats.fmTempSenIoMax)
+                .withfmTempSenIoMin(computeMbTempStats.fmTempSenIoMin)
+                .withfmTempSenRear(computeMbTempStats.fmTempSenRear)
+                .withfmTempSenRearAvg(computeMbTempStats.fmTempSenRearAvg)
+                .withfmTempSenRearMax(computeMbTempStats.fmTempSenRearMax)
+                .withfmTempSenRearMin(computeMbTempStats.fmTempSenRearMin)
+                .build();
+    }
+
+    private UcsComputeMbPowerStats from(ComputeMbPowerStats computeMbPowerStats) {
+        return UcsComputeMbPowerStats.builder()
+                .withDn(computeMbPowerStats.dn)
+                .withIntervals(computeMbPowerStats.intervals)
+                .withSuspect(computeMbPowerStats.suspect)
+                .withThresholded(computeMbPowerStats.thresholded)
+                .withTimeCollected(computeMbPowerStats.timeCollected)
+                .withUpdate(computeMbPowerStats.update)
+                .withconsumedPower(computeMbPowerStats.consumedPower)
+                .withconsumedPowerAvg(computeMbPowerStats.consumedPowerAvg)
+                .withconsumedPowerMax(computeMbPowerStats.consumedPowerMax)
+                .withconsumedPowerMin(computeMbPowerStats.consumedPowerMin)
+                .withinputCurrent(computeMbPowerStats.inputCurrent)
+                .withinputCurrentAvg(computeMbPowerStats.inputCurrentAvg)
+                .withinputCurrentMax(computeMbPowerStats.inputCurrentMax)
+                .withinputCurrentMin(computeMbPowerStats.inputCurrentMin)
+                .withinputVoltage(computeMbPowerStats.inputVoltage)
+                .withinputVoltageAvg(computeMbPowerStats.inputVoltageAvg)
+                .withinputVoltageMax(computeMbPowerStats.inputVoltageMax)
+                .withinputVoltageMin(computeMbPowerStats.inputVoltageMin)
                 .build();
     }
 

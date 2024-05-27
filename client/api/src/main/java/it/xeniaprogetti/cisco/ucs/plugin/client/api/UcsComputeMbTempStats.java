@@ -1,5 +1,6 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.api;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class UcsComputeMbTempStats extends UcsStats {
@@ -9,17 +10,14 @@ public class UcsComputeMbTempStats extends UcsStats {
     }
 
     public final double fmTempSenIo;
-    public final double fmTempSenIoAvg;
-    public final double fmTempSenIoMax;
-    public final double fmTempSenIoMin;
+    public final Aggregate fmTempSenIoAgg;
     public final double fmTempSenRear;
-    public final double fmTempSenRearAvg;
+    public final Aggregate fmTempSenRearAgg;
+
     public final String fmTempSenRearL;
     public final String fmTempSenRearLAvg;
     public final String fmTempSenRearLMax;
     public final String fmTempSenRearLMin;
-    public final double fmTempSenRearMax;
-    public final double fmTempSenRearMin;
     public final String fmTempSenRearR;
     public final String fmTempSenRearRAvg;
     public final String fmTempSenRearRMax;
@@ -28,17 +26,21 @@ public class UcsComputeMbTempStats extends UcsStats {
     private UcsComputeMbTempStats(Builder builder) {
         super(builder.dn, UcsEnums.ClassId.computeMbTempStats, UcsEnums.ClassItem.statsItem, builder.intervals, builder.suspect, builder.thresholded, builder.timeCollected, builder.update);
         fmTempSenIo = builder.fmTempSenIo;
-        fmTempSenIoAvg = builder.fmTempSenIoAvg;
-        fmTempSenIoMax = builder.fmTempSenIoMax;
-        fmTempSenIoMin = builder.fmTempSenIoMin;
+        fmTempSenIoAgg = Aggregate.builder()
+                .withAverage(BigDecimal.valueOf(builder.fmTempSenIoAvg))
+                .withMax(BigDecimal.valueOf(builder.fmTempSenIoMax))
+                .withMin(BigDecimal.valueOf(builder.fmTempSenIoMin))
+                .build();
         fmTempSenRear = builder.fmTempSenRear;
-        fmTempSenRearAvg = builder.fmTempSenRearAvg;
+        fmTempSenRearAgg = Aggregate.builder()
+                .withAverage(BigDecimal.valueOf(builder.fmTempSenRearAvg))
+                .withMax(BigDecimal.valueOf(builder.fmTempSenRearMax))
+                .withMin(BigDecimal.valueOf(builder.fmTempSenRearMin))
+                .build();
         fmTempSenRearL = builder.fmTempSenRearL;
         fmTempSenRearLAvg = builder.fmTempSenRearLAvg;
         fmTempSenRearLMax = builder.fmTempSenRearLMax;
         fmTempSenRearLMin = builder.fmTempSenRearLMin;
-        fmTempSenRearMax = builder.fmTempSenRearMax;
-        fmTempSenRearMin = builder.fmTempSenRearMin;
         fmTempSenRearR = builder.fmTempSenRearR;
         fmTempSenRearRAvg = builder.fmTempSenRearRAvg;
         fmTempSenRearRMax = builder.fmTempSenRearRMax;

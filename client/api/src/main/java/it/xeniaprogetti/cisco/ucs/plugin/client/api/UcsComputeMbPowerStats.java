@@ -1,5 +1,6 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.api;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class UcsComputeMbPowerStats extends UcsStats {
@@ -9,32 +10,32 @@ public class UcsComputeMbPowerStats extends UcsStats {
     }
 
     public final double consumedPower;
-    public final double consumedPowerAvg;
-    public final double consumedPowerMax;
-    public final double consumedPowerMin;
+    public final Aggregate consumedPowerAgg;
     public final double inputCurrent;
-    public final double inputCurrentAvg;
-    public final double inputCurrentMax;
-    public final double inputCurrentMin;
+    public final Aggregate inputCurrentAgg;
     public final double inputVoltage;
-    public final double inputVoltageAvg;
-    public final double inputVoltageMax;
-    public final double inputVoltageMin;
+    public final Aggregate inputVoltageAgg;
 
     private UcsComputeMbPowerStats(Builder builder) {
         super(builder.dn, UcsEnums.ClassId.computeMbPowerStats, UcsEnums.ClassItem.statsItem, builder.intervals, builder.suspect, builder.thresholded, builder.timeCollected, builder.update);
         consumedPower = builder.consumedPower;
-        consumedPowerAvg = builder.consumedPowerAvg;
-        consumedPowerMax = builder.consumedPowerMax;
-        consumedPowerMin = builder.consumedPowerMin;
         inputCurrent = builder.inputCurrent;
-        inputCurrentAvg = builder.inputCurrentAvg;
-        inputCurrentMax = builder.inputCurrentMax;
-        inputCurrentMin = builder.inputCurrentMin;
         inputVoltage = builder.inputVoltage;
-        inputVoltageAvg = builder.inputVoltageAvg;
-        inputVoltageMax = builder.inputVoltageMax;
-        inputVoltageMin = builder.inputVoltageMin;
+        consumedPowerAgg = Aggregate.builder()
+                .withAverage(BigDecimal.valueOf(builder.consumedPowerAvg))
+                .withMax(BigDecimal.valueOf(builder.consumedPowerMax))
+                .withMin(BigDecimal.valueOf(builder.consumedPowerMin))
+                .build();
+        inputCurrentAgg = Aggregate.builder()
+                .withAverage(BigDecimal.valueOf(builder.inputCurrentAvg))
+                .withMax(BigDecimal.valueOf(builder.inputCurrentMax))
+                .withMin(BigDecimal.valueOf(builder.inputCurrentMin))
+                .build();
+        inputVoltageAgg = Aggregate.builder()
+                .withAverage(BigDecimal.valueOf(builder.inputVoltageAvg))
+                .withMax(BigDecimal.valueOf(builder.inputVoltageMax))
+                .withMin(BigDecimal.valueOf(builder.inputVoltageMin))
+                .build();
     }
 
     public static class Builder {

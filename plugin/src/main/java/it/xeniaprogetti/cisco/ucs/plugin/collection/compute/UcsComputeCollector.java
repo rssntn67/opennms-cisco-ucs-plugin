@@ -86,8 +86,26 @@ public class UcsComputeCollector extends AbstractUcsServiceCollector {
             LOG.error("collect: {}", requestMap, e );
             return createFailedCollectionSet(nodeResource, Instant.now().toEpochMilli());
         }
+        final ImmutableCollectionSetResource.Builder<NodeResource> computeAttrBuilder =
+                ImmutableCollectionSetResource.newBuilder(NodeResource.class).setResource(nodeResource);
+
+        computeAttrBuilder.addStringAttribute(createStringAttribute("ucsComputeMbPowerStats", "ucsComputeMbPowerStats.dn", stats.ucsComputeMbPowerStats.dn.value));
+        addNumAttr(computeAttrBuilder, "ucsComputeMbPowerStats", "ConsumedPower", stats.ucsComputeMbPowerStats.consumedPower);
+        addAggregate(computeAttrBuilder, "ucsComputeMbPowerStats", "ConsumedPower", stats.ucsComputeMbPowerStats.consumedPowerAgg);
+        addNumAttr(computeAttrBuilder, "ucsComputeMbPowerStats", "InputCurrent", stats.ucsComputeMbPowerStats.inputCurrent);
+        addAggregate(computeAttrBuilder, "ucsComputeMbPowerStats", "InputCurrent", stats.ucsComputeMbPowerStats.inputCurrentAgg);
+        addNumAttr(computeAttrBuilder, "ucsComputeMbPowerStats", "InputVoltage", stats.ucsComputeMbPowerStats.inputVoltage);
+        addAggregate(computeAttrBuilder, "ucsComputeMbPowerStats", "InputVoltage", stats.ucsComputeMbPowerStats.inputVoltageAgg);
+
+
+        computeAttrBuilder.addStringAttribute(createStringAttribute("ucsComputeMbTempStats", "ucsComputeMbTempStats.dn", stats.ucsComputeMbTempStats.dn.value));
+        addNumAttr(computeAttrBuilder, "ucsComputeMbTempStats", "FmTempSenIo", stats.ucsComputeMbTempStats.fmTempSenIo);
+        addAggregate(computeAttrBuilder, "ucsComputeMbTempStats", "FmTempSenIo", stats.ucsComputeMbTempStats.fmTempSenIoAgg);
+        addNumAttr(computeAttrBuilder, "ucsComputeMbTempStats", "FmTempSenRear", stats.ucsComputeMbTempStats.fmTempSenRear);
+        addAggregate(computeAttrBuilder, "ucsComputeMbTempStats", "FmTempSenRear", stats.ucsComputeMbTempStats.fmTempSenRearAgg);
 
         final ImmutableCollectionSet.Builder resultBuilder = ImmutableCollectionSet.newBuilder();
+        resultBuilder.addCollectionSetResource(computeAttrBuilder.build());
 
         stats.ucsProcessorEnvStats.forEach( stat -> {
             UcsDn processorDn = UcsDn.getParentDn(stat.dn);
