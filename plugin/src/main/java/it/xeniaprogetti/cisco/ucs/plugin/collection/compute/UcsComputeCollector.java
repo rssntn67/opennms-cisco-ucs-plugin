@@ -63,7 +63,7 @@ public class UcsComputeCollector extends AbstractUcsServiceCollector {
         var dn = attributes.get(UcsUtils.UCS_DN_KEY).toString();
         requestMap.put(
                 dn,
-                collectionItemMap.get(UcsEnums.ClassId.networkElement).get(UcsUtils.UCS_DN_KEY)
+                collectionItemMap.get(UcsEnums.ClassId.computeBlade).get(UcsUtils.UCS_DN_KEY)
         );
         ApiClientService client;
         try {
@@ -88,8 +88,7 @@ public class UcsComputeCollector extends AbstractUcsServiceCollector {
         final ImmutableCollectionSet.Builder resultBuilder = ImmutableCollectionSet.newBuilder();
         resultBuilder.addCollectionSetResource(networkElementAttrBuilder.build());
 
-        //return CompletableFuture.completedFuture(resultBuilder.setStatus(CollectionSet.Status.SUCCEEDED)
-        //        .setTimestamp().build());
-        return null;
+        return CompletableFuture.completedFuture(resultBuilder.setStatus(CollectionSet.Status.SUCCEEDED)
+                .setTimestamp(System.currentTimeMillis()).build());
     }
 }
