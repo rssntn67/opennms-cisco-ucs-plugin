@@ -3,6 +3,7 @@ package it.xeniaprogetti.cisco.ucs.plugin.collection.network;
 import it.xeniaprogetti.cisco.ucs.plugin.client.ClientManager;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientService;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDn;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEnums;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsNetworkElementStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsUtils;
@@ -10,9 +11,11 @@ import it.xeniaprogetti.cisco.ucs.plugin.collection.AbstractUcsServiceCollector;
 import it.xeniaprogetti.cisco.ucs.plugin.connection.ConnectionManager;
 import org.opennms.integration.api.v1.collectors.CollectionRequest;
 import org.opennms.integration.api.v1.collectors.CollectionSet;
+import org.opennms.integration.api.v1.collectors.resource.GenericTypeResource;
 import org.opennms.integration.api.v1.collectors.resource.NodeResource;
 import org.opennms.integration.api.v1.collectors.resource.immutables.ImmutableCollectionSet;
 import org.opennms.integration.api.v1.collectors.resource.immutables.ImmutableCollectionSetResource;
+import org.opennms.integration.api.v1.collectors.resource.immutables.ImmutableGenericTypeResource;
 import org.opennms.integration.api.v1.collectors.resource.immutables.ImmutableNodeResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -131,6 +134,35 @@ public class UcsNetworkElementCollector extends AbstractUcsServiceCollector {
 
         final ImmutableCollectionSet.Builder resultBuilder = ImmutableCollectionSet.newBuilder();
         resultBuilder.addCollectionSetResource(networkElementAttrBuilder.build());
+
+        stats.ucsEquipmentNetworkElementFanStatsList.forEach(stat -> {
+            UcsDn fanDn = UcsDn.getParentDn(stat.dn);
+            assert fanDn != null;
+            String fanId = fanDn.value.replace("/","-");
+            UcsDn fanModuleDn = UcsDn.getParentDn(fanDn);
+            assert fanModuleDn != null;
+            String fanName = fanDn.value.replace(fanModuleDn.value, "").replace("/","");
+            final ImmutableCollectionSetResource.Builder<GenericTypeResource> appResourceBuilder =
+                    ImmutableCollectionSetResource.newBuilder(GenericTypeResource.class).setResource(
+                                    ImmutableGenericTypeResource.newBuilder().setNodeResource(nodeResource)
+                                            .setType("NetworkElementFan")
+                                            .setInstance(fanId)
+                                            .build())
+                            .addStringAttribute(createStringAttribute("equipmentNetworkElementFan", "dn", stat.dn.value))
+                            .addStringAttribute(createStringAttribute("equipmentNetworkElementFan", "fanDn", fanDn.value))
+                            .addStringAttribute(createStringAttribute("equipmentNetworkElementFan", "fanName", fanName))
+                            .addStringAttribute(createStringAttribute("equipmentNetworkElementFan", "fanId", fanId))
+                            .addStringAttribute(createStringAttribute("equipmentNetworkElementFan", "airFlowDirection", stat.airflowDirection));
+
+            addNumAttr(appResourceBuilder, "equipmentNetworkElementFan", "Speed", stat.speed);
+            addAggregate(appResourceBuilder, "equipmentNetworkElementFan", "Speed", stat.speedAgg);
+
+            addNumAttr(appResourceBuilder, "equipmentNetworkElementFan", "DrivePercentage", stat.drivePercentage);
+            addAggregate(appResourceBuilder, "equipmentNetworkElementFan", "DrivePercentage", stat.drivePercentageAgg);
+
+            resultBuilder.addCollectionSetResource(appResourceBuilder.build());
+
+        });
 
         return CompletableFuture.completedFuture(resultBuilder.setStatus(CollectionSet.Status.SUCCEEDED)
                 .setTimestamp(stats.ucsSwEnvStats.timeCollected.getTime()).build());

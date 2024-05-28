@@ -11,9 +11,7 @@ public class UcsEquipmentNetworkElementFanStats extends UcsStats {
 
     public final String airflowDirection;
     public final int drivePercentage;
-    public final int drivePercentageAvg;
-    public final int drivePercentageMax;
-    public final int drivePercentageMin;
+    public final Aggregate drivePercentageAgg;
     public final int speed;
     public final Aggregate speedAgg;
 
@@ -21,9 +19,11 @@ public class UcsEquipmentNetworkElementFanStats extends UcsStats {
         super(builder.dn, UcsEnums.ClassId.equipmentNetworkElementFanStats, UcsEnums.ClassItem.statsItem, builder.intervals, builder.suspect, builder.thresholded, builder.timeCollected, builder.update);
         airflowDirection = builder.airflowDirection;
         drivePercentage = builder.drivePercentage;
-        drivePercentageAvg = builder.drivePercentageAvg;
-        drivePercentageMax = builder.drivePercentageMax;
-        drivePercentageMin = builder.drivePercentageMin;
+        drivePercentageAgg = Aggregate.builder()
+                .withAverage(BigDecimal.valueOf(builder.drivePercentageAvg))
+                .withMax(BigDecimal.valueOf(builder.drivePercentageMax))
+                .withMin(BigDecimal.valueOf(builder.drivePercentageMin))
+                .build();
         speed = builder.speed;
         speedAgg = Aggregate.builder()
                 .withMax(BigDecimal.valueOf(builder.speedMax))

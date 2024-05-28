@@ -13,6 +13,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEnums;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentChassis;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentChassisStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentFex;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentNetworkElementFanStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentRackEnclosure;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsFault;
@@ -46,6 +47,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.request.UcsXmlApiRequ
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ComputeMbPowerStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ComputeMbTempStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentChassisStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentNetworkElementFanStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ProcessorEnvStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.SwCardEnvStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.SwEnvStats;
@@ -290,6 +292,7 @@ public class XmlApiClientService implements ApiClientService {
         UcsSwEnvStats swEnvStats = null;
         UcsSwSystemStats swSystemStats = null;
         UcsSwCardEnvStats swCardEnvStats = null;
+        final List<UcsEquipmentNetworkElementFanStats> fanStats = new ArrayList<>();
         for (String dn: collectMap.keySet()) {
             for (UcsEnums.NamingClassId classid: collectMap.get(dn)) {
                 UcsXmlApiRequest.InFilter filter = UcsXmlApiRequest.getWCardFilter(
@@ -305,6 +308,11 @@ public class XmlApiClientService implements ApiClientService {
                         break;
                     case swCardEnvStats:
                         swCardEnvStats = from(statsApi.getSwCardEnvStats(aaaApi.getToken(), filter).get(0));
+                        break;
+                    case equipmentNetworkElementFanStats:
+                        statsApi.getEquipmentNetworkElementFanStats(aaaApi.getToken(), filter)
+                                .forEach(e -> fanStats.add(from(e)));
+                        break;
                     default:
                         break;
 
@@ -315,6 +323,27 @@ public class XmlApiClientService implements ApiClientService {
                 .withUcsSwEnvStats(swEnvStats)
                 .withUcsSwSystemStats(swSystemStats)
                 .withUcsSwCardEnvStats(swCardEnvStats)
+                .withUcsEquipmentNetworkElementFanStatsList(fanStats)
+                .build();
+    }
+
+    private UcsEquipmentNetworkElementFanStats from(EquipmentNetworkElementFanStats equipmentNetworkElementFanStats) {
+        return UcsEquipmentNetworkElementFanStats.builder()
+                .withDn(equipmentNetworkElementFanStats.dn)
+                .withIntervals(equipmentNetworkElementFanStats.intervals)
+                .withSuspect(equipmentNetworkElementFanStats.suspect)
+                .withThresholded(equipmentNetworkElementFanStats.thresholded)
+                .withTimeCollected(equipmentNetworkElementFanStats.timeCollected)
+                .withUpdate(equipmentNetworkElementFanStats.update)
+                .withairflowDirection(equipmentNetworkElementFanStats.airflowDirection)
+                .withspeed(equipmentNetworkElementFanStats.speed)
+                .withspeedAvg(equipmentNetworkElementFanStats.speedAvg)
+                .withspeedMax(equipmentNetworkElementFanStats.speedMax)
+                .withspeedMin(equipmentNetworkElementFanStats.speedMin)
+                .withdrivePercentage(equipmentNetworkElementFanStats.drivePercentage)
+                .withdrivePercentageAvg(equipmentNetworkElementFanStats.drivePercentageAvg)
+                .withdrivePercentageMax(equipmentNetworkElementFanStats.drivePercentageMax)
+                .withdrivePercentageMin(equipmentNetworkElementFanStats.drivePercentageMin)
                 .build();
     }
 
@@ -432,15 +461,12 @@ public class XmlApiClientService implements ApiClientService {
                 switch (classId) {
                     case processorEnvStats:
                         statsApi.getProcessorEnvStats(aaaApi.getToken(), filter ).forEach(p -> ucsProcessorEnvStats.add(from(p)));
-                        LOG.debug("getUcsComputeStats: getUcsComputeStats.size = {}", ucsProcessorEnvStats.size());
                         break;
                     case computeMbPowerStats:
                         ucsComputeMbPowerStats =  from(statsApi.getComputeMbPowerStats(aaaApi.getToken(), filter ).get(0));
-                        LOG.debug("getUcsComputeStats: ucsComputeMbPowerStats {}", ucsComputeMbPowerStats);
                         break;
                     case computeMbTempStats:
                         ucsComputeMbTempStats =  from(statsApi.getComputeMbTempStats(aaaApi.getToken(), filter ).get(0));
-                        LOG.debug("getUcsComputeStats: ucsComputeMbPowerStats {}", ucsComputeMbPowerStats);
                         break;
 
                     default:

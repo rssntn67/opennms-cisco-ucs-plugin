@@ -3,4 +3,9 @@
         <persistenceSelectorStrategy class="org.opennms.netmgt.collection.support.PersistAllSelectorStrategy"/>
         <storageStrategy class="org.opennms.netmgt.collection.support.IndexStorageStrategy"/>
     </resourceType>
+    <resourceType name="NetworkElementFan" label="Network Element Fan" resourceLabel="Fan(${fanName}) dn(${fanDn}) airFlowDirection(${airFlowDirection})">
+        <persistenceSelectorStrategy class="org.opennms.netmgt.collection.support.PersistAllSelectorStrategy"/>
+        <storageStrategy class="org.opennms.netmgt.collection.support.IndexStorageStrategy"/>
+    </resourceType>
+
 </resource-types>
