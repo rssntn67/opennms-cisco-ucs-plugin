@@ -17,6 +17,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentNetworkElementFa
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentRackEnclosure;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsFault;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsFcStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsIpPoolPooled;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsManager;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsNetworkElement;
@@ -48,6 +49,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ComputeMbPowerS
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ComputeMbTempStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentChassisStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentNetworkElementFanStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.FcStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ProcessorEnvStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.SwCardEnvStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.SwEnvStats;
@@ -293,6 +295,7 @@ public class XmlApiClientService implements ApiClientService {
         UcsSwSystemStats swSystemStats = null;
         UcsSwCardEnvStats swCardEnvStats = null;
         final List<UcsEquipmentNetworkElementFanStats> fanStats = new ArrayList<>();
+        final List<UcsFcStats> fcStats = new ArrayList<>();
         for (String dn: collectMap.keySet()) {
             for (UcsEnums.NamingClassId classid: collectMap.get(dn)) {
                 UcsXmlApiRequest.InFilter filter = UcsXmlApiRequest.getWCardFilter(
@@ -313,6 +316,10 @@ public class XmlApiClientService implements ApiClientService {
                         statsApi.getEquipmentNetworkElementFanStats(aaaApi.getToken(), filter)
                                 .forEach(e -> fanStats.add(from(e)));
                         break;
+                    case fcStats:
+                        statsApi.getFcStats(aaaApi.getToken(), filter)
+                                .forEach(f -> fcStats.add(from(f)) );
+                        break;
                     default:
                         break;
 
@@ -324,6 +331,38 @@ public class XmlApiClientService implements ApiClientService {
                 .withUcsSwSystemStats(swSystemStats)
                 .withUcsSwCardEnvStats(swCardEnvStats)
                 .withUcsEquipmentNetworkElementFanStatsList(fanStats)
+                .withUcsFcStats(fcStats)
+                .build();
+    }
+
+    private UcsFcStats from(FcStats f) {
+        return UcsFcStats.builder()
+                .withDn(f.dn)
+                .withIntervals(f.intervals)
+                .withSuspect(f.suspect)
+                .withThresholded(f.thresholded)
+                .withTimeCollected(f.timeCollected)
+                .withUpdate(f.update)
+                .withBytesRx(f.bytesRx)
+                .withBytesTx(f.bytesTx)
+                .withPacketsRx(f.packetsRx)
+                .withPacketsTx(f.packetsTx)
+                .withBytesRxDelta(f.bytesRxDelta)
+                .withBytesRxDeltaAvg(f.bytesRxDeltaAvg)
+                .withBytesRxDeltaMax(f.bytesRxDeltaMax)
+                .withBytesRxDeltaMin(f.bytesRxDeltaMin)
+                .withBytesTxDelta(f.bytesTxDelta)
+                .withBytesTxDeltaAvg(f.bytesTxDeltaAvg)
+                .withBytesTxDeltaMax(f.bytesTxDeltaMax)
+                .withBytesTxDeltaMin(f.bytesTxDeltaMin)
+                .withPacketsRxDelta(f.packetsRxDelta)
+                .withPacketsRxDeltaAvg(f.packetsRxDeltaAvg)
+                .withPacketsRxDeltaMax(f.packetsRxDeltaMax)
+                .withPacketsRxDeltaMin(f.packetsRxDeltaMin)
+                .withPacketsTxDelta(f.packetsTxDelta)
+                .withPacketsTxDeltaAvg(f.packetsTxDeltaAvg)
+                .withPacketsTxDeltaMax(f.packetsTxDeltaMax)
+                .withPacketsTxDeltaMin(f.packetsTxDeltaMin)
                 .build();
     }
 

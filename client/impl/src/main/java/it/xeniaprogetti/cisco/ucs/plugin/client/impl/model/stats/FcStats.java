@@ -6,42 +6,42 @@ public class FcStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
     public long bytesRx;
     @JacksonXmlProperty(isAttribute = true)
-    public long bytesRxDelta;
+    public int bytesRxDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public long bytesRxDeltaAvg;
+    public int bytesRxDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public long bytesRxDeltaMax;
+    public int bytesRxDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public long bytesRxDeltaMin;
+    public int bytesRxDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
     public long bytesTx;
     @JacksonXmlProperty(isAttribute = true)
-    public long bytesTxDelta;
+    public int bytesTxDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public long bytesTxDeltaAvg;
+    public int bytesTxDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public long bytesTxDeltaMax;
+    public int bytesTxDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public long bytesTxDeltaMin;
+    public int bytesTxDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public long packetsRx;
+    public int packetsRx;
     @JacksonXmlProperty(isAttribute = true)
-    public long packetsRxDelta;
+    public int packetsRxDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public long packetsRxDeltaAvg;
+    public int packetsRxDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public long packetsRxDeltaMax;
+    public int packetsRxDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public long packetsRxDeltaMin;
+    public int packetsRxDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public long packetsTx;
+    public int packetsTx;
     @JacksonXmlProperty(isAttribute = true)
-    public long packetsTxDelta;
+    public int packetsTxDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public long packetsTxDeltaAvg;
+    public int packetsTxDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public long packetsTxDeltaMax;
+    public int packetsTxDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public long packetsTxDeltaMin;
+    public int packetsTxDeltaMin;
 }
 

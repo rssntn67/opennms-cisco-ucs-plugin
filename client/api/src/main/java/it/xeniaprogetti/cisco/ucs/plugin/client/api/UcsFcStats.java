@@ -9,25 +9,25 @@ public class UcsFcStats extends UcsStats {
     }
 
     public final long bytesRx;
-    public final long bytesRxDelta;
-    public final long bytesRxDeltaAvg;
-    public final long bytesRxDeltaMax;
-    public final long bytesRxDeltaMin;
     public final long bytesTx;
-    public final long bytesTxDelta;
-    public final long bytesTxDeltaAvg;
-    public final long bytesTxDeltaMax;
-    public final long bytesTxDeltaMin;
-    public final long packetsRx;
-    public final long packetsRxDelta;
-    public final long packetsRxDeltaAvg;
-    public final long packetsRxDeltaMax;
-    public final long packetsRxDeltaMin;
-    public final long packetsTx;
-    public final long packetsTxDelta;
-    public final long packetsTxDeltaAvg;
-    public final long packetsTxDeltaMax;
-    public final long packetsTxDeltaMin;
+    public final int packetsRx;
+    public final int packetsTx;
+    public final int bytesRxDelta;
+    public final int bytesRxDeltaAvg;
+    public final int bytesRxDeltaMax;
+    public final int bytesRxDeltaMin;
+    public final int bytesTxDelta;
+    public final int bytesTxDeltaAvg;
+    public final int bytesTxDeltaMax;
+    public final int bytesTxDeltaMin;
+    public final int packetsRxDelta;
+    public final int packetsRxDeltaAvg;
+    public final int packetsRxDeltaMax;
+    public final int packetsRxDeltaMin;
+    public final int packetsTxDelta;
+    public final int packetsTxDeltaAvg;
+    public final int packetsTxDeltaMax;
+    public final int packetsTxDeltaMin;
 
     private UcsFcStats(Builder builder) {
         super(builder.dn, UcsEnums.ClassId.fcStats, UcsEnums.ClassItem.statsItem, builder.intervals, builder.suspect, builder.thresholded, builder.timeCollected, builder.update);
@@ -66,25 +66,25 @@ public class UcsFcStats extends UcsStats {
         public long update;
 
         private long bytesRx;
-        private long bytesRxDelta;
-        private long bytesRxDeltaAvg;
-        private long bytesRxDeltaMax;
-        private long bytesRxDeltaMin;
+        private int bytesRxDelta;
+        private int bytesRxDeltaAvg;
+        private int bytesRxDeltaMax;
+        private int bytesRxDeltaMin;
         private long bytesTx;
-        private long bytesTxDelta;
-        private long bytesTxDeltaAvg;
-        private long bytesTxDeltaMax;
-        private long bytesTxDeltaMin;
-        private long packetsRx;
-        private long packetsRxDelta;
-        private long packetsRxDeltaAvg;
-        private long packetsRxDeltaMax;
-        private long packetsRxDeltaMin;
-        private long packetsTx;
-        private long packetsTxDelta;
-        private long packetsTxDeltaAvg;
-        private long packetsTxDeltaMax;
-        private long packetsTxDeltaMin;
+        private int bytesTxDelta;
+        private int bytesTxDeltaAvg;
+        private int bytesTxDeltaMax;
+        private int bytesTxDeltaMin;
+        private int packetsRx;
+        private int packetsRxDelta;
+        private int packetsRxDeltaAvg;
+        private int packetsRxDeltaMax;
+        private int packetsRxDeltaMin;
+        private int packetsTx;
+        private int packetsTxDelta;
+        private int packetsTxDeltaAvg;
+        private int packetsTxDeltaMax;
+        private int packetsTxDeltaMin;
 
         public Builder withDn(String dn) {
             this.dn = UcsDn.getDn(dn);
@@ -116,102 +116,102 @@ public class UcsFcStats extends UcsStats {
             return this;
         }
 
-        public Builder withbytesRx(long bytesRx){
+        public Builder withBytesRx(long bytesRx){
             this.bytesRx = bytesRx;
             return this;
         }
 
-        public Builder withbytesRxDelta(long bytesRxDelta){
-            this.bytesRxDelta = bytesRxDelta;
-            return this;
-        }
-
-        public Builder withbytesRxDeltaAvg(long bytesRxDeltaAvg){
-            this.bytesRxDeltaAvg = bytesRxDeltaAvg;
-            return this;
-        }
-
-        public Builder withbytesRxDeltaMax(long bytesRxDeltaMax){
-            this.bytesRxDeltaMax = bytesRxDeltaMax;
-            return this;
-        }
-
-        public Builder withbytesRxDeltaMin(long bytesRxDeltaMin){
-            this.bytesRxDeltaMin = bytesRxDeltaMin;
-            return this;
-        }
-
-        public Builder withbytesTx(long bytesTx){
+        public Builder withBytesTx(long bytesTx){
             this.bytesTx = bytesTx;
             return this;
         }
 
-        public Builder withbytesTxDelta(long bytesTxDelta){
+        public Builder withBytesRxDelta(int bytesRxDelta){
+            this.bytesRxDelta = bytesRxDelta;
+            return this;
+        }
+
+        public Builder withBytesRxDeltaAvg(int bytesRxDeltaAvg){
+            this.bytesRxDeltaAvg = bytesRxDeltaAvg;
+            return this;
+        }
+
+        public Builder withBytesRxDeltaMax(int bytesRxDeltaMax){
+            this.bytesRxDeltaMax = bytesRxDeltaMax;
+            return this;
+        }
+
+        public Builder withBytesRxDeltaMin(int bytesRxDeltaMin){
+            this.bytesRxDeltaMin = bytesRxDeltaMin;
+            return this;
+        }
+        
+        public Builder withBytesTxDelta(int bytesTxDelta){
             this.bytesTxDelta = bytesTxDelta;
             return this;
         }
 
-        public Builder withbytesTxDeltaAvg(long bytesTxDeltaAvg){
+        public Builder withBytesTxDeltaAvg(int bytesTxDeltaAvg){
             this.bytesTxDeltaAvg = bytesTxDeltaAvg;
             return this;
         }
 
-        public Builder withbytesTxDeltaMax(long bytesTxDeltaMax){
+        public Builder withBytesTxDeltaMax(int bytesTxDeltaMax){
             this.bytesTxDeltaMax = bytesTxDeltaMax;
             return this;
         }
 
-        public Builder withbytesTxDeltaMin(long bytesTxDeltaMin){
+        public Builder withBytesTxDeltaMin(int bytesTxDeltaMin){
             this.bytesTxDeltaMin = bytesTxDeltaMin;
             return this;
         }
 
-        public Builder withpacketsRx(long packetsRx){
+        public Builder withPacketsRx(int packetsRx){
             this.packetsRx = packetsRx;
             return this;
         }
 
-        public Builder withpacketsRxDelta(long packetsRxDelta){
+        public Builder withPacketsRxDelta(int packetsRxDelta){
             this.packetsRxDelta = packetsRxDelta;
             return this;
         }
 
-        public Builder withpacketsRxDeltaAvg(long packetsRxDeltaAvg){
+        public Builder withPacketsRxDeltaAvg(int packetsRxDeltaAvg){
             this.packetsRxDeltaAvg = packetsRxDeltaAvg;
             return this;
         }
 
-        public Builder withpacketsRxDeltaMax(long packetsRxDeltaMax){
+        public Builder withPacketsRxDeltaMax(int packetsRxDeltaMax){
             this.packetsRxDeltaMax = packetsRxDeltaMax;
             return this;
         }
 
-        public Builder withpacketsRxDeltaMin(long packetsRxDeltaMin){
+        public Builder withPacketsRxDeltaMin(int packetsRxDeltaMin){
             this.packetsRxDeltaMin = packetsRxDeltaMin;
             return this;
         }
 
-        public Builder withpacketsTx(long packetsTx){
+        public Builder withPacketsTx(int packetsTx){
             this.packetsTx = packetsTx;
             return this;
         }
 
-        public Builder withpacketsTxDelta(long packetsTxDelta){
+        public Builder withPacketsTxDelta(int packetsTxDelta){
             this.packetsTxDelta = packetsTxDelta;
             return this;
         }
 
-        public Builder withpacketsTxDeltaAvg(long packetsTxDeltaAvg){
+        public Builder withPacketsTxDeltaAvg(int packetsTxDeltaAvg){
             this.packetsTxDeltaAvg = packetsTxDeltaAvg;
             return this;
         }
 
-        public Builder withpacketsTxDeltaMax(long packetsTxDeltaMax){
+        public Builder withPacketsTxDeltaMax(int packetsTxDeltaMax){
             this.packetsTxDeltaMax = packetsTxDeltaMax;
             return this;
         }
 
-        public Builder withpacketsTxDeltaMin(long packetsTxDeltaMin){
+        public Builder withPacketsTxDeltaMin(int packetsTxDeltaMin){
             this.packetsTxDeltaMin = packetsTxDeltaMin;
             return this;
         }

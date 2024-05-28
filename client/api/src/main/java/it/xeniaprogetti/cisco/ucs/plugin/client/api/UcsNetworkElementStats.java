@@ -7,6 +7,7 @@ public class UcsNetworkElementStats {
     public final UcsSwEnvStats ucsSwEnvStats;
     public final UcsSwCardEnvStats ucsSwCardEnvStats;
     public final UcsSwSystemStats ucsSwSystemStats;
+    public final List<UcsFcStats> ucsFcStats;
 
     public static Builder builder() {
         return new Builder();
@@ -17,6 +18,7 @@ public class UcsNetworkElementStats {
         this.ucsSwEnvStats = builder.ucsSwEnvStats;
         this.ucsSwSystemStats = builder.ucsSwSystemStats;
         this.ucsSwCardEnvStats= builder.ucsSwCardEnvStats;
+        this.ucsFcStats = builder.ucsFcStats;
     }
 
 
@@ -25,7 +27,7 @@ public class UcsNetworkElementStats {
         private UcsSwSystemStats ucsSwSystemStats;
         private UcsSwCardEnvStats ucsSwCardEnvStats;
         private List<UcsEquipmentNetworkElementFanStats> ucsEquipmentNetworkElementFanStatsList;
-
+        private List<UcsFcStats> ucsFcStats;
         private Builder () {
 
         }
@@ -51,6 +53,10 @@ public class UcsNetworkElementStats {
             return this;
         }
 
+        public Builder withUcsFcStats(List<UcsFcStats> ucsFcStats) {
+            this.ucsFcStats = ucsFcStats;
+            return this;
+        }
 
 
         public UcsNetworkElementStats build() {
