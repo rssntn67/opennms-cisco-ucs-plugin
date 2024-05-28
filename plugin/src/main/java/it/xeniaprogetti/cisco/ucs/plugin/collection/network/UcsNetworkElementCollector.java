@@ -113,7 +113,6 @@ public class UcsNetworkElementCollector extends AbstractUcsServiceCollector {
         addNumAttr(networkElementAttrBuilder,"ucsSwEnvStats", "MainBoardOutlet2", stats.ucsSwEnvStats.mainBoardOutlet2);
 
         networkElementAttrBuilder.addStringAttribute(createStringAttribute("ucsSwSystemStats", "ucsSwSystemStats.dn", stats.ucsSwSystemStats.dn.value));
-        networkElementAttrBuilder.addStringAttribute(createStringAttribute("ucsSwSystemStats", "ucsSwSystemStats.dn", stats.ucsSwSystemStats.dn.value));
         networkElementAttrBuilder.addStringAttribute(createStringAttribute("ucsSwSystemStats", "ucsSwSystemStats.thresholded", stats.ucsSwSystemStats.thresholded));
         networkElementAttrBuilder.addStringAttribute(createStringAttribute("ucsSwSystemStats", "ucsSwSystemStats.suspect", stats.ucsSwSystemStats.suspect));
         networkElementAttrBuilder.addStringAttribute(createStringAttribute("ucsSwSystemStats", "ucsSwSystemStats.timeCollected", stats.ucsSwSystemStats.timeCollected.toString()));
@@ -123,6 +122,12 @@ public class UcsNetworkElementCollector extends AbstractUcsServiceCollector {
         addNumAttr(networkElementAttrBuilder,"ucsSwSystemStats", "Load", stats.ucsSwSystemStats.load);
         addNumAttr(networkElementAttrBuilder,"ucsSwSystemStats", "MemAvailable", stats.ucsSwSystemStats.memAvailable);
         addNumAttr(networkElementAttrBuilder,"ucsSwSystemStats", "MemCached", stats.ucsSwSystemStats.memCached);
+
+        networkElementAttrBuilder.addStringAttribute(createStringAttribute("ucsSwCardEnvStats", "ucsSwCardEnvStats.dn", stats.ucsSwCardEnvStats.dn.value));
+        networkElementAttrBuilder.addStringAttribute(createStringAttribute("ucsSwCardEnvStats", "ucsSwCardEnvStats.thresholded", stats.ucsSwCardEnvStats.thresholded));
+        networkElementAttrBuilder.addStringAttribute(createStringAttribute("ucsSwCardEnvStats", "ucsSwCardEnvStats.suspect", stats.ucsSwCardEnvStats.suspect));
+        networkElementAttrBuilder.addStringAttribute(createStringAttribute("ucsSwCardEnvStats", "ucsSwCardEnvStats.timeCollected", stats.ucsSwCardEnvStats.timeCollected.toString()));
+
 
         final ImmutableCollectionSet.Builder resultBuilder = ImmutableCollectionSet.newBuilder();
         resultBuilder.addCollectionSetResource(networkElementAttrBuilder.build());

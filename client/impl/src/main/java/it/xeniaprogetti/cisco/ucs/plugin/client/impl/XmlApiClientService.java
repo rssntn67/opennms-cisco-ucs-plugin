@@ -21,6 +21,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsManager;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsNetworkElement;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsNetworkElementStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsProcessorEnvStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsSwCardEnvStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsSwEnvStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsSwSystemStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsUtils;
@@ -46,6 +47,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ComputeMbPowerS
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ComputeMbTempStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentChassisStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ProcessorEnvStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.SwCardEnvStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.SwEnvStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.SwSystemStats;
 import org.slf4j.Logger;
@@ -287,6 +289,7 @@ public class XmlApiClientService implements ApiClientService {
         checkCredentials();
         UcsSwEnvStats swEnvStats = null;
         UcsSwSystemStats swSystemStats = null;
+        UcsSwCardEnvStats swCardEnvStats = null;
         for (String dn: collectMap.keySet()) {
             for (UcsEnums.NamingClassId classid: collectMap.get(dn)) {
                 UcsXmlApiRequest.InFilter filter = UcsXmlApiRequest.getWCardFilter(
@@ -296,10 +299,12 @@ public class XmlApiClientService implements ApiClientService {
                 switch (classid) {
                     case swEnvStats:
                         swEnvStats =  from(statsApi.getSwEnvStats(aaaApi.getToken(), filter ).get(0));
-                        LOG.debug("getNetworkElementStats: {}", swEnvStats);
                         break;
                     case swSystemStats:
                         swSystemStats = from(statsApi.getSwSystemStats(aaaApi.getToken(), filter).get(0));
+                        break;
+                    case swCardEnvStats:
+                        swCardEnvStats = from(statsApi.getSwCardEnvStats(aaaApi.getToken(), filter).get(0));
                     default:
                         break;
 
@@ -309,6 +314,18 @@ public class XmlApiClientService implements ApiClientService {
         return UcsNetworkElementStats.builder()
                 .withUcsSwEnvStats(swEnvStats)
                 .withUcsSwSystemStats(swSystemStats)
+                .withUcsSwCardEnvStats(swCardEnvStats)
+                .build();
+    }
+
+    private UcsSwCardEnvStats from(SwCardEnvStats swCardEnvStats) {
+        return UcsSwCardEnvStats.builder()
+                .withDn(swCardEnvStats.dn)
+                .withIntervals(swCardEnvStats.intervals)
+                .withSuspect(swCardEnvStats.suspect)
+                .withThresholded(swCardEnvStats.thresholded)
+                .withTimeCollected(swCardEnvStats.timeCollected)
+                .withUpdate(swCardEnvStats.update)
                 .build();
     }
 
