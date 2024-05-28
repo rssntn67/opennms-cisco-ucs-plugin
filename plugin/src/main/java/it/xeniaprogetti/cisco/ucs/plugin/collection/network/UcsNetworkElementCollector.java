@@ -104,10 +104,25 @@ public class UcsNetworkElementCollector extends AbstractUcsServiceCollector {
                 ImmutableCollectionSetResource.newBuilder(NodeResource.class).setResource(nodeResource);
 
         networkElementAttrBuilder.addStringAttribute(createStringAttribute("ucsSwEnvStats", "ucsSwEnvStats.dn", stats.ucsSwEnvStats.dn.value));
+        networkElementAttrBuilder.addStringAttribute(createStringAttribute("ucsSwEnvStats", "ucsSwEnvStats.thresholded", stats.ucsSwEnvStats.thresholded));
+        networkElementAttrBuilder.addStringAttribute(createStringAttribute("ucsSwEnvStats", "ucsSwEnvStats.suspect", stats.ucsSwEnvStats.suspect));
+        networkElementAttrBuilder.addStringAttribute(createStringAttribute("ucsSwEnvStats", "ucsSwEnvStats.timeCollected", stats.ucsSwEnvStats.timeCollected.toString()));
         addAggregate(networkElementAttrBuilder, "ucsSwEnvStats","MainBoardOutlet1", stats.ucsSwEnvStats.mainBoardOutlet1Agg);
         addAggregate(networkElementAttrBuilder, "ucsSwEnvStats","MainBoardOutlet2", stats.ucsSwEnvStats.mainBoardOutlet2Agg);
         addNumAttr(networkElementAttrBuilder,"ucsSwEnvStats", "MainBoardOutlet1", stats.ucsSwEnvStats.mainBoardOutlet1);
         addNumAttr(networkElementAttrBuilder,"ucsSwEnvStats", "MainBoardOutlet2", stats.ucsSwEnvStats.mainBoardOutlet2);
+
+        networkElementAttrBuilder.addStringAttribute(createStringAttribute("ucsSwSystemStats", "ucsSwSystemStats.dn", stats.ucsSwSystemStats.dn.value));
+        networkElementAttrBuilder.addStringAttribute(createStringAttribute("ucsSwSystemStats", "ucsSwSystemStats.dn", stats.ucsSwSystemStats.dn.value));
+        networkElementAttrBuilder.addStringAttribute(createStringAttribute("ucsSwSystemStats", "ucsSwSystemStats.thresholded", stats.ucsSwSystemStats.thresholded));
+        networkElementAttrBuilder.addStringAttribute(createStringAttribute("ucsSwSystemStats", "ucsSwSystemStats.suspect", stats.ucsSwSystemStats.suspect));
+        networkElementAttrBuilder.addStringAttribute(createStringAttribute("ucsSwSystemStats", "ucsSwSystemStats.timeCollected", stats.ucsSwSystemStats.timeCollected.toString()));
+        addAggregate(networkElementAttrBuilder, "ucsSwSystemStats","Load", stats.ucsSwSystemStats.loadAgg);
+        addAggregate(networkElementAttrBuilder, "ucsSwSystemStats","MemAvailable", stats.ucsSwSystemStats.memAvailableAgg);
+        addAggregate(networkElementAttrBuilder, "ucsSwSystemStats","MemCached", stats.ucsSwSystemStats.memCachedAgg);
+        addNumAttr(networkElementAttrBuilder,"ucsSwSystemStats", "Load", stats.ucsSwSystemStats.load);
+        addNumAttr(networkElementAttrBuilder,"ucsSwSystemStats", "MemAvailable", stats.ucsSwSystemStats.memAvailable);
+        addNumAttr(networkElementAttrBuilder,"ucsSwSystemStats", "MemCached", stats.ucsSwSystemStats.memCached);
 
         final ImmutableCollectionSet.Builder resultBuilder = ImmutableCollectionSet.newBuilder();
         resultBuilder.addCollectionSetResource(networkElementAttrBuilder.build());

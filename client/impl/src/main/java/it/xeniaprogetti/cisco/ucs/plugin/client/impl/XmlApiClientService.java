@@ -22,6 +22,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsNetworkElement;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsNetworkElementStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsProcessorEnvStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsSwEnvStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsSwSystemStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsUtils;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.AaaApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.ConfigApi;
@@ -46,6 +47,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ComputeMbTempSt
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentChassisStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ProcessorEnvStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.SwEnvStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.SwSystemStats;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -284,20 +286,52 @@ public class XmlApiClientService implements ApiClientService {
         LOG.debug("getNetworkElementStats: {}", collectMap);
         checkCredentials();
         UcsSwEnvStats swEnvStats = null;
+        UcsSwSystemStats swSystemStats = null;
         for (String dn: collectMap.keySet()) {
             for (UcsEnums.NamingClassId classid: collectMap.get(dn)) {
-                if (classid == UcsEnums.NamingClassId.swEnvStats) {
-                    UcsXmlApiRequest.InFilter filter = UcsXmlApiRequest.getWCardFilter(
-                            UcsEnums.NamingClassId.swEnvStats,
-                            "dn",
-                            dn+".*");
-                    swEnvStats =  from(statsApi.getSwEnvStats(aaaApi.getToken(), filter ).get(0));
-                    LOG.debug("getNetworkElementStats: {}", swEnvStats);
+                UcsXmlApiRequest.InFilter filter = UcsXmlApiRequest.getWCardFilter(
+                        UcsEnums.NamingClassId.swEnvStats,
+                        "dn",
+                        dn+".*");
+                switch (classid) {
+                    case swEnvStats:
+                        swEnvStats =  from(statsApi.getSwEnvStats(aaaApi.getToken(), filter ).get(0));
+                        LOG.debug("getNetworkElementStats: {}", swEnvStats);
+                        break;
+                    case swSystemStats:
+                        swSystemStats = from(statsApi.getSwSystemStats(aaaApi.getToken(), filter).get(0));
+                    default:
+                        break;
+
                 }
             }
         }
         return UcsNetworkElementStats.builder()
                 .withUcsSwEnvStats(swEnvStats)
+                .withUcsSwSystemStats(swSystemStats)
+                .build();
+    }
+
+    private UcsSwSystemStats from(SwSystemStats swSystemStats) {
+        return UcsSwSystemStats.builder()
+                .withDn(swSystemStats.dn)
+                .withIntervals(swSystemStats.intervals)
+                .withSuspect(swSystemStats.suspect)
+                .withThresholded(swSystemStats.thresholded)
+                .withTimeCollected(swSystemStats.timeCollected)
+                .withUpdate(swSystemStats.update)
+                .withload(swSystemStats.load)
+                .withloadAvg(swSystemStats.loadAvg)
+                .withloadMax(swSystemStats.loadMax)
+                .withloadMin(swSystemStats.loadMin)
+                .withmemAvailable(swSystemStats.memAvailable)
+                .withmemAvailableAvg(swSystemStats.memAvailableAvg)
+                .withmemAvailableMax(swSystemStats.memAvailableMax)
+                .withmemAvailableMin(swSystemStats.memAvailableMin)
+                .withmemCached(swSystemStats.memCached)
+                .withmemCachedAvg(swSystemStats.memCachedAvg)
+                .withmemCachedMax(swSystemStats.memCachedMax)
+                .withmemCachedMin(swSystemStats.memCachedMin)
                 .build();
     }
 
