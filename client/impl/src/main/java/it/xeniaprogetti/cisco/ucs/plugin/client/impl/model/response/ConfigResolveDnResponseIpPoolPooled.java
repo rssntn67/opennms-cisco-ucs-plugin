@@ -14,9 +14,6 @@ public class ConfigResolveDnResponseIpPoolPooled extends ConfigResolveDnResponse
         return "ConfigResolveNetworkElementDnResponse{" +
                 "cookie='" + cookie + '\'' +
                 ", response='" + response + '\'' +
-                ", errorCode=" + errorCode +
-                ", errorDescr='" + errorDescr + '\'' +
-                ", invocationResult='" + invocationResult + '\'' +
                 ", dn='" + dn + '\'' +
                 ", outconfig=" + outconfig.ippoolPooled +
                 '}';

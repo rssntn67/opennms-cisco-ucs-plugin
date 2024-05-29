@@ -43,9 +43,6 @@ public class AaaLoginResponse extends UcsXmlApiResponse {
                 ", outName='" + outName + '\'' +
                 ", outPasswdExpiryStatus='" + outPasswdExpiryStatus + '\'' +
                 ", outPasswdExpiryDuration=" + outPasswdExpiryDuration +
-                ", errorCode=" + errorCode +
-                ", errorDescr='" + errorDescr + '\'' +
-                ", invocationResult='" + invocationResult + '\'' +
                 '}';
     }
 }

@@ -32,8 +32,10 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigResolv
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigResolveDnResponseEquipmentChassis;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigResolveDnResponseEquipmentFex;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigResolveDnResponseEquipmentRackEnclosure;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigResolveDnResponseFcStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigResolveDnResponseNetworkElement;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ErrorResponse;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.FcStats;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -41,9 +43,6 @@ import org.slf4j.LoggerFactory;
 
 import java.math.BigInteger;
 import java.net.InetAddress;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
@@ -73,7 +72,7 @@ public class ApiClientTest {
     public void testGetIpAddressFromUrl() {
         ApiClientCredentials credentials = getCredentials();
         Assert.assertTrue(UcsUtils.validate(credentials));
-        InetAddress ip = null;
+        InetAddress ip;
         try {
             ip = UcsUtils.getIpAddressFromCredentials(credentials);
             LOG.info("{}", ip.getHostAddress());
@@ -94,7 +93,7 @@ public class ApiClientTest {
                 .build();
 
         Assert.assertTrue(UcsUtils.validate(credentials));
-        InetAddress ip = null;
+        InetAddress ip;
         try {
             ip = UcsUtils.getIpAddressFromCredentials(credentials);
             LOG.info("{}", ip.getHostAddress());
@@ -1544,4 +1543,17 @@ Oper Evac Mode	:	Off
         loginApi.logout();
     }
 
+    @Test
+    public void testConvertProperlyFcStats() throws ApiException {
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        String date1 = "Wed May 29 08:50:12 CEST 2024";
+        String response1 = " <configResolveDn dn=\"sys/switch-A/slot-1/switch-fc/port-1/stats\" cookie=\"1716965139/cbf0751f-d020-49fe-b150-7f1e9719c943\" response=\"yes\"> <outConfig> <fcStats bytesRx=\"11094931231960\" bytesRxDelta=\"603704\" bytesRxDeltaAvg=\"5190927\" bytesRxDeltaMax=\"33997280\" bytesRxDeltaMin=\"405272\" bytesTx=\"217019375872\" bytesTxDelta=\"10546524\" bytesTxDeltaAvg=\"14125307\" bytesTxDeltaMax=\"22938596\" bytesTxDeltaMin=\"8662964\" dn=\"sys/switch-A/slot-1/switch-fc/port-1/stats\" intervals=\"58982460\" packetsRx=\"5379210322\" packetsRxDelta=\"2646\" packetsRxDeltaAvg=\"5572\" packetsRxDeltaMax=\"19375\" packetsRxDeltaMin=\"2642\" packetsTx=\"132559706\" packetsTxDelta=\"6367\" packetsTxDeltaAvg=\"8477\" packetsTxDeltaMax=\"13247\" packetsTxDeltaMin=\"5435\" suspect=\"no\" thresholded=\"\" timeCollected=\"2024-05-29T08:49:58.166\" update=\"65547\"/> </outConfig> </configResolveDn>";
+        FcStats fcStats1 = apiClient.getUcsEntity(response1, ConfigResolveDnResponseFcStats.class).outconfig.fcStats;
+        System.out.println(fcStats1);
+
+        String date2 = "Wed May 29 08:51:12 CEST 2024";
+        String response2 = "<configResolveDn dn=\"sys/switch-A/slot-1/switch-fc/port-1/stats\" cookie=\"1716965139/cbf0751f-d020-49fe-b150-7f1e9719c943\" response=\"yes\"> <outConfig> <fcStats bytesRx=\"11094934557624\" bytesRxDelta=\"3325664\" bytesRxDeltaAvg=\"5035488\" bytesRxDeltaMax=\"33997280\" bytesRxDeltaMin=\"405272\" bytesTx=\"217035185828\" bytesTxDelta=\"15809956\" bytesTxDeltaAvg=\"14265694\" bytesTxDeltaMax=\"22938596\" bytesTxDeltaMin=\"8662964\" dn=\"sys/switch-A/slot-1/switch-fc/port-1/stats\" intervals=\"58982460\" packetsRx=\"5379215194\" packetsRxDelta=\"4872\" packetsRxDeltaAvg=\"5513\" packetsRxDeltaMax=\"19375\" packetsRxDeltaMin=\"2642\" packetsTx=\"132569169\" packetsTxDelta=\"9463\" packetsTxDeltaAvg=\"8559\" packetsTxDeltaMax=\"13247\" packetsTxDeltaMin=\"5435\" suspect=\"no\" thresholded=\"\" timeCollected=\"2024-05-29T08:50:58.166\" update=\"65548\"/> </outConfig> </configResolveDn>";
+        FcStats fcStats2 = apiClient.getUcsEntity(response2, ConfigResolveDnResponseFcStats.class).outconfig.fcStats;
+    }
 }

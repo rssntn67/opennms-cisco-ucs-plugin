@@ -13,9 +13,6 @@ public class AaaLogoutResponse extends UcsXmlApiResponse {
         return "AaaLogoutResponse{" + "cookie='" + cookie + '\'' +
                 ", response='" + response + '\'' +
                 ", outStatus='" + outStatus + '\'' +
-                ", errorCode=" + errorCode +
-                ", errorDescr='" + errorDescr + '\'' +
-                ", invocationResult='" + invocationResult + '\'' +
                 '}';
     }
 }

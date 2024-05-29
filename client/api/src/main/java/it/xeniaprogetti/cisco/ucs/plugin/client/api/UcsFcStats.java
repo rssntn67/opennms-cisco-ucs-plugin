@@ -10,8 +10,8 @@ public class UcsFcStats extends UcsStats {
 
     public final long bytesRx;
     public final long bytesTx;
-    public final int packetsRx;
-    public final int packetsTx;
+    public final long packetsRx;
+    public final long packetsTx;
     public final int bytesRxDelta;
     public final int bytesRxDeltaAvg;
     public final int bytesRxDeltaMax;
@@ -75,12 +75,12 @@ public class UcsFcStats extends UcsStats {
         private int bytesTxDeltaAvg;
         private int bytesTxDeltaMax;
         private int bytesTxDeltaMin;
-        private int packetsRx;
+        private long packetsRx;
         private int packetsRxDelta;
         private int packetsRxDeltaAvg;
         private int packetsRxDeltaMax;
         private int packetsRxDeltaMin;
-        private int packetsTx;
+        private long packetsTx;
         private int packetsTxDelta;
         private int packetsTxDeltaAvg;
         private int packetsTxDeltaMax;
@@ -166,7 +166,7 @@ public class UcsFcStats extends UcsStats {
             return this;
         }
 
-        public Builder withPacketsRx(int packetsRx){
+        public Builder withPacketsRx(long packetsRx){
             this.packetsRx = packetsRx;
             return this;
         }
@@ -191,7 +191,7 @@ public class UcsFcStats extends UcsStats {
             return this;
         }
 
-        public Builder withPacketsTx(int packetsTx){
+        public Builder withPacketsTx(long packetsTx){
             this.packetsTx = packetsTx;
             return this;
         }

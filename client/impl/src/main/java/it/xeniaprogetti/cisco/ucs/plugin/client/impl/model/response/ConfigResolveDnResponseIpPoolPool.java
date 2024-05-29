@@ -13,9 +13,6 @@ public class ConfigResolveDnResponseIpPoolPool extends ConfigResolveDnResponse {
         return "ConfigResolveNetworkElementDnResponse{" +
                 "cookie='" + cookie + '\'' +
                 ", response='" + response + '\'' +
-                ", errorCode=" + errorCode +
-                ", errorDescr='" + errorDescr + '\'' +
-                ", invocationResult='" + invocationResult + '\'' +
                 ", dn='" + dn + '\'' +
                 ", outconfig=" + outconfig.ippoolPool +
                 '}';

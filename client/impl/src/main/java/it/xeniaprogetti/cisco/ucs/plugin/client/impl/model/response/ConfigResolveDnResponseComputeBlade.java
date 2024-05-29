@@ -13,9 +13,6 @@ public class ConfigResolveDnResponseComputeBlade extends ConfigResolveDnResponse
         return "ConfigResolveComputeBladeDnResponse{" +
                 "cookie='" + cookie + '\'' +
                 ", response='" + response + '\'' +
-                ", errorCode=" + errorCode +
-                ", errorDescr='" + errorDescr + '\'' +
-                ", invocationResult='" + invocationResult + '\'' +
                 ", dn='" + dn + '\'' +
                 ", outconfig=" + outconfig.computeBlade +
                 '}';

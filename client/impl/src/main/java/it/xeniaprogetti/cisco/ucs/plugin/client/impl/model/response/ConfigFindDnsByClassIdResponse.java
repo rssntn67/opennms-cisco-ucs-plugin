@@ -17,9 +17,6 @@ public class ConfigFindDnsByClassIdResponse extends UcsXmlApiResponse {
     public String toString() {
         return "ConfigFindDnsByClassIdResponse{" + "cookie='" + cookie + '\'' +
                 ", response='" + response + '\'' +
-                ", errorCode=" + errorCode +
-                ", errorDescr='" + errorDescr + '\'' +
-                ", invocationResult='" + invocationResult + '\'' +
                 ", classId='" + classId + '\'' +
                 ", dns=" + dns +
                 '}';

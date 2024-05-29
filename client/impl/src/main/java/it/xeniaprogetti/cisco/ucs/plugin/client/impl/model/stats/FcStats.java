@@ -24,7 +24,7 @@ public class FcStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
     public int bytesTxDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public int packetsRx;
+    public long packetsRx;
     @JacksonXmlProperty(isAttribute = true)
     public int packetsRxDelta;
     @JacksonXmlProperty(isAttribute = true)
@@ -34,7 +34,7 @@ public class FcStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
     public int packetsRxDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public int packetsTx;
+    public long packetsTx;
     @JacksonXmlProperty(isAttribute = true)
     public int packetsTxDelta;
     @JacksonXmlProperty(isAttribute = true)
@@ -43,5 +43,37 @@ public class FcStats extends Stats {
     public int packetsTxDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
     public int packetsTxDeltaMin;
+
+    @Override
+    public String toString() {
+        return "FcStats{" +
+                "bytesRx=" + bytesRx +
+                ", bytesRxDelta=" + bytesRxDelta +
+                ", bytesRxDeltaAvg=" + bytesRxDeltaAvg +
+                ", bytesRxDeltaMax=" + bytesRxDeltaMax +
+                ", bytesRxDeltaMin=" + bytesRxDeltaMin +
+                ", bytesTx=" + bytesTx +
+                ", bytesTxDelta=" + bytesTxDelta +
+                ", bytesTxDeltaAvg=" + bytesTxDeltaAvg +
+                ", bytesTxDeltaMax=" + bytesTxDeltaMax +
+                ", bytesTxDeltaMin=" + bytesTxDeltaMin +
+                ", packetsRx=" + packetsRx +
+                ", packetsRxDelta=" + packetsRxDelta +
+                ", packetsRxDeltaAvg=" + packetsRxDeltaAvg +
+                ", packetsRxDeltaMax=" + packetsRxDeltaMax +
+                ", packetsRxDeltaMin=" + packetsRxDeltaMin +
+                ", packetsTx=" + packetsTx +
+                ", packetsTxDelta=" + packetsTxDelta +
+                ", packetsTxDeltaAvg=" + packetsTxDeltaAvg +
+                ", packetsTxDeltaMax=" + packetsTxDeltaMax +
+                ", packetsTxDeltaMin=" + packetsTxDeltaMin +
+                ", intervals=" + intervals +
+                ", suspect='" + suspect + '\'' +
+                ", thresholded='" + thresholded + '\'' +
+                ", timeCollected=" + timeCollected +
+                ", update=" + update +
+                ", dn='" + dn + '\'' +
+                '}';
+    }
 }
 

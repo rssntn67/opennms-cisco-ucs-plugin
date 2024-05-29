@@ -13,9 +13,6 @@ public class ConfigResolveDnResponseNetworkElement extends ConfigResolveDnRespon
         return "ConfigResolveNetworkElementDnResponse{" +
                 "cookie='" + cookie + '\'' +
                 ", response='" + response + '\'' +
-                ", errorCode=" + errorCode +
-                ", errorDescr='" + errorDescr + '\'' +
-                ", invocationResult='" + invocationResult + '\'' +
                 ", dn='" + dn + '\'' +
                 ", outconfig=" + outconfig.networkElement +
                 '}';

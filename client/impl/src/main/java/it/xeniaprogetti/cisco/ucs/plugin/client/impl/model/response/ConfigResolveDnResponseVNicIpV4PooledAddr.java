@@ -14,9 +14,6 @@ public class ConfigResolveDnResponseVNicIpV4PooledAddr extends ConfigResolveDnRe
         return "ConfigResolveNetworkElementDnResponse{" +
                 "cookie='" + cookie + '\'' +
                 ", response='" + response + '\'' +
-                ", errorCode=" + errorCode +
-                ", errorDescr='" + errorDescr + '\'' +
-                ", invocationResult='" + invocationResult + '\'' +
                 ", dn='" + dn + '\'' +
                 ", outconfig=" + outconfig.vnicIpV4PooledAddr +
                 '}';

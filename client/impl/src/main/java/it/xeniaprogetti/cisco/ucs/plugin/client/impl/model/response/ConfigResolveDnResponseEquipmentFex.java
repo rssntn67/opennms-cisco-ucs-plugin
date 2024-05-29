@@ -13,9 +13,6 @@ public class ConfigResolveDnResponseEquipmentFex extends ConfigResolveDnResponse
         return "ConfigResolveEquipmentFexDnResponse{" +
                 "cookie='" + cookie + '\'' +
                 ", response='" + response + '\'' +
-                ", errorCode=" + errorCode +
-                ", errorDescr='" + errorDescr + '\'' +
-                ", invocationResult='" + invocationResult + '\'' +
                 ", dn='" + dn + '\'' +
                 ", outconfig=" + outconfig.equipmentFex +
                 '}';

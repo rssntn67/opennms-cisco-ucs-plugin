@@ -115,30 +115,20 @@ public class ApiClient {
 
     public <T extends UcsXmlApiResponse> T getUcsEntity(String response, Class<T> clazz) throws ApiException {
         try {
-            T t = mapper.readValue(response, clazz);
-            if (t.errorCode > 0) {
-                LOG.error("getUcsEntity: failed: with error code: {}, {}", t.errorCode, response);
-                throw new ApiException(
-                        "getUcsEntity: server responded with error: " + t.errorCode
-                        ,new RuntimeException("getUcsEntity error code: " + t.errorCode)
-                        , t.errorCode
-                        , response);
-            }
-            return t;
+            return mapper.readValue(response, clazz);
         } catch (JsonProcessingException e) {
-            LOG.error("getUcsEntity: Error Processing response: {}", e.getMessage(), e);
             try {
                 ErrorResponse error = mapper.readValue(response, ErrorResponse.class);
+                LOG.error("getUcsEntity: failed: with error output: {}, {}", error, response);
                 throw new ApiException("getUcsEntity: server responded with error: " + error.invocationResult
                         ,new RuntimeException("getUcsEntity: response error: " + error.invocationResult)
                         , error.invocationResult
                         , error.toString());
             } catch (JsonProcessingException ex) {
-                LOG.error("getUcsEntity: Cisco UCS Manager communication failed: Error processing Response: {}", ex.getMessage(), ex);
-                throw new ApiException("getUcsEntity: " + ex.getMessage(), ex);
+                LOG.error("getUcsEntity: Error Processing response: {}", e.getMessage(), e);
+                throw new ApiException("getUcsEntity: " + e.getMessage(), e);
             }
         }
-
     }
 
     public <T extends UcsXmlApiResponse> T getUcsXmlApiResponse(String requestBody, Class<T> clazz) throws ApiException {
