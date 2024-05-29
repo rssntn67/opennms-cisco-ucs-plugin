@@ -43,13 +43,20 @@ import org.slf4j.LoggerFactory;
 
 import java.math.BigInteger;
 import java.net.InetAddress;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -1544,16 +1551,32 @@ Oper Evac Mode	:	Off
     }
 
     @Test
-    public void testConvertProperlyFcStats() throws ApiException {
+    public void testConvertProperlyFcStats() throws ApiException, ParseException {
         ApiClientCredentials credentials = getCredentials();
         ApiClient apiClient = new ApiClient(credentials.url);
-        String date1 = "Wed May 29 08:50:12 CEST 2024";
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(
+                "EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+        LocalDateTime date1 = LocalDateTime.parse("Wed May 29 08:50:12 CEST 2024",dateFormat);
         String response1 = " <configResolveDn dn=\"sys/switch-A/slot-1/switch-fc/port-1/stats\" cookie=\"1716965139/cbf0751f-d020-49fe-b150-7f1e9719c943\" response=\"yes\"> <outConfig> <fcStats bytesRx=\"11094931231960\" bytesRxDelta=\"603704\" bytesRxDeltaAvg=\"5190927\" bytesRxDeltaMax=\"33997280\" bytesRxDeltaMin=\"405272\" bytesTx=\"217019375872\" bytesTxDelta=\"10546524\" bytesTxDeltaAvg=\"14125307\" bytesTxDeltaMax=\"22938596\" bytesTxDeltaMin=\"8662964\" dn=\"sys/switch-A/slot-1/switch-fc/port-1/stats\" intervals=\"58982460\" packetsRx=\"5379210322\" packetsRxDelta=\"2646\" packetsRxDeltaAvg=\"5572\" packetsRxDeltaMax=\"19375\" packetsRxDeltaMin=\"2642\" packetsTx=\"132559706\" packetsTxDelta=\"6367\" packetsTxDeltaAvg=\"8477\" packetsTxDeltaMax=\"13247\" packetsTxDeltaMin=\"5435\" suspect=\"no\" thresholded=\"\" timeCollected=\"2024-05-29T08:49:58.166\" update=\"65547\"/> </outConfig> </configResolveDn>";
         FcStats fcStats1 = apiClient.getUcsEntity(response1, ConfigResolveDnResponseFcStats.class).outconfig.fcStats;
-        System.out.println(fcStats1);
-
-        String date2 = "Wed May 29 08:51:12 CEST 2024";
+        System.out.println(date1);
+        System.out.println(fcStats1.timeCollected);
+        System.out.println(fcStats1.update);
+        System.out.println(new Date(fcStats1.intervals));
+        System.out.println(fcStats1.intervals);
+        LocalDateTime date2 = LocalDateTime.parse("Wed May 29 08:51:12 CEST 2024", dateFormat);
+        Assert.assertEquals(date2.minus(Duration.ofMinutes(1)),date1);
         String response2 = "<configResolveDn dn=\"sys/switch-A/slot-1/switch-fc/port-1/stats\" cookie=\"1716965139/cbf0751f-d020-49fe-b150-7f1e9719c943\" response=\"yes\"> <outConfig> <fcStats bytesRx=\"11094934557624\" bytesRxDelta=\"3325664\" bytesRxDeltaAvg=\"5035488\" bytesRxDeltaMax=\"33997280\" bytesRxDeltaMin=\"405272\" bytesTx=\"217035185828\" bytesTxDelta=\"15809956\" bytesTxDeltaAvg=\"14265694\" bytesTxDeltaMax=\"22938596\" bytesTxDeltaMin=\"8662964\" dn=\"sys/switch-A/slot-1/switch-fc/port-1/stats\" intervals=\"58982460\" packetsRx=\"5379215194\" packetsRxDelta=\"4872\" packetsRxDeltaAvg=\"5513\" packetsRxDeltaMax=\"19375\" packetsRxDeltaMin=\"2642\" packetsTx=\"132569169\" packetsTxDelta=\"9463\" packetsTxDeltaAvg=\"8559\" packetsTxDeltaMax=\"13247\" packetsTxDeltaMin=\"5435\" suspect=\"no\" thresholded=\"\" timeCollected=\"2024-05-29T08:50:58.166\" update=\"65548\"/> </outConfig> </configResolveDn>";
         FcStats fcStats2 = apiClient.getUcsEntity(response2, ConfigResolveDnResponseFcStats.class).outconfig.fcStats;
+        System.out.println(date2);
+        System.out.println(fcStats2.timeCollected);
+        System.out.println(fcStats2.update);
+        System.out.println(new Date(fcStats2.intervals));
+        System.out.println(fcStats2.intervals);
+
+        System.out.println(fcStats2.intervals-fcStats1.intervals);
+        System.out.println(fcStats2.bytesRx-fcStats1.bytesRx);
+        System.out.println(fcStats2.bytesRxDelta);
+
     }
 }
