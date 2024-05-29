@@ -104,6 +104,9 @@
     <service ref="ciscoUcsCollectorConfig"
              interface="org.opennms.integration.api.v1.config.collector.CollectorConfigurationExtension"/>
 
+    <service interface="org.opennms.integration.api.v1.config.datacollection.ResourceTypesExtension">
+        <bean class="it.xeniaprogetti.cisco.ucs.plugin.collection.UcsResourceTypesExtension"/>
+    </service>
 
     <!-- Load Graphs -->
     <service interface="org.opennms.integration.api.v1.config.datacollection.graphs.GraphPropertiesExtension">
