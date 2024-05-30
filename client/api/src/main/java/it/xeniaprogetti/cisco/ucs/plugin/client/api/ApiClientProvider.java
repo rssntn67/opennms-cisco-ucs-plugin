@@ -7,7 +7,7 @@ public interface ApiClientProvider {
      * @param credentials the credentials to use for the client.
      * @return a NutanixApiClient client
      */
-    ApiClientService client(final ApiClientCredentials credentials);
+    ApiClientService client(final ApiClientCredentials credentials) throws ApiException;
 
     boolean validate(final ApiClientCredentials credentials);
 

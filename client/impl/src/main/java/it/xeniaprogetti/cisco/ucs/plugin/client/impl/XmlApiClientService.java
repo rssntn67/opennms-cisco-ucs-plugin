@@ -77,15 +77,18 @@ public class XmlApiClientService implements ApiClientService {
     private final IpApi ipApi;
     private final FaultApi faultApi;
     private final StatsApi statsApi;
+    private final XmlApiClientProvider apiClientProvider;
+    private final ApiClient client;
 
-    public XmlApiClientService(ApiClientCredentials credentials) {
-        ApiClient client = XmlApiClientProvider.getApiClient(credentials);
+    public XmlApiClientService(ApiClientCredentials credentials, XmlApiClientProvider provider) throws ApiException {
+        this.client = provider.getApiClient(credentials);
         this.credentials = credentials;
         this.aaaApi = new AaaApi(credentials, client);
         this.configApi = new ConfigApi(client);
         this.ipApi = new IpApi(client);
         this.faultApi = new FaultApi(client);
         this.statsApi = new StatsApi(client);
+        this.apiClientProvider = provider;
     }
 
 
@@ -108,6 +111,8 @@ public class XmlApiClientService implements ApiClientService {
     @Override
     public void disconnect() throws ApiException {
         aaaApi.logout();
+        boolean disconnected = apiClientProvider.release(this.client, this.credentials);
+        LOG.info("disconnect: cleared connection: {}", disconnected);
     }
 
     @Override

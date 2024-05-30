@@ -33,13 +33,14 @@ public class XmlApiClientTest {
     @Test
     public void testValidate() {
         ApiClientCredentials credentials = getCredentials(30);
-        XmlApiClientProvider clientProvider = new XmlApiClientProvider();
+        XmlApiClientProvider clientProvider = new XmlApiClientProvider(5);
         Assert.assertTrue(clientProvider.validate(credentials));
     }
 
     @Test
     public void testXmlClientServiceCheckCredentials() throws ApiException, InterruptedException {
-        XmlApiClientService service = new XmlApiClientService(getCredentials(550));
+        XmlApiClientProvider clientProvider = new XmlApiClientProvider(5);
+        XmlApiClientService service = new XmlApiClientService(getCredentials(550),clientProvider);
         //Should do login
         service.checkCredentials();
         LOG.info("sleeping 30sec {}", OffsetDateTime.now());
@@ -67,7 +68,8 @@ public class XmlApiClientTest {
 
     @Test
     public void testXmlClientService() throws ApiException {
-        XmlApiClientService service = new XmlApiClientService(getCredentials(30));
+        XmlApiClientProvider clientProvider = new XmlApiClientProvider(5);
+        XmlApiClientService service = new XmlApiClientService(getCredentials(30),clientProvider);
         service.getUcsXmlFromDn("fabric/san/A", false);
         service.findDnByClassItem(UcsEnums.NamingClassId.equipmentRackEnclosure).forEach(System.out::println);
 
@@ -88,7 +90,8 @@ public class XmlApiClientTest {
 
     @Test
     public void testXmlClientServiceForStats() throws ApiException {
-        XmlApiClientService service = new XmlApiClientService(getCredentials(30));
+        XmlApiClientProvider clientProvider = new XmlApiClientProvider(5);
+        XmlApiClientService service = new XmlApiClientService(getCredentials(30), clientProvider);
         List<String> statsItemList = service.findDnByClassItem(UcsEnums.NamingClassId.statsItem);
         System.out.println(statsItemList.size());
         statsItemList.forEach(System.out::println);
@@ -101,7 +104,8 @@ public class XmlApiClientTest {
 
     @Test
     public void testXmlClientServiceForSwEnvStats() throws ApiException {
-        XmlApiClientService service = new XmlApiClientService(getCredentials(30));
+        XmlApiClientProvider clientProvider = new XmlApiClientProvider(5);
+        XmlApiClientService service = new XmlApiClientService(getCredentials(30),clientProvider);
         Map<String, Set<UcsEnums.NamingClassId>> requestMap = new HashMap<>();
         requestMap.put("sys/switch-A", new HashSet<>());
         requestMap.get("sys/switch-A").add(UcsEnums.NamingClassId.swEnvStats);

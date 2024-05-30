@@ -1,4 +1,17 @@
-<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
-    <bean id="clientProvider" class="it.xeniaprogetti.cisco.ucs.plugin.client.impl.XmlApiClientProvider"/>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
+           xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0
+                http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+                http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0
+                http://aries.apache.org/schemas/blueprint-cm/blueprint-cm-1.1.0.xsd">
+    <!-- Configuration stored in $OPENNMS_HOME/etc/it.xeniaprogetti.cisco.ucs.plugin.cfg file -->
+    <cm:property-placeholder id="cisco-ucsClientProperties" persistent-id="it.xeniaprogetti.cisco.ucs.client" update-strategy="reload">
+        <cm:default-properties>
+            <cm:property name="client.pool.size" value="64" />
+        </cm:default-properties>
+    </cm:property-placeholder>
+    <bean id="clientProvider" class="it.xeniaprogetti.cisco.ucs.plugin.client.impl.XmlApiClientProvider">
+        <argument value="${client.pool.size}"/>
+    </bean>
     <service ref="clientProvider" interface="it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientProvider"/>
 </blueprint>

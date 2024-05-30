@@ -24,7 +24,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 import static it.xeniaprogetti.cisco.ucs.plugin.collection.AbstractUcsServiceCollector.addAggregate;
@@ -55,7 +54,7 @@ public class CiscoUcsPluginTest {
 
     @Test
     public void testValidate() {
-        ClientManager clientManager = new ClientManager(new XmlApiClientProvider());
+        ClientManager clientManager = new ClientManager(new XmlApiClientProvider(1));
         ConnectionManagerForTest connectionManager = new ConnectionManagerForTest(getRuntimeInfo(),getSecureCredentialVault());
         Connection connection = connectionManager
                 .newConnection("test","https://10.172.192.15/nuova", "pippo", "pluto", true, 30);
