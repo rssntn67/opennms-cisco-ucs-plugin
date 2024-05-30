@@ -1562,7 +1562,6 @@ Oper Evac Mode	:	Off
         System.out.println(date1);
         System.out.println(fcStats1.timeCollected);
         System.out.println(fcStats1.update);
-        System.out.println(new Date(fcStats1.intervals));
         System.out.println(fcStats1.intervals);
         LocalDateTime date2 = LocalDateTime.parse("Wed May 29 08:51:12 CEST 2024", dateFormat);
         Assert.assertEquals(date2.minus(Duration.ofMinutes(1)),date1);
@@ -1571,12 +1570,17 @@ Oper Evac Mode	:	Off
         System.out.println(date2);
         System.out.println(fcStats2.timeCollected);
         System.out.println(fcStats2.update);
-        System.out.println(new Date(fcStats2.intervals));
         System.out.println(fcStats2.intervals);
 
         System.out.println(fcStats2.intervals-fcStats1.intervals);
         System.out.println(fcStats2.bytesRx-fcStats1.bytesRx);
         System.out.println(fcStats2.bytesRxDelta);
 
+    }
+
+    @Test
+    public void testConfigScopeRequest() {
+        String request = UcsXmlApiRequest.getConfigScopeRequest("real_cookie", "sys/chassis-1/blade-1/board/cpu-2", UcsEnums.NamingClassId.processorEnvStats);
+        System.out.println(request);
     }
 }

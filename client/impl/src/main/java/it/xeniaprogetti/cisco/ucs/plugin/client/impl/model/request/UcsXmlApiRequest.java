@@ -11,6 +11,13 @@ UcsXmlApiRequest {
         private InFilter(String xml) {
             this.xml = xml;
         }
+
+        @Override
+        public String toString() {
+            return "InFilter{" +
+                    "xml='" + xml + '\'' +
+                    '}';
+        }
     }
 
     public static String getLoginRequest(String inName, String inPassword) {
@@ -104,6 +111,14 @@ UcsXmlApiRequest {
                 "    <inFilter>\n" +
                 "    </inFilter>\n" +
                 "</configResolveClass>";
+    }
+
+    public static String getConfigScopeRequest(String cookie, String dn, UcsEnums.NamingClassId classId) {
+        return "<configScope " +
+                "cookie=\""+cookie+"\" " +
+                "inHierarchical=\"false\" " +
+                "dn=\""+dn+"\" " +
+                "classId=\""+classId.name()+"\" />";
     }
 
     public static String getConfigFindDnsByClassIdRequest(String cookie, UcsEnums.NamingClassId classId) {
