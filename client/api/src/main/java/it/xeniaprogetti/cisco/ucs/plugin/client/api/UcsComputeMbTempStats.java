@@ -10,24 +10,12 @@ public class UcsComputeMbTempStats extends UcsStats {
     }
 
     public final double fmTempSenIo;
-    public final Aggregate fmTempSenIoAgg;
     public final double fmTempSenRear;
-    public final Aggregate fmTempSenRearAgg;
 
     private UcsComputeMbTempStats(Builder builder) {
         super(builder.dn, UcsEnums.ClassId.computeMbTempStats, UcsEnums.ClassItem.statsItem, builder.intervals, builder.suspect, builder.thresholded, builder.timeCollected, builder.update);
         fmTempSenIo = builder.fmTempSenIo;
-        fmTempSenIoAgg = Aggregate.builder()
-                .withAverage(BigDecimal.valueOf(builder.fmTempSenIoAvg))
-                .withMax(BigDecimal.valueOf(builder.fmTempSenIoMax))
-                .withMin(BigDecimal.valueOf(builder.fmTempSenIoMin))
-                .build();
         fmTempSenRear = builder.fmTempSenRear;
-        fmTempSenRearAgg = Aggregate.builder()
-                .withAverage(BigDecimal.valueOf(builder.fmTempSenRearAvg))
-                .withMax(BigDecimal.valueOf(builder.fmTempSenRearMax))
-                .withMin(BigDecimal.valueOf(builder.fmTempSenRearMin))
-                .build();
     }
 
     public static class Builder {
@@ -43,13 +31,7 @@ public class UcsComputeMbTempStats extends UcsStats {
         public long update;
 
         private double fmTempSenIo;
-        private double fmTempSenIoAvg;
-        private double fmTempSenIoMax;
-        private double fmTempSenIoMin;
         private double fmTempSenRear;
-        private double fmTempSenRearAvg;
-        private double fmTempSenRearMax;
-        private double fmTempSenRearMin;
 
         public Builder withDn(String dn) {
             this.dn = UcsDn.getDn(dn);
@@ -86,40 +68,11 @@ public class UcsComputeMbTempStats extends UcsStats {
             return this;
         }
 
-        public Builder withFmTempSenIoAvg(double fmTempSenIoAvg){
-            this.fmTempSenIoAvg = fmTempSenIoAvg;
-            return this;
-        }
-
-        public Builder withFmTempSenIoMax(double fmTempSenIoMax){
-            this.fmTempSenIoMax = fmTempSenIoMax;
-            return this;
-        }
-
-        public Builder withFmTempSenIoMin(double fmTempSenIoMin){
-            this.fmTempSenIoMin = fmTempSenIoMin;
-            return this;
-        }
-
         public Builder withFmTempSenRear(double fmTempSenRear){
             this.fmTempSenRear = fmTempSenRear;
             return this;
         }
 
-        public Builder withfmTempSenRearAvg(double fmTempSenRearAvg){
-            this.fmTempSenRearAvg = fmTempSenRearAvg;
-            return this;
-        }
-
-        public Builder withfmTempSenRearMax(double fmTempSenRearMax){
-            this.fmTempSenRearMax = fmTempSenRearMax;
-            return this;
-        }
-
-        public Builder withfmTempSenRearMin(double fmTempSenRearMin){
-            this.fmTempSenRearMin = fmTempSenRearMin;
-            return this;
-        }
 
         public UcsComputeMbTempStats build() {
             return new UcsComputeMbTempStats(this);

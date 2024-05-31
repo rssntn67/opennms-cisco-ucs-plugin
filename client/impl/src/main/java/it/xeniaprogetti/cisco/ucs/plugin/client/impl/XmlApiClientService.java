@@ -554,13 +554,7 @@ public class XmlApiClientService implements ApiClientService {
                 .withTimeCollected(computeMbTempStats.timeCollected)
                 .withUpdate(computeMbTempStats.update)
                 .withFmTempSenIo(computeMbTempStats.fmTempSenIo)
-                .withFmTempSenIoAvg(computeMbTempStats.fmTempSenIoAvg)
-                .withFmTempSenIoMax(computeMbTempStats.fmTempSenIoMax)
-                .withFmTempSenIoMin(computeMbTempStats.fmTempSenIoMin)
                 .withFmTempSenRear(computeMbTempStats.fmTempSenRear)
-                .withfmTempSenRearAvg(computeMbTempStats.fmTempSenRearAvg)
-                .withfmTempSenRearMax(computeMbTempStats.fmTempSenRearMax)
-                .withfmTempSenRearMin(computeMbTempStats.fmTempSenRearMin)
                 .build();
     }
 
@@ -572,18 +566,9 @@ public class XmlApiClientService implements ApiClientService {
                 .withThresholded(computeMbPowerStats.thresholded)
                 .withTimeCollected(computeMbPowerStats.timeCollected)
                 .withUpdate(computeMbPowerStats.update)
-                .withconsumedPower(computeMbPowerStats.consumedPower)
-                .withconsumedPowerAvg(computeMbPowerStats.consumedPowerAvg)
-                .withconsumedPowerMax(computeMbPowerStats.consumedPowerMax)
-                .withconsumedPowerMin(computeMbPowerStats.consumedPowerMin)
-                .withinputCurrent(computeMbPowerStats.inputCurrent)
-                .withinputCurrentAvg(computeMbPowerStats.inputCurrentAvg)
-                .withinputCurrentMax(computeMbPowerStats.inputCurrentMax)
-                .withinputCurrentMin(computeMbPowerStats.inputCurrentMin)
-                .withinputVoltage(computeMbPowerStats.inputVoltage)
-                .withinputVoltageAvg(computeMbPowerStats.inputVoltageAvg)
-                .withinputVoltageMax(computeMbPowerStats.inputVoltageMax)
-                .withinputVoltageMin(computeMbPowerStats.inputVoltageMin)
+                .withConsumedPower(computeMbPowerStats.consumedPower)
+                .withInputCurrent(computeMbPowerStats.inputCurrent)
+                .withInputVoltage(computeMbPowerStats.inputVoltage)
                 .build();
     }
 

@@ -10,32 +10,14 @@ public class UcsComputeMbPowerStats extends UcsStats {
     }
 
     public final double consumedPower;
-    public final Aggregate consumedPowerAgg;
     public final double inputCurrent;
-    public final Aggregate inputCurrentAgg;
     public final double inputVoltage;
-    public final Aggregate inputVoltageAgg;
 
     private UcsComputeMbPowerStats(Builder builder) {
         super(builder.dn, UcsEnums.ClassId.computeMbPowerStats, UcsEnums.ClassItem.statsItem, builder.intervals, builder.suspect, builder.thresholded, builder.timeCollected, builder.update);
         consumedPower = builder.consumedPower;
         inputCurrent = builder.inputCurrent;
         inputVoltage = builder.inputVoltage;
-        consumedPowerAgg = Aggregate.builder()
-                .withAverage(BigDecimal.valueOf(builder.consumedPowerAvg))
-                .withMax(BigDecimal.valueOf(builder.consumedPowerMax))
-                .withMin(BigDecimal.valueOf(builder.consumedPowerMin))
-                .build();
-        inputCurrentAgg = Aggregate.builder()
-                .withAverage(BigDecimal.valueOf(builder.inputCurrentAvg))
-                .withMax(BigDecimal.valueOf(builder.inputCurrentMax))
-                .withMin(BigDecimal.valueOf(builder.inputCurrentMin))
-                .build();
-        inputVoltageAgg = Aggregate.builder()
-                .withAverage(BigDecimal.valueOf(builder.inputVoltageAvg))
-                .withMax(BigDecimal.valueOf(builder.inputVoltageMax))
-                .withMin(BigDecimal.valueOf(builder.inputVoltageMin))
-                .build();
     }
 
     public static class Builder {
@@ -51,17 +33,8 @@ public class UcsComputeMbPowerStats extends UcsStats {
         public long update;
 
         private double consumedPower;
-        private double consumedPowerAvg;
-        private double consumedPowerMax;
-        private double consumedPowerMin;
         private double inputCurrent;
-        private double inputCurrentAvg;
-        private double inputCurrentMax;
-        private double inputCurrentMin;
         private double inputVoltage;
-        private double inputVoltageAvg;
-        private double inputVoltageMax;
-        private double inputVoltageMin;
 
         public Builder withDn(String dn) {
             this.dn = UcsDn.getDn(dn);
@@ -93,63 +66,18 @@ public class UcsComputeMbPowerStats extends UcsStats {
             return this;
         }
 
-        public Builder withconsumedPower(double consumedPower){
+        public Builder withConsumedPower(double consumedPower){
             this.consumedPower = consumedPower;
             return this;
         }
 
-        public Builder withconsumedPowerAvg(double consumedPowerAvg){
-            this.consumedPowerAvg = consumedPowerAvg;
-            return this;
-        }
-
-        public Builder withconsumedPowerMax(double consumedPowerMax){
-            this.consumedPowerMax = consumedPowerMax;
-            return this;
-        }
-
-        public Builder withconsumedPowerMin(double consumedPowerMin){
-            this.consumedPowerMin = consumedPowerMin;
-            return this;
-        }
-
-        public Builder withinputCurrent(double inputCurrent){
+        public Builder withInputCurrent(double inputCurrent){
             this.inputCurrent = inputCurrent;
             return this;
         }
 
-        public Builder withinputCurrentAvg(double inputCurrentAvg){
-            this.inputCurrentAvg = inputCurrentAvg;
-            return this;
-        }
-
-        public Builder withinputCurrentMax(double inputCurrentMax){
-            this.inputCurrentMax = inputCurrentMax;
-            return this;
-        }
-
-        public Builder withinputCurrentMin(double inputCurrentMin){
-            this.inputCurrentMin = inputCurrentMin;
-            return this;
-        }
-
-        public Builder withinputVoltage(double inputVoltage){
+        public Builder withInputVoltage(double inputVoltage){
             this.inputVoltage = inputVoltage;
-            return this;
-        }
-
-        public Builder withinputVoltageAvg(double inputVoltageAvg){
-            this.inputVoltageAvg = inputVoltageAvg;
-            return this;
-        }
-
-        public Builder withinputVoltageMax(double inputVoltageMax){
-            this.inputVoltageMax = inputVoltageMax;
-            return this;
-        }
-
-        public Builder withinputVoltageMin(double inputVoltageMin){
-            this.inputVoltageMin = inputVoltageMin;
             return this;
         }
 
