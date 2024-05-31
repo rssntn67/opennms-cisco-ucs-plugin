@@ -24,64 +24,64 @@ public class AdaptorVnicStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
     public long bytesTxDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public int droppedRx;
+    public long droppedRx;
     @JacksonXmlProperty(isAttribute = true)
-    public int droppedRxDelta;
+    public long droppedRxDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public int droppedRxDeltaAvg;
+    public long droppedRxDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public int droppedRxDeltaMax;
+    public long droppedRxDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public int droppedRxDeltaMin;
+    public long droppedRxDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public int droppedTx;
+    public long droppedTx;
     @JacksonXmlProperty(isAttribute = true)
-    public int droppedTxDelta;
+    public long droppedTxDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public int droppedTxDeltaAvg;
+    public long droppedTxDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public int droppedTxDeltaMax;
+    public long droppedTxDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public int droppedTxDeltaMin;
+    public long droppedTxDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public int errorsRx;
+    public long errorsRx;
     @JacksonXmlProperty(isAttribute = true)
-    public int errorsRxDelta;
+    public long errorsRxDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public int errorsRxDeltaAvg;
+    public long errorsRxDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public int errorsRxDeltaMax;
+    public long errorsRxDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public int errorsRxDeltaMin;
+    public long errorsRxDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public int errorsTx;
+    public long errorsTx;
     @JacksonXmlProperty(isAttribute = true)
-    public int errorsTxDelta;
+    public long errorsTxDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public int errorsTxDeltaAvg;
+    public long errorsTxDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public int errorsTxDeltaMax;
+    public long errorsTxDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public int errorsTxDeltaMin;
+    public long errorsTxDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public int packetsRx;
+    public long packetsRx;
     @JacksonXmlProperty(isAttribute = true)
-    public int packetsRxDelta;
+    public long packetsRxDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public int packetsRxDeltaAvg;
+    public long packetsRxDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public int packetsRxDeltaMax;
+    public long packetsRxDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public int packetsRxDeltaMin;
+    public long packetsRxDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public int packetsTx;
+    public long packetsTx;
     @JacksonXmlProperty(isAttribute = true)
-    public int packetsTxDelta;
+    public long packetsTxDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public int packetsTxDeltaAvg;
+    public long packetsTxDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public int packetsTxDeltaMax;
+    public long packetsTxDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public int packetsTxDeltaMin;
+    public long packetsTxDeltaMin;
 }
 

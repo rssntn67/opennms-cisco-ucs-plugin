@@ -10,12 +10,12 @@ public class UcsAdaptorVnicStats extends UcsStats {
 
     public final long bytesRx;
     public final long bytesTx;
-    public final int droppedRx;
-    public final int droppedTx;
-    public final int errorsRx;
-    public final int errorsTx;
-    public final int packetsRx;
-    public final int packetsTx;
+    public final long droppedRx;
+    public final long droppedTx;
+    public final long errorsRx;
+    public final long errorsTx;
+    public final long packetsRx;
+    public final long packetsTx;
 
     private UcsAdaptorVnicStats(Builder builder) {
         super(builder.dn, UcsEnums.ClassId.adaptorVnicStats, UcsEnums.ClassItem.statsItem, builder.intervals, builder.suspect, builder.thresholded, builder.timeCollected, builder.update);
@@ -43,12 +43,12 @@ public class UcsAdaptorVnicStats extends UcsStats {
 
         private long bytesRx;
         private long bytesTx;
-        private int droppedRx;
-        private int droppedTx;
-        private int errorsRx;
-        private int errorsTx;
-        private int packetsRx;
-        private int packetsTx;
+        private long droppedRx;
+        private long droppedTx;
+        private long errorsRx;
+        private long errorsTx;
+        private long packetsRx;
+        private long packetsTx;
 
         public Builder withDn(String dn) {
             this.dn = UcsDn.getDn(dn);
@@ -90,32 +90,32 @@ public class UcsAdaptorVnicStats extends UcsStats {
             return this;
         }
 
-        public Builder withDroppedRx(int droppedRx){
+        public Builder withDroppedRx(long droppedRx){
             this.droppedRx = droppedRx;
             return this;
         }
 
-        public Builder withDroppedTx(int droppedTx){
+        public Builder withDroppedTx(long droppedTx){
             this.droppedTx = droppedTx;
             return this;
         }
 
-        public Builder withErrorsRx(int errorsRx){
+        public Builder withErrorsRx(long errorsRx){
             this.errorsRx = errorsRx;
             return this;
         }
 
-        public Builder withErrorsTx(int errorsTx){
+        public Builder withErrorsTx(long errorsTx){
             this.errorsTx = errorsTx;
             return this;
         }
 
-        public Builder withPacketsRx(int packetsRx){
+        public Builder withPacketsRx(long packetsRx){
             this.packetsRx = packetsRx;
             return this;
         }
 
-        public Builder withPacketsTx(int packetsTx){
+        public Builder withPacketsTx(long packetsTx){
             this.packetsTx = packetsTx;
             return this;
         }
