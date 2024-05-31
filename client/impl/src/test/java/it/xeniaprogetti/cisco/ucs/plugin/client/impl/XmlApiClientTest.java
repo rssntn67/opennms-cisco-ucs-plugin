@@ -4,6 +4,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientCredentials;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEnums;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsNetworkElementStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsUtils;
 import org.junit.Assert;
@@ -173,7 +174,7 @@ public class XmlApiClientTest {
         Map<String, Set<UcsEnums.NamingClassId>> requestMap = new HashMap<>();
         requestMap.put("sys/switch-A", new HashSet<>());
         requestMap.get("sys/switch-A").add(UcsEnums.NamingClassId.swEnvStats);
-        UcsNetworkElementStats ucsNetworkElementStats = service.getNetworkElementStats(requestMap);
+        UcsNetworkElementStats ucsNetworkElementStats = service.getUcsNetworkElementStats(requestMap);
         Assert.assertNotNull(ucsNetworkElementStats.ucsSwEnvStats);
         service.disconnect();
         System.out.println(ucsNetworkElementStats.ucsSwEnvStats.mainBoardOutlet1);
@@ -183,11 +184,65 @@ public class XmlApiClientTest {
     }
 
     @Test
-    public void testXmlClientServiceForStatsCollection() throws ApiException {
+    public void testXmlClientServiceForNetworkElementStatsCollection() throws ApiException {
         XmlApiClientProvider clientProvider = new XmlApiClientProvider(1);
         XmlApiClientService service = new XmlApiClientService(getCredentials(600),clientProvider);
 
-        UcsComputeStats stats = service.getUcsComputeStats(null);
+        Map<String, Set<UcsEnums.NamingClassId>> requestMap = new HashMap<>();
+        var swDn = "sys/switch-A";
+        var lanDn = "fabric/lan/A";
+        var sanDn = "fabric/san/A";
+        requestMap.put(
+                swDn,
+                getCollectionMap().get(UcsEnums.ClassId.equipmentChassis).get(UcsUtils.UCS_DN_KEY)
+        );
+
+        requestMap.put(
+                lanDn,
+                getCollectionMap().get(UcsEnums.ClassId.equipmentChassis).get(UcsUtils.UCS_FABRIC_LAN_KEY)
+        );
+
+        requestMap.put(
+                sanDn,
+                getCollectionMap().get(UcsEnums.ClassId.equipmentChassis).get(UcsUtils.UCS_FABRIC_SAN_KEY)
+        );
+
+        UcsNetworkElementStats stats = service.getUcsNetworkElementStats(requestMap);
+        System.out.println(stats);
+
+    }
+
+    @Test
+    public void testXmlClientServiceForEquipmentChassisStatsCollection() throws ApiException {
+        XmlApiClientProvider clientProvider = new XmlApiClientProvider(1);
+        XmlApiClientService service = new XmlApiClientService(getCredentials(600),clientProvider);
+
+        Map<String, Set<UcsEnums.NamingClassId>> requestMap = new HashMap<>();
+        var dn = "sys/chassis-3";
+        requestMap.put(
+                dn,
+                getCollectionMap().get(UcsEnums.ClassId.equipmentChassis).get(UcsUtils.UCS_DN_KEY)
+        );
+
+        UcsEquipmentStats stats = service.getUcsEquipmentStats(requestMap);
+        System.out.println(stats);
+
+    }
+
+    @Test
+    public void testXmlClientServiceForComputeBladeStatsCollection() throws ApiException {
+        XmlApiClientProvider clientProvider = new XmlApiClientProvider(1);
+        XmlApiClientService service = new XmlApiClientService(getCredentials(600),clientProvider);
+
+        Map<String, Set<UcsEnums.NamingClassId>> requestMap = new HashMap<>();
+        var dn = "sys/chassis-3/blade-3";
+        requestMap.put(
+                dn,
+                getCollectionMap().get(UcsEnums.ClassId.computeBlade).get(UcsUtils.UCS_DN_KEY)
+        );
+        UcsComputeStats stats = service.getUcsComputeStats(requestMap);
+        service.disconnect();
+        System.out.println(stats);
 
     }
 

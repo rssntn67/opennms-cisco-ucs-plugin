@@ -301,7 +301,7 @@ public class XmlApiClientService implements ApiClientService {
     }
 
     @Override
-    public UcsNetworkElementStats getNetworkElementStats(Map<String, Set<UcsEnums.NamingClassId>> collectMap) throws ApiException {
+    public UcsNetworkElementStats getUcsNetworkElementStats(Map<String, Set<UcsEnums.NamingClassId>> collectMap) throws ApiException {
         LOG.debug("getNetworkElementStats: {}", collectMap);
         checkCredentials();
         UcsSwEnvStats swEnvStats = null;

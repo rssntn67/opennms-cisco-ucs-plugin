@@ -96,7 +96,7 @@ public class UcsNetworkElementCollector extends AbstractUcsServiceCollector {
 
         UcsNetworkElementStats stats;
         try {
-            stats = service.getNetworkElementStats(requestMap);
+            stats = service.getUcsNetworkElementStats(requestMap);
         } catch (ApiException e) {
             LOG.error("collect: {}", requestMap, e );
             return createFailedCollectionSet(nodeResource, Instant.now().toEpochMilli());

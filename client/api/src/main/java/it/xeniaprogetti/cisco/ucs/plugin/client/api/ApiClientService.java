@@ -35,7 +35,7 @@ public interface ApiClientService {
 
     UcsManager getUcsManager() throws ApiException;
 
-    UcsNetworkElementStats getNetworkElementStats(Map<String, Set<UcsEnums.NamingClassId>> collectMap) throws ApiException;
+    UcsNetworkElementStats getUcsNetworkElementStats(Map<String, Set<UcsEnums.NamingClassId>> collectMap) throws ApiException;
     UcsEquipmentStats getUcsEquipmentStats(Map<String, Set<UcsEnums.NamingClassId>> collectMap) throws ApiException;
     UcsComputeStats getUcsComputeStats(Map<String, Set<UcsEnums.NamingClassId>> collectMap) throws ApiException;
     
