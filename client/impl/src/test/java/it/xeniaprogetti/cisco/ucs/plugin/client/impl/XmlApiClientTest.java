@@ -208,6 +208,7 @@ public class XmlApiClientTest {
         );
 
         UcsNetworkElementStats stats = service.getUcsNetworkElementStats(requestMap);
+        service.disconnect();
         System.out.println(stats);
 
     }
@@ -225,6 +226,7 @@ public class XmlApiClientTest {
         );
 
         UcsEquipmentStats stats = service.getUcsEquipmentStats(requestMap);
+        service.disconnect();
         System.out.println(stats);
 
     }
