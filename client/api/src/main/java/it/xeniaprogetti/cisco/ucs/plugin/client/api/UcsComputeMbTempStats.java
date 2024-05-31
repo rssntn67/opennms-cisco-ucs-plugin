@@ -14,15 +14,6 @@ public class UcsComputeMbTempStats extends UcsStats {
     public final double fmTempSenRear;
     public final Aggregate fmTempSenRearAgg;
 
-    public final String fmTempSenRearL;
-    public final String fmTempSenRearLAvg;
-    public final String fmTempSenRearLMax;
-    public final String fmTempSenRearLMin;
-    public final String fmTempSenRearR;
-    public final String fmTempSenRearRAvg;
-    public final String fmTempSenRearRMax;
-    public final String fmTempSenRearRMin;
-
     private UcsComputeMbTempStats(Builder builder) {
         super(builder.dn, UcsEnums.ClassId.computeMbTempStats, UcsEnums.ClassItem.statsItem, builder.intervals, builder.suspect, builder.thresholded, builder.timeCollected, builder.update);
         fmTempSenIo = builder.fmTempSenIo;
@@ -37,14 +28,6 @@ public class UcsComputeMbTempStats extends UcsStats {
                 .withMax(BigDecimal.valueOf(builder.fmTempSenRearMax))
                 .withMin(BigDecimal.valueOf(builder.fmTempSenRearMin))
                 .build();
-        fmTempSenRearL = builder.fmTempSenRearL;
-        fmTempSenRearLAvg = builder.fmTempSenRearLAvg;
-        fmTempSenRearLMax = builder.fmTempSenRearLMax;
-        fmTempSenRearLMin = builder.fmTempSenRearLMin;
-        fmTempSenRearR = builder.fmTempSenRearR;
-        fmTempSenRearRAvg = builder.fmTempSenRearRAvg;
-        fmTempSenRearRMax = builder.fmTempSenRearRMax;
-        fmTempSenRearRMin = builder.fmTempSenRearRMin;
     }
 
     public static class Builder {
@@ -65,16 +48,8 @@ public class UcsComputeMbTempStats extends UcsStats {
         private double fmTempSenIoMin;
         private double fmTempSenRear;
         private double fmTempSenRearAvg;
-        private String fmTempSenRearL;
-        private String fmTempSenRearLAvg;
-        private String fmTempSenRearLMax;
-        private String fmTempSenRearLMin;
         private double fmTempSenRearMax;
         private double fmTempSenRearMin;
-        private String fmTempSenRearR;
-        private String fmTempSenRearRAvg;
-        private String fmTempSenRearRMax;
-        private String fmTempSenRearRMin;
 
         public Builder withDn(String dn) {
             this.dn = UcsDn.getDn(dn);
@@ -106,53 +81,33 @@ public class UcsComputeMbTempStats extends UcsStats {
             return this;
         }
 
-        public Builder withfmTempSenIo(double fmTempSenIo){
+        public Builder withFmTempSenIo(double fmTempSenIo){
             this.fmTempSenIo = fmTempSenIo;
             return this;
         }
 
-        public Builder withfmTempSenIoAvg(double fmTempSenIoAvg){
+        public Builder withFmTempSenIoAvg(double fmTempSenIoAvg){
             this.fmTempSenIoAvg = fmTempSenIoAvg;
             return this;
         }
 
-        public Builder withfmTempSenIoMax(double fmTempSenIoMax){
+        public Builder withFmTempSenIoMax(double fmTempSenIoMax){
             this.fmTempSenIoMax = fmTempSenIoMax;
             return this;
         }
 
-        public Builder withfmTempSenIoMin(double fmTempSenIoMin){
+        public Builder withFmTempSenIoMin(double fmTempSenIoMin){
             this.fmTempSenIoMin = fmTempSenIoMin;
             return this;
         }
 
-        public Builder withfmTempSenRear(double fmTempSenRear){
+        public Builder withFmTempSenRear(double fmTempSenRear){
             this.fmTempSenRear = fmTempSenRear;
             return this;
         }
 
         public Builder withfmTempSenRearAvg(double fmTempSenRearAvg){
             this.fmTempSenRearAvg = fmTempSenRearAvg;
-            return this;
-        }
-
-        public Builder withfmTempSenRearL(String fmTempSenRearL){
-            this.fmTempSenRearL = fmTempSenRearL;
-            return this;
-        }
-
-        public Builder withfmTempSenRearLAvg(String fmTempSenRearLAvg){
-            this.fmTempSenRearLAvg = fmTempSenRearLAvg;
-            return this;
-        }
-
-        public Builder withfmTempSenRearLMax(String fmTempSenRearLMax){
-            this.fmTempSenRearLMax = fmTempSenRearLMax;
-            return this;
-        }
-
-        public Builder withfmTempSenRearLMin(String fmTempSenRearLMin){
-            this.fmTempSenRearLMin = fmTempSenRearLMin;
             return this;
         }
 
@@ -163,26 +118,6 @@ public class UcsComputeMbTempStats extends UcsStats {
 
         public Builder withfmTempSenRearMin(double fmTempSenRearMin){
             this.fmTempSenRearMin = fmTempSenRearMin;
-            return this;
-        }
-
-        public Builder withfmTempSenRearR(String fmTempSenRearR){
-            this.fmTempSenRearR = fmTempSenRearR;
-            return this;
-        }
-
-        public Builder withfmTempSenRearRAvg(String fmTempSenRearRAvg){
-            this.fmTempSenRearRAvg = fmTempSenRearRAvg;
-            return this;
-        }
-
-        public Builder withfmTempSenRearRMax(String fmTempSenRearRMax){
-            this.fmTempSenRearRMax = fmTempSenRearRMax;
-            return this;
-        }
-
-        public Builder withfmTempSenRearRMin(String fmTempSenRearRMin){
-            this.fmTempSenRearRMin = fmTempSenRearRMin;
             return this;
         }
 

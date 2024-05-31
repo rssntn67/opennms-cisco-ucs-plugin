@@ -111,7 +111,7 @@ public class UcsAdaptorEthPortStats extends UcsStats {
             this.vlanPackets = vlanPackets;
             return this;
         }
-        
+
         public UcsAdaptorEthPortStats build() {
             return new UcsAdaptorEthPortStats(this);
         }
