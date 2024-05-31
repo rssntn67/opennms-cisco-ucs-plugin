@@ -118,7 +118,7 @@ UcsXmlApiRequest {
                 "cookie=\""+cookie+"\" " +
                 "inHierarchical=\"false\" " +
                 "dn=\""+dn+"\" " +
-                "classId=\""+classId.name()+"\" />";
+                "inClass=\""+classId.name()+"\" />";
     }
 
     public static String getConfigFindDnsByClassIdRequest(String cookie, UcsEnums.NamingClassId classId) {
