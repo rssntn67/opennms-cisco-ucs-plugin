@@ -169,7 +169,7 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
                     .forEach(element -> requisition.addNode(from(element, context, dnToIpListMap.get(element.dn))));
         }
 
-        service.disconnect();
+        service.release();
         return requisition.build();
     }
 
@@ -1907,7 +1907,7 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
                 throw new ApiException("No connection for alias", new NullPointerException("No connection found for "+ request.alias));
             }
             LOG.info("client: requesting Alias {}", request.alias);
-            this.client = clientManager.getClient(connection.get());
+            this.client = clientManager.getClientService(connection.get());
         }
 
         public ApiClientService client() {

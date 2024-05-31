@@ -24,7 +24,6 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
@@ -57,8 +56,6 @@ public class UcsComputeCollector extends AbstractUcsServiceCollector {
         collectionItemMap.get(UcsEnums.ClassId.computeBlade).get(UcsUtils.UCS_DN_KEY).add(UcsEnums.NamingClassId.computeMbTempStats);
         collectionItemMap.get(UcsEnums.ClassId.computeBlade).get(UcsUtils.UCS_DN_KEY).add(UcsEnums.NamingClassId.storageDiskEnvStats);
         collectionItemMap.get(UcsEnums.ClassId.computeBlade).get(UcsUtils.UCS_DN_KEY).add(UcsEnums.NamingClassId.storageSsdHealthStats);
-
-
     }
 
     @Override
@@ -69,9 +66,9 @@ public class UcsComputeCollector extends AbstractUcsServiceCollector {
                 dn,
                 collectionItemMap.get(UcsEnums.ClassId.computeBlade).get(UcsUtils.UCS_DN_KEY)
         );
-        ApiClientService client;
+        ApiClientService service;
         try {
-            client = getClient(attributes);
+            service = getClientService(attributes);
         } catch (ApiException e) {
             LOG.error("collect: {}", requestMap, e );
             return  CompletableFuture.failedFuture(e);
@@ -80,11 +77,12 @@ public class UcsComputeCollector extends AbstractUcsServiceCollector {
         final ImmutableNodeResource nodeResource = ImmutableNodeResource.newBuilder().setNodeId(request.getNodeId()).build();
         UcsComputeStats stats;
         try {
-            stats = client.getUcsComputeStats(requestMap);
-            client.disconnect();
+            stats = service.getUcsComputeStats(requestMap);
         } catch (ApiException e) {
             LOG.error("collect: {}", requestMap, e );
             return createFailedCollectionSet(nodeResource, Instant.now().toEpochMilli());
+        } finally {
+            service.release();
         }
         final ImmutableCollectionSetResource.Builder<NodeResource> computeAttrBuilder =
                 ImmutableCollectionSetResource.newBuilder(NodeResource.class).setResource(nodeResource);

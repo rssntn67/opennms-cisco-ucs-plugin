@@ -43,7 +43,7 @@ public class ListUcsEntityCommand implements Action {
                 .column(new Col("ClassId").maxSize(12))
                 .column(new Col("ClassItem").maxSize(12));
 
-        var service = clientManager.getClient(connection.get());
+        var service = clientManager.getClientService(connection.get());
         for (final var ne : service.getUcsNetworkElementList()) {
             final var row = table.addRow();
             row.addContent(ne.dn.value);
@@ -81,7 +81,7 @@ public class ListUcsEntityCommand implements Action {
             row.addContent(e.classItem);
         }
         table.print(System.out, true);
-        service.disconnect();
+        service.release();
 
         return null;
     }

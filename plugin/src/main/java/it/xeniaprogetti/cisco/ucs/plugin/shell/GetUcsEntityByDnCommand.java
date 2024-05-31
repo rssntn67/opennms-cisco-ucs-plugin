@@ -45,13 +45,13 @@ public class GetUcsEntityByDnCommand implements Action {
                 .column(new Col("Dn").maxSize(128).bold(true))
                 .column(new Col("Response").maxSize(500));
 
-        var service = clientManager.getClient(connection.get());
+        var service = clientManager.getClientService(connection.get());
         String response = service.getUcsXmlFromDn(dn, false);
         final var row = table.addRow();
         row.addContent(dn);
         row.addContent(response.substring(response.indexOf("<outConfig>")+11, response.indexOf("</outConfig>")));
         table.print(System.out, true);
-        service.disconnect();
+        service.release();
 
         return null;
 

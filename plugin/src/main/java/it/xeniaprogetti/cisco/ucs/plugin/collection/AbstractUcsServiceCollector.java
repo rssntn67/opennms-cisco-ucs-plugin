@@ -66,13 +66,13 @@ public abstract class AbstractUcsServiceCollector implements UcsServiceCollector
         }
     }
 
-    protected ApiClientService getClient(Map<String, Object> attributes) throws ApiException {
+    protected ApiClientService getClientService(Map<String, Object> attributes) throws ApiException {
         String alias = Objects.requireNonNull(attributes.get(CiscoUcsAbstractPoller.ALIAS_KEY), "alias is missing").toString();
         var connection = connectionManager.getConnection(alias);
         if (connection.isEmpty()) {
             throw new ApiException("No connection for alias", new NullPointerException("No connection found for "+ alias));
         }
-        return clientManager.getClient(connection.get());
+        return clientManager.getClientService(connection.get());
     }
 
     public static CompletableFuture<CollectionSet> createFailedCollectionSet(ImmutableNodeResource nodeResource, long timestamp) {

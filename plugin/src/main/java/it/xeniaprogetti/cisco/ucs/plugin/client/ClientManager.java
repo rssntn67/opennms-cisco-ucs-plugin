@@ -32,7 +32,7 @@ public class ClientManager {
     }
 
 
-    public ApiClientService getClient(Connection connection) throws ApiException {
+    public ApiClientService getClientService(Connection connection) throws ApiException {
         return clientProvider.client(asApiClientCredentials(connection));
     }
 

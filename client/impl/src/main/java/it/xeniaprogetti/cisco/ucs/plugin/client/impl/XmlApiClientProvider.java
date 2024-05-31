@@ -33,7 +33,7 @@ public class XmlApiClientProvider implements ApiClientProvider {
         return client;
     }
 
-    public boolean release(XmlApiClientService service){
+    public boolean release(XmlApiClientService service) {
         serviceAvailableMap.get(service.getCredentials()).add(service);
         return serviceUsedMap.get(service.getCredentials()).remove(service);
     }

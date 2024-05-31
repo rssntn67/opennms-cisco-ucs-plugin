@@ -47,47 +47,46 @@ public abstract class CiscoUcsAbstractPoller implements ServicePoller {
     protected abstract PollerResult poll(final UcsEquipmentRackEnclosure equipmentRackEnclosure) throws ApiException;
     protected abstract PollerResult poll(final UcsNetworkElement networkElement) throws ApiException;
 
-
-    public CompletableFuture<PollerResult> poll(final Context context) throws ApiException {
+    public CompletableFuture<PollerResult> poll(final Context context) {
         final var type = context.getUcsEntityClassId();
-        switch (type) {
-            case computeBlade:
-                var computeBladeStatus = CompletableFuture.completedFuture(this.poll(context.getUcsComputeBlade()));
-                context.disconnect();
-                return computeBladeStatus;
-            case computeRackUnit:
-                var computeRackUnitStatus = CompletableFuture.completedFuture(this.poll(context.getUcsComputeRackUnit()));
-                context.disconnect();
-                return computeRackUnitStatus;
-            case equipmentChassis:
-                var equipmentChassisStatus =  CompletableFuture.completedFuture(this.poll(context.getUcsEquipmentChassis()));
-                context.disconnect();
-                return equipmentChassisStatus;
-            case equipmentFex:
-                var equipmentFexStatus =  CompletableFuture.completedFuture(this.poll(context.getUcsEquipmentFex()));
-                context.disconnect();
-                return equipmentFexStatus;
-            case equipmentRackEnclosure:
-                var equipmentRackEnclosureStatus = CompletableFuture.completedFuture(this.poll(context.getUcsEquipmentRackEnclosure()));
-                context.disconnect();
-                return equipmentRackEnclosureStatus;
-            case networkElement:
-                var networkElementStatus =  CompletableFuture.completedFuture(this.poll(context.getUcsNetworkElement()));
-                context.disconnect();
-                return networkElementStatus;
-            default:
-                return CompletableFuture.completedFuture(ImmutablePollerResult.newBuilder()
-                        .setStatus(Status.Unknown)
-                        .setReason("No supported UCS Entity: " + type)
-                        .build());
+        try {
+            switch (type) {
+                case computeBlade:
+                    return CompletableFuture.completedFuture(this.poll(context.getUcsComputeBlade()));
+                case computeRackUnit:
+                    return CompletableFuture.completedFuture(this.poll(context.getUcsComputeRackUnit()));
+                case equipmentChassis:
+                    return CompletableFuture.completedFuture(this.poll(context.getUcsEquipmentChassis()));
+                case equipmentFex:
+                    return CompletableFuture.completedFuture(this.poll(context.getUcsEquipmentFex()));
+                case equipmentRackEnclosure:
+                    return CompletableFuture.completedFuture(this.poll(context.getUcsEquipmentRackEnclosure()));
+                case networkElement:
+                    return CompletableFuture.completedFuture(this.poll(context.getUcsNetworkElement()));
+                default:
+                    return CompletableFuture.completedFuture(ImmutablePollerResult.newBuilder()
+                            .setStatus(Status.Unknown)
+                            .setReason("No supported UCS Entity: " + type)
+                            .build());
+            }
+
+        } catch (ApiException e) {
+            LOG.warn("Cisco UCS manager failed", e);
+            return CompletableFuture.completedFuture(ImmutablePollerResult.newBuilder()
+                    .setStatus(Status.Unknown)
+                    .setReason(e.getMessage())
+                    .build());
+        } finally {
+            context.release();
         }
     }
 
     @Override
     public final CompletableFuture<PollerResult> poll(final PollerRequest pollerRequest) {
+        Context context;
         try {
             LOG.debug("poll: {} {}", pollerRequest.getAddress().getHostAddress(), pollerRequest.getServiceName());
-            return this.poll(new Context(pollerRequest));
+            context = new Context(pollerRequest);
         } catch (final ApiException e) {
             LOG.warn("Cisco UCS manager communication failed", e);
             return CompletableFuture.completedFuture(ImmutablePollerResult.newBuilder()
@@ -95,6 +94,7 @@ public abstract class CiscoUcsAbstractPoller implements ServicePoller {
                                                                           .setReason(e.getMessage())
                                                                           .build());
         }
+        return this.poll(context);
     }
 
     public static abstract class Factory<T extends CiscoUcsAbstractPoller> implements ServicePollerFactory<T> {
@@ -147,7 +147,7 @@ public abstract class CiscoUcsAbstractPoller implements ServicePoller {
         public final String alias;
         public final String type;
         public final String dn;
-        public final ApiClientService client;
+        public final ApiClientService service;
 
         public Context(final PollerRequest request) throws ApiException {
             this.request = Objects.requireNonNull(request);
@@ -161,36 +161,36 @@ public abstract class CiscoUcsAbstractPoller implements ServicePoller {
             if (connection.isEmpty()) {
                 throw new ApiException("No connection for alias", new NullPointerException("No connection found for "+ alias));
             }
-            client = CiscoUcsAbstractPoller.this.clientManager.getClient(connection.get());
+            service = CiscoUcsAbstractPoller.this.clientManager.getClientService(connection.get());
 
         }
 
-        public void disconnect() throws ApiException {
-            client.disconnect();
+        public void release() {
+            service.release();
         }
 
         public UcsNetworkElement getUcsNetworkElement() throws ApiException {
-            return client.resolveUcsNetworkElementByResponse(client.getUcsXmlFromDn(dn,false));
+            return service.resolveUcsNetworkElementByResponse(service.getUcsXmlFromDn(dn,false));
         }
 
         public UcsComputeBlade getUcsComputeBlade() throws ApiException {
-            return client.resolveUcsComputeBladeByResponse(client.getUcsXmlFromDn(dn,false));
+            return service.resolveUcsComputeBladeByResponse(service.getUcsXmlFromDn(dn,false));
         }
 
         public UcsComputeRackUnit getUcsComputeRackUnit() throws ApiException {
-            return client.resolveUcsComputeRackUnitByResponse(client.getUcsXmlFromDn(dn,false));
+            return service.resolveUcsComputeRackUnitByResponse(service.getUcsXmlFromDn(dn,false));
         }
 
         public UcsEquipmentChassis getUcsEquipmentChassis() throws ApiException {
-            return client.resolveUcsEquipmentChassisByResponse(client.getUcsXmlFromDn(dn,false));
+            return service.resolveUcsEquipmentChassisByResponse(service.getUcsXmlFromDn(dn,false));
         }
 
         public UcsEquipmentFex getUcsEquipmentFex() throws ApiException {
-            return client.resolveUcsEquipmentFexByResponse(client.getUcsXmlFromDn(dn,false));
+            return service.resolveUcsEquipmentFexByResponse(service.getUcsXmlFromDn(dn,false));
         }
 
         public UcsEquipmentRackEnclosure getUcsEquipmentRackEnclosure() throws ApiException {
-            return client.resolveUcsEquipmentRackEnclosureByResponse(client.getUcsXmlFromDn(dn,false));
+            return service.resolveUcsEquipmentRackEnclosureByResponse(service.getUcsXmlFromDn(dn,false));
         }
 
         public UcsEnums.ClassId getUcsEntityClassId() {

@@ -8,6 +8,7 @@ import java.util.Set;
 public interface ApiClientService {
 
     void disconnect() throws ApiException;
+    void release();
 
     String getUcsXmlFromDn(String dn, boolean isHierarchical) throws ApiException;
 

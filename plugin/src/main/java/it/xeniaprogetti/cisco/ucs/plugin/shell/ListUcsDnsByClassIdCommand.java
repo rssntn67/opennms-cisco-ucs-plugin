@@ -46,13 +46,13 @@ public class ListUcsDnsByClassIdCommand implements Action {
                 .size(session.getTerminal().getWidth() - 1)
                 .column(new Col("Dn").maxSize(128).bold(true));
 
-        var service = clientManager.getClient(connection.get());
+        var service = clientManager.getClientService(connection.get());
         for (final var dn : service.findDnByClassItem(UcsEnums.NamingClassId.valueOf(classId))) {
             final var row = table.addRow();
             row.addContent(dn);
         }
         table.print(System.out, true);
-        service.disconnect();
+        service.release();
 
         return null;
     }

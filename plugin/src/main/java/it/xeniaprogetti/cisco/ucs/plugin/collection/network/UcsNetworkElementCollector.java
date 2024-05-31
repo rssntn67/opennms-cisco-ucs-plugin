@@ -84,9 +84,9 @@ public class UcsNetworkElementCollector extends AbstractUcsServiceCollector {
                     attributes.get(UcsUtils.UCS_FABRIC_SAN_KEY).toString(),
                     collectionItemMap.get(UcsEnums.ClassId.networkElement).get(UcsUtils.UCS_FABRIC_SAN_KEY)
             );
-        ApiClientService client;
+        ApiClientService service;
         try {
-            client = getClient(attributes);
+            service = getClientService(attributes);
         } catch (ApiException e) {
             LOG.error("collect: {}", requestMap, e );
             return  CompletableFuture.failedFuture(e);
@@ -96,11 +96,12 @@ public class UcsNetworkElementCollector extends AbstractUcsServiceCollector {
 
         UcsNetworkElementStats stats;
         try {
-            stats = client.getNetworkElementStats(requestMap);
-            client.disconnect();
+            stats = service.getNetworkElementStats(requestMap);
         } catch (ApiException e) {
             LOG.error("collect: {}", requestMap, e );
             return createFailedCollectionSet(nodeResource, Instant.now().toEpochMilli());
+        } finally {
+            service.release();
         }
 
         final ImmutableCollectionSetResource.Builder<NodeResource> networkElementAttrBuilder =

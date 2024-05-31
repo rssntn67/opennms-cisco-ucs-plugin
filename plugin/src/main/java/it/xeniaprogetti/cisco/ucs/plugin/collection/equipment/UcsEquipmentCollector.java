@@ -59,9 +59,9 @@ public class UcsEquipmentCollector extends AbstractUcsServiceCollector {
                 dn,
                 collectionItemMap.get(UcsEnums.ClassId.equipmentChassis).get(UcsUtils.UCS_DN_KEY)
         );
-        ApiClientService client;
+        ApiClientService service;
         try {
-            client = getClient(attributes);
+            service = getClientService(attributes);
         } catch (ApiException e) {
             LOG.error("collect: {}", requestMap, e );
             return  CompletableFuture.failedFuture(e);
@@ -70,11 +70,12 @@ public class UcsEquipmentCollector extends AbstractUcsServiceCollector {
         final ImmutableNodeResource nodeResource = ImmutableNodeResource.newBuilder().setNodeId(request.getNodeId()).build();
         UcsEquipmentStats stats;
         try {
-            stats = client.getUcsEquipmentStats(requestMap);
-            client.disconnect();
+            stats = service.getUcsEquipmentStats(requestMap);
         } catch (ApiException e) {
             LOG.error("collect: {}", requestMap, e );
             return createFailedCollectionSet(nodeResource, Instant.now().toEpochMilli());
+        } finally {
+            service.release();
         }
 
         final ImmutableCollectionSetResource.Builder<NodeResource> equipmentAttrBuilder =

@@ -152,7 +152,7 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
             LOG.error("client: No connection available for alias {}", alias);
             throw new ApiException("No connection for alias", new NullPointerException("No connection found for "+ alias));
         }
-        return clientManager.getClient(connection.get());
+        return clientManager.getClientService(connection.get());
     }
 
     @Override
@@ -208,11 +208,7 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
             } catch (ApiException e) {
                 LOG.error("Cannot process fault for alias='{}'. {}", alias, e.getMessage(),e);
             } finally {
-                try {
-                    service.disconnect();
-                } catch (ApiException e) {
-                    LOG.error("Cannot Disconnect from Service: {}", e.getMessage(),e);
-                }
+                service.release();
             }
         }
 
