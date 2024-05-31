@@ -18,8 +18,8 @@ import java.util.Map;
 public class XmlApiClientProvider implements ApiClientProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(XmlApiClientProvider.class);
-    private static final Map<ApiClientCredentials, List<ApiClient>> serviceAvailableMap = new HashMap<>();
-    private static final Map<ApiClientCredentials, List<ApiClient>> serviceUsedMap = new HashMap<>();
+    private static final Map<ApiClientCredentials, List<XmlApiClientService>> serviceAvailableMap = new HashMap<>();
+    private static final Map<ApiClientCredentials, List<XmlApiClientService>> serviceUsedMap = new HashMap<>();
     private final int clientPoolSize;
 
     public XmlApiClientProvider(int clientPoolSize) {
@@ -33,42 +33,35 @@ public class XmlApiClientProvider implements ApiClientProvider {
         return client;
     }
 
-    public boolean release(ApiClient apiClient, ApiClientCredentials credentials){
-        serviceAvailableMap.get(credentials).add(apiClient);
-        return serviceUsedMap.get(credentials).remove(apiClient);
-    }
-
-    public ApiClient getApiClient(ApiClientCredentials credentials) throws ApiException {
-        if (!serviceAvailableMap.containsKey(credentials)) {
-            LOG.debug("getApiClient: no client found for {}", credentials);
-            serviceAvailableMap.put(credentials, new ArrayList<>());
-            serviceUsedMap.put(credentials, new ArrayList<>());
-        }
-        if (serviceAvailableMap.get(credentials).isEmpty() && serviceUsedMap.get(credentials).size() < clientPoolSize) {
-            LOG.debug("getApiClient: creating client for {}", credentials);
-            LOG.debug("getApiClient: {} api client connection used for {}",serviceUsedMap.get(credentials).size(), credentials);
-            ApiClient client = createApiClient(credentials);
-            serviceUsedMap.get(credentials).add(client);
-            return client;
-        }
-        if (serviceAvailableMap.isEmpty()) {
-            LOG.error("getApiClient: no api client connection available");
-            LOG.debug("getApiClient: {} api client connection used for {}",serviceUsedMap.get(credentials).size(), credentials);
-            throw new ApiException("no api client connection available", new RuntimeException(
-                    "Maximum pool size reached, no available connections!"));
-        }
-        int size = serviceAvailableMap.get(credentials).size();
-        LOG.debug("getApiClient: {} api client connection available for {}", size, credentials);
-        LOG.debug("getApiClient: {} api client connection used for {}",serviceUsedMap.get(credentials).size(), credentials);
-        ApiClient client = serviceAvailableMap.get(credentials).remove(size-1);
-        serviceUsedMap.get(credentials).add(client);
-        return client;
+    public boolean release(XmlApiClientService service){
+        serviceAvailableMap.get(service.getCredentials()).add(service);
+        return serviceUsedMap.get(service.getCredentials()).remove(service);
     }
 
 
     @Override
     public ApiClientService client(ApiClientCredentials credentials) throws ApiException {
-        return new XmlApiClientService(credentials, this);
+        if (!serviceAvailableMap.containsKey(credentials)) {
+            LOG.debug("client: no client found for {}, clientPoolSize: {} ", credentials, this.clientPoolSize);
+            serviceAvailableMap.put(credentials, new ArrayList<>());
+            serviceUsedMap.put(credentials, new ArrayList<>());
+        }
+        if (serviceAvailableMap.get(credentials).isEmpty() && serviceUsedMap.get(credentials).size() < clientPoolSize) {
+            LOG.debug("client: {}/{} api client connection used for {}, adding a new client to clientPool!", serviceUsedMap.get(credentials).size(), this.clientPoolSize, credentials);
+            XmlApiClientService service = new XmlApiClientService(credentials, this);
+            serviceUsedMap.get(credentials).add(service);
+            return service;
+        }
+        if (serviceAvailableMap.isEmpty()) {
+            LOG.debug("client: {}/{} api client connection used for {}, no room space left on clientPool",serviceUsedMap.get(credentials).size(), this.clientPoolSize, credentials);
+            throw new ApiException("no api client connection available", new RuntimeException(
+                    "Maximum pool size reached, no available connections!"));
+        }
+        int size = serviceAvailableMap.get(credentials).size();
+        LOG.debug("client: {} available, {} used, over {} api client connection for {}", size, serviceUsedMap.get(credentials).size(), this.clientPoolSize,credentials);
+        XmlApiClientService service = serviceAvailableMap.get(credentials).remove(size-1);
+        serviceUsedMap.get(credentials).add(service);
+        return service;
     }
 
     @Override

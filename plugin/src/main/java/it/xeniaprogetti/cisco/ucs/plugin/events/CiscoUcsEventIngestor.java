@@ -192,7 +192,7 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
                                 Alarm::getType));
         LOG.info("run: found {} Cisco UCS fault on opennms", ciscoUcsFaults.size());
         for(final String alias : requisitionIdentifiers.stream().map(ri -> ri.alias).collect(Collectors.toSet())) {
-            ApiClientService service = null;
+            ApiClientService service;
             try {
                 service = client(alias);
             } catch (ApiException e) {
