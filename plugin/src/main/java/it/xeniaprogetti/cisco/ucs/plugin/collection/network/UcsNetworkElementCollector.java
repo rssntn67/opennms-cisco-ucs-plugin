@@ -182,10 +182,10 @@ public class UcsNetworkElementCollector extends AbstractUcsServiceCollector {
                                             .setType("Fc")
                                             .setInstance(fcId)
                                             .build())
-                            .addStringAttribute(createStringAttribute("fcStat", "dn", stat.dn.value))
-                            .addStringAttribute(createStringAttribute("fcStat", "fanDn", fcDn.value))
-                            .addStringAttribute(createStringAttribute("fcStat", "fanName", fcName))
-                            .addStringAttribute(createStringAttribute("fcStat", "fanId", fcId));
+                            .addStringAttribute(createStringAttribute("fcStat", "fcStat.dn", stat.dn.value))
+                            .addStringAttribute(createStringAttribute("fcStat", "fcStat.fcDn", fcDn.value))
+                            .addStringAttribute(createStringAttribute("fcStat", "fcStat.fcName", fcName))
+                            .addStringAttribute(createStringAttribute("fcStat", "fcStat.fcId", fcId));
 
             addNumAttr(appResourceBuilder, "fcStat", "ByteRx", stat.bytesRx, milliseconds);
             addNumAttr(appResourceBuilder, "fcStat", "ByteTx", stat.bytesTx, milliseconds);
@@ -193,6 +193,38 @@ public class UcsNetworkElementCollector extends AbstractUcsServiceCollector {
             addNumAttr(appResourceBuilder, "fcStat", "PacketsTx", stat.packetsTx, milliseconds);
 
         });
+
+        stats.ucsFcErrStats.forEach(stat -> {
+            UcsDn fcDn = UcsDn.getParentDn(stat.dn);
+            assert fcDn != null;
+            String fcId = fcDn.value.replace("/","-");
+            UcsDn fcSwitchDn = UcsDn.getParentDn(fcDn);
+            assert fcSwitchDn != null;
+            String fcName = fcDn.value.replace(fcSwitchDn.value, "").replace("/","");
+            final ImmutableCollectionSetResource.Builder<GenericTypeResource> appResourceBuilder =
+                    ImmutableCollectionSetResource.newBuilder(GenericTypeResource.class).setResource(
+                                    ImmutableGenericTypeResource.newBuilder().setNodeResource(nodeResource)
+                                            .setType("Fc")
+                                            .setInstance(fcId)
+                                            .build())
+                            .addStringAttribute(createStringAttribute("fcErrStat", "fcErrStat.dn", stat.dn.value))
+                            .addStringAttribute(createStringAttribute("fcErrStat", "fcErrStat.fcDn", fcDn.value))
+                            .addStringAttribute(createStringAttribute("fcErrStat", "fcErrStat.fcName", fcName))
+                            .addStringAttribute(createStringAttribute("fcErrStat", "fcErrStat.fcId", fcId));
+
+            addNumAttr(appResourceBuilder, "fcErrStat", "LinkFailures", stat.linkFailures, milliseconds);
+            addNumAttr(appResourceBuilder, "fcErrStat", "SignalLosses", stat.signalLosses, milliseconds);
+            addNumAttr(appResourceBuilder, "fcErrStat", "SyncLosses", stat.syncLosses, milliseconds);
+            addNumAttr(appResourceBuilder, "fcErrStat", "Rx", stat.rx, milliseconds);
+            addNumAttr(appResourceBuilder, "fcErrStat", "CrcRx", stat.crcRx, milliseconds);
+            addNumAttr(appResourceBuilder, "fcErrStat", "DiscardRx", stat.discardRx, milliseconds);
+            addNumAttr(appResourceBuilder, "fcErrStat", "TooLongRx", stat.tooLongRx, milliseconds);
+            addNumAttr(appResourceBuilder, "fcErrStat", "TooShortRx", stat.tooShortRx, milliseconds);
+            addNumAttr(appResourceBuilder, "fcErrStat", "Tx", stat.tx, milliseconds);
+            addNumAttr(appResourceBuilder, "fcErrStat", "DiscardTx", stat.discardTx, milliseconds);
+
+        });
+
         return CompletableFuture.completedFuture(resultBuilder.setStatus(CollectionSet.Status.SUCCEEDED)
                 .setTimestamp(stats.ucsSwEnvStats.timeCollected.getTime()).build());
 
