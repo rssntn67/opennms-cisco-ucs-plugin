@@ -43,9 +43,6 @@ import org.slf4j.LoggerFactory;
 
 import java.math.BigInteger;
 import java.net.InetAddress;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -53,7 +50,6 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -1551,36 +1547,103 @@ Oper Evac Mode	:	Off
     }
 
     @Test
-    public void testConvertProperlyFcStats() throws ApiException, ParseException {
+    public void testConvertProperlyFcStats() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
         ApiClient apiClient = new ApiClient(credentials.url);
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(
                 "EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
-        LocalDateTime date1 = LocalDateTime.parse("Wed May 29 08:50:12 CEST 2024",dateFormat);
+
+        LocalDateTime date1 = LocalDateTime.parse("Wed May 29 08:50:12 CET 2024",dateFormat);
         String response1 = " <configResolveDn dn=\"sys/switch-A/slot-1/switch-fc/port-1/stats\" cookie=\"1716965139/cbf0751f-d020-49fe-b150-7f1e9719c943\" response=\"yes\"> <outConfig> <fcStats bytesRx=\"11094931231960\" bytesRxDelta=\"603704\" bytesRxDeltaAvg=\"5190927\" bytesRxDeltaMax=\"33997280\" bytesRxDeltaMin=\"405272\" bytesTx=\"217019375872\" bytesTxDelta=\"10546524\" bytesTxDeltaAvg=\"14125307\" bytesTxDeltaMax=\"22938596\" bytesTxDeltaMin=\"8662964\" dn=\"sys/switch-A/slot-1/switch-fc/port-1/stats\" intervals=\"58982460\" packetsRx=\"5379210322\" packetsRxDelta=\"2646\" packetsRxDeltaAvg=\"5572\" packetsRxDeltaMax=\"19375\" packetsRxDeltaMin=\"2642\" packetsTx=\"132559706\" packetsTxDelta=\"6367\" packetsTxDeltaAvg=\"8477\" packetsTxDeltaMax=\"13247\" packetsTxDeltaMin=\"5435\" suspect=\"no\" thresholded=\"\" timeCollected=\"2024-05-29T08:49:58.166\" update=\"65547\"/> </outConfig> </configResolveDn>";
         FcStats fcStats1 = apiClient.getUcsEntity(response1, ConfigResolveDnResponseFcStats.class).outconfig.fcStats;
-        System.out.println(date1);
-        System.out.println(fcStats1.timeCollected);
-        System.out.println(fcStats1.update);
-        System.out.println(fcStats1.intervals);
-        LocalDateTime date2 = LocalDateTime.parse("Wed May 29 08:51:12 CEST 2024", dateFormat);
-        Assert.assertEquals(date2.minus(Duration.ofMinutes(1)),date1);
+
+        LocalDateTime date2 = LocalDateTime.parse("Wed May 29 08:51:12 CET 2024", dateFormat);
         String response2 = "<configResolveDn dn=\"sys/switch-A/slot-1/switch-fc/port-1/stats\" cookie=\"1716965139/cbf0751f-d020-49fe-b150-7f1e9719c943\" response=\"yes\"> <outConfig> <fcStats bytesRx=\"11094934557624\" bytesRxDelta=\"3325664\" bytesRxDeltaAvg=\"5035488\" bytesRxDeltaMax=\"33997280\" bytesRxDeltaMin=\"405272\" bytesTx=\"217035185828\" bytesTxDelta=\"15809956\" bytesTxDeltaAvg=\"14265694\" bytesTxDeltaMax=\"22938596\" bytesTxDeltaMin=\"8662964\" dn=\"sys/switch-A/slot-1/switch-fc/port-1/stats\" intervals=\"58982460\" packetsRx=\"5379215194\" packetsRxDelta=\"4872\" packetsRxDeltaAvg=\"5513\" packetsRxDeltaMax=\"19375\" packetsRxDeltaMin=\"2642\" packetsTx=\"132569169\" packetsTxDelta=\"9463\" packetsTxDeltaAvg=\"8559\" packetsTxDeltaMax=\"13247\" packetsTxDeltaMin=\"5435\" suspect=\"no\" thresholded=\"\" timeCollected=\"2024-05-29T08:50:58.166\" update=\"65548\"/> </outConfig> </configResolveDn>";
         FcStats fcStats2 = apiClient.getUcsEntity(response2, ConfigResolveDnResponseFcStats.class).outconfig.fcStats;
-        System.out.println(date2);
-        System.out.println(fcStats2.timeCollected);
-        System.out.println(fcStats2.update);
-        System.out.println(fcStats2.intervals);
 
-        System.out.println(fcStats2.intervals-fcStats1.intervals);
-        System.out.println(fcStats2.bytesRx-fcStats1.bytesRx);
-        System.out.println(fcStats2.bytesRxDelta);
+        LocalDateTime date3 = LocalDateTime.parse("Wed May 29 08:52:12 CET 2024", dateFormat);
+        Assert.assertEquals(date3.minus(Duration.ofMinutes(1)),date2);
+        String response3 = "<configResolveDn dn=\"sys/switch-A/slot-1/switch-fc/port-1/stats\" cookie=\"1716965139/cbf0751f-d020-49fe-b150-7f1e9719c943\" response=\"yes\"> <outConfig> <fcStats bytesRx=\"11094935161472\" bytesRxDelta=\"603848\" bytesRxDeltaAvg=\"4694592\" bytesRxDeltaMax=\"33997280\" bytesRxDeltaMin=\"405272\" bytesTx=\"217044393056\" bytesTxDelta=\"9207228\" bytesTxDeltaAvg=\"13876581\" bytesTxDeltaMax=\"22938596\" bytesTxDeltaMin=\"8662964\" dn=\"sys/switch-A/slot-1/switch-fc/port-1/stats\" intervals=\"58982460\" packetsRx=\"5379217734\" packetsRxDelta=\"2540\" packetsRxDeltaAvg=\"5284\" packetsRxDeltaMax=\"19375\" packetsRxDeltaMin=\"2540\" packetsTx=\"132574866\" packetsTxDelta=\"5697\" packetsTxDeltaAvg=\"8338\" packetsTxDeltaMax=\"13247\" packetsTxDeltaMin=\"5435\" suspect=\"no\" thresholded=\"\" timeCollected=\"2024-05-29T08:51:58.166\" update=\"65549\"/> </outConfig> </configResolveDn>";
+        FcStats fcStats3 = apiClient.getUcsEntity(response3, ConfigResolveDnResponseFcStats.class).outconfig.fcStats;
+
+        LocalDateTime date4 = LocalDateTime.parse("Wed May 29 08:53:12 CET 2024", dateFormat);
+        String response4 = "<configResolveDn dn=\"sys/switch-A/slot-1/switch-fc/port-1/stats\" cookie=\"1716965139/cbf0751f-d020-49fe-b150-7f1e9719c943\" response=\"yes\"> <outConfig> <fcStats bytesRx=\"11094937981760\" bytesRxDelta=\"2820288\" bytesRxDeltaAvg=\"4560713\" bytesRxDeltaMax=\"33997280\" bytesRxDeltaMin=\"405272\" bytesTx=\"217069806488\" bytesTxDelta=\"25413432\" bytesTxDeltaAvg=\"14700641\" bytesTxDeltaMax=\"25413432\" bytesTxDeltaMin=\"8662964\" dn=\"sys/switch-A/slot-1/switch-fc/port-1/stats\" intervals=\"58982460\" packetsRx=\"5379223147\" packetsRxDelta=\"5413\" packetsRxDeltaAvg=\"5293\" packetsRxDeltaMax=\"19375\" packetsRxDeltaMin=\"2540\" packetsTx=\"132589206\" packetsTxDelta=\"14340\" packetsTxDeltaAvg=\"8766\" packetsTxDeltaMax=\"14340\" packetsTxDeltaMin=\"5435\" suspect=\"no\" thresholded=\"\" timeCollected=\"2024-05-29T08:52:58.166\" update=\"65550\"/> </outConfig> </configResolveDn>";
+        FcStats fcStats4 = apiClient.getUcsEntity(response4, ConfigResolveDnResponseFcStats.class).outconfig.fcStats;
+
+        LocalDateTime date5 = LocalDateTime.parse("Wed May 29 08:54:12 CET 2024", dateFormat);
+        String response5 = " <configResolveDn dn=\"sys/switch-A/slot-1/switch-fc/port-1/stats\" cookie=\"1716965139/cbf0751f-d020-49fe-b150-7f1e9719c943\" response=\"yes\"> <outConfig> <fcStats bytesRx=\"11094938674868\" bytesRxDelta=\"693108\" bytesRxDeltaAvg=\"4302872\" bytesRxDeltaMax=\"33997280\" bytesRxDeltaMin=\"405272\" bytesTx=\"217080137016\" bytesTxDelta=\"10330528\" bytesTxDeltaAvg=\"14409300\" bytesTxDeltaMax=\"25413432\" bytesTxDeltaMin=\"8662964\" dn=\"sys/switch-A/slot-1/switch-fc/port-1/stats\" intervals=\"58982460\" packetsRx=\"5379225943\" packetsRxDelta=\"2796\" packetsRxDeltaAvg=\"5126\" packetsRxDeltaMax=\"19375\" packetsRxDeltaMin=\"2540\" packetsTx=\"132595608\" packetsTxDelta=\"6402\" packetsTxDeltaAvg=\"8608\" packetsTxDeltaMax=\"14340\" packetsTxDeltaMin=\"5435\" suspect=\"no\" thresholded=\"\" timeCollected=\"2024-05-29T08:53:58.166\" update=\"131072\"/> </outConfig> </configResolveDn>";
+        FcStats fcStats5 = apiClient.getUcsEntity(response5, ConfigResolveDnResponseFcStats.class).outconfig.fcStats;
+
+        LocalDateTime date6 = LocalDateTime.parse("Wed May 29 08:55:12 CET 2024", dateFormat);
+        String response6 = "<configResolveDn dn=\"sys/switch-A/slot-1/switch-fc/port-1/stats\" cookie=\"1716965139/cbf0751f-d020-49fe-b150-7f1e9719c943\" response=\"yes\"> <outConfig> <fcStats bytesRx=\"11094940570128\" bytesRxDelta=\"1895260\" bytesRxDeltaAvg=\"1895260\" bytesRxDeltaMax=\"1895260\" bytesRxDeltaMin=\"1895260\" bytesTx=\"217088341188\" bytesTxDelta=\"8204172\" bytesTxDeltaAvg=\"8204172\" bytesTxDeltaMax=\"8204172\" bytesTxDeltaMin=\"8204172\" dn=\"sys/switch-A/slot-1/switch-fc/port-1/stats\" intervals=\"58982460\" packetsRx=\"5379229336\" packetsRxDelta=\"3393\" packetsRxDeltaAvg=\"3393\" packetsRxDeltaMax=\"3393\" packetsRxDeltaMin=\"3393\" packetsTx=\"132600821\" packetsTxDelta=\"5213\" packetsTxDeltaAvg=\"5213\" packetsTxDeltaMax=\"5213\" packetsTxDeltaMin=\"5213\" suspect=\"no\" thresholded=\"\" timeCollected=\"2024-05-29T08:54:58.166\" update=\"131073\"/> </outConfig> </configResolveDn>";
+        FcStats fcStats6 = apiClient.getUcsEntity(response6, ConfigResolveDnResponseFcStats.class).outconfig.fcStats;
+
+        LocalDateTime date7 = LocalDateTime.parse("Wed May 29 09:00:13 CET 2024", dateFormat);
+        String response7 = " <configResolveDn dn=\"sys/switch-A/slot-1/switch-fc/port-1/stats\" cookie=\"1716965139/cbf0751f-d020-49fe-b150-7f1e9719c943\" response=\"yes\"> <outConfig> <fcStats bytesRx=\"11095013052436\" bytesRxDelta=\"1905728\" bytesRxDeltaAvg=\"12396261\" bytesRxDeltaMax=\"64422124\" bytesRxDeltaMin=\"916700\" bytesTx=\"217202319092\" bytesTxDelta=\"17934896\" bytesTxDeltaAvg=\"20363679\" bytesTxDeltaMax=\"31086572\" bytesTxDeltaMin=\"8204172\" dn=\"sys/switch-A/slot-1/switch-fc/port-1/stats\" intervals=\"58982460\" packetsRx=\"5379284030\" packetsRxDelta=\"3903\" packetsRxDeltaAvg=\"9679\" packetsRxDeltaMax=\"37454\" packetsRxDeltaMin=\"3393\" packetsTx=\"132667049\" packetsTxDelta=\"10130\" packetsTxDeltaAvg=\"11905\" packetsTxDeltaMax=\"19125\" packetsTxDeltaMin=\"5213\" suspect=\"no\" thresholded=\"\" timeCollected=\"2024-05-29T08:59:58.166\" update=\"131078\"/> </outConfig> </configResolveDn>";
+        FcStats fcStats7 = apiClient.getUcsEntity(response7, ConfigResolveDnResponseFcStats.class).outconfig.fcStats;
+
+
+        System.out.println(date1);
+        System.out.println(LocalDateTime.ofInstant(fcStats1.timeCollected.toInstant(), ZoneId.of("UTC")));
+        System.out.println();
+
+        System.out.println(date2);
+        System.out.println(LocalDateTime.ofInstant(fcStats2.timeCollected.toInstant(), ZoneId.of("UTC")));
+        System.out.println();
+
+        System.out.println(date3);
+        System.out.println(LocalDateTime.ofInstant(fcStats3.timeCollected.toInstant(), ZoneId.of("UTC")));
+        System.out.println();
+
+        System.out.println(date4);
+        System.out.println(LocalDateTime.ofInstant(fcStats4.timeCollected.toInstant(), ZoneId.of("UTC")));
+        System.out.println();
+
+        System.out.println(date5);
+        System.out.println(LocalDateTime.ofInstant(fcStats5.timeCollected.toInstant(), ZoneId.of("UTC")));
+        System.out.println();
+
+        System.out.println(date6);
+        System.out.println(LocalDateTime.ofInstant(fcStats6.timeCollected.toInstant(), ZoneId.of("UTC")));
+        System.out.println();
+
+        System.out.println(date7);
+        System.out.println(LocalDateTime.ofInstant(fcStats7.timeCollected.toInstant(), ZoneId.of("UTC")));
+        System.out.println();
+
+        Assert.assertEquals(date2.minus(Duration.ofMinutes(1)),date1);
+        Assert.assertEquals(date3.minus(Duration.ofMinutes(1)),date2);
+        Assert.assertEquals(date4.minus(Duration.ofMinutes(1)),date3);
+        Assert.assertEquals(date5.minus(Duration.ofMinutes(1)),date4);
+        Assert.assertEquals(date6.minus(Duration.ofMinutes(1)),date5);
+        Assert.assertEquals(date7.minus(Duration.ofMinutes(5)),date6.plus(Duration.ofSeconds(1)));
+
+        Assert.assertEquals(fcStats2.bytesRx-fcStats1.bytesRx,fcStats2.bytesRxDelta);
+        Assert.assertEquals(fcStats3.bytesRx-fcStats2.bytesRx,fcStats3.bytesRxDelta);
+        Assert.assertEquals(fcStats4.bytesRx-fcStats3.bytesRx,fcStats4.bytesRxDelta);
+        Assert.assertEquals(fcStats5.bytesRx-fcStats4.bytesRx,fcStats5.bytesRxDelta);
+        Assert.assertEquals(fcStats6.bytesRx-fcStats5.bytesRx,fcStats6.bytesRxDelta);
+        Assert.assertNotEquals(fcStats7.bytesRx-fcStats6.bytesRx,fcStats7.bytesRxDelta);
+
+        Assert.assertEquals(fcStats1.intervals, fcStats2.intervals);
+        Assert.assertEquals(fcStats3.intervals, fcStats2.intervals);
+        Assert.assertEquals(fcStats4.intervals, fcStats2.intervals);
+        Assert.assertEquals(fcStats5.intervals, fcStats2.intervals);
+        Assert.assertEquals(fcStats6.intervals, fcStats2.intervals);
+        Assert.assertEquals(fcStats7.intervals, fcStats2.intervals);
+
+        Assert.assertEquals(fcStats2.update, fcStats1.update+1);
+        Assert.assertEquals(fcStats3.update, fcStats2.update+1);
+        Assert.assertEquals(fcStats4.update, fcStats3.update+1);
+        Assert.assertNotEquals(fcStats5.update, fcStats4.update+1);
+        Assert.assertEquals(fcStats6.update, fcStats5.update+1);
+        Assert.assertEquals(fcStats7.update, fcStats6.update+5);
 
     }
 
     @Test
     public void testConfigScopeRequest() {
         String request = UcsXmlApiRequest.getConfigScopeRequest("real_cookie", "sys/chassis-1/blade-1/board/cpu-2", UcsEnums.NamingClassId.processorEnvStats);
-        System.out.println(request);
+        Assert.assertEquals("<configScope cookie=\"real_cookie\" inHierarchical=\"false\" dn=\"sys/chassis-1/blade-1/board/cpu-2\" inClass=\"processorEnvStats\" />",request);
     }
 }
