@@ -6,43 +6,43 @@ public class FcStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
     public long bytesRx;
     @JacksonXmlProperty(isAttribute = true)
-    public int bytesRxDelta;
+    public long bytesRxDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public int bytesRxDeltaAvg;
+    public long bytesRxDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public int bytesRxDeltaMax;
+    public long bytesRxDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public int bytesRxDeltaMin;
+    public long bytesRxDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
     public long bytesTx;
     @JacksonXmlProperty(isAttribute = true)
-    public int bytesTxDelta;
+    public long bytesTxDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public int bytesTxDeltaAvg;
+    public long bytesTxDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public int bytesTxDeltaMax;
+    public long bytesTxDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public int bytesTxDeltaMin;
+    public long bytesTxDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
     public long packetsRx;
     @JacksonXmlProperty(isAttribute = true)
-    public int packetsRxDelta;
+    public long packetsRxDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public int packetsRxDeltaAvg;
+    public long packetsRxDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public int packetsRxDeltaMax;
+    public long packetsRxDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public int packetsRxDeltaMin;
+    public long packetsRxDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
     public long packetsTx;
     @JacksonXmlProperty(isAttribute = true)
-    public int packetsTxDelta;
+    public long packetsTxDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public int packetsTxDeltaAvg;
+    public long packetsTxDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public int packetsTxDeltaMax;
+    public long packetsTxDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public int packetsTxDeltaMin;
+    public long packetsTxDeltaMin;
 
     @Override
     public String toString() {

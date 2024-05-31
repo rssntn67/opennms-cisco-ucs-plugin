@@ -4,54 +4,54 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class EtherNiErrStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
-    public int crc;
+    public long crc;
     @JacksonXmlProperty(isAttribute = true)
-    public int crcDelta;
+    public long crcDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public int crcDeltaAvg;
+    public long crcDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public int crcDeltaMax;
+    public long crcDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public int crcDeltaMin;
+    public long crcDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public int frameTx;
+    public long frameTx;
     @JacksonXmlProperty(isAttribute = true)
-    public int frameTxDelta;
+    public long frameTxDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public int frameTxDeltaAvg;
+    public long frameTxDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public int frameTxDeltaMax;
+    public long frameTxDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public int frameTxDeltaMin;
+    public long frameTxDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public int inRange;
+    public long inRange;
     @JacksonXmlProperty(isAttribute = true)
-    public int inRangeDelta;
+    public long inRangeDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public int inRangeDeltaAvg;
+    public long inRangeDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public int inRangeDeltaMax;
+    public long inRangeDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public int inRangeDeltaMin;
+    public long inRangeDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public int tooLong;
+    public long tooLong;
     @JacksonXmlProperty(isAttribute = true)
-    public int tooLongDelta;
+    public long tooLongDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public int tooLongDeltaAvg;
+    public long tooLongDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public int tooLongDeltaMax;
+    public long tooLongDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public int tooLongDeltaMin;
+    public long tooLongDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public int tooShort;
+    public long tooShort;
     @JacksonXmlProperty(isAttribute = true)
-    public int tooShortDelta;
+    public long tooShortDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public int tooShortDeltaAvg;
+    public long tooShortDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public int tooShortDeltaMax;
+    public long tooShortDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public int tooShortDeltaMin;
+    public long tooShortDeltaMin;
 }
 

@@ -179,8 +179,6 @@ public class XmlApiClientTest {
         service.disconnect();
         System.out.println(ucsNetworkElementStats.ucsSwEnvStats.mainBoardOutlet1);
         System.out.println(ucsNetworkElementStats.ucsSwEnvStats.mainBoardOutlet2);
-        System.out.println(ucsNetworkElementStats.ucsSwEnvStats.mainBoardOutlet1Agg);
-        System.out.println(ucsNetworkElementStats.ucsSwEnvStats.mainBoardOutlet2Agg);
     }
 
     @Test

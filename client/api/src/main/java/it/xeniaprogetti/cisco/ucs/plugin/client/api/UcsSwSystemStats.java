@@ -1,6 +1,5 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.api;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class UcsSwSystemStats extends UcsStats {
@@ -9,57 +8,15 @@ public class UcsSwSystemStats extends UcsStats {
        return new Builder();
     }
 
-    public final String CorrectableParityError;
-    public final String CorrectableParityErrorAvg;
-    public final String CorrectableParityErrorMax;
-    public final String CorrectableParityErrorMin;
-    public final String kernelMemFree;
-    public final String kernelMemFreeAvg;
-    public final String kernelMemFreeMax;
-    public final String kernelMemFreeMin;
-    public final String kernelMemTotal;
-    public final String kernelMemTotalAvg;
-    public final String kernelMemTotalMax;
-    public final String kernelMemTotalMin;
     public final double load;
-    public final Aggregate loadAgg;
     public final int memAvailable;
-    public final Aggregate memAvailableAgg;
     public final int memCached;
-    public final Aggregate memCachedAgg;
 
     private UcsSwSystemStats(Builder builder) {
         super(builder.dn, UcsEnums.ClassId.swSystemStats, UcsEnums.ClassItem.statsItem, builder.intervals, builder.suspect, builder.thresholded, builder.timeCollected, builder.update);
-        CorrectableParityError = builder.CorrectableParityError;
-        CorrectableParityErrorAvg = builder.CorrectableParityErrorAvg;
-        CorrectableParityErrorMax = builder.CorrectableParityErrorMax;
-        CorrectableParityErrorMin = builder.CorrectableParityErrorMin;
-        kernelMemFree = builder.kernelMemFree;
-        kernelMemFreeAvg = builder.kernelMemFreeAvg;
-        kernelMemFreeMax = builder.kernelMemFreeMax;
-        kernelMemFreeMin = builder.kernelMemFreeMin;
-        kernelMemTotal = builder.kernelMemTotal;
-        kernelMemTotalAvg = builder.kernelMemTotalAvg;
-        kernelMemTotalMax = builder.kernelMemTotalMax;
-        kernelMemTotalMin = builder.kernelMemTotalMin;
         load = builder.load;
-        loadAgg = Aggregate.builder()
-                .withAverage(BigDecimal.valueOf(builder.loadAvg))
-                .withMin(BigDecimal.valueOf(builder.loadMin))
-                .withMax(BigDecimal.valueOf(builder.loadMax))
-                .build();
         memAvailable = builder.memAvailable;
-        memAvailableAgg = Aggregate.builder()
-                .withAverage(BigDecimal.valueOf(builder.memAvailableAvg))
-                .withMin(BigDecimal.valueOf(builder.memAvailableMin))
-                .withMax(BigDecimal.valueOf(builder.memAvailableMax))
-                .build();
         memCached = builder.memCached;
-        memCachedAgg = Aggregate.builder()
-                .withAverage(BigDecimal.valueOf(builder.memCachedAvg))
-                .withMin(BigDecimal.valueOf(builder.memCachedMin))
-                .withMax(BigDecimal.valueOf(builder.memCachedMax))
-                .build();
     }
 
     public static class Builder {
@@ -74,30 +31,9 @@ public class UcsSwSystemStats extends UcsStats {
         public Date timeCollected;
         public long update;
 
-        private String CorrectableParityError;
-        private String CorrectableParityErrorAvg;
-        private String CorrectableParityErrorMax;
-        private String CorrectableParityErrorMin;
-        private String kernelMemFree;
-        private String kernelMemFreeAvg;
-        private String kernelMemFreeMax;
-        private String kernelMemFreeMin;
-        private String kernelMemTotal;
-        private String kernelMemTotalAvg;
-        private String kernelMemTotalMax;
-        private String kernelMemTotalMin;
         private double load;
-        private double loadAvg;
-        private double loadMax;
-        private double loadMin;
         private int memAvailable;
-        private int memAvailableAvg;
-        private int memAvailableMax;
-        private int memAvailableMin;
         private int memCached;
-        private int memCachedAvg;
-        private int memCachedMax;
-        private int memCachedMin;
 
         public Builder withDn(String dn) {
             this.dn = UcsDn.getDn(dn);
@@ -129,123 +65,18 @@ public class UcsSwSystemStats extends UcsStats {
             return this;
         }
 
-        public Builder withCorrectableParityError(String CorrectableParityError){
-            this.CorrectableParityError = CorrectableParityError;
-            return this;
-        }
-
-        public Builder withCorrectableParityErrorAvg(String CorrectableParityErrorAvg){
-            this.CorrectableParityErrorAvg = CorrectableParityErrorAvg;
-            return this;
-        }
-
-        public Builder withCorrectableParityErrorMax(String CorrectableParityErrorMax){
-            this.CorrectableParityErrorMax = CorrectableParityErrorMax;
-            return this;
-        }
-
-        public Builder withCorrectableParityErrorMin(String CorrectableParityErrorMin){
-            this.CorrectableParityErrorMin = CorrectableParityErrorMin;
-            return this;
-        }
-
-        public Builder withkernelMemFree(String kernelMemFree){
-            this.kernelMemFree = kernelMemFree;
-            return this;
-        }
-
-        public Builder withkernelMemFreeAvg(String kernelMemFreeAvg){
-            this.kernelMemFreeAvg = kernelMemFreeAvg;
-            return this;
-        }
-
-        public Builder withkernelMemFreeMax(String kernelMemFreeMax){
-            this.kernelMemFreeMax = kernelMemFreeMax;
-            return this;
-        }
-
-        public Builder withkernelMemFreeMin(String kernelMemFreeMin){
-            this.kernelMemFreeMin = kernelMemFreeMin;
-            return this;
-        }
-
-        public Builder withkernelMemTotal(String kernelMemTotal){
-            this.kernelMemTotal = kernelMemTotal;
-            return this;
-        }
-
-        public Builder withkernelMemTotalAvg(String kernelMemTotalAvg){
-            this.kernelMemTotalAvg = kernelMemTotalAvg;
-            return this;
-        }
-
-        public Builder withkernelMemTotalMax(String kernelMemTotalMax){
-            this.kernelMemTotalMax = kernelMemTotalMax;
-            return this;
-        }
-
-        public Builder withkernelMemTotalMin(String kernelMemTotalMin){
-            this.kernelMemTotalMin = kernelMemTotalMin;
-            return this;
-        }
-
-        public Builder withload(double load){
+        public Builder withLoad(double load){
             this.load = load;
             return this;
         }
 
-        public Builder withloadAvg(double loadAvg){
-            this.loadAvg = loadAvg;
-            return this;
-        }
-
-        public Builder withloadMax(double loadMax){
-            this.loadMax = loadMax;
-            return this;
-        }
-
-        public Builder withloadMin(double loadMin){
-            this.loadMin = loadMin;
-            return this;
-        }
-
-        public Builder withmemAvailable(int memAvailable){
+        public Builder withMemAvailable(int memAvailable){
             this.memAvailable = memAvailable;
             return this;
         }
 
-        public Builder withmemAvailableAvg(int memAvailableAvg){
-            this.memAvailableAvg = memAvailableAvg;
-            return this;
-        }
-
-        public Builder withmemAvailableMax(int memAvailableMax){
-            this.memAvailableMax = memAvailableMax;
-            return this;
-        }
-
-        public Builder withmemAvailableMin(int memAvailableMin){
-            this.memAvailableMin = memAvailableMin;
-            return this;
-        }
-
-        public Builder withmemCached(int memCached){
+        public Builder withMemCached(int memCached){
             this.memCached = memCached;
-            return this;
-        }
-
-        public Builder withmemCachedAvg(int memCachedAvg){
-            this.memCachedAvg = memCachedAvg;
-            return this;
-        }
-
-        public Builder withmemCachedMax(int memCachedMax){
-            this.memCachedMax = memCachedMax;
-            return this;
-        }
-
-        public Builder withmemCachedMin(int memCachedMin){
-            this.memCachedMin = memCachedMin;
             return this;
         }
 

@@ -4,35 +4,35 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class AdaptorEthPortErrStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
-    public int badCrcPackets;
+    public long badCrcPackets;
     @JacksonXmlProperty(isAttribute = true)
-    public int badCrcPacketsDelta;
+    public long badCrcPacketsDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public int badCrcPacketsDeltaAvg;
+    public long badCrcPacketsDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public int badCrcPacketsDeltaMax;
+    public long badCrcPacketsDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public int badCrcPacketsDeltaMin;
+    public long badCrcPacketsDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public int badLengthPackets;
+    public long badLengthPackets;
     @JacksonXmlProperty(isAttribute = true)
-    public int badLengthPacketsDelta;
+    public long badLengthPacketsDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public int badLengthPacketsDeltaAvg;
+    public long badLengthPacketsDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public int badLengthPacketsDeltaMax;
+    public long badLengthPacketsDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public int badLengthPacketsDeltaMin;
+    public long badLengthPacketsDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public int macDiscardedPackets;
+    public long macDiscardedPackets;
     @JacksonXmlProperty(isAttribute = true)
-    public int macDiscardedPacketsDelta;
+    public long macDiscardedPacketsDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public int macDiscardedPacketsDeltaAvg;
+    public long macDiscardedPacketsDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public int macDiscardedPacketsDeltaMax;
+    public long macDiscardedPacketsDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public int macDiscardedPacketsDeltaMin;
+    public long macDiscardedPacketsDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
     public String trafficDirection;
 }

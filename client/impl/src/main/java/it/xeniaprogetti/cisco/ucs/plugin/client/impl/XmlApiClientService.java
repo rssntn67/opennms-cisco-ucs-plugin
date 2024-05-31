@@ -400,14 +400,8 @@ public class XmlApiClientService implements ApiClientService {
                 .withTimeCollected(equipmentNetworkElementFanStats.timeCollected)
                 .withUpdate(equipmentNetworkElementFanStats.update)
                 .withairflowDirection(equipmentNetworkElementFanStats.airflowDirection)
-                .withspeed(equipmentNetworkElementFanStats.speed)
-                .withspeedAvg(equipmentNetworkElementFanStats.speedAvg)
-                .withspeedMax(equipmentNetworkElementFanStats.speedMax)
-                .withspeedMin(equipmentNetworkElementFanStats.speedMin)
-                .withdrivePercentage(equipmentNetworkElementFanStats.drivePercentage)
-                .withdrivePercentageAvg(equipmentNetworkElementFanStats.drivePercentageAvg)
-                .withdrivePercentageMax(equipmentNetworkElementFanStats.drivePercentageMax)
-                .withdrivePercentageMin(equipmentNetworkElementFanStats.drivePercentageMin)
+                .withSpeed(equipmentNetworkElementFanStats.speed)
+                .withDrivePercentage(equipmentNetworkElementFanStats.drivePercentage)
                 .build();
     }
 
@@ -430,18 +424,9 @@ public class XmlApiClientService implements ApiClientService {
                 .withThresholded(swSystemStats.thresholded)
                 .withTimeCollected(swSystemStats.timeCollected)
                 .withUpdate(swSystemStats.update)
-                .withload(swSystemStats.load)
-                .withloadAvg(swSystemStats.loadAvg)
-                .withloadMax(swSystemStats.loadMax)
-                .withloadMin(swSystemStats.loadMin)
-                .withmemAvailable(swSystemStats.memAvailable)
-                .withmemAvailableAvg(swSystemStats.memAvailableAvg)
-                .withmemAvailableMax(swSystemStats.memAvailableMax)
-                .withmemAvailableMin(swSystemStats.memAvailableMin)
-                .withmemCached(swSystemStats.memCached)
-                .withmemCachedAvg(swSystemStats.memCachedAvg)
-                .withmemCachedMax(swSystemStats.memCachedMax)
-                .withmemCachedMin(swSystemStats.memCachedMin)
+                .withLoad(swSystemStats.load)
+                .withMemAvailable(swSystemStats.memAvailable)
+                .withMemCached(swSystemStats.memCached)
                 .build();
     }
 
@@ -453,14 +438,8 @@ public class XmlApiClientService implements ApiClientService {
                 .withThresholded(swEnvStats.thresholded)
                 .withTimeCollected(swEnvStats.timeCollected)
                 .withUpdate(swEnvStats.update)
-                .withmainBoardOutlet1(swEnvStats.mainBoardOutlet1)
-                .withmainBoardOutlet2(swEnvStats.mainBoardOutlet2)
-                .withmainBoardOutlet1Avg(swEnvStats.mainBoardOutlet1Avg)
-                .withmainBoardOutlet2Avg(swEnvStats.mainBoardOutlet2Avg)
-                .withmainBoardOutlet1Max(swEnvStats.mainBoardOutlet1Max)
-                .withmainBoardOutlet2Max(swEnvStats.mainBoardOutlet2Max)
-                .withmainBoardOutlet1Min(swEnvStats.mainBoardOutlet1Min)
-                .withmainBoardOutlet2Min(swEnvStats.mainBoardOutlet2Min)
+                .withMainBoardOutlet1(swEnvStats.mainBoardOutlet1)
+                .withMainBoardOutlet2(swEnvStats.mainBoardOutlet2)
                 .build();
     }
 
@@ -495,17 +474,8 @@ public class XmlApiClientService implements ApiClientService {
                 .withTimeCollected(equipmentChassisStats.timeCollected)
                 .withUpdate(equipmentChassisStats.update)
                 .withChassisI2CErrors(equipmentChassisStats.ChassisI2CErrors)
-                .withChassisI2CErrorsAvg(equipmentChassisStats.ChassisI2CErrorsAvg)
-                .withChassisI2CErrorsMax(equipmentChassisStats.ChassisI2CErrorsMax)
-                .withChassisI2CErrorsMin(equipmentChassisStats.ChassisI2CErrorsMin)
-                .withinputPower(equipmentChassisStats.inputPower)
-                .withinputPowerAvg(equipmentChassisStats.inputPowerAvg)
-                .withinputPowerMax(equipmentChassisStats.inputPowerMax)
-                .withinputPowerMin(equipmentChassisStats.inputPowerMin)
-                .withoutputPower(equipmentChassisStats.outputPower)
-                .withoutputPowerAvg(equipmentChassisStats.outputPowerAvg)
-                .withoutputPowerMax(equipmentChassisStats.outputPowerMax)
-                .withoutputPowerMin(equipmentChassisStats.outputPowerMin)
+                .withInputPower(equipmentChassisStats.inputPower)
+                .withOutputPower(equipmentChassisStats.outputPower)
                 .build();
     }
 
@@ -580,10 +550,7 @@ public class XmlApiClientService implements ApiClientService {
                 .withThresholded(processorEnvStats.thresholded)
                 .withTimeCollected(processorEnvStats.timeCollected)
                 .withUpdate(processorEnvStats.update)
-                .withtemperature(processorEnvStats.temperature)
-                .withtemperatureMin(processorEnvStats.temperatureMin)
-                .withtemperatureMax(processorEnvStats.temperatureMax)
-                .withtemperatureAvg(processorEnvStats.temperatureAvg)
+                .withTemperature(processorEnvStats.temperature)
                 .build();
     }
 

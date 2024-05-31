@@ -9,34 +9,16 @@ public class UcsEquipmentPsuInputStats extends UcsStats {
     }
 
     public final double current;
-    public final double currentAvg;
-    public final double currentMax;
-    public final double currentMin;
     public final String inputStatus;
     public final double power;
-    public final double powerAvg;
-    public final double powerMax;
-    public final double powerMin;
     public final double voltage;
-    public final double voltageAvg;
-    public final double voltageMax;
-    public final double voltageMin;
 
     private UcsEquipmentPsuInputStats(Builder builder) {
         super(builder.dn, UcsEnums.ClassId.equipmentPsuInputStats, UcsEnums.ClassItem.statsItem, builder.intervals, builder.suspect, builder.thresholded, builder.timeCollected, builder.update);
         current = builder.current;
-        currentAvg = builder.currentAvg;
-        currentMax = builder.currentMax;
-        currentMin = builder.currentMin;
         inputStatus = builder.inputStatus;
         power = builder.power;
-        powerAvg = builder.powerAvg;
-        powerMax = builder.powerMax;
-        powerMin = builder.powerMin;
         voltage = builder.voltage;
-        voltageAvg = builder.voltageAvg;
-        voltageMax = builder.voltageMax;
-        voltageMin = builder.voltageMin;
     }
 
     public static class Builder {
@@ -52,18 +34,9 @@ public class UcsEquipmentPsuInputStats extends UcsStats {
         public long update;
 
         private double current;
-        private double currentAvg;
-        private double currentMax;
-        private double currentMin;
         private String inputStatus;
         private double power;
-        private double powerAvg;
-        private double powerMax;
-        private double powerMin;
         private double voltage;
-        private double voltageAvg;
-        private double voltageMax;
-        private double voltageMin;
 
         public Builder withDn(String dn) {
             this.dn = UcsDn.getDn(dn);
@@ -95,68 +68,23 @@ public class UcsEquipmentPsuInputStats extends UcsStats {
             return this;
         }
 
-        public Builder withcurrent(double current){
+        public Builder withCurrent(double current){
             this.current = current;
             return this;
         }
 
-        public Builder withcurrentAvg(double currentAvg){
-            this.currentAvg = currentAvg;
-            return this;
-        }
-
-        public Builder withcurrentMax(double currentMax){
-            this.currentMax = currentMax;
-            return this;
-        }
-
-        public Builder withcurrentMin(double currentMin){
-            this.currentMin = currentMin;
-            return this;
-        }
-
-        public Builder withinputStatus(String inputStatus){
+        public Builder withInputStatus(String inputStatus){
             this.inputStatus = inputStatus;
             return this;
         }
 
-        public Builder withpower(double power){
+        public Builder withPower(double power){
             this.power = power;
             return this;
         }
 
-        public Builder withpowerAvg(double powerAvg){
-            this.powerAvg = powerAvg;
-            return this;
-        }
-
-        public Builder withpowerMax(double powerMax){
-            this.powerMax = powerMax;
-            return this;
-        }
-
-        public Builder withpowerMin(double powerMin){
-            this.powerMin = powerMin;
-            return this;
-        }
-
-        public Builder withvoltage(double voltage){
+        public Builder withVoltage(double voltage){
             this.voltage = voltage;
-            return this;
-        }
-
-        public Builder withvoltageAvg(double voltageAvg){
-            this.voltageAvg = voltageAvg;
-            return this;
-        }
-
-        public Builder withvoltageMax(double voltageMax){
-            this.voltageMax = voltageMax;
-            return this;
-        }
-
-        public Builder withvoltageMin(double voltageMin){
-            this.voltageMin = voltageMin;
             return this;
         }
 

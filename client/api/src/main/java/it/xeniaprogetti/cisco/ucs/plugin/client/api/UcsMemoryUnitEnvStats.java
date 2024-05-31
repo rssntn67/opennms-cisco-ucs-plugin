@@ -9,16 +9,10 @@ public class UcsMemoryUnitEnvStats extends UcsStats {
     }
 
     public final double temperature;
-    public final double temperatureAvg;
-    public final double temperatureMax;
-    public final double temperatureMin;
 
     private UcsMemoryUnitEnvStats(Builder builder) {
         super(builder.dn, UcsEnums.ClassId.memoryUnitEnvStats, UcsEnums.ClassItem.statsItem, builder.intervals, builder.suspect, builder.thresholded, builder.timeCollected, builder.update);
         temperature = builder.temperature;
-        temperatureAvg = builder.temperatureAvg;
-        temperatureMax = builder.temperatureMax;
-        temperatureMin = builder.temperatureMin;
     }
 
     public static class Builder {
@@ -34,9 +28,6 @@ public class UcsMemoryUnitEnvStats extends UcsStats {
         public long update;
 
         private double temperature;
-        private double temperatureAvg;
-        private double temperatureMax;
-        private double temperatureMin;
 
         public Builder withDn(String dn) {
             this.dn = UcsDn.getDn(dn);
@@ -68,23 +59,8 @@ public class UcsMemoryUnitEnvStats extends UcsStats {
             return this;
         }
 
-        public Builder withtemperature(double temperature){
+        public Builder withTemperature(double temperature){
             this.temperature = temperature;
-            return this;
-        }
-
-        public Builder withtemperatureAvg(double temperatureAvg){
-            this.temperatureAvg = temperatureAvg;
-            return this;
-        }
-
-        public Builder withtemperatureMax(double temperatureMax){
-            this.temperatureMax = temperatureMax;
-            return this;
-        }
-
-        public Builder withtemperatureMin(double temperatureMin){
-            this.temperatureMin = temperatureMin;
             return this;
         }
 

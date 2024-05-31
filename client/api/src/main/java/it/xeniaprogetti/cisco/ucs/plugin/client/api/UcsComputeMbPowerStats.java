@@ -1,6 +1,5 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.api;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class UcsComputeMbPowerStats extends UcsStats {

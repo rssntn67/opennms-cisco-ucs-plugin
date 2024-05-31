@@ -9,16 +9,10 @@ public class UcsEquipmentFanStats extends UcsStats {
     }
 
     public final int speed;
-    public final int speedAvg;
-    public final int speedMax;
-    public final int speedMin;
 
     private UcsEquipmentFanStats(Builder builder) {
         super(builder.dn, UcsEnums.ClassId.equipmentFanStats, UcsEnums.ClassItem.statsItem, builder.intervals, builder.suspect, builder.thresholded, builder.timeCollected, builder.update);
         speed = builder.speed;
-        speedAvg = builder.speedAvg;
-        speedMax = builder.speedMax;
-        speedMin = builder.speedMin;
     }
 
     public static class Builder {
@@ -34,9 +28,6 @@ public class UcsEquipmentFanStats extends UcsStats {
         public long update;
 
         private int speed;
-        private int speedAvg;
-        private int speedMax;
-        private int speedMin;
 
         public Builder withDn(String dn) {
             this.dn = UcsDn.getDn(dn);
@@ -68,23 +59,8 @@ public class UcsEquipmentFanStats extends UcsStats {
             return this;
         }
 
-        public Builder withspeed(int speed){
+        public Builder withSpeed(int speed){
             this.speed = speed;
-            return this;
-        }
-
-        public Builder withspeedAvg(int speedAvg){
-            this.speedAvg = speedAvg;
-            return this;
-        }
-
-        public Builder withspeedMax(int speedMax){
-            this.speedMax = speedMax;
-            return this;
-        }
-
-        public Builder withspeedMin(int speedMin){
-            this.speedMin = speedMin;
             return this;
         }
 

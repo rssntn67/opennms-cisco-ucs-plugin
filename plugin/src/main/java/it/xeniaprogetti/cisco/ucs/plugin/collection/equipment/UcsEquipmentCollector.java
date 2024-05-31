@@ -84,9 +84,6 @@ public class UcsEquipmentCollector extends AbstractUcsServiceCollector {
         addNumAttr(equipmentAttrBuilder, "ucsEquipmentChassisStats", "ChassisI2CErrors", stats.ucsEquipmentChassisStats.ChassisI2CErrors);
         addNumAttr(equipmentAttrBuilder, "ucsEquipmentChassisStats", "InputPower", stats.ucsEquipmentChassisStats.inputPower);
         addNumAttr(equipmentAttrBuilder, "ucsEquipmentChassisStats", "OutputPower", stats.ucsEquipmentChassisStats.outputPower);
-        addAggregate(equipmentAttrBuilder, "ucsEquipmentChassisStats", "ChassisI2CErrors", stats.ucsEquipmentChassisStats.ChassisI2CErrorsAgg);
-        addAggregate(equipmentAttrBuilder, "ucsEquipmentChassisStats", "InputPower", stats.ucsEquipmentChassisStats.inputPowerAgg);
-        addAggregate(equipmentAttrBuilder, "ucsEquipmentChassisStats", "OutputPower", stats.ucsEquipmentChassisStats.outputPowerAgg);
 
         final ImmutableCollectionSet.Builder resultBuilder = ImmutableCollectionSet.newBuilder();
         resultBuilder.addCollectionSetResource(equipmentAttrBuilder.build());

@@ -79,7 +79,7 @@ public class UcsEquipmentChassisStats extends UcsStats {
             this.outputPower = outputPower;
             return this;
         }
-        
+
         public UcsEquipmentChassisStats build() {
             return new UcsEquipmentChassisStats(this);
         }

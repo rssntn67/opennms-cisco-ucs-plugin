@@ -115,8 +115,6 @@ public class UcsNetworkElementCollector extends AbstractUcsServiceCollector {
         networkElementAttrBuilder.addStringAttribute(createStringAttribute("ucsSwEnvStats", "ucsSwEnvStats.thresholded", stats.ucsSwEnvStats.thresholded));
         networkElementAttrBuilder.addStringAttribute(createStringAttribute("ucsSwEnvStats", "ucsSwEnvStats.suspect", stats.ucsSwEnvStats.suspect));
         networkElementAttrBuilder.addStringAttribute(createStringAttribute("ucsSwEnvStats", "ucsSwEnvStats.timeCollected", stats.ucsSwEnvStats.timeCollected.toString()));
-        addAggregate(networkElementAttrBuilder, "ucsSwEnvStats","MainBoardOutlet1", stats.ucsSwEnvStats.mainBoardOutlet1Agg);
-        addAggregate(networkElementAttrBuilder, "ucsSwEnvStats","MainBoardOutlet2", stats.ucsSwEnvStats.mainBoardOutlet2Agg);
         addNumAttr(networkElementAttrBuilder,"ucsSwEnvStats", "MainBoardOutlet1", stats.ucsSwEnvStats.mainBoardOutlet1);
         addNumAttr(networkElementAttrBuilder,"ucsSwEnvStats", "MainBoardOutlet2", stats.ucsSwEnvStats.mainBoardOutlet2);
 
@@ -124,9 +122,7 @@ public class UcsNetworkElementCollector extends AbstractUcsServiceCollector {
         networkElementAttrBuilder.addStringAttribute(createStringAttribute("ucsSwSystemStats", "ucsSwSystemStats.thresholded", stats.ucsSwSystemStats.thresholded));
         networkElementAttrBuilder.addStringAttribute(createStringAttribute("ucsSwSystemStats", "ucsSwSystemStats.suspect", stats.ucsSwSystemStats.suspect));
         networkElementAttrBuilder.addStringAttribute(createStringAttribute("ucsSwSystemStats", "ucsSwSystemStats.timeCollected", stats.ucsSwSystemStats.timeCollected.toString()));
-        addAggregate(networkElementAttrBuilder, "ucsSwSystemStats","Load", stats.ucsSwSystemStats.loadAgg);
-        addAggregate(networkElementAttrBuilder, "ucsSwSystemStats","MemAvailable", stats.ucsSwSystemStats.memAvailableAgg);
-        addAggregate(networkElementAttrBuilder, "ucsSwSystemStats","MemCached", stats.ucsSwSystemStats.memCachedAgg);
+
         addNumAttr(networkElementAttrBuilder,"ucsSwSystemStats", "Load", stats.ucsSwSystemStats.load);
         addNumAttr(networkElementAttrBuilder,"ucsSwSystemStats", "MemAvailable", stats.ucsSwSystemStats.memAvailable);
         addNumAttr(networkElementAttrBuilder,"ucsSwSystemStats", "MemCached", stats.ucsSwSystemStats.memCached);
@@ -160,10 +156,7 @@ public class UcsNetworkElementCollector extends AbstractUcsServiceCollector {
                             .addStringAttribute(createStringAttribute("equipmentNetworkElementFan", "airFlowDirection", stat.airflowDirection));
 
             addNumAttr(appResourceBuilder, "equipmentNetworkElementFan", "Speed", stat.speed);
-            addAggregate(appResourceBuilder, "equipmentNetworkElementFan", "Speed", stat.speedAgg);
-
             addNumAttr(appResourceBuilder, "equipmentNetworkElementFan", "DrivePercentage", stat.drivePercentage);
-            addAggregate(appResourceBuilder, "equipmentNetworkElementFan", "DrivePercentage", stat.drivePercentageAgg);
 
             resultBuilder.addCollectionSetResource(appResourceBuilder.build());
 

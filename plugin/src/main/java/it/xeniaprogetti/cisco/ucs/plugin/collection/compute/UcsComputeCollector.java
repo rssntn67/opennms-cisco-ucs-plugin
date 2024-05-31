@@ -118,7 +118,6 @@ public class UcsComputeCollector extends AbstractUcsServiceCollector {
                             .addStringAttribute(createStringAttribute("processor", "processorName", processorName))
                             .addStringAttribute(createStringAttribute("processor", "processorId", processorId));
             addNumAttr(appResourceBuilder, "processor", "Temperature", stat.temperature);
-            addAggregate(appResourceBuilder, "processor", "Temperature", stat.temperatureAgg);
 
             resultBuilder.addCollectionSetResource(appResourceBuilder.build());
         });

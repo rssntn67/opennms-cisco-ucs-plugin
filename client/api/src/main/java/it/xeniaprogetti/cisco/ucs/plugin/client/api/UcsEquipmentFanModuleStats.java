@@ -9,24 +9,12 @@ public class UcsEquipmentFanModuleStats extends UcsStats {
     }
 
     public final int FanModuleI2CErrors;
-    public final int FanModuleI2CErrorsAvg;
-    public final int FanModuleI2CErrorsMax;
-    public final int FanModuleI2CErrorsMin;
     public final double ambientTemp;
-    public final double ambientTempAvg;
-    public final double ambientTempMax;
-    public final double ambientTempMin;
 
     private UcsEquipmentFanModuleStats(Builder builder) {
         super(builder.dn, UcsEnums.ClassId.equipmentFanModuleStats, UcsEnums.ClassItem.statsItem, builder.intervals, builder.suspect, builder.thresholded, builder.timeCollected, builder.update);
         FanModuleI2CErrors = builder.FanModuleI2CErrors;
-        FanModuleI2CErrorsAvg = builder.FanModuleI2CErrorsAvg;
-        FanModuleI2CErrorsMax = builder.FanModuleI2CErrorsMax;
-        FanModuleI2CErrorsMin = builder.FanModuleI2CErrorsMin;
         ambientTemp = builder.ambientTemp;
-        ambientTempAvg = builder.ambientTempAvg;
-        ambientTempMax = builder.ambientTempMax;
-        ambientTempMin = builder.ambientTempMin;
     }
 
     public static class Builder {
@@ -42,13 +30,7 @@ public class UcsEquipmentFanModuleStats extends UcsStats {
         public long update;
 
         private int FanModuleI2CErrors;
-        private int FanModuleI2CErrorsAvg;
-        private int FanModuleI2CErrorsMax;
-        private int FanModuleI2CErrorsMin;
         private double ambientTemp;
-        private double ambientTempAvg;
-        private double ambientTempMax;
-        private double ambientTempMin;
 
         public Builder withDn(String dn) {
             this.dn = UcsDn.getDn(dn);
@@ -85,38 +67,8 @@ public class UcsEquipmentFanModuleStats extends UcsStats {
             return this;
         }
 
-        public Builder withFanModuleI2CErrorsAvg(int FanModuleI2CErrorsAvg){
-            this.FanModuleI2CErrorsAvg = FanModuleI2CErrorsAvg;
-            return this;
-        }
-
-        public Builder withFanModuleI2CErrorsMax(int FanModuleI2CErrorsMax){
-            this.FanModuleI2CErrorsMax = FanModuleI2CErrorsMax;
-            return this;
-        }
-
-        public Builder withFanModuleI2CErrorsMin(int FanModuleI2CErrorsMin){
-            this.FanModuleI2CErrorsMin = FanModuleI2CErrorsMin;
-            return this;
-        }
-
-        public Builder withambientTemp(double ambientTemp){
+        public Builder withAmbientTemp(double ambientTemp){
             this.ambientTemp = ambientTemp;
-            return this;
-        }
-
-        public Builder withambientTempAvg(double ambientTempAvg){
-            this.ambientTempAvg = ambientTempAvg;
-            return this;
-        }
-
-        public Builder withambientTempMax(double ambientTempMax){
-            this.ambientTempMax = ambientTempMax;
-            return this;
-        }
-
-        public Builder withambientTempMin(double ambientTempMin){
-            this.ambientTempMin = ambientTempMin;
             return this;
         }
 
