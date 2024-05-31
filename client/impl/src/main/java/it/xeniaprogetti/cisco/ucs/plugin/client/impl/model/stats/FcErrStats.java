@@ -4,100 +4,104 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class FcErrStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
-    public int crcRx;
+    public long crcRx;
     @JacksonXmlProperty(isAttribute = true)
-    public int crcRxDelta;
+    public long crcRxDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public int crcRxDeltaAvg;
+    public long crcRxDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public int crcRxDeltaMax;
+    public long crcRxDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public int crcRxDeltaMin;
+    public long crcRxDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public int discardRx;
+    public long discardRx;
     @JacksonXmlProperty(isAttribute = true)
-    public int discardRxDelta;
+    public long discardRxDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public int discardRxDeltaAvg;
+    public long discardRxDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public int discardRxDeltaMax;
+    public long discardRxDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public int discardRxDeltaMin;
+    public long discardRxDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public int discardTx;
+    public long discardTx;
     @JacksonXmlProperty(isAttribute = true)
-    public int discardTxDelta;
+    public long discardTxDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public int discardTxDeltaAvg;
+    public long discardTxDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public int discardTxDeltaMax;
+    public long discardTxDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public int discardTxDeltaMin;
+    public long discardTxDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public int linkFailures;
+    public long linkFailures;
     @JacksonXmlProperty(isAttribute = true)
-    public int linkFailuresDelta;
+    public long linkFailuresDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public int linkFailuresDeltaAvg;
+    public long linkFailuresDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public int linkFailuresDeltaMax;
+    public long linkFailuresDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public int linkFailuresDeltaMin;
+    public long linkFailuresDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public int rx;
+    public long rx;
     @JacksonXmlProperty(isAttribute = true)
-    public int rxDelta;
+    public long rxDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public int rxDeltaAvg;
+    public long rxDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public int rxDeltaMax;
+    public long rxDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public int rxDeltaMin;
+    public long rxDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public int signalLosses;
+    public long signalLosses;
     @JacksonXmlProperty(isAttribute = true)
-    public int signalLossesDelta;
+    public long signalLossesDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public int signalLossesDeltaAvg;
+    public long signalLossesDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public int signalLossesDeltaMax;
+    public long signalLossesDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public int signalLossesDeltaMin;
+    public long signalLossesDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public int syncLosses;
+    public long syncLosses;
     @JacksonXmlProperty(isAttribute = true)
-    public int syncLossesDelta;
+    public long syncLossesDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public int syncLossesDeltaAvg;
+    public long syncLossesDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public int syncLossesDeltaMax;
+    public long syncLossesDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public int syncLossesDeltaMin;
+    public long syncLossesDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public int tooLongRx;
+    public long tooLongRx;
     @JacksonXmlProperty(isAttribute = true)
-    public int tooLongRxDelta;
+    public long tooLongRxDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public int tooLongRxDeltaAvg;
+    public long tooLongRxDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public int tooLongRxDeltaMax;
+    public long tooLongRxDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public int tooLongRxDeltaMin;
+    public long tooLongRxDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public int tooShortRx;
+    public long tooShortRx;
     @JacksonXmlProperty(isAttribute = true)
-    public int tooShortRxDelta;
+    public long tooShortRxDelta;
     @JacksonXmlProperty(isAttribute = true)
-    public int tooShortRxDeltaAvg;
+    public long tooShortRxDeltaAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public int tooShortRxDeltaMax;
+    public long tooShortRxDeltaMax;
     @JacksonXmlProperty(isAttribute = true)
-    public int tooShortRxDeltaMin;
+    public long tooShortRxDeltaMin;
     @JacksonXmlProperty(isAttribute = true)
-    public int tx;
-    public int txDelta;
-    public int txDeltaAvg;
-    public int txDeltaMax;
-    public int txDeltaMin;
+    public long tx;
+    @JacksonXmlProperty(isAttribute = true)
+    public long txDelta;
+    @JacksonXmlProperty(isAttribute = true)
+    public long txDeltaAvg;
+    @JacksonXmlProperty(isAttribute = true)
+    public long txDeltaMax;
+    @JacksonXmlProperty(isAttribute = true)
+    public long txDeltaMin;
 }
 
