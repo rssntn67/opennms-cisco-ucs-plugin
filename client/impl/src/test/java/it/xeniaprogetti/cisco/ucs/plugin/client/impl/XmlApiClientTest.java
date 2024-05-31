@@ -194,17 +194,17 @@ public class XmlApiClientTest {
         var sanDn = "fabric/san/A";
         requestMap.put(
                 swDn,
-                getCollectionMap().get(UcsEnums.ClassId.equipmentChassis).get(UcsUtils.UCS_DN_KEY)
+                getCollectionMap().get(UcsEnums.ClassId.networkElement).get(UcsUtils.UCS_DN_KEY)
         );
 
         requestMap.put(
                 lanDn,
-                getCollectionMap().get(UcsEnums.ClassId.equipmentChassis).get(UcsUtils.UCS_FABRIC_LAN_KEY)
+                getCollectionMap().get(UcsEnums.ClassId.networkElement).get(UcsUtils.UCS_FABRIC_LAN_KEY)
         );
 
         requestMap.put(
                 sanDn,
-                getCollectionMap().get(UcsEnums.ClassId.equipmentChassis).get(UcsUtils.UCS_FABRIC_SAN_KEY)
+                getCollectionMap().get(UcsEnums.ClassId.networkElement).get(UcsUtils.UCS_FABRIC_SAN_KEY)
         );
 
         UcsNetworkElementStats stats = service.getUcsNetworkElementStats(requestMap);
