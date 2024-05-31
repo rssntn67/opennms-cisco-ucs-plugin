@@ -467,10 +467,10 @@ public class XmlApiClientService implements ApiClientService {
     @Override
     public UcsEquipmentStats getUcsEquipmentStats(Map<String, Set<UcsEnums.NamingClassId>> collectMap) throws ApiException {
         LOG.debug("getUcsEquipmentStats: {}", collectMap);
-        checkCredentials();
         UcsEquipmentChassisStats ucsEquipmentChassisStats = null;
         for (String dn: collectMap.keySet()) {
             for (UcsEnums.NamingClassId classId: collectMap.get(dn)) {
+                checkCredentials();
                 if (classId == UcsEnums.NamingClassId.equipmentChassisStats) {
                     UcsXmlApiRequest.InFilter filter = UcsXmlApiRequest.getWCardFilter(
                             UcsEnums.NamingClassId.equipmentChassisStats,
@@ -512,12 +512,12 @@ public class XmlApiClientService implements ApiClientService {
     @Override
     public UcsComputeStats getUcsComputeStats(Map<String, Set<UcsEnums.NamingClassId>> collectMap) throws ApiException {
         LOG.debug("getUcsComputeStats: {}", collectMap);
-        checkCredentials();
         final List<UcsProcessorEnvStats> ucsProcessorEnvStats = new ArrayList<>();
         UcsComputeMbTempStats ucsComputeMbTempStats = null;
         UcsComputeMbPowerStats ucsComputeMbPowerStats = null;
         for (String dn: collectMap.keySet()) {
             for (UcsEnums.NamingClassId classId: collectMap.get(dn)) {
+                checkCredentials();
                 UcsXmlApiRequest.InFilter filter = UcsXmlApiRequest.getWCardFilter(
                         classId,
                         "dn",
