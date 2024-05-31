@@ -27,6 +27,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
+import static java.util.Objects.requireNonNull;
+
 public class UcsNetworkElementCollector extends AbstractUcsServiceCollector {
     private final Map<UcsEnums.ClassId, Map<String,Set<UcsEnums.NamingClassId>>> collectionItemMap = new HashMap<>();
     private final static Logger LOG = LoggerFactory.getLogger(UcsNetworkElementCollector.class);
@@ -68,6 +70,8 @@ public class UcsNetworkElementCollector extends AbstractUcsServiceCollector {
 
     @Override
     public CompletableFuture<CollectionSet> collect(CollectionRequest request, Map<String, Object> attributes) {
+        int milliseconds = Integer.parseInt((String) requireNonNull(attributes.get(SERVICE_INTERVAL), "Missing attribute: " + SERVICE_INTERVAL));
+
         Map<String, Set<UcsEnums.NamingClassId>> requestMap = new HashMap<>();
         var dn = attributes.get(UcsUtils.UCS_DN_KEY).toString();
         requestMap.put(
@@ -165,6 +169,30 @@ public class UcsNetworkElementCollector extends AbstractUcsServiceCollector {
 
         });
 
+        stats.ucsFcStats.forEach(stat -> {
+            UcsDn fcDn = UcsDn.getParentDn(stat.dn);
+            assert fcDn != null;
+            String fcId = fcDn.value.replace("/","-");
+            UcsDn fcSwitchDn = UcsDn.getParentDn(fcDn);
+            assert fcSwitchDn != null;
+            String fcName = fcDn.value.replace(fcSwitchDn.value, "").replace("/","");
+            final ImmutableCollectionSetResource.Builder<GenericTypeResource> appResourceBuilder =
+                    ImmutableCollectionSetResource.newBuilder(GenericTypeResource.class).setResource(
+                                    ImmutableGenericTypeResource.newBuilder().setNodeResource(nodeResource)
+                                            .setType("Fc")
+                                            .setInstance(fcId)
+                                            .build())
+                            .addStringAttribute(createStringAttribute("fcStat", "dn", stat.dn.value))
+                            .addStringAttribute(createStringAttribute("fcStat", "fanDn", fcDn.value))
+                            .addStringAttribute(createStringAttribute("fcStat", "fanName", fcName))
+                            .addStringAttribute(createStringAttribute("fcStat", "fanId", fcId));
+
+            addNumAttr(appResourceBuilder, "fcStat", "ByteRx", stat.bytesRx, milliseconds);
+            addNumAttr(appResourceBuilder, "fcStat", "ByteTx", stat.bytesTx, milliseconds);
+            addNumAttr(appResourceBuilder, "fcStat", "PacketsRx", stat.packetsRx, milliseconds);
+            addNumAttr(appResourceBuilder, "fcStat", "PacketsTx", stat.packetsTx, milliseconds);
+
+        });
         return CompletableFuture.completedFuture(resultBuilder.setStatus(CollectionSet.Status.SUCCEEDED)
                 .setTimestamp(stats.ucsSwEnvStats.timeCollected.getTime()).build());
 
