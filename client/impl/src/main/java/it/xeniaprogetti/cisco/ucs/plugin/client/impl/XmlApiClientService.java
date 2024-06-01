@@ -15,6 +15,8 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentChassisStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentFex;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentNetworkElementFanStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentRackEnclosure;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEtherRxStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEtherTxStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsFault;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsFcErrStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsFcStats;
@@ -48,6 +50,8 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ComputeMbPowerS
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ComputeMbTempStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentChassisStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentNetworkElementFanStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EtherRxStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EtherTxStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.FcErrStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.FcStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ProcessorEnvStats;
@@ -313,15 +317,17 @@ public class XmlApiClientService implements ApiClientService {
         final List<UcsProcessorEnvStats> ucsProcessorEnvStats = new ArrayList<>();
         UcsComputeMbTempStats ucsComputeMbTempStats = null;
         UcsComputeMbPowerStats ucsComputeMbPowerStats = null;
+        final List<UcsEtherRxStats> ucsEtherRxStats = new ArrayList<>();
+        final List<UcsEtherTxStats> ucsEtherTxStats = new ArrayList<>();
 
         for (String dn: collectMap.keySet()) {
-            for (UcsEnums.NamingClassId classid: collectMap.get(dn)) {
+            for (UcsEnums.NamingClassId classId: collectMap.get(dn)) {
                 UcsXmlApiRequest.InFilter filter = UcsXmlApiRequest.getWCardFilter(
-                        UcsEnums.NamingClassId.swEnvStats,
+                        classId,
                         "dn",
                         dn+".*");
                 checkCredentials();
-                switch (classid) {
+                switch (classId) {
                     case swEnvStats:
                         swEnvStats =  from(statsApi.getSwEnvStats(aaaApi.getToken(), filter ).get(0));
                         break;
@@ -355,6 +361,12 @@ public class XmlApiClientService implements ApiClientService {
                     case computeMbTempStats:
                         ucsComputeMbTempStats =  from(statsApi.getComputeMbTempStats(aaaApi.getToken(), filter ).get(0));
                         break;
+                    case etherRxStats:
+                        statsApi.getEtherRxStats(aaaApi.getToken(), filter).forEach(e -> ucsEtherRxStats.add(from(e)));
+                        break;
+                    case etherTxStats:
+                        statsApi.getEtherTxStats(aaaApi.getToken(), filter).forEach(e -> ucsEtherTxStats.add(from(e)));
+                        break;
                     default:
                         break;
                 }
@@ -371,6 +383,42 @@ public class XmlApiClientService implements ApiClientService {
                 .withUcsProcessorEnvStats(ucsProcessorEnvStats)
                 .withUcsComputeMbPowerStats(ucsComputeMbPowerStats)
                 .withUcsComputeTempStats(ucsComputeMbTempStats)
+                .withUcsEtherRxStats(ucsEtherRxStats)
+                .withUcsEtherTxStats(ucsEtherTxStats)
+                .build();
+    }
+
+    private UcsEtherTxStats from(EtherTxStats e) {
+        return UcsEtherTxStats.builder()
+                .withDn(e.dn)
+                .withIntervals(e.intervals)
+                .withSuspect(e.suspect)
+                .withThresholded(e.thresholded)
+                .withTimeCollected(e.timeCollected)
+                .withUpdate(e.update)
+                .withBroadcastPackets(e.broadcastPackets)
+                .withJumboPackets(e.jumboPackets)
+                .withMulticastPackets(e.multicastPackets)
+                .withTotalBytes(e.totalBytes)
+                .withTotalPackets(e.totalPackets)
+                .withUnicastPackets(e.unicastPackets)
+                .build();
+    }
+
+    private UcsEtherRxStats from(EtherRxStats e) {
+        return UcsEtherRxStats.builder()
+                .withDn(e.dn)
+                .withIntervals(e.intervals)
+                .withSuspect(e.suspect)
+                .withThresholded(e.thresholded)
+                .withTimeCollected(e.timeCollected)
+                .withUpdate(e.update)
+                .withBroadcastPackets(e.broadcastPackets)
+                .withJumboPackets(e.jumboPackets)
+                .withMulticastPackets(e.multicastPackets)
+                .withTotalBytes(e.totalBytes)
+                .withTotalPackets(e.totalPackets)
+                .withUnicastPackets(e.unicastPackets)
                 .build();
     }
 
