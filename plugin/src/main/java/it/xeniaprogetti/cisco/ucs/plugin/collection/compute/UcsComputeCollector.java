@@ -61,11 +61,21 @@ public class UcsComputeCollector extends AbstractUcsServiceCollector {
     @Override
     public CompletableFuture<CollectionSet> collect(CollectionRequest request, Map<String, Object> attributes) {
         Map<String, Set<UcsEnums.NamingClassId>> requestMap = new HashMap<>();
+        LOG.debug("collect: nodeid:{} ipaddr:{}, attributes:{}", request.getNodeId(), request.getAddress(), attributes);
         var dn = attributes.get(UcsUtils.UCS_DN_KEY).toString();
-        requestMap.put(
-                dn,
-                collectionItemMap.get(UcsEnums.ClassId.computeBlade).get(UcsUtils.UCS_DN_KEY)
-        );
+        var type = UcsEnums.ClassId.valueOf(attributes.get(UcsUtils.UCS_TYPE_KEY).toString());
+        LOG.debug("collect: nodeid:{} ipaddr:{}, dn:{} type:{}",
+                request.getNodeId(), request.getAddress(), dn, type);
+        final ImmutableNodeResource nodeResource = ImmutableNodeResource.newBuilder().setNodeId(request.getNodeId()).build();
+
+        if (collectionItemMap.containsKey(type)) {
+            requestMap.put(
+                    dn,
+                    collectionItemMap.get(UcsEnums.ClassId.computeBlade).get(UcsUtils.UCS_DN_KEY));
+        } else {
+            return creatEmptyCollectionSet(nodeResource, Instant.now().toEpochMilli());
+
+        }
         ApiClientService service;
         try {
             service = getClientService(attributes);
@@ -74,7 +84,6 @@ public class UcsComputeCollector extends AbstractUcsServiceCollector {
             return  CompletableFuture.failedFuture(e);
         }
 
-        final ImmutableNodeResource nodeResource = ImmutableNodeResource.newBuilder().setNodeId(request.getNodeId()).build();
         UcsDataCollection stats;
         try {
             stats = service.getUcsDataCollection(requestMap);

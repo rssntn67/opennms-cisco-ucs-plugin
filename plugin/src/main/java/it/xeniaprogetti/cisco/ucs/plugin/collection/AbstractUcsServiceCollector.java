@@ -4,8 +4,8 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.ClientManager;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.Aggregate;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientService;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsUtils;
 import it.xeniaprogetti.cisco.ucs.plugin.connection.ConnectionManager;
-import it.xeniaprogetti.cisco.ucs.plugin.pollers.CiscoUcsAbstractPoller;
 import org.opennms.integration.api.v1.collectors.CollectionSet;
 import org.opennms.integration.api.v1.collectors.immutables.ImmutableNumericAttribute;
 import org.opennms.integration.api.v1.collectors.immutables.ImmutableStringAttribute;
@@ -67,7 +67,7 @@ public abstract class AbstractUcsServiceCollector implements UcsServiceCollector
     }
 
     protected ApiClientService getClientService(Map<String, Object> attributes) throws ApiException {
-        String alias = Objects.requireNonNull(attributes.get(CiscoUcsAbstractPoller.ALIAS_KEY), "alias is missing").toString();
+        String alias = Objects.requireNonNull(attributes.get(UcsUtils.UCS_ALIAS_KEY), "alias is missing").toString();
         var connection = connectionManager.getConnection(alias);
         if (connection.isEmpty()) {
             throw new ApiException("No connection for alias", new NullPointerException("No connection found for "+ alias));
@@ -81,5 +81,13 @@ public abstract class AbstractUcsServiceCollector implements UcsServiceCollector
                         .setResource(nodeResource).build())
                 .setTimestamp(timestamp).setStatus(CollectionSet.Status.FAILED).build());
     }
+
+    public static CompletableFuture<CollectionSet> creatEmptyCollectionSet(ImmutableNodeResource nodeResource, long timestamp) {
+        return CompletableFuture.completedFuture(ImmutableCollectionSet.newBuilder()
+                .addCollectionSetResource(ImmutableCollectionSetResource.newBuilder(NodeResource.class)
+                        .setResource(nodeResource).build())
+                .setTimestamp(timestamp).setStatus(CollectionSet.Status.SUCCEEDED).build());
+    }
+
 
 }

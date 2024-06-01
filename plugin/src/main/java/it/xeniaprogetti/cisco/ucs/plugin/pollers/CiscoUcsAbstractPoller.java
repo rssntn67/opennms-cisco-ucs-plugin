@@ -12,6 +12,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentChassis;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentFex;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentRackEnclosure;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsNetworkElement;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsUtils;
 import it.xeniaprogetti.cisco.ucs.plugin.connection.ConnectionManager;
 import org.opennms.integration.api.v1.pollers.PollerRequest;
 import org.opennms.integration.api.v1.pollers.PollerResult;
@@ -30,10 +31,6 @@ public abstract class CiscoUcsAbstractPoller implements ServicePoller {
     private static final Logger LOG = LoggerFactory.getLogger(CiscoUcsAbstractPoller.class);
     private final ClientManager clientManager;
     private final ConnectionManager connectionManager;
-
-    public final static String ALIAS_KEY = "alias";
-    public final static String DN_KEY = "dn";
-    public final static String TYPE_KEY = "type";
 
     protected CiscoUcsAbstractPoller(final ConnectionManager connectionManager, final ClientManager clientManager) {
         this.connectionManager = Objects.requireNonNull(connectionManager);
@@ -129,13 +126,13 @@ public abstract class CiscoUcsAbstractPoller implements ServicePoller {
 
         @Override
         public final Map<String, String> getRuntimeAttributes(final PollerRequest pollerRequest) {
-            final var alias = Objects.requireNonNull(pollerRequest.getPollerAttributes().get(ALIAS_KEY), "Missing property: " + ALIAS_KEY);
-            final var dn = Objects.requireNonNull(pollerRequest.getPollerAttributes().get(DN_KEY), "Missing property: " + DN_KEY);
-            final var type = Objects.requireNonNull(pollerRequest.getPollerAttributes().get(TYPE_KEY), "Missing property: " + TYPE_KEY);
+            final var alias = Objects.requireNonNull(pollerRequest.getPollerAttributes().get(UcsUtils.UCS_ALIAS_KEY), "Missing property: " + UcsUtils.UCS_ALIAS_KEY);
+            final var dn = Objects.requireNonNull(pollerRequest.getPollerAttributes().get(UcsUtils.UCS_DN_KEY), "Missing property: " + UcsUtils.UCS_DN_KEY);
+            final var type = Objects.requireNonNull(pollerRequest.getPollerAttributes().get(UcsUtils.UCS_TYPE_KEY), "Missing property: " + UcsUtils.UCS_TYPE_KEY);
             final var attrs = ImmutableMap.<String,String>builder();
-            attrs.put(ALIAS_KEY,alias);
-            attrs.put(DN_KEY, dn);
-            attrs.put(TYPE_KEY, type);
+            attrs.put(UcsUtils.UCS_ALIAS_KEY,alias);
+            attrs.put(UcsUtils.UCS_DN_KEY, dn);
+            attrs.put(UcsUtils.UCS_TYPE_KEY, type);
 
             return attrs.build();
         }
@@ -151,12 +148,12 @@ public abstract class CiscoUcsAbstractPoller implements ServicePoller {
 
         public Context(final PollerRequest request) throws ApiException {
             this.request = Objects.requireNonNull(request);
-            this.alias = Objects.requireNonNull(this.request.getPollerAttributes().get(ALIAS_KEY),
-                    "Missing attribute: " + ALIAS_KEY);
-            this.dn = Objects.requireNonNull(this.request.getPollerAttributes().get(DN_KEY),
-                    "Missing attribute: " + DN_KEY);
-            this.type = Objects.requireNonNull(this.request.getPollerAttributes().get(TYPE_KEY),
-                    "Missing attribute: " + TYPE_KEY);
+            this.alias = Objects.requireNonNull(this.request.getPollerAttributes().get(UcsUtils.UCS_ALIAS_KEY),
+                    "Missing attribute: " + UcsUtils.UCS_ALIAS_KEY);
+            this.dn = Objects.requireNonNull(this.request.getPollerAttributes().get(UcsUtils.UCS_DN_KEY),
+                    "Missing attribute: " + UcsUtils.UCS_DN_KEY);
+            this.type = Objects.requireNonNull(this.request.getPollerAttributes().get(UcsUtils.UCS_TYPE_KEY),
+                    "Missing attribute: " + UcsUtils.UCS_TYPE_KEY);
             var connection =  CiscoUcsAbstractPoller.this.connectionManager.getConnection(alias);
             if (connection.isEmpty()) {
                 throw new ApiException("No connection for alias", new NullPointerException("No connection found for "+ alias));
