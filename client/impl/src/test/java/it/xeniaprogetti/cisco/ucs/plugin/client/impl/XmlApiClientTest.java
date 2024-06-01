@@ -2,10 +2,8 @@ package it.xeniaprogetti.cisco.ucs.plugin.client.impl;
 
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientCredentials;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEnums;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentStats;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsNetworkElementStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDataCollection;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -106,7 +104,6 @@ public class XmlApiClientTest {
     public void testXmlClientServiceCheckCredentials() throws ApiException, InterruptedException {
         XmlApiClientProvider clientProvider = new XmlApiClientProvider(5);
         XmlApiClientService service = new XmlApiClientService(getCredentials(550),clientProvider);
-        //Should do login
         service.checkCredentials();
         LOG.info("sleeping 30sec {}", OffsetDateTime.now());
         Thread.sleep(30000);
@@ -174,11 +171,11 @@ public class XmlApiClientTest {
         Map<String, Set<UcsEnums.NamingClassId>> requestMap = new HashMap<>();
         requestMap.put("sys/switch-A", new HashSet<>());
         requestMap.get("sys/switch-A").add(UcsEnums.NamingClassId.swEnvStats);
-        UcsNetworkElementStats ucsNetworkElementStats = service.getUcsNetworkElementStats(requestMap);
-        Assert.assertNotNull(ucsNetworkElementStats.ucsSwEnvStats);
+        UcsDataCollection ucsDataCollection = service.getUcsDataCollection(requestMap);
+        Assert.assertNotNull(ucsDataCollection.ucsSwEnvStats);
         service.disconnect();
-        System.out.println(ucsNetworkElementStats.ucsSwEnvStats.mainBoardOutlet1);
-        System.out.println(ucsNetworkElementStats.ucsSwEnvStats.mainBoardOutlet2);
+        System.out.println(ucsDataCollection.ucsSwEnvStats.mainBoardOutlet1);
+        System.out.println(ucsDataCollection.ucsSwEnvStats.mainBoardOutlet2);
     }
 
     @Test
@@ -205,7 +202,7 @@ public class XmlApiClientTest {
                 getCollectionMap().get(UcsEnums.ClassId.networkElement).get(UcsUtils.UCS_FABRIC_SAN_KEY)
         );
 
-        UcsNetworkElementStats stats = service.getUcsNetworkElementStats(requestMap);
+        UcsDataCollection stats = service.getUcsDataCollection(requestMap);
         service.disconnect();
         System.out.println(stats);
 
@@ -223,7 +220,7 @@ public class XmlApiClientTest {
                 getCollectionMap().get(UcsEnums.ClassId.equipmentChassis).get(UcsUtils.UCS_DN_KEY)
         );
 
-        UcsEquipmentStats stats = service.getUcsEquipmentStats(requestMap);
+        UcsDataCollection stats = service.getUcsDataCollection(requestMap);
         service.disconnect();
         System.out.println(stats);
 
@@ -240,7 +237,7 @@ public class XmlApiClientTest {
                 dn,
                 getCollectionMap().get(UcsEnums.ClassId.computeBlade).get(UcsUtils.UCS_DN_KEY)
         );
-        UcsComputeStats stats = service.getUcsComputeStats(requestMap);
+        UcsDataCollection stats = service.getUcsDataCollection(requestMap);
         service.disconnect();
         System.out.println(stats);
 

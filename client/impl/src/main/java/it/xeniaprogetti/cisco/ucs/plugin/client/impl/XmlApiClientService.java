@@ -7,7 +7,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeBlade;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeMbPowerStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeMbTempStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeRackUnit;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDataCollection;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDn;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEnums;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentChassis;
@@ -15,14 +15,12 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentChassisStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentFex;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentNetworkElementFanStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentRackEnclosure;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsFault;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsFcErrStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsFcStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsIpPoolPooled;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsManager;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsNetworkElement;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsNetworkElementStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsProcessorEnvStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsSwCardEnvStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsSwEnvStats;
@@ -303,14 +301,19 @@ public class XmlApiClientService implements ApiClientService {
     }
 
     @Override
-    public UcsNetworkElementStats getUcsNetworkElementStats(Map<String, Set<UcsEnums.NamingClassId>> collectMap) throws ApiException {
-        LOG.debug("getNetworkElementStats: {}", collectMap);
+    public UcsDataCollection getUcsDataCollection(Map<String, Set<UcsEnums.NamingClassId>> collectMap) throws ApiException {
+        LOG.debug("getUcsDataCollection: {}", collectMap);
         UcsSwEnvStats swEnvStats = null;
         UcsSwSystemStats swSystemStats = null;
         UcsSwCardEnvStats swCardEnvStats = null;
+        UcsEquipmentChassisStats ucsEquipmentChassisStats = null;
         final List<UcsEquipmentNetworkElementFanStats> fanStats = new ArrayList<>();
         final List<UcsFcStats> fcStats = new ArrayList<>();
         final List<UcsFcErrStats> fcErrStats = new ArrayList<>();
+        final List<UcsProcessorEnvStats> ucsProcessorEnvStats = new ArrayList<>();
+        UcsComputeMbTempStats ucsComputeMbTempStats = null;
+        UcsComputeMbPowerStats ucsComputeMbPowerStats = null;
+
         for (String dn: collectMap.keySet()) {
             for (UcsEnums.NamingClassId classid: collectMap.get(dn)) {
                 UcsXmlApiRequest.InFilter filter = UcsXmlApiRequest.getWCardFilter(
@@ -340,18 +343,34 @@ public class XmlApiClientService implements ApiClientService {
                         statsApi.getFcErrStats(aaaApi.getToken(), filter)
                                 .forEach(f -> fcErrStats.add(from(f)) );
                         break;
+                    case equipmentChassisStats:
+                        ucsEquipmentChassisStats =  from(statsApi.getEquipmentChassisStats(aaaApi.getToken(), filter ).get(0));
+                        break;
+                    case processorEnvStats:
+                        statsApi.getProcessorEnvStats(aaaApi.getToken(), filter ).forEach(p -> ucsProcessorEnvStats.add(from(p)));
+                        break;
+                    case computeMbPowerStats:
+                        ucsComputeMbPowerStats =  from(statsApi.getComputeMbPowerStats(aaaApi.getToken(), filter ).get(0));
+                        break;
+                    case computeMbTempStats:
+                        ucsComputeMbTempStats =  from(statsApi.getComputeMbTempStats(aaaApi.getToken(), filter ).get(0));
+                        break;
                     default:
                         break;
                 }
             }
         }
-        return UcsNetworkElementStats.builder()
+        return UcsDataCollection.builder()
                 .withUcsSwEnvStats(swEnvStats)
                 .withUcsSwSystemStats(swSystemStats)
                 .withUcsSwCardEnvStats(swCardEnvStats)
                 .withUcsEquipmentNetworkElementFanStatsList(fanStats)
                 .withUcsFcStats(fcStats)
                 .withUcsFcErrStats(fcErrStats)
+                .withUcsEquipmentChassisStats(ucsEquipmentChassisStats)
+                .withUcsProcessorEnvStats(ucsProcessorEnvStats)
+                .withUcsComputeMbPowerStats(ucsComputeMbPowerStats)
+                .withUcsComputeTempStats(ucsComputeMbTempStats)
                 .build();
     }
 
@@ -443,28 +462,6 @@ public class XmlApiClientService implements ApiClientService {
                 .build();
     }
 
-    @Override
-    public UcsEquipmentStats getUcsEquipmentStats(Map<String, Set<UcsEnums.NamingClassId>> collectMap) throws ApiException {
-        LOG.debug("getUcsEquipmentStats: {}", collectMap);
-        UcsEquipmentChassisStats ucsEquipmentChassisStats = null;
-        for (String dn: collectMap.keySet()) {
-            for (UcsEnums.NamingClassId classId: collectMap.get(dn)) {
-                checkCredentials();
-                if (classId == UcsEnums.NamingClassId.equipmentChassisStats) {
-                    UcsXmlApiRequest.InFilter filter = UcsXmlApiRequest.getWCardFilter(
-                            UcsEnums.NamingClassId.equipmentChassisStats,
-                            "dn",
-                            dn+".*");
-                    ucsEquipmentChassisStats =  from(statsApi.getEquipmentChassisStats(aaaApi.getToken(), filter ).get(0));
-                    LOG.debug("getUcsEquipmentStats: {}", ucsEquipmentChassisStats);
-                }
-            }
-        }
-        return UcsEquipmentStats.builder()
-                .withUcsEquipmentChassisStats(ucsEquipmentChassisStats)
-                .build();
-    }
-
     private UcsEquipmentChassisStats from(EquipmentChassisStats equipmentChassisStats) {
         return UcsEquipmentChassisStats.builder()
                 .withDn(equipmentChassisStats.dn)
@@ -476,42 +473,6 @@ public class XmlApiClientService implements ApiClientService {
                 .withChassisI2CErrors(equipmentChassisStats.ChassisI2CErrors)
                 .withInputPower(equipmentChassisStats.inputPower)
                 .withOutputPower(equipmentChassisStats.outputPower)
-                .build();
-    }
-
-    @Override
-    public UcsComputeStats getUcsComputeStats(Map<String, Set<UcsEnums.NamingClassId>> collectMap) throws ApiException {
-        LOG.debug("getUcsComputeStats: {}", collectMap);
-        final List<UcsProcessorEnvStats> ucsProcessorEnvStats = new ArrayList<>();
-        UcsComputeMbTempStats ucsComputeMbTempStats = null;
-        UcsComputeMbPowerStats ucsComputeMbPowerStats = null;
-        for (String dn: collectMap.keySet()) {
-            for (UcsEnums.NamingClassId classId: collectMap.get(dn)) {
-                checkCredentials();
-                UcsXmlApiRequest.InFilter filter = UcsXmlApiRequest.getWCardFilter(
-                        classId,
-                        "dn",
-                        dn+".*");
-                switch (classId) {
-                    case processorEnvStats:
-                        statsApi.getProcessorEnvStats(aaaApi.getToken(), filter ).forEach(p -> ucsProcessorEnvStats.add(from(p)));
-                        break;
-                    case computeMbPowerStats:
-                        ucsComputeMbPowerStats =  from(statsApi.getComputeMbPowerStats(aaaApi.getToken(), filter ).get(0));
-                        break;
-                    case computeMbTempStats:
-                        ucsComputeMbTempStats =  from(statsApi.getComputeMbTempStats(aaaApi.getToken(), filter ).get(0));
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-        }
-        return UcsComputeStats.builder()
-                .withUcsProcessorEnvStats(ucsProcessorEnvStats)
-                .withUcsComputeMbPowerStats(ucsComputeMbPowerStats)
-                .withUcsComputeTempStats(ucsComputeMbTempStats)
                 .build();
     }
 

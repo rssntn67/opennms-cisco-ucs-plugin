@@ -3,7 +3,7 @@ package it.xeniaprogetti.cisco.ucs.plugin.collection.compute;
 import it.xeniaprogetti.cisco.ucs.plugin.client.ClientManager;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientService;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDataCollection;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDn;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEnums;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsUtils;
@@ -75,9 +75,9 @@ public class UcsComputeCollector extends AbstractUcsServiceCollector {
         }
 
         final ImmutableNodeResource nodeResource = ImmutableNodeResource.newBuilder().setNodeId(request.getNodeId()).build();
-        UcsComputeStats stats;
+        UcsDataCollection stats;
         try {
-            stats = service.getUcsComputeStats(requestMap);
+            stats = service.getUcsDataCollection(requestMap);
         } catch (ApiException e) {
             LOG.error("collect: {}", requestMap, e );
             return createFailedCollectionSet(nodeResource, Instant.now().toEpochMilli());

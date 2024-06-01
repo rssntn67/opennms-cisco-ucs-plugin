@@ -2,25 +2,33 @@ package it.xeniaprogetti.cisco.ucs.plugin.client.api;
 
 import java.util.List;
 
-public class UcsNetworkElementStats {
+public class UcsDataCollection {
     public final List<UcsEquipmentNetworkElementFanStats> ucsEquipmentNetworkElementFanStatsList;
     public final UcsSwEnvStats ucsSwEnvStats;
     public final UcsSwCardEnvStats ucsSwCardEnvStats;
     public final UcsSwSystemStats ucsSwSystemStats;
     public final List<UcsFcStats> ucsFcStats;
     public final List<UcsFcErrStats> ucsFcErrStats;
+    public final UcsEquipmentChassisStats ucsEquipmentChassisStats;
+    public final List<UcsProcessorEnvStats> ucsProcessorEnvStats;
+    public final UcsComputeMbPowerStats ucsComputeMbPowerStats;
+    public final UcsComputeMbTempStats ucsComputeMbTempStats;
 
     public static Builder builder() {
         return new Builder();
     }
 
-    private UcsNetworkElementStats(Builder builder) {
+    private UcsDataCollection(Builder builder) {
         this.ucsEquipmentNetworkElementFanStatsList = builder.ucsEquipmentNetworkElementFanStatsList;
         this.ucsSwEnvStats = builder.ucsSwEnvStats;
         this.ucsSwSystemStats = builder.ucsSwSystemStats;
         this.ucsSwCardEnvStats= builder.ucsSwCardEnvStats;
         this.ucsFcStats = builder.ucsFcStats;
         this.ucsFcErrStats = builder.ucsFcErrStats;
+        this.ucsEquipmentChassisStats = builder.ucsEquipmentChassisStats;
+        this.ucsProcessorEnvStats = builder.ucsProcessorEnvStats;
+        this.ucsComputeMbTempStats = builder.ucsComputeMbTempStats;
+        this.ucsComputeMbPowerStats = builder.ucsComputeMbPowerStats;
     }
 
 
@@ -31,6 +39,11 @@ public class UcsNetworkElementStats {
         private List<UcsEquipmentNetworkElementFanStats> ucsEquipmentNetworkElementFanStatsList;
         private List<UcsFcStats> ucsFcStats;
         private List<UcsFcErrStats> ucsFcErrStats;
+        private UcsEquipmentChassisStats ucsEquipmentChassisStats;
+        private List<UcsProcessorEnvStats> ucsProcessorEnvStats;
+        private UcsComputeMbPowerStats ucsComputeMbPowerStats;
+        private UcsComputeMbTempStats ucsComputeMbTempStats;
+
         private Builder () {
 
         }
@@ -66,8 +79,29 @@ public class UcsNetworkElementStats {
             return this;
         }
 
-        public UcsNetworkElementStats build() {
-            return new UcsNetworkElementStats(this);
+        public Builder withUcsEquipmentChassisStats(UcsEquipmentChassisStats ucsEquipmentChassisStats) {
+            this.ucsEquipmentChassisStats = ucsEquipmentChassisStats;
+            return this;
+        }
+
+        public Builder withUcsProcessorEnvStats(List<UcsProcessorEnvStats> ucsProcessorEnvStats) {
+            this.ucsProcessorEnvStats=ucsProcessorEnvStats;
+            return this;
+        }
+
+        public Builder withUcsComputeMbPowerStats(UcsComputeMbPowerStats ucsComputeMbPowerStats) {
+            this.ucsComputeMbPowerStats = ucsComputeMbPowerStats;
+            return this;
+        }
+
+        public Builder withUcsComputeTempStats(UcsComputeMbTempStats ucsComputeMbTempStats) {
+            this.ucsComputeMbTempStats = ucsComputeMbTempStats;
+            return this;
+        }
+
+
+        public UcsDataCollection build() {
+            return new UcsDataCollection(this);
         }
     }
 
