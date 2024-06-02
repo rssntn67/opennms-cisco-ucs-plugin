@@ -3,16 +3,16 @@ package it.xeniaprogetti.cisco.ucs.plugin.client.api;
 import java.util.List;
 
 public class UcsDataCollection {
-    public final List<UcsEquipmentNetworkElementFanStats> ucsEquipmentNetworkElementFanStatsList;
     public final UcsSwEnvStats ucsSwEnvStats;
     public final UcsSwCardEnvStats ucsSwCardEnvStats;
     public final UcsSwSystemStats ucsSwSystemStats;
-    public final List<UcsFcStats> ucsFcStats;
-    public final List<UcsFcErrStats> ucsFcErrStats;
-    public final UcsEquipmentChassisStats ucsEquipmentChassisStats;
-    public final List<UcsProcessorEnvStats> ucsProcessorEnvStats;
     public final UcsComputeMbPowerStats ucsComputeMbPowerStats;
     public final UcsComputeMbTempStats ucsComputeMbTempStats;
+    public final UcsEquipmentChassisStats ucsEquipmentChassisStats;
+    public final List<UcsFcStats> ucsFcStats;
+    public final List<UcsFcErrStats> ucsFcErrStats;
+    public final List<UcsEquipmentNetworkElementFanStats> ucsEquipmentNetworkElementFanStats;
+    public final List<UcsProcessorEnvStats> ucsProcessorEnvStats;
     public final List<UcsEtherRxStats> ucsEtherRxStats;
     public final List<UcsEtherTxStats> ucsEtherTxStats;
 
@@ -21,7 +21,7 @@ public class UcsDataCollection {
     }
 
     private UcsDataCollection(Builder builder) {
-        this.ucsEquipmentNetworkElementFanStatsList = builder.ucsEquipmentNetworkElementFanStatsList;
+        this.ucsEquipmentNetworkElementFanStats = builder.ucsEquipmentNetworkElementFanStats;
         this.ucsSwEnvStats = builder.ucsSwEnvStats;
         this.ucsSwSystemStats = builder.ucsSwSystemStats;
         this.ucsSwCardEnvStats= builder.ucsSwCardEnvStats;
@@ -40,7 +40,7 @@ public class UcsDataCollection {
         private UcsSwEnvStats ucsSwEnvStats;
         private UcsSwSystemStats ucsSwSystemStats;
         private UcsSwCardEnvStats ucsSwCardEnvStats;
-        private List<UcsEquipmentNetworkElementFanStats> ucsEquipmentNetworkElementFanStatsList;
+        private List<UcsEquipmentNetworkElementFanStats> ucsEquipmentNetworkElementFanStats;
         private List<UcsFcStats> ucsFcStats;
         private List<UcsFcErrStats> ucsFcErrStats;
         private UcsEquipmentChassisStats ucsEquipmentChassisStats;
@@ -71,7 +71,7 @@ public class UcsDataCollection {
 
 
         public Builder withUcsEquipmentNetworkElementFanStatsList(final List<UcsEquipmentNetworkElementFanStats> ucsEquipmentNetworkElementFanStatsList) {
-            this.ucsEquipmentNetworkElementFanStatsList = ucsEquipmentNetworkElementFanStatsList;
+            this.ucsEquipmentNetworkElementFanStats = ucsEquipmentNetworkElementFanStatsList;
             return this;
         }
 

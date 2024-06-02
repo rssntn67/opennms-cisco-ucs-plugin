@@ -88,10 +88,7 @@ public class UcsEquipmentCollector extends AbstractUcsServiceCollector {
 
         final ImmutableCollectionSetResource.Builder<NodeResource> equipmentAttrBuilder =
                 ImmutableCollectionSetResource.newBuilder(NodeResource.class).setResource(nodeResource);
-        equipmentAttrBuilder.addStringAttribute(createStringAttribute("ucsEquipmentChassisStats", "ucsEquipmentChassisStats.dn", stats.ucsEquipmentChassisStats.dn.value));
-        addNumAttr(equipmentAttrBuilder, "ucsEquipmentChassisStats", "ChassisI2CErrors", stats.ucsEquipmentChassisStats.ChassisI2CErrors);
-        addNumAttr(equipmentAttrBuilder, "ucsEquipmentChassisStats", "InputPower", stats.ucsEquipmentChassisStats.inputPower);
-        addNumAttr(equipmentAttrBuilder, "ucsEquipmentChassisStats", "OutputPower", stats.ucsEquipmentChassisStats.outputPower);
+        addUcsEquipmentChassisStats(equipmentAttrBuilder, stats);
 
         final ImmutableCollectionSet.Builder resultBuilder = ImmutableCollectionSet.newBuilder();
         resultBuilder.addCollectionSetResource(equipmentAttrBuilder.build());

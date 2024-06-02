@@ -4,18 +4,15 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.ClientManager;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientService;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDataCollection;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDn;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEnums;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsUtils;
 import it.xeniaprogetti.cisco.ucs.plugin.collection.AbstractUcsServiceCollector;
 import it.xeniaprogetti.cisco.ucs.plugin.connection.ConnectionManager;
 import org.opennms.integration.api.v1.collectors.CollectionRequest;
 import org.opennms.integration.api.v1.collectors.CollectionSet;
-import org.opennms.integration.api.v1.collectors.resource.GenericTypeResource;
 import org.opennms.integration.api.v1.collectors.resource.NodeResource;
 import org.opennms.integration.api.v1.collectors.resource.immutables.ImmutableCollectionSet;
 import org.opennms.integration.api.v1.collectors.resource.immutables.ImmutableCollectionSetResource;
-import org.opennms.integration.api.v1.collectors.resource.immutables.ImmutableGenericTypeResource;
 import org.opennms.integration.api.v1.collectors.resource.immutables.ImmutableNodeResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,42 +92,12 @@ public class UcsComputeCollector extends AbstractUcsServiceCollector {
         }
         final ImmutableCollectionSetResource.Builder<NodeResource> computeAttrBuilder =
                 ImmutableCollectionSetResource.newBuilder(NodeResource.class).setResource(nodeResource);
-
-        computeAttrBuilder.addStringAttribute(createStringAttribute("ucsComputeMbPowerStats", "ucsComputeMbPowerStats.dn", stats.ucsComputeMbPowerStats.dn.value));
-        addNumAttr(computeAttrBuilder, "ucsComputeMbPowerStats", "ConsumedPower", stats.ucsComputeMbPowerStats.consumedPower);
-        addNumAttr(computeAttrBuilder, "ucsComputeMbPowerStats", "InputCurrent", stats.ucsComputeMbPowerStats.inputCurrent);
-        addNumAttr(computeAttrBuilder, "ucsComputeMbPowerStats", "InputVoltage", stats.ucsComputeMbPowerStats.inputVoltage);
-
-
-        computeAttrBuilder.addStringAttribute(createStringAttribute("ucsComputeMbTempStats", "ucsComputeMbTempStats.dn", stats.ucsComputeMbTempStats.dn.value));
-        addNumAttr(computeAttrBuilder, "ucsComputeMbTempStats", "FmTempSenIo", stats.ucsComputeMbTempStats.fmTempSenIo);
-        addNumAttr(computeAttrBuilder, "ucsComputeMbTempStats", "FmTempSenRear", stats.ucsComputeMbTempStats.fmTempSenRear);
+        addUcsComputeMbPowerStats(computeAttrBuilder, stats);
+        addUcsComputeMbTempStats(computeAttrBuilder, stats);
 
         final ImmutableCollectionSet.Builder resultBuilder = ImmutableCollectionSet.newBuilder();
         resultBuilder.addCollectionSetResource(computeAttrBuilder.build());
-
-        stats.ucsProcessorEnvStats.forEach( stat -> {
-            UcsDn processorDn = UcsDn.getParentDn(stat.dn);
-            assert processorDn != null;
-            String processorId = processorDn.value.replace("/","-");
-            UcsDn boardDn = UcsDn.getParentDn(processorDn);
-            assert boardDn != null;
-            String processorName = processorDn.value.replace(boardDn.value, "").replace("/","");
-            final ImmutableCollectionSetResource.Builder<GenericTypeResource> appResourceBuilder =
-                    ImmutableCollectionSetResource.newBuilder(GenericTypeResource.class).setResource(
-                                    ImmutableGenericTypeResource.newBuilder().setNodeResource(nodeResource)
-                                            .setType("CiscoUcsProcessor")
-                                            .setInstance(processorId)
-                                            .build())
-                            .addStringAttribute(createStringAttribute("processor", "processorEnvStatsDn", stat.dn.value))
-                            .addStringAttribute(createStringAttribute("processor", "processorDn", processorDn.value))
-                            .addStringAttribute(createStringAttribute("processor", "processorName", processorName))
-                            .addStringAttribute(createStringAttribute("processor", "processorId", processorId));
-            addNumAttr(appResourceBuilder, "processor", "Temperature", stat.temperature);
-
-            resultBuilder.addCollectionSetResource(appResourceBuilder.build());
-        });
-
+        addUcsProcessorEnvStats(resultBuilder, stats, nodeResource);
 
         return CompletableFuture.completedFuture(resultBuilder.setStatus(CollectionSet.Status.SUCCEEDED)
                 .setTimestamp(System.currentTimeMillis()).build());
