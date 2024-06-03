@@ -24,6 +24,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
+import static java.util.Objects.requireNonNull;
+
 public class UcsEquipmentCollector extends AbstractUcsServiceCollector {
     private final Map<UcsEnums.ClassId, Map<String,Set<UcsEnums.NamingClassId>>> collectionItemMap = new HashMap<>();
 
@@ -53,6 +55,7 @@ public class UcsEquipmentCollector extends AbstractUcsServiceCollector {
 
     @Override
     public CompletableFuture<CollectionSet> collect(CollectionRequest request, Map<String, Object> attributes) {
+        int milliseconds = Integer.parseInt((String) requireNonNull(attributes.get(SERVICE_INTERVAL), "Missing attribute: " + SERVICE_INTERVAL));
         LOG.debug("collect: nodeid:{} ipaddr:{}, attributes:{}", request.getNodeId(), request.getAddress(), attributes);
         Map<String, Set<UcsEnums.NamingClassId>> requestMap = new HashMap<>();
         var dn = attributes.get(UcsUtils.UCS_DN_KEY).toString();
@@ -92,7 +95,9 @@ public class UcsEquipmentCollector extends AbstractUcsServiceCollector {
 
         final ImmutableCollectionSet.Builder resultBuilder = ImmutableCollectionSet.newBuilder();
         resultBuilder.addCollectionSetResource(equipmentAttrBuilder.build());
-
+        addUcsEtherRxStats(resultBuilder, stats, nodeResource,milliseconds);
+        addUcsEtherTxStats(resultBuilder, stats, nodeResource,milliseconds);
+        
         return CompletableFuture.completedFuture(resultBuilder.setStatus(CollectionSet.Status.SUCCEEDED)
                 .setTimestamp(stats.ucsEquipmentChassisStats.timeCollected.getTime()).build());
 
