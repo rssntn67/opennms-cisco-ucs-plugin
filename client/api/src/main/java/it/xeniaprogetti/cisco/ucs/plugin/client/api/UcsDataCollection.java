@@ -15,6 +15,7 @@ public class UcsDataCollection {
     public final List<UcsProcessorEnvStats> ucsProcessorEnvStats;
     public final List<UcsEtherRxStats> ucsEtherRxStats;
     public final List<UcsEtherTxStats> ucsEtherTxStats;
+    public final List<UcsEquipmentPsuInputStats> ucsEquipmentPsuInputStats;
 
     public static Builder builder() {
         return new Builder();
@@ -33,6 +34,7 @@ public class UcsDataCollection {
         this.ucsComputeMbPowerStats = builder.ucsComputeMbPowerStats;
         this.ucsEtherRxStats = builder.ucsEtherRxStats;
         this.ucsEtherTxStats = builder.ucsEtherTxStats;
+        this.ucsEquipmentPsuInputStats = builder.ucsEquipmentPsuInputStats;
     }
 
 
@@ -49,6 +51,7 @@ public class UcsDataCollection {
         private UcsComputeMbTempStats ucsComputeMbTempStats;
         private List<UcsEtherRxStats> ucsEtherRxStats;
         private List<UcsEtherTxStats> ucsEtherTxStats;
+        private List<UcsEquipmentPsuInputStats> ucsEquipmentPsuInputStats;
 
         private Builder () {
 
@@ -112,6 +115,11 @@ public class UcsDataCollection {
 
         public Builder withUcsEtherTxStats(List<UcsEtherTxStats> ucsEtherTxStats) {
             this.ucsEtherTxStats = ucsEtherTxStats;
+            return this;
+        }
+
+        public Builder withUcsEquipmentPsuInputStats(List<UcsEquipmentPsuInputStats> ucsEquipmentPsuInputStats) {
+            this.ucsEquipmentPsuInputStats =  ucsEquipmentPsuInputStats;
             return this;
         }
 

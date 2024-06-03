@@ -289,6 +289,32 @@ public abstract class AbstractUcsServiceCollector implements UcsServiceCollector
         });
     }
 
+    public static void addUcsEquipmentPsuInputStats(ImmutableCollectionSet.Builder builder, UcsDataCollection stats, ImmutableNodeResource nodeResource) {
+        stats.ucsEquipmentPsuInputStats.forEach(stat -> {
+            UcsDn psuInputDn = UcsDn.getParentDn(stat.dn);
+            assert psuInputDn != null;
+            String psuInputId = psuInputDn.value.replace("/","-");
+            UcsDn switchDn = UcsDn.getParentDn(psuInputDn);
+            assert switchDn != null;
+            String psuInputName = psuInputDn.value.replace(switchDn.value, "").replace("/","");
+            final ImmutableCollectionSetResource.Builder<GenericTypeResource> appResourceBuilder =
+                    ImmutableCollectionSetResource.newBuilder(GenericTypeResource.class).setResource(
+                                    ImmutableGenericTypeResource.newBuilder().setNodeResource(nodeResource)
+                                            .setType("EquipPsuInput")
+                                            .setInstance(psuInputId)
+                                            .build())
+                            .addStringAttribute(createStringAttribute("equipmentPsuInput", "equipmentPsuInput.dn", stat.dn.value))
+                            .addStringAttribute(createStringAttribute("equipmentPsuInput", "psuInputDn", psuInputDn.value))
+                            .addStringAttribute(createStringAttribute("equipmentPsuInput", "psuInputName", psuInputName))
+                            .addStringAttribute(createStringAttribute("equipmentPsuInput", "inputStatus", stat.inputStatus));
+
+            addNumAttr(appResourceBuilder, "equipmentPsuInput", "Current", stat.current);
+            addNumAttr(appResourceBuilder, "equipmentPsuInput", "Power", stat.power);
+            addNumAttr(appResourceBuilder, "equipmentPsuInput", "Voltage", stat.voltage);
+            builder.addCollectionSetResource(appResourceBuilder.build());
+        });
+    }
+
     protected ApiClientService getClientService(Map<String, Object> attributes) throws ApiException {
         String alias = Objects.requireNonNull(attributes.get(UcsUtils.UCS_ALIAS_KEY), "alias is missing").toString();
         var connection = connectionManager.getConnection(alias);

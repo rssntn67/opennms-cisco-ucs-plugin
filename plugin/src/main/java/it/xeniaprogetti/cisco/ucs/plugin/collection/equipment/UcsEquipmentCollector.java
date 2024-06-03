@@ -97,7 +97,7 @@ public class UcsEquipmentCollector extends AbstractUcsServiceCollector {
         resultBuilder.addCollectionSetResource(equipmentAttrBuilder.build());
         addUcsEtherRxStats(resultBuilder, stats, nodeResource,milliseconds);
         addUcsEtherTxStats(resultBuilder, stats, nodeResource,milliseconds);
-        
+
         return CompletableFuture.completedFuture(resultBuilder.setStatus(CollectionSet.Status.SUCCEEDED)
                 .setTimestamp(stats.ucsEquipmentChassisStats.timeCollected.getTime()).build());
 

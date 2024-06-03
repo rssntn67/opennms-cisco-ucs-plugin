@@ -14,6 +14,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentChassis;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentChassisStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentFex;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentNetworkElementFanStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentPsuInputStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentRackEnclosure;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEtherRxStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEtherTxStats;
@@ -50,6 +51,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ComputeMbPowerS
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ComputeMbTempStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentChassisStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentNetworkElementFanStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentPsuInputStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EtherRxStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EtherTxStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.FcErrStats;
@@ -319,7 +321,7 @@ public class XmlApiClientService implements ApiClientService {
         UcsComputeMbPowerStats ucsComputeMbPowerStats = null;
         final List<UcsEtherRxStats> ucsEtherRxStats = new ArrayList<>();
         final List<UcsEtherTxStats> ucsEtherTxStats = new ArrayList<>();
-
+        final List<UcsEquipmentPsuInputStats> ucsEquipmentPsuInputStats = new ArrayList<>();
         for (String dn: collectMap.keySet()) {
             for (UcsEnums.NamingClassId classId: collectMap.get(dn)) {
                 UcsXmlApiRequest.InFilter filter = UcsXmlApiRequest.getWCardFilter(
@@ -367,6 +369,8 @@ public class XmlApiClientService implements ApiClientService {
                     case etherTxStats:
                         statsApi.getEtherTxStats(aaaApi.getToken(), filter).forEach(e -> ucsEtherTxStats.add(from(e)));
                         break;
+                    case equipmentPsuInputStats:
+                        statsApi.getEquipmentPsuInputStats(aaaApi.getToken(), filter).forEach(e -> ucsEquipmentPsuInputStats.add(from(e)));
                     default:
                         break;
                 }
@@ -385,7 +389,23 @@ public class XmlApiClientService implements ApiClientService {
                 .withUcsComputeTempStats(ucsComputeMbTempStats)
                 .withUcsEtherRxStats(ucsEtherRxStats)
                 .withUcsEtherTxStats(ucsEtherTxStats)
+                .withUcsEquipmentPsuInputStats(ucsEquipmentPsuInputStats)
                 .build();
+    }
+
+    private UcsEquipmentPsuInputStats from(EquipmentPsuInputStats e) {
+         return UcsEquipmentPsuInputStats.builder()
+                 .withDn(e.dn)
+                 .withIntervals(e.intervals)
+                 .withSuspect(e.suspect)
+                 .withThresholded(e.thresholded)
+                 .withTimeCollected(e.timeCollected)
+                 .withUpdate(e.update)
+                 .withPower(e.power)
+                 .withCurrent(e.current)
+                 .withVoltage(e.voltage)
+                 .withInputStatus(e.inputStatus)
+                 .build();
     }
 
     private UcsEtherTxStats from(EtherTxStats e) {
