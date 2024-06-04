@@ -315,6 +315,58 @@ public abstract class AbstractUcsServiceCollector implements UcsServiceCollector
         });
     }
 
+    public static void addUcsEquipmentPsuStats(ImmutableCollectionSet.Builder builder, UcsDataCollection stats, ImmutableNodeResource nodeResource) {
+        stats.ucsEquipmentPsuStats.forEach(stat -> {
+            UcsDn psuDn = UcsDn.getParentDn(stat.dn);
+            assert psuDn != null;
+            String psuId = psuDn.value.replace("/","-");
+            UcsDn equipmentDn = UcsDn.getParentDn(psuDn);
+            assert equipmentDn != null;
+            String psuName = psuDn.value.replace(equipmentDn.value, "").replace("/","");
+            final ImmutableCollectionSetResource.Builder<GenericTypeResource> appResourceBuilder =
+                    ImmutableCollectionSetResource.newBuilder(GenericTypeResource.class).setResource(
+                                    ImmutableGenericTypeResource.newBuilder().setNodeResource(nodeResource)
+                                            .setType("EquipPsu")
+                                            .setInstance(psuId)
+                                            .build())
+                            .addStringAttribute(createStringAttribute("equipmentPsu", "equipmentPsu.dn", stat.dn.value))
+                            .addStringAttribute(createStringAttribute("equipmentPsu", "psuDn", psuDn.value))
+                            .addStringAttribute(createStringAttribute("equipmentPsu", "psuName", psuName));
+
+            addNumAttr(appResourceBuilder, "equipmentPsu", "AmbientTemp", stat.ambientTemp);
+            addNumAttr(appResourceBuilder, "equipmentPsu", "Input210v", stat.input210v);
+            addNumAttr(appResourceBuilder, "equipmentPsu", "Output12v", stat.output12v);
+            addNumAttr(appResourceBuilder, "equipmentPsu", "Output3v3", stat.output3v3);
+            addNumAttr(appResourceBuilder, "equipmentPsu", "OutputCurrent", stat.outputCurrent);
+            addNumAttr(appResourceBuilder, "equipmentPsu", "OutputPower", stat.outputPower);
+            builder.addCollectionSetResource(appResourceBuilder.build());
+        });
+    }
+
+    public static void addUcsEquipmentIoCardStats(ImmutableCollectionSet.Builder builder, UcsDataCollection stats, ImmutableNodeResource nodeResource) {
+        stats.ucsEquipmentIOCardStats.forEach(stat -> {
+            UcsDn ioCardDn = UcsDn.getParentDn(stat.dn);
+            assert ioCardDn != null;
+            String ioCardId = ioCardDn.value.replace("/","-");
+            UcsDn equipmentDn = UcsDn.getParentDn(ioCardDn);
+            assert equipmentDn != null;
+            String ioCardName = ioCardDn.value.replace(equipmentDn.value, "").replace("/","");
+            final ImmutableCollectionSetResource.Builder<GenericTypeResource> appResourceBuilder =
+                    ImmutableCollectionSetResource.newBuilder(GenericTypeResource.class).setResource(
+                                    ImmutableGenericTypeResource.newBuilder().setNodeResource(nodeResource)
+                                            .setType("EquipIOCard")
+                                            .setInstance(ioCardId)
+                                            .build())
+                            .addStringAttribute(createStringAttribute("equipmentIOCard", "equipmentIOCard.dn", stat.dn.value))
+                            .addStringAttribute(createStringAttribute("equipmentIOCard", "ioCardDn", ioCardDn.value))
+                            .addStringAttribute(createStringAttribute("equipmentIOCard", "ioCardName", ioCardName));
+
+            addNumAttr(appResourceBuilder, "equipmentIOCard", "AmbientTemp", stat.ambientTemp);
+            addNumAttr(appResourceBuilder, "equipmentIOCard", "IomI2CErrors", stat.IomI2CErrors);
+            builder.addCollectionSetResource(appResourceBuilder.build());
+        });
+    }
+
     protected ApiClientService getClientService(Map<String, Object> attributes) throws ApiException {
         String alias = Objects.requireNonNull(attributes.get(UcsUtils.UCS_ALIAS_KEY), "alias is missing").toString();
         var connection = connectionManager.getConnection(alias);

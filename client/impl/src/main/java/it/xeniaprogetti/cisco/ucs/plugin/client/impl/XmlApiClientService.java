@@ -13,8 +13,10 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEnums;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentChassis;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentChassisStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentFex;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentIOCardStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentNetworkElementFanStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentPsuInputStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentPsuStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentRackEnclosure;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEtherRxStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEtherTxStats;
@@ -50,8 +52,10 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.request.UcsXmlApiRequ
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ComputeMbPowerStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ComputeMbTempStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentChassisStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentIOCardStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentNetworkElementFanStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentPsuInputStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentPsuStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EtherRxStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EtherTxStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.FcErrStats;
@@ -322,6 +326,8 @@ public class XmlApiClientService implements ApiClientService {
         final List<UcsEtherRxStats> ucsEtherRxStats = new ArrayList<>();
         final List<UcsEtherTxStats> ucsEtherTxStats = new ArrayList<>();
         final List<UcsEquipmentPsuInputStats> ucsEquipmentPsuInputStats = new ArrayList<>();
+        final List<UcsEquipmentPsuStats> ucsEquipmentPsuStats = new ArrayList<>();
+        final List<UcsEquipmentIOCardStats> ucsEquipmentIOCardStats = new ArrayList<>();
         for (String dn: collectMap.keySet()) {
             for (UcsEnums.NamingClassId classId: collectMap.get(dn)) {
                 UcsXmlApiRequest.InFilter filter = UcsXmlApiRequest.getWCardFilter(
@@ -371,6 +377,13 @@ public class XmlApiClientService implements ApiClientService {
                         break;
                     case equipmentPsuInputStats:
                         statsApi.getEquipmentPsuInputStats(aaaApi.getToken(), filter).forEach(e -> ucsEquipmentPsuInputStats.add(from(e)));
+                        break;
+                    case equipmentPsuStats:
+                        statsApi.getEquipmentPsuStats(aaaApi.getToken(), filter).forEach(e -> ucsEquipmentPsuStats.add(from(e)));
+                        break;
+                    case equipmentIOCardStats:
+                        statsApi.getEquipmentIOCardStats(aaaApi.getToken(), filter).forEach(e -> ucsEquipmentIOCardStats.add(from(e)));
+                        break;
                     default:
                         break;
                 }
@@ -390,6 +403,40 @@ public class XmlApiClientService implements ApiClientService {
                 .withUcsEtherRxStats(ucsEtherRxStats)
                 .withUcsEtherTxStats(ucsEtherTxStats)
                 .withUcsEquipmentPsuInputStats(ucsEquipmentPsuInputStats)
+                .withUcsEquipmentPsuStats(ucsEquipmentPsuStats)
+                .withUcsEquipmentIOCardStats(ucsEquipmentIOCardStats)
+                .build();
+    }
+
+    private UcsEquipmentIOCardStats from(EquipmentIOCardStats e) {
+        return UcsEquipmentIOCardStats.builder()
+                .withDn(e.dn)
+                .withIntervals(e.intervals)
+                .withSuspect(e.suspect)
+                .withThresholded(e.thresholded)
+                .withTimeCollected(e.timeCollected)
+                .withUpdate(e.update)
+                .withAmbientTemp(e.ambientTemp)
+                .withTemp(e.temp)
+                .withIomI2CErrors(e.IomI2CErrors)
+                .build();
+    }
+
+    private UcsEquipmentPsuStats from(EquipmentPsuStats e) {
+        return UcsEquipmentPsuStats.builder()
+                .withDn(e.dn)
+                .withIntervals(e.intervals)
+                .withSuspect(e.suspect)
+                .withThresholded(e.thresholded)
+                .withTimeCollected(e.timeCollected)
+                .withUpdate(e.update)
+                .withAmbientTemp(e.ambientTemp)
+                .withInput210v(e.input210v)
+                .withOutput12v(e.output12v)
+                .withOutput3v3(e.output3v3)
+                .withOutputCurrent(e.outputCurrent)
+                .withOutputPower(e.outputPower)
+                .withPsuI2CErrors(e.PsuI2CErrors)
                 .build();
     }
 
