@@ -7,7 +7,7 @@
     <!-- Configuration stored in $OPENNMS_HOME/etc/it.xeniaprogetti.cisco.ucs.plugin.cfg file -->
     <cm:property-placeholder id="cisco-ucsClientProperties" persistent-id="it.xeniaprogetti.cisco.ucs.client" update-strategy="reload">
         <cm:default-properties>
-            <cm:property name="client.pool.size" value="64" />
+            <cm:property name="client.pool.size" value="10" />
         </cm:default-properties>
     </cm:property-placeholder>
     <bean id="clientProvider" class="it.xeniaprogetti.cisco.ucs.plugin.client.impl.XmlApiClientProvider">
