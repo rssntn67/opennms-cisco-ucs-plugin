@@ -1,0 +1,2 @@
+grep 'public final String' $1 | awk '{print $4}' | sed -e "s/;//g" | while read p; do echo ".addMetaData(ImmutableRequisitionMetaData.newBuilder()"; echo "        .setContext(CISCO_UCS_METADATA_CONTEXT)"; echo "        .setKey(\"$p\")";
+echo "        .setValue(ucsElement.$p)"; echo "        .build())"; done
