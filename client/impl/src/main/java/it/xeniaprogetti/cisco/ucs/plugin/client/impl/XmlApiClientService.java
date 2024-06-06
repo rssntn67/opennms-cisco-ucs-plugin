@@ -88,8 +88,9 @@ public class XmlApiClientService implements ApiClientService {
     private final FaultApi faultApi;
     private final StatsApi statsApi;
     private final XmlApiClientProvider apiClientProvider;
+    private final int poolNumber;
 
-    public XmlApiClientService(ApiClientCredentials credentials, XmlApiClientProvider provider) {
+    public XmlApiClientService(ApiClientCredentials credentials, XmlApiClientProvider provider, int poolNumber) {
         ApiClient client = XmlApiClientProvider.createApiClient(credentials);
         this.credentials = credentials;
         this.aaaApi = new AaaApi(credentials, client);
@@ -98,6 +99,7 @@ public class XmlApiClientService implements ApiClientService {
         this.faultApi = new FaultApi(client);
         this.statsApi = new StatsApi(client);
         this.apiClientProvider = provider;
+        this.poolNumber = poolNumber;
     }
 
     protected ApiClientCredentials getCredentials() {
@@ -107,30 +109,30 @@ public class XmlApiClientService implements ApiClientService {
     protected void checkCredentials() throws ApiException {
         if (aaaApi.getToken() == null) {
             aaaApi.login();
-            LOG.debug("checkCredentials: login! first");
+            LOG.debug("checkCredentials: pool[{}] login!", poolNumber);
         } else if (aaaApi.isValid() && !aaaApi.isValidTokenAtLeastFor(credentials.validity)) {
             aaaApi.refresh();
-            LOG.debug("checkCredentials: refreshed token: previous token was valid for less then {} seconds", credentials.validity);
+            LOG.debug("checkCredentials: pool[{}] refreshed token: previous token was valid for less then {} seconds", poolNumber, credentials.validity);
         } else if (!aaaApi.isValid()) {
             aaaApi.logout();
-            LOG.debug("checkCredentials: logout! token is no more valid");
+            LOG.debug("checkCredentials: pool[{}] logout! token is no more valid", poolNumber);
             aaaApi.login();
-            LOG.debug("checkCredentials: new login!");
+            LOG.debug("checkCredentials: pool[{}], login!", poolNumber);
         }
-        LOG.info("checkCredentials: token is valid for at least {} seconds", credentials.validity);
+        LOG.info("checkCredentials: pool[{}] token is valid for at least {} seconds", poolNumber, credentials.validity);
     }
 
     @Override
     public void disconnect() throws ApiException {
         aaaApi.logout();
-        LOG.info("disconnect: logout");
         release();
+        LOG.info("disconnect: pool[{}], done ", poolNumber);
     }
 
     @Override
     public void release() {
         boolean disconnected = apiClientProvider.release(this);
-        LOG.info("release: cleared connection: {}", disconnected);
+        LOG.info("release: pool[{}] cleared connection: {}", poolNumber, disconnected);
     }
 
     @Override

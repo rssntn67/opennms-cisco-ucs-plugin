@@ -21,6 +21,7 @@ public class XmlApiClientProvider implements ApiClientProvider {
     private static final Map<ApiClientCredentials, List<XmlApiClientService>> serviceAvailableMap = new HashMap<>();
     private static final Map<ApiClientCredentials, List<XmlApiClientService>> serviceUsedMap = new HashMap<>();
     private final int clientPoolSize;
+    private final Map<ApiClientCredentials, Integer> poolIdMap = new HashMap<>();
 
     public XmlApiClientProvider(int clientPoolSize) {
         this.clientPoolSize = clientPoolSize;
@@ -42,25 +43,61 @@ public class XmlApiClientProvider implements ApiClientProvider {
     @Override
     public ApiClientService client(ApiClientCredentials credentials) throws ApiException {
         if (!serviceAvailableMap.containsKey(credentials)) {
-            LOG.debug("client: no client found for {}, clientPoolSize: {} ", credentials, this.clientPoolSize);
+            LOG.debug("client: url/user {}/{} no client found! Initialize!",
+                    credentials.url,
+                    credentials.username);
             serviceAvailableMap.put(credentials, new ArrayList<>());
             serviceUsedMap.put(credentials, new ArrayList<>());
+            poolIdMap.put(credentials, 0);
         }
-        if (serviceAvailableMap.get(credentials).isEmpty() && serviceUsedMap.get(credentials).size() < clientPoolSize) {
-            LOG.debug("client: {}/{} api client connection used for {}, adding a new client to clientPool!", serviceUsedMap.get(credentials).size(), this.clientPoolSize, credentials);
-            XmlApiClientService service = new XmlApiClientService(credentials, this);
+        int avail = serviceAvailableMap.get(credentials).size();
+        int used = serviceUsedMap.get(credentials).size();
+        int pool = poolIdMap.get(credentials);
+        LOG.info("client: url/user {}/{}, pool/maxPoolSize {}/{} avail:{}, used:{}",
+                credentials.url,
+                credentials.username,
+                pool,
+                this.clientPoolSize,
+                avail,
+                used);
+        if (serviceAvailableMap.get(credentials).isEmpty() && pool < clientPoolSize) {
+            LOG.info("client: url/user {}/{}, adding a new client to clientPool!",
+                    credentials.url,
+                    credentials.username);
+            XmlApiClientService service = new XmlApiClientService(credentials, this, pool);
+            pool++;
+            poolIdMap.put(credentials, pool);
             serviceUsedMap.get(credentials).add(service);
             return service;
         }
-        if (serviceAvailableMap.isEmpty()) {
-            LOG.debug("client: {}/{} api client connection used for {}, no room space left on clientPool",serviceUsedMap.get(credentials).size(), this.clientPoolSize, credentials);
+        if (serviceAvailableMap.get(credentials).isEmpty()) {
+            LOG.info("client: url/user {}/{} pool {}/{}, no room space left on clientPool",
+                    credentials.url,
+                    credentials.username,
+                    pool,
+                    this.clientPoolSize
+                    );
             throw new ApiException("no api client connection available", new RuntimeException(
                     "Maximum pool size reached, no available connections!"));
         }
-        int size = serviceAvailableMap.get(credentials).size();
-        LOG.debug("client: {} available, {} used, over {} api client connection for {}", size, serviceUsedMap.get(credentials).size(), this.clientPoolSize,credentials);
-        XmlApiClientService service = serviceAvailableMap.get(credentials).remove(size-1);
+        LOG.info("client: url/user {}/{} avail {}/{}, getting client from clientPool",
+                credentials.url,
+                credentials.username,
+                avail,
+                this.clientPoolSize
+        );
+        XmlApiClientService service = serviceAvailableMap.get(credentials).remove(avail-1);
         serviceUsedMap.get(credentials).add(service);
+        int availN = serviceAvailableMap.get(credentials).size();
+        int usedN = serviceUsedMap.get(credentials).size();
+        int poolN = poolIdMap.get(credentials);
+        LOG.info("client: url/user {}/{}, pool/maxPoolSize {}/{} avail:{}, used:{}",
+                credentials.url,
+                credentials.username,
+                poolN,
+                this.clientPoolSize,
+                availN,
+                usedN);
         return service;
     }
 
