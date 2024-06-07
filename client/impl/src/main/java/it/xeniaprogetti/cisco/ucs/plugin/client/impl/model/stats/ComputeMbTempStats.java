@@ -6,15 +6,15 @@ public class ComputeMbTempStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
     public double fmTempSenIo;
     @JacksonXmlProperty(isAttribute = true)
-    public double fmTempSenIoAvg;
+    public String fmTempSenIoAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public double fmTempSenIoMax;
+    public String fmTempSenIoMax;
     @JacksonXmlProperty(isAttribute = true)
-    public double fmTempSenIoMin;
+    public String fmTempSenIoMin;
     @JacksonXmlProperty(isAttribute = true)
     public double fmTempSenRear;
     @JacksonXmlProperty(isAttribute = true)
-    public double fmTempSenRearAvg;
+    public String fmTempSenRearAvg;
     @JacksonXmlProperty(isAttribute = true)
     public String fmTempSenRearL;
     @JacksonXmlProperty(isAttribute = true)
@@ -24,9 +24,9 @@ public class ComputeMbTempStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
     public String fmTempSenRearLMin;
     @JacksonXmlProperty(isAttribute = true)
-    public double fmTempSenRearMax;
+    public String fmTempSenRearMax;
     @JacksonXmlProperty(isAttribute = true)
-    public double fmTempSenRearMin;
+    public String fmTempSenRearMin;
     @JacksonXmlProperty(isAttribute = true)
     public String fmTempSenRearR;
     @JacksonXmlProperty(isAttribute = true)

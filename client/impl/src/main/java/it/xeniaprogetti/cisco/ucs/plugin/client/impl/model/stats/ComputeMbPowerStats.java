@@ -6,25 +6,25 @@ public class ComputeMbPowerStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
     public double consumedPower;
     @JacksonXmlProperty(isAttribute = true)
-    public double consumedPowerAvg;
+    public String consumedPowerAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public double consumedPowerMax;
+    public String consumedPowerMax;
     @JacksonXmlProperty(isAttribute = true)
-    public double consumedPowerMin;
+    public String consumedPowerMin;
     @JacksonXmlProperty(isAttribute = true)
     public double inputCurrent;
     @JacksonXmlProperty(isAttribute = true)
-    public double inputCurrentAvg;
+    public String inputCurrentAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public double inputCurrentMax;
+    public String inputCurrentMax;
     @JacksonXmlProperty(isAttribute = true)
-    public double inputCurrentMin;
+    public String inputCurrentMin;
     @JacksonXmlProperty(isAttribute = true)
     public double inputVoltage;
     @JacksonXmlProperty(isAttribute = true)
-    public double inputVoltageAvg;
+    public String inputVoltageAvg;
     @JacksonXmlProperty(isAttribute = true)
-    public double inputVoltageMax;
+    public String inputVoltageMax;
     @JacksonXmlProperty(isAttribute = true)
-    public double inputVoltageMin;
+    public String inputVoltageMin;
 }

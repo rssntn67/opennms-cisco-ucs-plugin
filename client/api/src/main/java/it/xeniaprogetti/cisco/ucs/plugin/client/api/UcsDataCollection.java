@@ -43,27 +43,27 @@ public class UcsDataCollection {
     }
 
     public Optional<UcsSwEnvStats> getUcsSwEnvStats() {
-        return Optional.of(ucsSwEnvStats);
+        return Optional.ofNullable(ucsSwEnvStats);
     }
 
     public Optional<UcsSwSystemStats> getUcsSwSystemStats() {
-        return Optional.of(ucsSwSystemStats);
+        return Optional.ofNullable(ucsSwSystemStats);
     }
 
     public Optional<UcsSwCardEnvStats> getUcsSwCardEnvStats() {
-        return Optional.of(ucsSwCardEnvStats);
+        return Optional.ofNullable(ucsSwCardEnvStats);
     }
 
     public Optional<UcsEquipmentChassisStats> getUcsEquipmentChassisStats() {
-        return Optional.of(ucsEquipmentChassisStats);
+        return Optional.ofNullable(ucsEquipmentChassisStats);
     }
 
     public Optional<UcsComputeMbPowerStats> getUcsComputeMbPowerStats() {
-        return Optional.of(ucsComputeMbPowerStats);
+        return Optional.ofNullable(ucsComputeMbPowerStats);
     }
 
     public Optional<UcsComputeMbTempStats> getUcsComputeMbTempStats() {
-        return Optional.of(ucsComputeMbTempStats);
+        return Optional.ofNullable(ucsComputeMbTempStats);
     }
 
 

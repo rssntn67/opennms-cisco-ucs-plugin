@@ -200,7 +200,7 @@ public class XmlApiClientTest {
         Assert.assertTrue(ucsDataCollection.getUcsSwCardEnvStats().isEmpty());
         service.disconnect();
         System.out.println(ucsDataCollection.getUcsSwSystemStats().get());
-        System.out.println(ucsDataCollection.getUcsSwSystemStats().get());
+        System.out.println(ucsDataCollection.getUcsSwEnvStats().get());
     }
 
     @Test
@@ -239,7 +239,7 @@ public class XmlApiClientTest {
         XmlApiClientService service = clientProvider.client(getCredentials(30));
 
         Map<String, Set<UcsEnums.NamingClassId>> requestMap = new HashMap<>();
-        var dn = "sys/chassis-3";
+        var dn = "sys/chassis-1";
         requestMap.put(
                 dn,
                 getCollectionMap().get(UcsEnums.ClassId.equipmentChassis).get(UcsUtils.UCS_DN_KEY)

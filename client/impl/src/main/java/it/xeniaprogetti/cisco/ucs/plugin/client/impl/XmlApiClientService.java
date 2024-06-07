@@ -335,6 +335,7 @@ public class XmlApiClientService implements ApiClientService {
         final List<UcsEquipmentIOCardStats> ucsEquipmentIOCardStats = new ArrayList<>();
         for (String dn: collectMap.keySet()) {
             for (UcsEnums.NamingClassId classId: collectMap.get(dn)) {
+                LOG.debug("getUcsDataCollection: parsing dn={}, type={}", dn, classId);
                 UcsXmlApiRequest.InFilter filter = UcsXmlApiRequest.getWCardFilter(
                         classId,
                         "dn",
@@ -355,7 +356,6 @@ public class XmlApiClientService implements ApiClientService {
                         break;
                     case swCardEnvStats:
                         List<SwCardEnvStats> listC = statsApi.getSwCardEnvStats(aaaApi.getToken(), filter);
-                        LOG.debug("getUcsDataCollection: swCardEnvStats {}", listC.size());
                         if (!listC.isEmpty()) {
                             swCardEnvStats = from(listC.get(0));
                         }
