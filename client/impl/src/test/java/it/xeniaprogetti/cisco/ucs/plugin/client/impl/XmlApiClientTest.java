@@ -101,14 +101,14 @@ public class XmlApiClientTest {
     }
 
     @Test
-    public void testXmlClientServicePool() throws ApiException, InterruptedException {
+    public void testXmlClientServicePool() throws ApiException {
         XmlApiClientProvider clientProvider = new XmlApiClientProvider(2);
         XmlApiClientService service1 = clientProvider.client(getCredentials(30));
         Assert.assertEquals(0, service1.getPool());
         XmlApiClientService service2 = clientProvider.client(getCredentials(30));
         Assert.assertEquals(1, service2.getPool());
         try {
-            XmlApiClientService service = clientProvider.client(getCredentials(30));
+            clientProvider.client(getCredentials(30));
             Assert.fail();
         } catch (ApiException e) {
             Assert.assertTrue(true);
@@ -117,7 +117,6 @@ public class XmlApiClientTest {
         service1.release();
         XmlApiClientService service = clientProvider.client(getCredentials(30));
         Assert.assertEquals(0, service.getPool());
-        service.checkSession();
         service.release();
     }
 

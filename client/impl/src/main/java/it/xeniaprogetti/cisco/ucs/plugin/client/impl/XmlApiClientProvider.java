@@ -35,7 +35,19 @@ public class XmlApiClientProvider implements ApiClientProvider {
 
     public boolean release(XmlApiClientService service) {
         serviceAvailableMap.get(service.getCredentials()).add(service);
-        return serviceUsedMap.get(service.getCredentials()).remove(service);
+        boolean result = serviceUsedMap.get(service.getCredentials()).remove(service);
+        int avail = serviceAvailableMap.get(service.getCredentials()).size();
+        int used = serviceUsedMap.get(service.getCredentials()).size();
+        int poolId = poolIdMap.get(service.getCredentials());
+        int poolSize = poolId + 1;
+        LOG.info("release: url/user {}/{}, poolSize/maxPoolSize {}/{} avail:{}, used:{}",
+                service.getCredentials().url,
+                service.getCredentials().username,
+                poolSize,
+                this.clientPoolSize,
+                avail,
+                used);
+        return result;
     }
 
 
@@ -52,7 +64,7 @@ public class XmlApiClientProvider implements ApiClientProvider {
         int poolId = poolIdMap.get(credentials);
         int poolSize = poolId + 1;
         if (serviceAvailableMap.get(credentials).isEmpty() && poolSize == clientPoolSize) {
-            LOG.info("client: url/user {}/{} pool {}/{}, no room space left on clientPool",
+            LOG.info("client: url/user {}/{} poolSize/maxPoolSize {}/{}, no room space left on clientPool",
                     credentials.url,
                     credentials.username,
                     poolSize,
