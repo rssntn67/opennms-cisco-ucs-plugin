@@ -167,6 +167,97 @@ public class UcsProcessorErrorStats extends UcsStats {
         sparingErrors2WeeksH = builder.sparingErrors2WeeksH;
     }
 
+    @Override
+    public String toString() {
+        return "UcsProcessorErrorStats{" +
+                "CorrectableLinkCRCErrors=" + CorrectableLinkCRCErrors +
+                ", CorrectableLinkCRCErrors15Min=" + CorrectableLinkCRCErrors15Min +
+                ", CorrectableLinkCRCErrors15MinH=" + CorrectableLinkCRCErrors15MinH +
+                ", CorrectableLinkCRCErrors1Day=" + CorrectableLinkCRCErrors1Day +
+                ", CorrectableLinkCRCErrors1DayH=" + CorrectableLinkCRCErrors1DayH +
+                ", CorrectableLinkCRCErrors1Hour=" + CorrectableLinkCRCErrors1Hour +
+                ", CorrectableLinkCRCErrors1HourH=" + CorrectableLinkCRCErrors1HourH +
+                ", CorrectableLinkCRCErrors1Week=" + CorrectableLinkCRCErrors1Week +
+                ", CorrectableLinkCRCErrors1WeekH=" + CorrectableLinkCRCErrors1WeekH +
+                ", CorrectableLinkCRCErrors2Weeks=" + CorrectableLinkCRCErrors2Weeks +
+                ", CorrectableLinkCRCErrors2WeeksH=" + CorrectableLinkCRCErrors2WeeksH +
+                ", UncorrectableLinkCRCErrors=" + UncorrectableLinkCRCErrors +
+                ", UncorrectableLinkCRCErrors15Min=" + UncorrectableLinkCRCErrors15Min +
+                ", UncorrectableLinkCRCErrors15MinH=" + UncorrectableLinkCRCErrors15MinH +
+                ", UncorrectableLinkCRCErrors1Day=" + UncorrectableLinkCRCErrors1Day +
+                ", UncorrectableLinkCRCErrors1DayH=" + UncorrectableLinkCRCErrors1DayH +
+                ", UncorrectableLinkCRCErrors1Hour=" + UncorrectableLinkCRCErrors1Hour +
+                ", UncorrectableLinkCRCErrors1HourH=" + UncorrectableLinkCRCErrors1HourH +
+                ", UncorrectableLinkCRCErrors1Week=" + UncorrectableLinkCRCErrors1Week +
+                ", UncorrectableLinkCRCErrors1WeekH=" + UncorrectableLinkCRCErrors1WeekH +
+                ", UncorrectableLinkCRCErrors2Weeks=" + UncorrectableLinkCRCErrors2Weeks +
+                ", UncorrectableLinkCRCErrors2WeeksH=" + UncorrectableLinkCRCErrors2WeeksH +
+                ", mirroringInterSockErrors=" + mirroringInterSockErrors +
+                ", mirroringInterSockErrors15Min=" + mirroringInterSockErrors15Min +
+                ", mirroringInterSockErrors15MinH=" + mirroringInterSockErrors15MinH +
+                ", mirroringInterSockErrors1Day=" + mirroringInterSockErrors1Day +
+                ", mirroringInterSockErrors1DayH=" + mirroringInterSockErrors1DayH +
+                ", mirroringInterSockErrors1Hour=" + mirroringInterSockErrors1Hour +
+                ", mirroringInterSockErrors1HourH=" + mirroringInterSockErrors1HourH +
+                ", mirroringInterSockErrors1Week=" + mirroringInterSockErrors1Week +
+                ", mirroringInterSockErrors1WeekH=" + mirroringInterSockErrors1WeekH +
+                ", mirroringInterSockErrors2Weeks=" + mirroringInterSockErrors2Weeks +
+                ", mirroringInterSockErrors2WeeksH=" + mirroringInterSockErrors2WeeksH +
+                ", mirroringIntraSockErrors=" + mirroringIntraSockErrors +
+                ", mirroringIntraSockErrors15Min=" + mirroringIntraSockErrors15Min +
+                ", mirroringIntraSockErrors15MinH=" + mirroringIntraSockErrors15MinH +
+                ", mirroringIntraSockErrors1Day=" + mirroringIntraSockErrors1Day +
+                ", mirroringIntraSockErrors1DayH=" + mirroringIntraSockErrors1DayH +
+                ", mirroringIntraSockErrors1Hour=" + mirroringIntraSockErrors1Hour +
+                ", mirroringIntraSockErrors1HourH=" + mirroringIntraSockErrors1HourH +
+                ", mirroringIntraSockErrors1Week=" + mirroringIntraSockErrors1Week +
+                ", mirroringIntraSockErrors1WeekH=" + mirroringIntraSockErrors1WeekH +
+                ", mirroringIntraSockErrors2Weeks=" + mirroringIntraSockErrors2Weeks +
+                ", mirroringIntraSockErrors2WeeksH=" + mirroringIntraSockErrors2WeeksH +
+                ", smiLinkCorrErrors=" + smiLinkCorrErrors +
+                ", smiLinkCorrErrors15Min=" + smiLinkCorrErrors15Min +
+                ", smiLinkCorrErrors15MinH=" + smiLinkCorrErrors15MinH +
+                ", smiLinkCorrErrors1Day=" + smiLinkCorrErrors1Day +
+                ", smiLinkCorrErrors1DayH=" + smiLinkCorrErrors1DayH +
+                ", smiLinkCorrErrors1Hour=" + smiLinkCorrErrors1Hour +
+                ", smiLinkCorrErrors1HourH=" + smiLinkCorrErrors1HourH +
+                ", smiLinkCorrErrors1Week=" + smiLinkCorrErrors1Week +
+                ", smiLinkCorrErrors1WeekH=" + smiLinkCorrErrors1WeekH +
+                ", smiLinkCorrErrors2Weeks=" + smiLinkCorrErrors2Weeks +
+                ", smiLinkCorrErrors2WeeksH=" + smiLinkCorrErrors2WeeksH +
+                ", smiLinkUncorrErrors=" + smiLinkUncorrErrors +
+                ", smiLinkUncorrErrors15Min=" + smiLinkUncorrErrors15Min +
+                ", smiLinkUncorrErrors15MinH=" + smiLinkUncorrErrors15MinH +
+                ", smiLinkUncorrErrors1Day=" + smiLinkUncorrErrors1Day +
+                ", smiLinkUncorrErrors1DayH=" + smiLinkUncorrErrors1DayH +
+                ", smiLinkUncorrErrors1Hour=" + smiLinkUncorrErrors1Hour +
+                ", smiLinkUncorrErrors1HourH=" + smiLinkUncorrErrors1HourH +
+                ", smiLinkUncorrErrors1Week=" + smiLinkUncorrErrors1Week +
+                ", smiLinkUncorrErrors1WeekH=" + smiLinkUncorrErrors1WeekH +
+                ", smiLinkUncorrErrors2Weeks=" + smiLinkUncorrErrors2Weeks +
+                ", smiLinkUncorrErrors2WeeksH=" + smiLinkUncorrErrors2WeeksH +
+                ", sparingErrors=" + sparingErrors +
+                ", sparingErrors15Min=" + sparingErrors15Min +
+                ", sparingErrors15MinH=" + sparingErrors15MinH +
+                ", sparingErrors1Day=" + sparingErrors1Day +
+                ", sparingErrors1DayH=" + sparingErrors1DayH +
+                ", sparingErrors1Hour=" + sparingErrors1Hour +
+                ", sparingErrors1HourH=" + sparingErrors1HourH +
+                ", sparingErrors1Week=" + sparingErrors1Week +
+                ", sparingErrors1WeekH=" + sparingErrors1WeekH +
+                ", sparingErrors2Weeks=" + sparingErrors2Weeks +
+                ", sparingErrors2WeeksH=" + sparingErrors2WeeksH +
+                ", intervals=" + intervals +
+                ", suspect='" + suspect + '\'' +
+                ", thresholded='" + thresholded + '\'' +
+                ", timeCollected=" + timeCollected +
+                ", update=" + update +
+                ", dn=" + dn +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                '}';
+    }
+
     public static class Builder {
         private Builder() {
 

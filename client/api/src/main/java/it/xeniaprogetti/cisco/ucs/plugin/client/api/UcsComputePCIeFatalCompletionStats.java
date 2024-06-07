@@ -79,6 +79,53 @@ public class UcsComputePCIeFatalCompletionStats extends UcsStats {
         unexpectedErrors2WeeksH = builder.unexpectedErrors2WeeksH;
     }
 
+    @Override
+    public String toString() {
+        return "UcsComputePCIeFatalCompletionStats{" +
+                "classItem=" + classItem +
+                ", classId=" + classId +
+                ", dn=" + dn +
+                ", update=" + update +
+                ", timeCollected=" + timeCollected +
+                ", thresholded='" + thresholded + '\'' +
+                ", suspect='" + suspect + '\'' +
+                ", intervals=" + intervals +
+                ", unexpectedErrors2WeeksH=" + unexpectedErrors2WeeksH +
+                ", unexpectedErrors2Weeks=" + unexpectedErrors2Weeks +
+                ", unexpectedErrors1WeekH=" + unexpectedErrors1WeekH +
+                ", unexpectedErrors1Week=" + unexpectedErrors1Week +
+                ", unexpectedErrors1HourH=" + unexpectedErrors1HourH +
+                ", unexpectedErrors1Hour=" + unexpectedErrors1Hour +
+                ", unexpectedErrors1DayH=" + unexpectedErrors1DayH +
+                ", unexpectedErrors1Day=" + unexpectedErrors1Day +
+                ", unexpectedErrors15MinH=" + unexpectedErrors15MinH +
+                ", unexpectedErrors15Min=" + unexpectedErrors15Min +
+                ", unexpectedErrors=" + unexpectedErrors +
+                ", TimeoutErrors2WeeksH=" + TimeoutErrors2WeeksH +
+                ", TimeoutErrors2Weeks=" + TimeoutErrors2Weeks +
+                ", TimeoutErrors1WeekH=" + TimeoutErrors1WeekH +
+                ", TimeoutErrors1Week=" + TimeoutErrors1Week +
+                ", TimeoutErrors1HourH=" + TimeoutErrors1HourH +
+                ", TimeoutErrors1Hour=" + TimeoutErrors1Hour +
+                ", TimeoutErrors1DayH=" + TimeoutErrors1DayH +
+                ", TimeoutErrors1Day=" + TimeoutErrors1Day +
+                ", TimeoutErrors15MinH=" + TimeoutErrors15MinH +
+                ", TimeoutErrors15Min=" + TimeoutErrors15Min +
+                ", TimeoutErrors=" + TimeoutErrors +
+                ", AbortErrors2WeeksH=" + AbortErrors2WeeksH +
+                ", AbortErrors2Weeks=" + AbortErrors2Weeks +
+                ", AbortErrors1WeekH=" + AbortErrors1WeekH +
+                ", AbortErrors1Week=" + AbortErrors1Week +
+                ", AbortErrors1HourH=" + AbortErrors1HourH +
+                ", AbortErrors1Hour=" + AbortErrors1Hour +
+                ", AbortErrors1DayH=" + AbortErrors1DayH +
+                ", AbortErrors1Day=" + AbortErrors1Day +
+                ", AbortErrors15MinH=" + AbortErrors15MinH +
+                ", AbortErrors15Min=" + AbortErrors15Min +
+                ", AbortErrors=" + AbortErrors +
+                '}';
+    }
+
     public static class Builder {
         private Builder() {
 

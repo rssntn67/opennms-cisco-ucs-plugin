@@ -21,6 +21,24 @@ public class UcsEquipmentPsuInputStats extends UcsStats {
         voltage = builder.voltage;
     }
 
+    @Override
+    public String toString() {
+        return "UcsEquipmentPsuInputStats{" +
+                "current=" + current +
+                ", inputStatus='" + inputStatus + '\'' +
+                ", power=" + power +
+                ", voltage=" + voltage +
+                ", intervals=" + intervals +
+                ", suspect='" + suspect + '\'' +
+                ", thresholded='" + thresholded + '\'' +
+                ", timeCollected=" + timeCollected +
+                ", update=" + update +
+                ", dn=" + dn +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                '}';
+    }
+
     public static class Builder {
         private Builder() {
 

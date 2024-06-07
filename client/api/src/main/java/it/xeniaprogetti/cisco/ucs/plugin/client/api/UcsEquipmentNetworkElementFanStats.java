@@ -19,6 +19,23 @@ public class UcsEquipmentNetworkElementFanStats extends UcsStats {
         speed = builder.speed;
     }
 
+    @Override
+    public String toString() {
+        return "UcsEquipmentNetworkElementFanStats{" +
+                "airflowDirection='" + airflowDirection + '\'' +
+                ", drivePercentage=" + drivePercentage +
+                ", speed=" + speed +
+                ", intervals=" + intervals +
+                ", suspect='" + suspect + '\'' +
+                ", thresholded='" + thresholded + '\'' +
+                ", timeCollected=" + timeCollected +
+                ", update=" + update +
+                ", dn=" + dn +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                '}';
+    }
+
     public static class Builder {
         private Builder() {
 

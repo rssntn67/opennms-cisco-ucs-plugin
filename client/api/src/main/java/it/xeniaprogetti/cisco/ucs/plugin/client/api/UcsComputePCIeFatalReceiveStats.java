@@ -101,6 +101,64 @@ public class UcsComputePCIeFatalReceiveStats extends UcsStats {
         unsupportedRequestErrors2WeeksH = builder.unsupportedRequestErrors2WeeksH;
     }
 
+    @Override
+    public String toString() {
+        return "UcsComputePCIeFatalReceiveStats{" +
+                "bufferOverflowErrors=" + bufferOverflowErrors +
+                ", bufferOverflowErrors15Min=" + bufferOverflowErrors15Min +
+                ", bufferOverflowErrors15MinH=" + bufferOverflowErrors15MinH +
+                ", bufferOverflowErrors1Day=" + bufferOverflowErrors1Day +
+                ", bufferOverflowErrors1DayH=" + bufferOverflowErrors1DayH +
+                ", bufferOverflowErrors1Hour=" + bufferOverflowErrors1Hour +
+                ", bufferOverflowErrors1HourH=" + bufferOverflowErrors1HourH +
+                ", bufferOverflowErrors1Week=" + bufferOverflowErrors1Week +
+                ", bufferOverflowErrors1WeekH=" + bufferOverflowErrors1WeekH +
+                ", bufferOverflowErrors2Weeks=" + bufferOverflowErrors2Weeks +
+                ", bufferOverflowErrors2WeeksH=" + bufferOverflowErrors2WeeksH +
+                ", errFatalErrors=" + errFatalErrors +
+                ", errFatalErrors15Min=" + errFatalErrors15Min +
+                ", errFatalErrors15MinH=" + errFatalErrors15MinH +
+                ", errFatalErrors1Day=" + errFatalErrors1Day +
+                ", errFatalErrors1DayH=" + errFatalErrors1DayH +
+                ", errFatalErrors1Hour=" + errFatalErrors1Hour +
+                ", errFatalErrors1HourH=" + errFatalErrors1HourH +
+                ", errFatalErrors1Week=" + errFatalErrors1Week +
+                ", errFatalErrors1WeekH=" + errFatalErrors1WeekH +
+                ", errFatalErrors2Weeks=" + errFatalErrors2Weeks +
+                ", errFatalErrors2WeeksH=" + errFatalErrors2WeeksH +
+                ", errNonFatalErrors=" + errNonFatalErrors +
+                ", errNonFatalErrors15Min=" + errNonFatalErrors15Min +
+                ", errNonFatalErrors15MinH=" + errNonFatalErrors15MinH +
+                ", errNonFatalErrors1Day=" + errNonFatalErrors1Day +
+                ", errNonFatalErrors1DayH=" + errNonFatalErrors1DayH +
+                ", errNonFatalErrors1Hour=" + errNonFatalErrors1Hour +
+                ", errNonFatalErrors1HourH=" + errNonFatalErrors1HourH +
+                ", errNonFatalErrors1Week=" + errNonFatalErrors1Week +
+                ", errNonFatalErrors1WeekH=" + errNonFatalErrors1WeekH +
+                ", errNonFatalErrors2Weeks=" + errNonFatalErrors2Weeks +
+                ", errNonFatalErrors2WeeksH=" + errNonFatalErrors2WeeksH +
+                ", unsupportedRequestErrors=" + unsupportedRequestErrors +
+                ", unsupportedRequestErrors15Min=" + unsupportedRequestErrors15Min +
+                ", unsupportedRequestErrors15MinH=" + unsupportedRequestErrors15MinH +
+                ", unsupportedRequestErrors1Day=" + unsupportedRequestErrors1Day +
+                ", unsupportedRequestErrors1DayH=" + unsupportedRequestErrors1DayH +
+                ", unsupportedRequestErrors1Hour=" + unsupportedRequestErrors1Hour +
+                ", unsupportedRequestErrors1HourH=" + unsupportedRequestErrors1HourH +
+                ", unsupportedRequestErrors1Week=" + unsupportedRequestErrors1Week +
+                ", unsupportedRequestErrors1WeekH=" + unsupportedRequestErrors1WeekH +
+                ", unsupportedRequestErrors2Weeks=" + unsupportedRequestErrors2Weeks +
+                ", unsupportedRequestErrors2WeeksH=" + unsupportedRequestErrors2WeeksH +
+                ", suspect='" + suspect + '\'' +
+                ", intervals=" + intervals +
+                ", thresholded='" + thresholded + '\'' +
+                ", timeCollected=" + timeCollected +
+                ", update=" + update +
+                ", dn=" + dn +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                '}';
+    }
+
     public static class Builder {
         private Builder() {
 

@@ -25,6 +25,26 @@ public class UcsEtherTxStats extends UcsStats {
         unicastPackets = builder.unicastPackets;
     }
 
+    @Override
+    public String toString() {
+        return "UcsEtherTxStats{" +
+                "broadcastPackets=" + broadcastPackets +
+                ", jumboPackets=" + jumboPackets +
+                ", multicastPackets=" + multicastPackets +
+                ", totalBytes=" + totalBytes +
+                ", totalPackets=" + totalPackets +
+                ", unicastPackets=" + unicastPackets +
+                ", intervals=" + intervals +
+                ", suspect='" + suspect + '\'' +
+                ", thresholded='" + thresholded + '\'' +
+                ", timeCollected=" + timeCollected +
+                ", update=" + update +
+                ", dn=" + dn +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                '}';
+    }
+
     public static class Builder {
         private Builder() {
 

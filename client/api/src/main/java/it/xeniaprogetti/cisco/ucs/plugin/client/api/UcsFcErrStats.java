@@ -33,6 +33,30 @@ public class UcsFcErrStats extends UcsStats {
         tx = builder.tx;
     }
 
+    @Override
+    public String toString() {
+        return "UcsFcErrStats{" +
+                "crcRx=" + crcRx +
+                ", discardRx=" + discardRx +
+                ", discardTx=" + discardTx +
+                ", linkFailures=" + linkFailures +
+                ", rx=" + rx +
+                ", signalLosses=" + signalLosses +
+                ", syncLosses=" + syncLosses +
+                ", tooLongRx=" + tooLongRx +
+                ", tooShortRx=" + tooShortRx +
+                ", tx=" + tx +
+                ", intervals=" + intervals +
+                ", suspect='" + suspect + '\'' +
+                ", thresholded='" + thresholded + '\'' +
+                ", timeCollected=" + timeCollected +
+                ", update=" + update +
+                ", dn=" + dn +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                '}';
+    }
+
     public static class Builder {
         private Builder() {
 

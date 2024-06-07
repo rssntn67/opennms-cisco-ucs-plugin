@@ -15,6 +15,21 @@ public class UcsMemoryUnitEnvStats extends UcsStats {
         temperature = builder.temperature;
     }
 
+    @Override
+    public String toString() {
+        return "UcsMemoryUnitEnvStats{" +
+                "temperature=" + temperature +
+                ", intervals=" + intervals +
+                ", suspect='" + suspect + '\'' +
+                ", thresholded='" + thresholded + '\'' +
+                ", timeCollected=" + timeCollected +
+                ", update=" + update +
+                ", dn=" + dn +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                '}';
+    }
+
     public static class Builder {
         private Builder() {
 

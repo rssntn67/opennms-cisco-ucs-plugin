@@ -19,6 +19,23 @@ public class UcsEquipmentIOCardStats extends UcsStats {
         temp = builder.temp;
     }
 
+    @Override
+    public String toString() {
+        return "UcsEquipmentIOCardStats{" +
+                "IomI2CErrors=" + IomI2CErrors +
+                ", ambientTemp=" + ambientTemp +
+                ", temp=" + temp +
+                ", intervals=" + intervals +
+                ", suspect='" + suspect + '\'' +
+                ", thresholded='" + thresholded + '\'' +
+                ", timeCollected=" + timeCollected +
+                ", update=" + update +
+                ", dn=" + dn +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                '}';
+    }
+
     public static class Builder {
         private Builder() {
 

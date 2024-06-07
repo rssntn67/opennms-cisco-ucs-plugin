@@ -21,6 +21,24 @@ public class UcsAdaptorEthPortMcastStats extends UcsStats {
         unicastPackets = builder.unicastPackets;
     }
 
+    @Override
+    public String toString() {
+        return "UcsAdaptorEthPortMcastStats{" +
+                "broadcastPackets=" + broadcastPackets +
+                ", multicastPackets=" + multicastPackets +
+                ", trafficDirection='" + trafficDirection + '\'' +
+                ", unicastPackets=" + unicastPackets +
+                ", intervals=" + intervals +
+                ", suspect='" + suspect + '\'' +
+                ", thresholded='" + thresholded + '\'' +
+                ", timeCollected=" + timeCollected +
+                ", update=" + update +
+                ", dn=" + dn +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                '}';
+    }
+
     public static class Builder {
         private Builder() {
 

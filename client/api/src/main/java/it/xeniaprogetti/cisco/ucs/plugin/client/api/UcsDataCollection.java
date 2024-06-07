@@ -41,6 +41,26 @@ public class UcsDataCollection {
         this.ucsEquipmentIOCardStats = builder.ucsEquipmentIOCardStats;
     }
 
+    @Override
+    public String toString() {
+        return "UcsDataCollection{" +
+                "ucsSwEnvStats=" + ucsSwEnvStats +
+                ", ucsSwCardEnvStats=" + ucsSwCardEnvStats +
+                ", ucsSwSystemStats=" + ucsSwSystemStats +
+                ", ucsComputeMbPowerStats=" + ucsComputeMbPowerStats +
+                ", ucsComputeMbTempStats=" + ucsComputeMbTempStats +
+                ", ucsEquipmentChassisStats=" + ucsEquipmentChassisStats +
+                ", ucsFcStats=" + ucsFcStats +
+                ", ucsFcErrStats=" + ucsFcErrStats +
+                ", ucsEquipmentNetworkElementFanStats=" + ucsEquipmentNetworkElementFanStats +
+                ", ucsProcessorEnvStats=" + ucsProcessorEnvStats +
+                ", ucsEtherRxStats=" + ucsEtherRxStats +
+                ", ucsEtherTxStats=" + ucsEtherTxStats +
+                ", ucsEquipmentPsuInputStats=" + ucsEquipmentPsuInputStats +
+                ", ucsEquipmentPsuStats=" + ucsEquipmentPsuStats +
+                ", ucsEquipmentIOCardStats=" + ucsEquipmentIOCardStats +
+                '}';
+    }
 
     public static class Builder {
         private UcsSwEnvStats ucsSwEnvStats;

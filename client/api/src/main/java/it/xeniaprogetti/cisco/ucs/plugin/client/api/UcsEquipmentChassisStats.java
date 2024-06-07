@@ -19,6 +19,23 @@ public class UcsEquipmentChassisStats extends UcsStats {
         outputPower = builder.outputPower;
     }
 
+    @Override
+    public String toString() {
+        return "UcsEquipmentChassisStats{" +
+                "classItem=" + classItem +
+                ", classId=" + classId +
+                ", dn=" + dn +
+                ", update=" + update +
+                ", timeCollected=" + timeCollected +
+                ", thresholded='" + thresholded + '\'' +
+                ", suspect='" + suspect + '\'' +
+                ", intervals=" + intervals +
+                ", outputPower=" + outputPower +
+                ", inputPower=" + inputPower +
+                ", ChassisI2CErrors=" + ChassisI2CErrors +
+                '}';
+    }
+
     public static class Builder {
         private Builder() {
 

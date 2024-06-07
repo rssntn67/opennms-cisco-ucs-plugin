@@ -31,6 +31,29 @@ public class UcsEtherErrStats extends UcsStats {
         xmit = builder.xmit;
     }
 
+    @Override
+    public String toString() {
+        return "UcsEtherErrStats{" +
+                "align=" + align +
+                ", deferredTx=" + deferredTx +
+                ", fcs=" + fcs +
+                ", intMacRx=" + intMacRx +
+                ", intMacTx=" + intMacTx +
+                ", outDiscard=" + outDiscard +
+                ", rcv=" + rcv +
+                ", underSize=" + underSize +
+                ", xmit=" + xmit +
+                ", intervals=" + intervals +
+                ", suspect='" + suspect + '\'' +
+                ", thresholded='" + thresholded + '\'' +
+                ", timeCollected=" + timeCollected +
+                ", update=" + update +
+                ", dn=" + dn +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                '}';
+    }
+
     public static class Builder {
         private Builder() {
 

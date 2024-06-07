@@ -23,6 +23,25 @@ public class UcsEtherNiErrStats extends UcsStats {
         tooShort = builder.tooShort;
     }
 
+    @Override
+    public String toString() {
+        return "UcsEtherNiErrStats{" +
+                "crc=" + crc +
+                ", frameTx=" + frameTx +
+                ", inRange=" + inRange +
+                ", tooLong=" + tooLong +
+                ", tooShort=" + tooShort +
+                ", intervals=" + intervals +
+                ", suspect='" + suspect + '\'' +
+                ", thresholded='" + thresholded + '\'' +
+                ", timeCollected=" + timeCollected +
+                ", update=" + update +
+                ", dn=" + dn +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                '}';
+    }
+
     public static class Builder {
         private Builder() {
 

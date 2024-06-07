@@ -21,6 +21,24 @@ public class UcsAdaptorEthPortErrStats extends UcsStats {
         trafficDirection = builder.trafficDirection;
     }
 
+    @Override
+    public String toString() {
+        return "UcsAdaptorEthPortErrStats{" +
+                "badCrcPackets=" + badCrcPackets +
+                ", badLengthPackets=" + badLengthPackets +
+                ", macDiscardedPackets=" + macDiscardedPackets +
+                ", trafficDirection='" + trafficDirection + '\'' +
+                ", intervals=" + intervals +
+                ", suspect='" + suspect + '\'' +
+                ", thresholded='" + thresholded + '\'' +
+                ", timeCollected=" + timeCollected +
+                ", update=" + update +
+                ", dn=" + dn +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                '}';
+    }
+
     public static class Builder {
         private Builder() {
 

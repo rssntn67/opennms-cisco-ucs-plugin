@@ -29,6 +29,28 @@ public class UcsAdaptorVnicStats extends UcsStats {
         packetsTx = builder.packetsTx;
     }
 
+    @Override
+    public String toString() {
+        return "UcsAdaptorVnicStats{" +
+                "bytesRx=" + bytesRx +
+                ", bytesTx=" + bytesTx +
+                ", droppedRx=" + droppedRx +
+                ", droppedTx=" + droppedTx +
+                ", errorsRx=" + errorsRx +
+                ", errorsTx=" + errorsTx +
+                ", packetsRx=" + packetsRx +
+                ", packetsTx=" + packetsTx +
+                ", intervals=" + intervals +
+                ", suspect='" + suspect + '\'' +
+                ", thresholded='" + thresholded + '\'' +
+                ", timeCollected=" + timeCollected +
+                ", update=" + update +
+                ", dn=" + dn +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                '}';
+    }
+
     public static class Builder {
         private Builder() {
 

@@ -23,6 +23,25 @@ public class UcsStorageSsdHealthStats extends UcsStats {
         wearStatusInDays = builder.wearStatusInDays;
     }
 
+    @Override
+    public String toString() {
+        return "UcsStorageSsdHealthStats{" +
+                "id=" + id +
+                ", percentageLifeLeft=" + percentageLifeLeft +
+                ", powerCycleCount=" + powerCycleCount +
+                ", powerOnHours=" + powerOnHours +
+                ", wearStatusInDays=" + wearStatusInDays +
+                ", intervals=" + intervals +
+                ", suspect='" + suspect + '\'' +
+                ", thresholded='" + thresholded + '\'' +
+                ", timeCollected=" + timeCollected +
+                ", update=" + update +
+                ", dn=" + dn +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                '}';
+    }
+
     public static class Builder {
         private Builder() {
 

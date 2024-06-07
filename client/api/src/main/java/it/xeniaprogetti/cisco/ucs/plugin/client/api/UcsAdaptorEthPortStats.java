@@ -27,6 +27,27 @@ public class UcsAdaptorEthPortStats extends UcsStats {
         vlanPackets = builder.vlanPackets;
     }
 
+    @Override
+    public String toString() {
+        return "UcsAdaptorEthPortStats{" +
+                "goodPackets=" + goodPackets +
+                ", pausePackets=" + pausePackets +
+                ", perPriorityPausePackets=" + perPriorityPausePackets +
+                ", pppPackets=" + pppPackets +
+                ", totalPackets=" + totalPackets +
+                ", trafficDirection='" + trafficDirection + '\'' +
+                ", vlanPackets=" + vlanPackets +
+                ", intervals=" + intervals +
+                ", suspect='" + suspect + '\'' +
+                ", thresholded='" + thresholded + '\'' +
+                ", timeCollected=" + timeCollected +
+                ", update=" + update +
+                ", dn=" + dn +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                '}';
+    }
+
     public static class Builder {
         private Builder() {
 

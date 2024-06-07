@@ -19,6 +19,23 @@ public class UcsEtherPauseStats extends UcsStats {
         xmitPause = builder.xmitPause;
     }
 
+    @Override
+    public String toString() {
+        return "UcsEtherPauseStats{" +
+                "recvPause=" + recvPause +
+                ", resets=" + resets +
+                ", xmitPause=" + xmitPause +
+                ", intervals=" + intervals +
+                ", suspect='" + suspect + '\'' +
+                ", thresholded='" + thresholded + '\'' +
+                ", timeCollected=" + timeCollected +
+                ", update=" + update +
+                ", dn=" + dn +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                '}';
+    }
+
     public static class Builder {
         private Builder() {
 

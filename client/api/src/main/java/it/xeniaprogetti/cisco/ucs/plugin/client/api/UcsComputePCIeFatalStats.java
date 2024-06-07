@@ -101,6 +101,64 @@ public class UcsComputePCIeFatalStats extends UcsStats {
         surpriseLinkDownErrors2WeeksH = builder.surpriseLinkDownErrors2WeeksH;
     }
 
+    @Override
+    public String toString() {
+        return "UcsComputePCIeFatalStats{" +
+                "acsViolationErrors=" + acsViolationErrors +
+                ", acsViolationErrors15Min=" + acsViolationErrors15Min +
+                ", acsViolationErrors15MinH=" + acsViolationErrors15MinH +
+                ", acsViolationErrors1Day=" + acsViolationErrors1Day +
+                ", acsViolationErrors1DayH=" + acsViolationErrors1DayH +
+                ", acsViolationErrors1Hour=" + acsViolationErrors1Hour +
+                ", acsViolationErrors1HourH=" + acsViolationErrors1HourH +
+                ", acsViolationErrors1Week=" + acsViolationErrors1Week +
+                ", acsViolationErrors1WeekH=" + acsViolationErrors1WeekH +
+                ", acsViolationErrors2Weeks=" + acsViolationErrors2Weeks +
+                ", acsViolationErrors2WeeksH=" + acsViolationErrors2WeeksH +
+                ", malformedTLPErrors=" + malformedTLPErrors +
+                ", malformedTLPErrors15Min=" + malformedTLPErrors15Min +
+                ", malformedTLPErrors15MinH=" + malformedTLPErrors15MinH +
+                ", malformedTLPErrors1Day=" + malformedTLPErrors1Day +
+                ", malformedTLPErrors1DayH=" + malformedTLPErrors1DayH +
+                ", malformedTLPErrors1Hour=" + malformedTLPErrors1Hour +
+                ", malformedTLPErrors1HourH=" + malformedTLPErrors1HourH +
+                ", malformedTLPErrors1Week=" + malformedTLPErrors1Week +
+                ", malformedTLPErrors1WeekH=" + malformedTLPErrors1WeekH +
+                ", malformedTLPErrors2Weeks=" + malformedTLPErrors2Weeks +
+                ", malformedTLPErrors2WeeksH=" + malformedTLPErrors2WeeksH +
+                ", poisonedTLPErrors=" + poisonedTLPErrors +
+                ", poisonedTLPErrors15Min=" + poisonedTLPErrors15Min +
+                ", poisonedTLPErrors15MinH=" + poisonedTLPErrors15MinH +
+                ", poisonedTLPErrors1Day=" + poisonedTLPErrors1Day +
+                ", poisonedTLPErrors1DayH=" + poisonedTLPErrors1DayH +
+                ", poisonedTLPErrors1Hour=" + poisonedTLPErrors1Hour +
+                ", poisonedTLPErrors1HourH=" + poisonedTLPErrors1HourH +
+                ", poisonedTLPErrors1Week=" + poisonedTLPErrors1Week +
+                ", poisonedTLPErrors1WeekH=" + poisonedTLPErrors1WeekH +
+                ", poisonedTLPErrors2Weeks=" + poisonedTLPErrors2Weeks +
+                ", poisonedTLPErrors2WeeksH=" + poisonedTLPErrors2WeeksH +
+                ", surpriseLinkDownErrors=" + surpriseLinkDownErrors +
+                ", surpriseLinkDownErrors15Min=" + surpriseLinkDownErrors15Min +
+                ", surpriseLinkDownErrors15MinH=" + surpriseLinkDownErrors15MinH +
+                ", surpriseLinkDownErrors1Day=" + surpriseLinkDownErrors1Day +
+                ", surpriseLinkDownErrors1DayH=" + surpriseLinkDownErrors1DayH +
+                ", surpriseLinkDownErrors1Hour=" + surpriseLinkDownErrors1Hour +
+                ", surpriseLinkDownErrors1HourH=" + surpriseLinkDownErrors1HourH +
+                ", surpriseLinkDownErrors1Week=" + surpriseLinkDownErrors1Week +
+                ", surpriseLinkDownErrors1WeekH=" + surpriseLinkDownErrors1WeekH +
+                ", surpriseLinkDownErrors2Weeks=" + surpriseLinkDownErrors2Weeks +
+                ", surpriseLinkDownErrors2WeeksH=" + surpriseLinkDownErrors2WeeksH +
+                ", intervals=" + intervals +
+                ", suspect='" + suspect + '\'' +
+                ", thresholded='" + thresholded + '\'' +
+                ", timeCollected=" + timeCollected +
+                ", update=" + update +
+                ", dn=" + dn +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                '}';
+    }
+
     public static class Builder {
         private Builder() {
 

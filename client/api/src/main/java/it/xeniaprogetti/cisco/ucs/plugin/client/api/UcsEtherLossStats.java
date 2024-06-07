@@ -29,6 +29,28 @@ public class UcsEtherLossStats extends UcsStats {
         symbol = builder.symbol;
     }
 
+    @Override
+    public String toString() {
+        return "UcsEtherLossStats{" +
+                "SQETest=" + SQETest +
+                ", carrierSense=" + carrierSense +
+                ", excessCollision=" + excessCollision +
+                ", giants=" + giants +
+                ", lateCollision=" + lateCollision +
+                ", multiCollision=" + multiCollision +
+                ", singleCollision=" + singleCollision +
+                ", symbol=" + symbol +
+                ", intervals=" + intervals +
+                ", suspect='" + suspect + '\'' +
+                ", thresholded='" + thresholded + '\'' +
+                ", timeCollected=" + timeCollected +
+                ", update=" + update +
+                ", dn=" + dn +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                '}';
+    }
+
     public static class Builder {
         private Builder() {
 

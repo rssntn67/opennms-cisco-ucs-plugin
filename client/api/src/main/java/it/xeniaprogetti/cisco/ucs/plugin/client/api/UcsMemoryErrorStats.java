@@ -189,6 +189,108 @@ public class UcsMemoryErrorStats extends UcsStats {
         mismatchErrors2WeeksH = builder.mismatchErrors2WeeksH;
     }
 
+    @Override
+    public String toString() {
+        return "UcsMemoryErrorStats{" +
+                "DramWriteDataCorrectableCRCErrors=" + DramWriteDataCorrectableCRCErrors +
+                ", DramWriteDataCorrectableCRCErrors15Min=" + DramWriteDataCorrectableCRCErrors15Min +
+                ", DramWriteDataCorrectableCRCErrors15MinH=" + DramWriteDataCorrectableCRCErrors15MinH +
+                ", DramWriteDataCorrectableCRCErrors1Day=" + DramWriteDataCorrectableCRCErrors1Day +
+                ", DramWriteDataCorrectableCRCErrors1DayH=" + DramWriteDataCorrectableCRCErrors1DayH +
+                ", DramWriteDataCorrectableCRCErrors1Hour=" + DramWriteDataCorrectableCRCErrors1Hour +
+                ", DramWriteDataCorrectableCRCErrors1HourH=" + DramWriteDataCorrectableCRCErrors1HourH +
+                ", DramWriteDataCorrectableCRCErrors1Week=" + DramWriteDataCorrectableCRCErrors1Week +
+                ", DramWriteDataCorrectableCRCErrors1WeekH=" + DramWriteDataCorrectableCRCErrors1WeekH +
+                ", DramWriteDataCorrectableCRCErrors2Weeks=" + DramWriteDataCorrectableCRCErrors2Weeks +
+                ", DramWriteDataCorrectableCRCErrors2WeeksH=" + DramWriteDataCorrectableCRCErrors2WeeksH +
+                ", DramWriteDataUnCorrectableCRCErrors=" + DramWriteDataUnCorrectableCRCErrors +
+                ", DramWriteDataUnCorrectableCRCErrors15Min=" + DramWriteDataUnCorrectableCRCErrors15Min +
+                ", DramWriteDataUnCorrectableCRCErrors15MinH=" + DramWriteDataUnCorrectableCRCErrors15MinH +
+                ", DramWriteDataUnCorrectableCRCErrors1Day=" + DramWriteDataUnCorrectableCRCErrors1Day +
+                ", DramWriteDataUnCorrectableCRCErrors1DayH=" + DramWriteDataUnCorrectableCRCErrors1DayH +
+                ", DramWriteDataUnCorrectableCRCErrors1Hour=" + DramWriteDataUnCorrectableCRCErrors1Hour +
+                ", DramWriteDataUnCorrectableCRCErrors1HourH=" + DramWriteDataUnCorrectableCRCErrors1HourH +
+                ", DramWriteDataUnCorrectableCRCErrors1Week=" + DramWriteDataUnCorrectableCRCErrors1Week +
+                ", DramWriteDataUnCorrectableCRCErrors1WeekH=" + DramWriteDataUnCorrectableCRCErrors1WeekH +
+                ", DramWriteDataUnCorrectableCRCErrors2Weeks=" + DramWriteDataUnCorrectableCRCErrors2Weeks +
+                ", DramWriteDataUnCorrectableCRCErrors2WeeksH=" + DramWriteDataUnCorrectableCRCErrors2WeeksH +
+                ", addressParityErrors=" + addressParityErrors +
+                ", addressParityErrors15Min=" + addressParityErrors15Min +
+                ", addressParityErrors15MinH=" + addressParityErrors15MinH +
+                ", addressParityErrors1Day=" + addressParityErrors1Day +
+                ", addressParityErrors1DayH=" + addressParityErrors1DayH +
+                ", addressParityErrors1Hour=" + addressParityErrors1Hour +
+                ", addressParityErrors1HourH=" + addressParityErrors1HourH +
+                ", addressParityErrors1Week=" + addressParityErrors1Week +
+                ", addressParityErrors1WeekH=" + addressParityErrors1WeekH +
+                ", addressParityErrors2Weeks=" + addressParityErrors2Weeks +
+                ", addressParityErrors2WeeksH=" + addressParityErrors2WeeksH +
+                ", addressParityErrorsCorrectable=" + addressParityErrorsCorrectable +
+                ", addressParityErrorsCorrectable15Min=" + addressParityErrorsCorrectable15Min +
+                ", addressParityErrorsCorrectable15MinH=" + addressParityErrorsCorrectable15MinH +
+                ", addressParityErrorsCorrectable1Day=" + addressParityErrorsCorrectable1Day +
+                ", addressParityErrorsCorrectable1DayH=" + addressParityErrorsCorrectable1DayH +
+                ", addressParityErrorsCorrectable1Hour=" + addressParityErrorsCorrectable1Hour +
+                ", addressParityErrorsCorrectable1HourH=" + addressParityErrorsCorrectable1HourH +
+                ", addressParityErrorsCorrectable1Week=" + addressParityErrorsCorrectable1Week +
+                ", addressParityErrorsCorrectable1WeekH=" + addressParityErrorsCorrectable1WeekH +
+                ", addressParityErrorsCorrectable2Weeks=" + addressParityErrorsCorrectable2Weeks +
+                ", addressParityErrorsCorrectable2WeeksH=" + addressParityErrorsCorrectable2WeeksH +
+                ", addressParityErrorsUnCorrectable=" + addressParityErrorsUnCorrectable +
+                ", addressParityErrorsUnCorrectable15Min=" + addressParityErrorsUnCorrectable15Min +
+                ", addressParityErrorsUnCorrectable15MinH=" + addressParityErrorsUnCorrectable15MinH +
+                ", addressParityErrorsUnCorrectable1Day=" + addressParityErrorsUnCorrectable1Day +
+                ", addressParityErrorsUnCorrectable1DayH=" + addressParityErrorsUnCorrectable1DayH +
+                ", addressParityErrorsUnCorrectable1Hour=" + addressParityErrorsUnCorrectable1Hour +
+                ", addressParityErrorsUnCorrectable1HourH=" + addressParityErrorsUnCorrectable1HourH +
+                ", addressParityErrorsUnCorrectable1Week=" + addressParityErrorsUnCorrectable1Week +
+                ", addressParityErrorsUnCorrectable1WeekH=" + addressParityErrorsUnCorrectable1WeekH +
+                ", addressParityErrorsUnCorrectable2Weeks=" + addressParityErrorsUnCorrectable2Weeks +
+                ", addressParityErrorsUnCorrectable2WeeksH=" + addressParityErrorsUnCorrectable2WeeksH +
+                ", eccMultibitErrors=" + eccMultibitErrors +
+                ", eccMultibitErrors15Min=" + eccMultibitErrors15Min +
+                ", eccMultibitErrors15MinH=" + eccMultibitErrors15MinH +
+                ", eccMultibitErrors1Day=" + eccMultibitErrors1Day +
+                ", eccMultibitErrors1DayH=" + eccMultibitErrors1DayH +
+                ", eccMultibitErrors1Hour=" + eccMultibitErrors1Hour +
+                ", eccMultibitErrors1HourH=" + eccMultibitErrors1HourH +
+                ", eccMultibitErrors1Week=" + eccMultibitErrors1Week +
+                ", eccMultibitErrors1WeekH=" + eccMultibitErrors1WeekH +
+                ", eccMultibitErrors2Weeks=" + eccMultibitErrors2Weeks +
+                ", eccMultibitErrors2WeeksH=" + eccMultibitErrors2WeeksH +
+                ", eccSinglebitErrors=" + eccSinglebitErrors +
+                ", eccSinglebitErrors15Min=" + eccSinglebitErrors15Min +
+                ", eccSinglebitErrors15MinH=" + eccSinglebitErrors15MinH +
+                ", eccSinglebitErrors1Day=" + eccSinglebitErrors1Day +
+                ", eccSinglebitErrors1DayH=" + eccSinglebitErrors1DayH +
+                ", eccSinglebitErrors1Hour=" + eccSinglebitErrors1Hour +
+                ", eccSinglebitErrors1HourH=" + eccSinglebitErrors1HourH +
+                ", eccSinglebitErrors1Week=" + eccSinglebitErrors1Week +
+                ", eccSinglebitErrors1WeekH=" + eccSinglebitErrors1WeekH +
+                ", eccSinglebitErrors2Weeks=" + eccSinglebitErrors2Weeks +
+                ", eccSinglebitErrors2WeeksH=" + eccSinglebitErrors2WeeksH +
+                ", mismatchErrors=" + mismatchErrors +
+                ", mismatchErrors15Min=" + mismatchErrors15Min +
+                ", mismatchErrors15MinH=" + mismatchErrors15MinH +
+                ", mismatchErrors1Day=" + mismatchErrors1Day +
+                ", mismatchErrors1DayH=" + mismatchErrors1DayH +
+                ", mismatchErrors1Hour=" + mismatchErrors1Hour +
+                ", mismatchErrors1HourH=" + mismatchErrors1HourH +
+                ", mismatchErrors1Week=" + mismatchErrors1Week +
+                ", mismatchErrors1WeekH=" + mismatchErrors1WeekH +
+                ", mismatchErrors2Weeks=" + mismatchErrors2Weeks +
+                ", mismatchErrors2WeeksH=" + mismatchErrors2WeeksH +
+                ", intervals=" + intervals +
+                ", suspect='" + suspect + '\'' +
+                ", thresholded='" + thresholded + '\'' +
+                ", timeCollected=" + timeCollected +
+                ", update=" + update +
+                ", dn=" + dn +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                '}';
+    }
+
     public static class Builder {
         private Builder() {
 

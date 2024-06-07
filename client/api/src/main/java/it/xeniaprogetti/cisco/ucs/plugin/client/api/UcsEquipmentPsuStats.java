@@ -27,6 +27,27 @@ public class UcsEquipmentPsuStats extends UcsStats {
         outputPower = builder.outputPower;
     }
 
+    @Override
+    public String toString() {
+        return "UcsEquipmentPsuStats{" +
+                "PsuI2CErrors=" + PsuI2CErrors +
+                ", ambientTemp=" + ambientTemp +
+                ", input210v=" + input210v +
+                ", output12v=" + output12v +
+                ", output3v3=" + output3v3 +
+                ", outputCurrent=" + outputCurrent +
+                ", outputPower=" + outputPower +
+                ", intervals=" + intervals +
+                ", suspect='" + suspect + '\'' +
+                ", thresholded='" + thresholded + '\'' +
+                ", timeCollected=" + timeCollected +
+                ", update=" + update +
+                ", dn=" + dn +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                '}';
+    }
+
     public static class Builder {
         private Builder() {
 

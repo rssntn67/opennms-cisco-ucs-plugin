@@ -17,6 +17,22 @@ public class UcsComputeMbTempStats extends UcsStats {
         fmTempSenRear = builder.fmTempSenRear;
     }
 
+    @Override
+    public String toString() {
+        return "UcsComputeMbTempStats{" +
+                "fmTempSenIo=" + fmTempSenIo +
+                ", fmTempSenRear=" + fmTempSenRear +
+                ", intervals=" + intervals +
+                ", suspect='" + suspect + '\'' +
+                ", thresholded='" + thresholded + '\'' +
+                ", timeCollected=" + timeCollected +
+                ", update=" + update +
+                ", dn=" + dn +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                '}';
+    }
+
     public static class Builder {
         private Builder() {
 

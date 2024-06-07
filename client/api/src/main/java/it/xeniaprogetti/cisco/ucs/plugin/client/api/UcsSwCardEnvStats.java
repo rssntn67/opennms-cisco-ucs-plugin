@@ -19,6 +19,23 @@ public class UcsSwCardEnvStats extends UcsStats {
         SlotOutlet3 = builder.SlotOutlet3;
     }
 
+    @Override
+    public String toString() {
+        return "UcsSwCardEnvStats{" +
+                "SlotOutlet1='" + SlotOutlet1 + '\'' +
+                ", SlotOutlet2='" + SlotOutlet2 + '\'' +
+                ", SlotOutlet3='" + SlotOutlet3 + '\'' +
+                ", intervals=" + intervals +
+                ", suspect='" + suspect + '\'' +
+                ", thresholded='" + thresholded + '\'' +
+                ", timeCollected=" + timeCollected +
+                ", update=" + update +
+                ", dn=" + dn +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                '}';
+    }
+
     public static class Builder {
         private Builder() {
 

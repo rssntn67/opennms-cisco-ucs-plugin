@@ -21,6 +21,24 @@ public class UcsFcStats extends UcsStats {
         packetsTx = builder.packetsTx;
     }
 
+    @Override
+    public String toString() {
+        return "UcsFcStats{" +
+                "bytesRx=" + bytesRx +
+                ", bytesTx=" + bytesTx +
+                ", packetsRx=" + packetsRx +
+                ", packetsTx=" + packetsTx +
+                ", intervals=" + intervals +
+                ", suspect='" + suspect + '\'' +
+                ", thresholded='" + thresholded + '\'' +
+                ", timeCollected=" + timeCollected +
+                ", update=" + update +
+                ", dn=" + dn +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                '}';
+    }
+
     public static class Builder {
         private Builder() {
 

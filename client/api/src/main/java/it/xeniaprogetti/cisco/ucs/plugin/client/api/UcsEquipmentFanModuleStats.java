@@ -17,6 +17,22 @@ public class UcsEquipmentFanModuleStats extends UcsStats {
         ambientTemp = builder.ambientTemp;
     }
 
+    @Override
+    public String toString() {
+        return "UcsEquipmentFanModuleStats{" +
+                "FanModuleI2CErrors=" + FanModuleI2CErrors +
+                ", ambientTemp=" + ambientTemp +
+                ", intervals=" + intervals +
+                ", suspect='" + suspect + '\'' +
+                ", thresholded='" + thresholded + '\'' +
+                ", timeCollected=" + timeCollected +
+                ", update=" + update +
+                ", dn=" + dn +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                '}';
+    }
+
     public static class Builder {
         private Builder() {
 

@@ -19,6 +19,23 @@ public class UcsSwSystemStats extends UcsStats {
         memCached = builder.memCached;
     }
 
+    @Override
+    public String toString() {
+        return "UcsSwSystemStats{" +
+                "load=" + load +
+                ", memAvailable=" + memAvailable +
+                ", memCached=" + memCached +
+                ", intervals=" + intervals +
+                ", suspect='" + suspect + '\'' +
+                ", thresholded='" + thresholded + '\'' +
+                ", timeCollected=" + timeCollected +
+                ", update=" + update +
+                ", dn=" + dn +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                '}';
+    }
+
     public static class Builder {
         private Builder() {
 

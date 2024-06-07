@@ -19,6 +19,23 @@ public class UcsComputeMbPowerStats extends UcsStats {
         inputVoltage = builder.inputVoltage;
     }
 
+    @Override
+    public String toString() {
+        return "UcsComputeMbPowerStats{" +
+                "consumedPower=" + consumedPower +
+                ", inputCurrent=" + inputCurrent +
+                ", inputVoltage=" + inputVoltage +
+                ", intervals=" + intervals +
+                ", suspect='" + suspect + '\'' +
+                ", thresholded='" + thresholded + '\'' +
+                ", timeCollected=" + timeCollected +
+                ", update=" + update +
+                ", dn=" + dn +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                '}';
+    }
+
     public static class Builder {
         private Builder() {
 

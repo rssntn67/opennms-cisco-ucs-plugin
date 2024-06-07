@@ -17,6 +17,22 @@ public class UcsSwEnvStats extends UcsStats {
         mainBoardOutlet2 = builder.mainBoardOutlet2;
     }
 
+    @Override
+    public String toString() {
+        return "UcsSwEnvStats{" +
+                "mainBoardOutlet1=" + mainBoardOutlet1 +
+                ", mainBoardOutlet2=" + mainBoardOutlet2 +
+                ", intervals=" + intervals +
+                ", suspect='" + suspect + '\'' +
+                ", thresholded='" + thresholded + '\'' +
+                ", timeCollected=" + timeCollected +
+                ", update=" + update +
+                ", dn=" + dn +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                '}';
+    }
+
     public static class Builder {
         private Builder() {
 

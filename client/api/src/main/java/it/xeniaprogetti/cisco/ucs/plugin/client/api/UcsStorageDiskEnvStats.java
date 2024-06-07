@@ -17,6 +17,22 @@ public class UcsStorageDiskEnvStats extends UcsStats {
         wearPercentage = builder.wearPercentage;
     }
 
+    @Override
+    public String toString() {
+        return "UcsStorageDiskEnvStats{" +
+                "temperature=" + temperature +
+                ", wearPercentage=" + wearPercentage +
+                ", intervals=" + intervals +
+                ", suspect='" + suspect + '\'' +
+                ", thresholded='" + thresholded + '\'' +
+                ", timeCollected=" + timeCollected +
+                ", update=" + update +
+                ", dn=" + dn +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                '}';
+    }
+
     public static class Builder {
         private Builder() {
 

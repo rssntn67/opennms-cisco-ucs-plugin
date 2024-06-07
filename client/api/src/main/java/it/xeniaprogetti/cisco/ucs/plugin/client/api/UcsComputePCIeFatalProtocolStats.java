@@ -57,6 +57,42 @@ public class UcsComputePCIeFatalProtocolStats extends UcsStats {
         flowControlErrors2WeeksH = builder.flowControlErrors2WeeksH;
     }
 
+    @Override
+    public String toString() {
+        return "UcsComputePCIeFatalProtocolStats{" +
+                "dllpErrors=" + dllpErrors +
+                ", dllpErrors15Min=" + dllpErrors15Min +
+                ", dllpErrors15MinH=" + dllpErrors15MinH +
+                ", dllpErrors1Day=" + dllpErrors1Day +
+                ", dllpErrors1DayH=" + dllpErrors1DayH +
+                ", dllpErrors1Hour=" + dllpErrors1Hour +
+                ", dllpErrors1HourH=" + dllpErrors1HourH +
+                ", dllpErrors1Week=" + dllpErrors1Week +
+                ", dllpErrors1WeekH=" + dllpErrors1WeekH +
+                ", dllpErrors2Weeks=" + dllpErrors2Weeks +
+                ", dllpErrors2WeeksH=" + dllpErrors2WeeksH +
+                ", flowControlErrors=" + flowControlErrors +
+                ", flowControlErrors15Min=" + flowControlErrors15Min +
+                ", flowControlErrors15MinH=" + flowControlErrors15MinH +
+                ", flowControlErrors1Day=" + flowControlErrors1Day +
+                ", flowControlErrors1DayH=" + flowControlErrors1DayH +
+                ", flowControlErrors1Hour=" + flowControlErrors1Hour +
+                ", flowControlErrors1HourH=" + flowControlErrors1HourH +
+                ", flowControlErrors1Week=" + flowControlErrors1Week +
+                ", flowControlErrors1WeekH=" + flowControlErrors1WeekH +
+                ", flowControlErrors2Weeks=" + flowControlErrors2Weeks +
+                ", flowControlErrors2WeeksH=" + flowControlErrors2WeeksH +
+                ", intervals=" + intervals +
+                ", suspect='" + suspect + '\'' +
+                ", thresholded='" + thresholded + '\'' +
+                ", timeCollected=" + timeCollected +
+                ", update=" + update +
+                ", dn=" + dn +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                '}';
+    }
+
     public static class Builder {
         private Builder() {
 
