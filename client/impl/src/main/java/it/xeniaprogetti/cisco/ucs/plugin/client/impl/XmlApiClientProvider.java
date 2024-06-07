@@ -47,56 +47,43 @@ public class XmlApiClientProvider implements ApiClientProvider {
                     credentials.username);
             serviceAvailableMap.put(credentials, new ArrayList<>());
             serviceUsedMap.put(credentials, new ArrayList<>());
-            poolIdMap.put(credentials, 0);
+            poolIdMap.put(credentials, -1);
         }
-        int avail = serviceAvailableMap.get(credentials).size();
-        int used = serviceUsedMap.get(credentials).size();
-        int pool = poolIdMap.get(credentials);
-        LOG.info("client: url/user {}/{}, pool/maxPoolSize {}/{} avail:{}, used:{}",
-                credentials.url,
-                credentials.username,
-                pool,
-                this.clientPoolSize,
-                avail,
-                used);
-        if (serviceAvailableMap.get(credentials).isEmpty() && pool < clientPoolSize) {
-            LOG.info("client: url/user {}/{}, adding a new client to clientPool!",
-                    credentials.url,
-                    credentials.username);
-            XmlApiClientService service = new XmlApiClientService(credentials, this, pool);
-            pool++;
-            poolIdMap.put(credentials, pool);
-            serviceUsedMap.get(credentials).add(service);
-            return service;
-        }
-        if (serviceAvailableMap.get(credentials).isEmpty()) {
+        int poolId = poolIdMap.get(credentials);
+        int poolSize = poolId + 1;
+        if (serviceAvailableMap.get(credentials).isEmpty() && poolSize == clientPoolSize) {
             LOG.info("client: url/user {}/{} pool {}/{}, no room space left on clientPool",
                     credentials.url,
                     credentials.username,
-                    pool,
+                    poolSize,
                     this.clientPoolSize
-                    );
+            );
             throw new ApiException("no api client connection available", new RuntimeException(
                     "Maximum pool size reached, no available connections!"));
         }
-        LOG.info("client: url/user {}/{} avail {}/{}, getting client from clientPool",
-                credentials.url,
-                credentials.username,
-                avail,
-                this.clientPoolSize
-        );
-        XmlApiClientService service = serviceAvailableMap.get(credentials).remove(avail-1);
+        XmlApiClientService service;
+        if (serviceAvailableMap.get(credentials).isEmpty()) {
+            LOG.info("client: url/user {}/{}, adding a new client to clientPool!",
+                    credentials.url,
+                    credentials.username);
+            poolId++;
+            poolSize++;
+            service = new XmlApiClientService(credentials, this, poolId);
+            poolIdMap.put(credentials, poolId);
+        } else {
+            int size = serviceAvailableMap.get(credentials).size();
+            service = serviceAvailableMap.get(credentials).remove(size-1);
+        }
         serviceUsedMap.get(credentials).add(service);
-        int availN = serviceAvailableMap.get(credentials).size();
-        int usedN = serviceUsedMap.get(credentials).size();
-        int poolN = poolIdMap.get(credentials);
-        LOG.info("client: url/user {}/{}, pool/maxPoolSize {}/{} avail:{}, used:{}",
+        int avail = serviceAvailableMap.get(credentials).size();
+        int used = serviceUsedMap.get(credentials).size();
+        LOG.info("client: url/user {}/{}, poolSize/maxPoolSize {}/{} avail:{}, used:{}",
                 credentials.url,
                 credentials.username,
-                poolN,
+                poolSize,
                 this.clientPoolSize,
-                availN,
-                usedN);
+                avail,
+                used);
         return service;
     }
 
