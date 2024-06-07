@@ -61,6 +61,8 @@ public class AaaApi {
 
     public void logout() throws ApiException {
         LOG.info("logout: {} from {}", this.username, this.client.getUrl());
+        if (this.token == null)
+            return;
         AaaLogoutResponse response = client.getUcsXmlApiResponse
                     (UcsXmlApiRequest.getLogoutRequest(token),
                     AaaLogoutResponse.class

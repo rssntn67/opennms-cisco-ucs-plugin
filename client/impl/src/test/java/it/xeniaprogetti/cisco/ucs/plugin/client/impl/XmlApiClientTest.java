@@ -101,28 +101,49 @@ public class XmlApiClientTest {
     }
 
     @Test
+    public void testXmlClientServicePool() throws ApiException, InterruptedException {
+        XmlApiClientProvider clientProvider = new XmlApiClientProvider(2);
+        XmlApiClientService service1 = clientProvider.client(getCredentials(30));
+        Assert.assertEquals(0, service1.getPool());
+        XmlApiClientService service2 = clientProvider.client(getCredentials(30));
+        Assert.assertEquals(1, service2.getPool());
+        try {
+            XmlApiClientService service = clientProvider.client(getCredentials(30));
+            Assert.fail();
+        } catch (ApiException e) {
+            Assert.assertTrue(true);
+        }
+        service2.release();
+        service1.release();
+        XmlApiClientService service = clientProvider.client(getCredentials(30));
+        Assert.assertEquals(0, service.getPool());
+        service.checkSession();
+        service.release();
+    }
+
+        @Test
     public void testXmlClientServiceCheckCredentials() throws ApiException, InterruptedException {
         XmlApiClientProvider clientProvider = new XmlApiClientProvider(5);
-        XmlApiClientService service = new XmlApiClientService(getCredentials(550),clientProvider, 0);
-        service.checkCredentials();
+        XmlApiClientService service = clientProvider.client(getCredentials(550));
+        service.checkSession();
         LOG.info("sleeping 30sec {}", OffsetDateTime.now());
         Thread.sleep(30000);
         LOG.info("waked up {}", OffsetDateTime.now());
         //Should do nothing
-        service.checkCredentials();
+        service.checkSession();
 
         LOG.info("sleeping 30sec {}", OffsetDateTime.now());
         Thread.sleep(30000);
         LOG.info("waked up {}", OffsetDateTime.now());
         //Should do refresh
-        service.checkCredentials();
+        service.checkSession();
 
         LOG.info("sleeping 60sec {}", OffsetDateTime.now());
         Thread.sleep(60000);
         LOG.info("waked up {}", OffsetDateTime.now());
 
         //Should do logout/login
-        service.checkCredentials();
+        service.checkSession();
 
         service.disconnect();
 

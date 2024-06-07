@@ -102,24 +102,27 @@ public class XmlApiClientService implements ApiClientService {
         this.poolNumber = poolNumber;
     }
 
+    public int getPool() {
+        return this.poolNumber;
+    }
     protected ApiClientCredentials getCredentials() {
         return this.credentials;
     }
 
-    protected void checkCredentials() throws ApiException {
+    protected void checkSession() throws ApiException {
         if (aaaApi.getToken() == null) {
             aaaApi.login();
-            LOG.debug("checkCredentials: pool[{}] login!", poolNumber);
+            LOG.debug("checkSession: pool[{}] login!", poolNumber);
         } else if (aaaApi.isValid() && !aaaApi.isValidTokenAtLeastFor(credentials.validity)) {
             aaaApi.refresh();
-            LOG.debug("checkCredentials: pool[{}] refreshed token: previous token was valid for less then {} seconds", poolNumber, credentials.validity);
+            LOG.debug("checkSession: pool[{}] refreshed token: previous token was valid for less then {} seconds", poolNumber, credentials.validity);
         } else if (!aaaApi.isValid()) {
             aaaApi.logout();
-            LOG.debug("checkCredentials: pool[{}] logout! token is no more valid", poolNumber);
+            LOG.debug("checkSession: pool[{}] logout! token is no more valid", poolNumber);
             aaaApi.login();
-            LOG.debug("checkCredentials: pool[{}], login!", poolNumber);
+            LOG.debug("checkSession: pool[{}], login!", poolNumber);
         }
-        LOG.info("checkCredentials: pool[{}] token is valid for at least {} seconds", poolNumber, credentials.validity);
+        LOG.info("checkSession: pool[{}] token is valid for at least {} seconds", poolNumber, credentials.validity);
     }
 
     @Override
@@ -137,7 +140,7 @@ public class XmlApiClientService implements ApiClientService {
 
     @Override
     public String getUcsXmlFromDn(String dn, boolean isHierarchical) throws ApiException {
-        checkCredentials();
+        checkSession();
         return configApi.getUcsEntityByDn(aaaApi.getToken(), dn, isHierarchical);
     }
 
@@ -174,7 +177,7 @@ public class XmlApiClientService implements ApiClientService {
 
     @Override
     public List<UcsComputeBlade> getUcsComputeBladeList() throws ApiException {
-        checkCredentials();
+        checkSession();
         return configApi
                 .getUcsComputeBladeListByClassId(aaaApi.getToken())
                 .stream()
@@ -184,7 +187,7 @@ public class XmlApiClientService implements ApiClientService {
 
     @Override
     public List<UcsComputeRackUnit> getUcsComputeRackUnitList() throws ApiException {
-        checkCredentials();
+        checkSession();
         return configApi
                 .getUcsComputeRackUnitListByClassId(aaaApi.getToken())
                 .stream()
@@ -194,7 +197,7 @@ public class XmlApiClientService implements ApiClientService {
 
     @Override
     public List<UcsEquipmentChassis> getUcsEquipmentChassisList() throws ApiException {
-        checkCredentials();
+        checkSession();
         return configApi
                 .getUcsEquipmentChassisListByClassId(aaaApi.getToken())
                 .stream()
@@ -204,7 +207,7 @@ public class XmlApiClientService implements ApiClientService {
 
     @Override
     public List<UcsEquipmentFex> getUcsEquipmentFexList() throws ApiException {
-        checkCredentials();
+        checkSession();
         return configApi
                 .getUcsEquipmentFexListByClassId(aaaApi.getToken())
                 .stream()
@@ -214,7 +217,7 @@ public class XmlApiClientService implements ApiClientService {
 
     @Override
     public List<UcsEquipmentRackEnclosure> getUcsEquipmentRackEnclosureList() throws ApiException {
-        checkCredentials();
+        checkSession();
         return configApi
                 .getUcsEquipmentRackEnclosureListByClassId(aaaApi.getToken())
                 .stream()
@@ -224,7 +227,7 @@ public class XmlApiClientService implements ApiClientService {
 
     @Override
     public List<UcsNetworkElement> getUcsNetworkElementList() throws ApiException {
-        checkCredentials();
+        checkSession();
         return configApi
                 .getUcsNetworkElementListByClassId(aaaApi.getToken())
                 .stream()
@@ -234,13 +237,13 @@ public class XmlApiClientService implements ApiClientService {
 
     @Override
     public List<String> findDnByClassItem(UcsEnums.NamingClassId classId) throws ApiException{
-        checkCredentials();
+        checkSession();
         return configApi.getDnByClassId(aaaApi.getToken(), classId);
     }
 
     @Override
     public List<UcsIpPoolPooled> findUcsIpPoolPooled() throws ApiException {
-        checkCredentials();
+        checkSession();
         IpPoolUniverse ipPoolUniverse = ipApi.getIpPoolUniverse(aaaApi.getToken());
         List<UcsIpPoolPooled> list = new ArrayList<>();
         for (IpPoolAddr pool: ipPoolUniverse.ippoolAddr) {
@@ -268,7 +271,7 @@ public class XmlApiClientService implements ApiClientService {
 
     @Override
     public List<UcsFault> findAllUcsFaults() throws ApiException{
-        checkCredentials();
+        checkSession();
         return faultApi.getUcsFaults(aaaApi.getToken()).stream().map(XmlApiClientService::from).collect(Collectors.toList());
     }
 
@@ -293,7 +296,7 @@ public class XmlApiClientService implements ApiClientService {
                         to.toString().substring(0,to.toString().indexOf("T")+1)+".*")
         );
         UcsXmlApiRequest.InFilter filter = UcsXmlApiRequest.getOrFilter(filters.toArray(new UcsXmlApiRequest.InFilter[0]));
-        checkCredentials();
+        checkSession();
         return faultApi
                 .getUcsFaultsByFilter(aaaApi.getToken(), filter)
                 .stream()
@@ -336,7 +339,7 @@ public class XmlApiClientService implements ApiClientService {
                         classId,
                         "dn",
                         dn+".*");
-                checkCredentials();
+                checkSession();
                 switch (classId) {
                     case swEnvStats:
                         swEnvStats =  from(statsApi.getSwEnvStats(aaaApi.getToken(), filter ).get(0));

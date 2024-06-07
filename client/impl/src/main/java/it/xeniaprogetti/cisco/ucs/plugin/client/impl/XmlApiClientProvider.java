@@ -2,7 +2,6 @@ package it.xeniaprogetti.cisco.ucs.plugin.client.impl;
 
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientCredentials;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientProvider;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientService;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsUtils;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.AaaApi;
@@ -41,7 +40,7 @@ public class XmlApiClientProvider implements ApiClientProvider {
 
 
     @Override
-    public ApiClientService client(ApiClientCredentials credentials) throws ApiException {
+    public XmlApiClientService client(ApiClientCredentials credentials) throws ApiException {
         if (!serviceAvailableMap.containsKey(credentials)) {
             LOG.debug("client: url/user {}/{} no client found! Initialize!",
                     credentials.url,
