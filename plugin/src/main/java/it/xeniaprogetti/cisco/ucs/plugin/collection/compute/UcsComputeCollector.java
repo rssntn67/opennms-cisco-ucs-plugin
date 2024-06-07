@@ -92,8 +92,8 @@ public class UcsComputeCollector extends AbstractUcsServiceCollector {
         }
         final ImmutableCollectionSetResource.Builder<NodeResource> computeAttrBuilder =
                 ImmutableCollectionSetResource.newBuilder(NodeResource.class).setResource(nodeResource);
-        stats.ucsComputeMbPowerStats.ifPresent(stat -> addUcsComputeMbPowerStats(computeAttrBuilder, stat));
-        stats.ucsComputeMbTempStats.ifPresent(stat -> addUcsComputeMbTempStats(computeAttrBuilder, stat));
+        stats.getUcsComputeMbPowerStats().ifPresent(stat -> addUcsComputeMbPowerStats(computeAttrBuilder, stat));
+        stats.getUcsComputeMbTempStats().ifPresent(stat -> addUcsComputeMbTempStats(computeAttrBuilder, stat));
 
         final ImmutableCollectionSet.Builder resultBuilder = ImmutableCollectionSet.newBuilder();
         resultBuilder.addCollectionSetResource(computeAttrBuilder.build());

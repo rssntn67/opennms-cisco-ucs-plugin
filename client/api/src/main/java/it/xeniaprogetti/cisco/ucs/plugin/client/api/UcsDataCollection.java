@@ -4,12 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 public class UcsDataCollection {
-    public final Optional<UcsSwEnvStats> ucsSwEnvStats;
-    public final Optional<UcsSwCardEnvStats> ucsSwCardEnvStats;
-    public final Optional<UcsSwSystemStats> ucsSwSystemStats;
-    public final Optional<UcsComputeMbPowerStats> ucsComputeMbPowerStats;
-    public final Optional<UcsComputeMbTempStats> ucsComputeMbTempStats;
-    public final Optional<UcsEquipmentChassisStats> ucsEquipmentChassisStats;
+    private final UcsSwEnvStats ucsSwEnvStats;
+    private final UcsSwCardEnvStats ucsSwCardEnvStats;
+    private final UcsSwSystemStats ucsSwSystemStats;
+    private final UcsComputeMbPowerStats ucsComputeMbPowerStats;
+    private final UcsComputeMbTempStats ucsComputeMbTempStats;
+    private final UcsEquipmentChassisStats ucsEquipmentChassisStats;
     public final List<UcsFcStats> ucsFcStats;
     public final List<UcsFcErrStats> ucsFcErrStats;
     public final List<UcsEquipmentNetworkElementFanStats> ucsEquipmentNetworkElementFanStats;
@@ -42,6 +42,31 @@ public class UcsDataCollection {
         this.ucsEquipmentIOCardStats = builder.ucsEquipmentIOCardStats;
     }
 
+    public Optional<UcsSwEnvStats> getUcsSwEnvStats() {
+        return Optional.of(ucsSwEnvStats);
+    }
+
+    public Optional<UcsSwSystemStats> getUcsSwSystemStats() {
+        return Optional.of(ucsSwSystemStats);
+    }
+
+    public Optional<UcsSwCardEnvStats> getUcsSwCardEnvStats() {
+        return Optional.of(ucsSwCardEnvStats);
+    }
+
+    public Optional<UcsEquipmentChassisStats> getUcsEquipmentChassisStats() {
+        return Optional.of(ucsEquipmentChassisStats);
+    }
+
+    public Optional<UcsComputeMbPowerStats> getUcsComputeMbPowerStats() {
+        return Optional.of(ucsComputeMbPowerStats);
+    }
+
+    public Optional<UcsComputeMbTempStats> getUcsComputeMbTempStats() {
+        return Optional.of(ucsComputeMbTempStats);
+    }
+
+
     @Override
     public String toString() {
         return "UcsDataCollection{" +
@@ -64,16 +89,16 @@ public class UcsDataCollection {
     }
 
     public static class Builder {
-        private Optional<UcsSwEnvStats> ucsSwEnvStats;
-        private Optional<UcsSwSystemStats> ucsSwSystemStats;
-        private Optional<UcsSwCardEnvStats> ucsSwCardEnvStats;
+        private UcsSwEnvStats ucsSwEnvStats;
+        private UcsSwSystemStats ucsSwSystemStats;
+        private UcsSwCardEnvStats ucsSwCardEnvStats;
+        private UcsEquipmentChassisStats ucsEquipmentChassisStats;
+        private UcsComputeMbPowerStats ucsComputeMbPowerStats;
+        private UcsComputeMbTempStats ucsComputeMbTempStats;
         private List<UcsEquipmentNetworkElementFanStats> ucsEquipmentNetworkElementFanStats;
         private List<UcsFcStats> ucsFcStats;
         private List<UcsFcErrStats> ucsFcErrStats;
-        private Optional<UcsEquipmentChassisStats> ucsEquipmentChassisStats;
         private List<UcsProcessorEnvStats> ucsProcessorEnvStats;
-        private Optional<UcsComputeMbPowerStats> ucsComputeMbPowerStats;
-        private Optional<UcsComputeMbTempStats> ucsComputeMbTempStats;
         private List<UcsEtherRxStats> ucsEtherRxStats;
         private List<UcsEtherTxStats> ucsEtherTxStats;
         private List<UcsEquipmentPsuInputStats> ucsEquipmentPsuInputStats;
@@ -85,17 +110,17 @@ public class UcsDataCollection {
         }
 
         public Builder withUcsSwEnvStats(final UcsSwEnvStats ucsSwEnvStats) {
-            this.ucsSwEnvStats = Optional.ofNullable(ucsSwEnvStats);
+            this.ucsSwEnvStats = ucsSwEnvStats;
             return this;
         }
 
         public Builder withUcsSwSystemStats(final UcsSwSystemStats ucsSwSystemStats) {
-            this.ucsSwSystemStats = Optional.ofNullable(ucsSwSystemStats);
+            this.ucsSwSystemStats =ucsSwSystemStats;
             return this;
         }
 
         public Builder withUcsSwCardEnvStats(final UcsSwCardEnvStats ucsSwCardEnvStats) {
-            this.ucsSwCardEnvStats = Optional.ofNullable(ucsSwCardEnvStats);
+            this.ucsSwCardEnvStats = ucsSwCardEnvStats;
             return this;
         }
 
@@ -116,7 +141,7 @@ public class UcsDataCollection {
         }
 
         public Builder withUcsEquipmentChassisStats(UcsEquipmentChassisStats ucsEquipmentChassisStats) {
-            this.ucsEquipmentChassisStats = Optional.ofNullable(ucsEquipmentChassisStats);
+            this.ucsEquipmentChassisStats = ucsEquipmentChassisStats;
             return this;
         }
 
@@ -126,12 +151,12 @@ public class UcsDataCollection {
         }
 
         public Builder withUcsComputeMbPowerStats(UcsComputeMbPowerStats ucsComputeMbPowerStats) {
-            this.ucsComputeMbPowerStats = Optional.ofNullable(ucsComputeMbPowerStats);
+            this.ucsComputeMbPowerStats = ucsComputeMbPowerStats;
             return this;
         }
 
         public Builder withUcsComputeTempStats(UcsComputeMbTempStats ucsComputeMbTempStats) {
-            this.ucsComputeMbTempStats = Optional.ofNullable(ucsComputeMbTempStats);
+            this.ucsComputeMbTempStats = ucsComputeMbTempStats;
             return this;
         }
 

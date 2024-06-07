@@ -91,7 +91,7 @@ public class UcsEquipmentCollector extends AbstractUcsServiceCollector {
 
         final ImmutableCollectionSetResource.Builder<NodeResource> equipmentAttrBuilder =
                 ImmutableCollectionSetResource.newBuilder(NodeResource.class).setResource(nodeResource);
-        stats.ucsEquipmentChassisStats.ifPresent(stat -> addUcsEquipmentChassisStats(equipmentAttrBuilder, stat));
+        stats.getUcsEquipmentChassisStats().ifPresent(stat -> addUcsEquipmentChassisStats(equipmentAttrBuilder, stat));
 
         final ImmutableCollectionSet.Builder resultBuilder = ImmutableCollectionSet.newBuilder();
         resultBuilder.addCollectionSetResource(equipmentAttrBuilder.build());

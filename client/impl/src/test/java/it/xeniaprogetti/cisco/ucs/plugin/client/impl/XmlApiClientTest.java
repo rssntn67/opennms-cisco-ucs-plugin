@@ -195,11 +195,12 @@ public class XmlApiClientTest {
         requestMap.get("sys/switch-A").add(UcsEnums.NamingClassId.swSystemStats);
         requestMap.get("sys/switch-A").add(UcsEnums.NamingClassId.swCardEnvStats);
         UcsDataCollection ucsDataCollection = service.getUcsDataCollection(requestMap);
-        Assert.assertNotNull(ucsDataCollection.ucsSwEnvStats);
-        Assert.assertNotNull(ucsDataCollection.ucsSwSystemStats);
+        Assert.assertTrue(ucsDataCollection.getUcsSwEnvStats().isPresent());
+        Assert.assertTrue(ucsDataCollection.getUcsSwSystemStats().isPresent());
+        Assert.assertTrue(ucsDataCollection.getUcsSwCardEnvStats().isEmpty());
         service.disconnect();
-        System.out.println(ucsDataCollection.ucsSwEnvStats);
-        System.out.println(ucsDataCollection.ucsSwSystemStats);
+        System.out.println(ucsDataCollection.getUcsSwSystemStats().get());
+        System.out.println(ucsDataCollection.getUcsSwSystemStats().get());
     }
 
     @Test

@@ -107,9 +107,9 @@ public class UcsNetworkElementCollector extends AbstractUcsServiceCollector {
 
         final ImmutableCollectionSetResource.Builder<NodeResource> networkElementAttrBuilder =
                 ImmutableCollectionSetResource.newBuilder(NodeResource.class).setResource(nodeResource);
-        stats.ucsSwEnvStats.ifPresent( stat -> addUcsSwEnvStats(networkElementAttrBuilder, stat));
-        stats.ucsSwSystemStats.ifPresent( stat -> addUcsSwSystemStats(networkElementAttrBuilder,stat));
-        stats.ucsSwCardEnvStats.ifPresent(stat -> addUcsSwCardEnvStats(networkElementAttrBuilder, stat));
+        stats.getUcsSwEnvStats().ifPresent( stat -> addUcsSwEnvStats(networkElementAttrBuilder, stat));
+        stats.getUcsSwSystemStats().ifPresent( stat -> addUcsSwSystemStats(networkElementAttrBuilder,stat));
+        stats.getUcsSwCardEnvStats().ifPresent(stat -> addUcsSwCardEnvStats(networkElementAttrBuilder, stat));
 
         final ImmutableCollectionSet.Builder resultBuilder = ImmutableCollectionSet.newBuilder();
         resultBuilder.addCollectionSetResource(networkElementAttrBuilder.build());
