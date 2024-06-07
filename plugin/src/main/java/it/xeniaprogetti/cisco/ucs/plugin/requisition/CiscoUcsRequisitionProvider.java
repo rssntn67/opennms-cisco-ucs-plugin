@@ -61,6 +61,7 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
     public final static String PARAMETER_IMPORT_EQUIPMENT_CHASSIS="importEquipmentChassis";
     public final static String PARAMETER_IMPORT_EQUIPMENT_FEX="importEquipmentFex";
     public final static String PARAMETER_IMPORT_EQUIPMENT_RACK_ENCLOSURE="importEquipmentRackEnclosure";
+    public final static String PARAMETER_IMPORT_UCS="importUcs";
 
 
     public CiscoUcsRequisitionProvider(final NodeDao nodeDao, final ConnectionManager connectionManager, final ClientManager clientManager) {
@@ -83,6 +84,10 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
 
         if (parameters.containsKey(PARAMETER_FOREIGN_SOURCE)) {
             request.foreignSource=parameters.get(PARAMETER_FOREIGN_SOURCE);
+        }
+
+        if (parameters.containsKey(PARAMETER_IMPORT_UCS)) {
+            request.importUcs=Boolean.parseBoolean(parameters.get(PARAMETER_IMPORT_UCS));
         }
 
         if (parameters.containsKey(PARAMETER_IMPORT_NETWORK_ELEMENT)) {
@@ -130,7 +135,9 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
 
         ApiClientService service = context.client();
 
-        requisition.addNode(from(service.getUcsManager(), context));
+        if (request.importUcs) {
+            requisition.addNode(from(service.getUcsManager(), context));
+        }
         Map<UcsDn, List<UcsIpPoolPooled>> dnToIpListMap =  new HashMap<>();
         for (UcsIpPoolPooled ucsIpPoolPooled: service.findUcsIpPoolPooled()) {
             if (!dnToIpListMap.containsKey(ucsIpPoolPooled.assignedToDeviceDn)) {
@@ -1887,6 +1894,7 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
         private boolean importEquipmentChassis = true;
         private boolean importEquipmentFex = true;
         private boolean importEquipmentRackEnclosure = true;
+        private boolean importUcs = false;
 
 
         public Request(String alias, String location) {
