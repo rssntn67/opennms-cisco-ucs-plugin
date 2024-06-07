@@ -238,7 +238,7 @@ public class XmlApiClientTest {
         XmlApiClientService service = clientProvider.client(getCredentials(30));
 
         Map<String, Set<UcsEnums.NamingClassId>> requestMap = new HashMap<>();
-        var dn = "sys/chassis-1";
+        var dn = "sys/chassis-3";
         requestMap.put(
                 dn,
                 getCollectionMap().get(UcsEnums.ClassId.equipmentChassis).get(UcsUtils.UCS_DN_KEY)
