@@ -1,14 +1,15 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.api;
 
 import java.util.List;
+import java.util.Optional;
 
 public class UcsDataCollection {
-    public final UcsSwEnvStats ucsSwEnvStats;
-    public final UcsSwCardEnvStats ucsSwCardEnvStats;
-    public final UcsSwSystemStats ucsSwSystemStats;
-    public final UcsComputeMbPowerStats ucsComputeMbPowerStats;
-    public final UcsComputeMbTempStats ucsComputeMbTempStats;
-    public final UcsEquipmentChassisStats ucsEquipmentChassisStats;
+    public final Optional<UcsSwEnvStats> ucsSwEnvStats;
+    public final Optional<UcsSwCardEnvStats> ucsSwCardEnvStats;
+    public final Optional<UcsSwSystemStats> ucsSwSystemStats;
+    public final Optional<UcsComputeMbPowerStats> ucsComputeMbPowerStats;
+    public final Optional<UcsComputeMbTempStats> ucsComputeMbTempStats;
+    public final Optional<UcsEquipmentChassisStats> ucsEquipmentChassisStats;
     public final List<UcsFcStats> ucsFcStats;
     public final List<UcsFcErrStats> ucsFcErrStats;
     public final List<UcsEquipmentNetworkElementFanStats> ucsEquipmentNetworkElementFanStats;
@@ -63,16 +64,16 @@ public class UcsDataCollection {
     }
 
     public static class Builder {
-        private UcsSwEnvStats ucsSwEnvStats;
-        private UcsSwSystemStats ucsSwSystemStats;
-        private UcsSwCardEnvStats ucsSwCardEnvStats;
+        private Optional<UcsSwEnvStats> ucsSwEnvStats;
+        private Optional<UcsSwSystemStats> ucsSwSystemStats;
+        private Optional<UcsSwCardEnvStats> ucsSwCardEnvStats;
         private List<UcsEquipmentNetworkElementFanStats> ucsEquipmentNetworkElementFanStats;
         private List<UcsFcStats> ucsFcStats;
         private List<UcsFcErrStats> ucsFcErrStats;
-        private UcsEquipmentChassisStats ucsEquipmentChassisStats;
+        private Optional<UcsEquipmentChassisStats> ucsEquipmentChassisStats;
         private List<UcsProcessorEnvStats> ucsProcessorEnvStats;
-        private UcsComputeMbPowerStats ucsComputeMbPowerStats;
-        private UcsComputeMbTempStats ucsComputeMbTempStats;
+        private Optional<UcsComputeMbPowerStats> ucsComputeMbPowerStats;
+        private Optional<UcsComputeMbTempStats> ucsComputeMbTempStats;
         private List<UcsEtherRxStats> ucsEtherRxStats;
         private List<UcsEtherTxStats> ucsEtherTxStats;
         private List<UcsEquipmentPsuInputStats> ucsEquipmentPsuInputStats;
@@ -84,17 +85,17 @@ public class UcsDataCollection {
         }
 
         public Builder withUcsSwEnvStats(final UcsSwEnvStats ucsSwEnvStats) {
-            this.ucsSwEnvStats = ucsSwEnvStats;
+            this.ucsSwEnvStats = Optional.ofNullable(ucsSwEnvStats);
             return this;
         }
 
         public Builder withUcsSwSystemStats(final UcsSwSystemStats ucsSwSystemStats) {
-            this.ucsSwSystemStats = ucsSwSystemStats;
+            this.ucsSwSystemStats = Optional.ofNullable(ucsSwSystemStats);
             return this;
         }
 
         public Builder withUcsSwCardEnvStats(final UcsSwCardEnvStats ucsSwCardEnvStats) {
-            this.ucsSwCardEnvStats = ucsSwCardEnvStats;
+            this.ucsSwCardEnvStats = Optional.ofNullable(ucsSwCardEnvStats);
             return this;
         }
 
@@ -115,7 +116,7 @@ public class UcsDataCollection {
         }
 
         public Builder withUcsEquipmentChassisStats(UcsEquipmentChassisStats ucsEquipmentChassisStats) {
-            this.ucsEquipmentChassisStats = ucsEquipmentChassisStats;
+            this.ucsEquipmentChassisStats = Optional.ofNullable(ucsEquipmentChassisStats);
             return this;
         }
 
@@ -125,12 +126,12 @@ public class UcsDataCollection {
         }
 
         public Builder withUcsComputeMbPowerStats(UcsComputeMbPowerStats ucsComputeMbPowerStats) {
-            this.ucsComputeMbPowerStats = ucsComputeMbPowerStats;
+            this.ucsComputeMbPowerStats = Optional.ofNullable(ucsComputeMbPowerStats);
             return this;
         }
 
         public Builder withUcsComputeTempStats(UcsComputeMbTempStats ucsComputeMbTempStats) {
-            this.ucsComputeMbTempStats = ucsComputeMbTempStats;
+            this.ucsComputeMbTempStats = Optional.ofNullable(ucsComputeMbTempStats);
             return this;
         }
 

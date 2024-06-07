@@ -186,7 +186,7 @@ public class XmlApiClientTest {
     }
 
     @Test
-    public void testXmlClientServiceForSwEnvStats() throws ApiException {
+    public void testXmlClientServiceForSwStats() throws ApiException {
         XmlApiClientProvider clientProvider = new XmlApiClientProvider(5);
         XmlApiClientService service = clientProvider.client(getCredentials(30));
         Map<String, Set<UcsEnums.NamingClassId>> requestMap = new HashMap<>();
@@ -196,9 +196,10 @@ public class XmlApiClientTest {
         requestMap.get("sys/switch-A").add(UcsEnums.NamingClassId.swCardEnvStats);
         UcsDataCollection ucsDataCollection = service.getUcsDataCollection(requestMap);
         Assert.assertNotNull(ucsDataCollection.ucsSwEnvStats);
+        Assert.assertNotNull(ucsDataCollection.ucsSwSystemStats);
         service.disconnect();
-        System.out.println(ucsDataCollection.ucsSwEnvStats.mainBoardOutlet1);
-        System.out.println(ucsDataCollection.ucsSwEnvStats.mainBoardOutlet2);
+        System.out.println(ucsDataCollection.ucsSwEnvStats);
+        System.out.println(ucsDataCollection.ucsSwSystemStats);
     }
 
     @Test

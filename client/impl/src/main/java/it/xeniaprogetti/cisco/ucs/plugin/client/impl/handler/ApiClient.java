@@ -76,7 +76,6 @@ public class ApiClient {
     }
 
     public String doPost(String requestBody) throws ApiException {
-        LOG.debug("doPost: url: {}, requestBody: {}", url, requestBody);
         Request request = new Request.Builder()
                 .url(url)
                 .addHeader("Accept", "*/*")
@@ -99,7 +98,7 @@ public class ApiClient {
                     throw new ApiException("doPost Error response body is null: ", new RuntimeException("cannot execute command"), response.code(), response.headers().toMultimap(),"");
                 }
                 String r = response.body().string();
-                LOG.debug("doPost: Body:{}", r);
+                LOG.debug("doPost: Response.Body:{}", r);
 
                 return r;
             }

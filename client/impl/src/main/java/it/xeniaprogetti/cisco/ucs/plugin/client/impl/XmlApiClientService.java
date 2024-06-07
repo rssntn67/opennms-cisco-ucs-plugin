@@ -342,13 +342,23 @@ public class XmlApiClientService implements ApiClientService {
                 checkSession();
                 switch (classId) {
                     case swEnvStats:
-                        swEnvStats =  from(statsApi.getSwEnvStats(aaaApi.getToken(), filter ).get(0));
+                        List<SwEnvStats> listA = statsApi.getSwEnvStats(aaaApi.getToken(), filter);
+                        if (!listA.isEmpty()) {
+                            swEnvStats = from(listA.get(0));
+                        }
                         break;
                     case swSystemStats:
-                        swSystemStats = from(statsApi.getSwSystemStats(aaaApi.getToken(), filter).get(0));
+                        List<SwSystemStats> listB = statsApi.getSwSystemStats(aaaApi.getToken(), filter);
+                        if (!listB.isEmpty()) {
+                            swSystemStats = from(listB.get(0));
+                        }
                         break;
                     case swCardEnvStats:
-                        swCardEnvStats = from(statsApi.getSwCardEnvStats(aaaApi.getToken(), filter).get(0));
+                        List<SwCardEnvStats> listC = statsApi.getSwCardEnvStats(aaaApi.getToken(), filter);
+                        LOG.debug("getUcsDataCollection: swCardEnvStats {}", listC.size());
+                        if (!listC.isEmpty()) {
+                            swCardEnvStats = from(listC.get(0));
+                        }
                         break;
                     case equipmentNetworkElementFanStats:
                         statsApi.getEquipmentNetworkElementFanStats(aaaApi.getToken(), filter)
@@ -363,16 +373,25 @@ public class XmlApiClientService implements ApiClientService {
                                 .forEach(f -> fcErrStats.add(from(f)) );
                         break;
                     case equipmentChassisStats:
-                        ucsEquipmentChassisStats =  from(statsApi.getEquipmentChassisStats(aaaApi.getToken(), filter ).get(0));
+                        List<EquipmentChassisStats> listD = statsApi.getEquipmentChassisStats(aaaApi.getToken(), filter);
+                        if (!listD.isEmpty()) {
+                            ucsEquipmentChassisStats =  from(listD.get(0));
+                        }
                         break;
                     case processorEnvStats:
                         statsApi.getProcessorEnvStats(aaaApi.getToken(), filter ).forEach(p -> ucsProcessorEnvStats.add(from(p)));
                         break;
                     case computeMbPowerStats:
-                        ucsComputeMbPowerStats =  from(statsApi.getComputeMbPowerStats(aaaApi.getToken(), filter ).get(0));
+                        List<ComputeMbPowerStats> listE = statsApi.getComputeMbPowerStats(aaaApi.getToken(), filter);
+                        if (!listE.isEmpty()) {
+                            ucsComputeMbPowerStats = from(listE.get(0));
+                        }
                         break;
                     case computeMbTempStats:
-                        ucsComputeMbTempStats =  from(statsApi.getComputeMbTempStats(aaaApi.getToken(), filter ).get(0));
+                        List<ComputeMbTempStats> listF = statsApi.getComputeMbTempStats(aaaApi.getToken(), filter);
+                        if (!listF.isEmpty()) {
+                            ucsComputeMbTempStats = from(listF.get(0));
+                        }
                         break;
                     case etherRxStats:
                         statsApi.getEtherRxStats(aaaApi.getToken(), filter).forEach(e -> ucsEtherRxStats.add(from(e)));

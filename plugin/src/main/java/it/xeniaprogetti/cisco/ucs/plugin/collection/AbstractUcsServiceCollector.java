@@ -4,8 +4,14 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.ClientManager;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.Aggregate;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientService;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeMbPowerStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeMbTempStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDataCollection;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDn;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentChassisStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsSwCardEnvStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsSwEnvStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsSwSystemStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsUtils;
 import it.xeniaprogetti.cisco.ucs.plugin.connection.ConnectionManager;
 import org.opennms.integration.api.v1.collectors.CollectionSet;
@@ -70,51 +76,51 @@ public abstract class AbstractUcsServiceCollector implements UcsServiceCollector
         }
     }
 
-    public static void addUcsSwCardEnvStats(ImmutableCollectionSetResource.Builder<? extends Resource> builder, UcsDataCollection stats) {
-        builder.addStringAttribute(createStringAttribute("ucsSwCardEnvStats", "ucsSwCardEnvStats.dn", stats.ucsSwCardEnvStats.dn.value));
-        builder.addStringAttribute(createStringAttribute("ucsSwCardEnvStats", "ucsSwCardEnvStats.thresholded", stats.ucsSwCardEnvStats.thresholded));
-        builder.addStringAttribute(createStringAttribute("ucsSwCardEnvStats", "ucsSwCardEnvStats.suspect", stats.ucsSwCardEnvStats.suspect));
-        builder.addStringAttribute(createStringAttribute("ucsSwCardEnvStats", "ucsSwCardEnvStats.timeCollected", stats.ucsSwCardEnvStats.timeCollected.toString()));
+    public static void addUcsSwCardEnvStats(ImmutableCollectionSetResource.Builder<? extends Resource> builder, UcsSwCardEnvStats stats) {
+        builder.addStringAttribute(createStringAttribute("ucsSwCardEnvStats", "ucsSwCardEnvStats.dn", stats.dn.value));
+        builder.addStringAttribute(createStringAttribute("ucsSwCardEnvStats", "ucsSwCardEnvStats.thresholded", stats.thresholded));
+        builder.addStringAttribute(createStringAttribute("ucsSwCardEnvStats", "ucsSwCardEnvStats.suspect", stats.suspect));
+        builder.addStringAttribute(createStringAttribute("ucsSwCardEnvStats", "ucsSwCardEnvStats.timeCollected", stats.timeCollected.toString()));
     }
 
-    public static void addUcsSwEnvStats(ImmutableCollectionSetResource.Builder<? extends Resource> builder, UcsDataCollection stats) {
-        builder.addStringAttribute(createStringAttribute("ucsSwEnvStats", "ucsSwEnvStats.dn", stats.ucsSwEnvStats.dn.value));
-        builder.addStringAttribute(createStringAttribute("ucsSwEnvStats", "ucsSwEnvStats.thresholded", stats.ucsSwEnvStats.thresholded));
-        builder.addStringAttribute(createStringAttribute("ucsSwEnvStats", "ucsSwEnvStats.suspect", stats.ucsSwEnvStats.suspect));
-        builder.addStringAttribute(createStringAttribute("ucsSwEnvStats", "ucsSwEnvStats.timeCollected", stats.ucsSwEnvStats.timeCollected.toString()));
-        addNumAttr(builder,"ucsSwEnvStats", "MainBoardOutlet1", stats.ucsSwEnvStats.mainBoardOutlet1);
-        addNumAttr(builder,"ucsSwEnvStats", "MainBoardOutlet2", stats.ucsSwEnvStats.mainBoardOutlet2);
+    public static void addUcsSwEnvStats(ImmutableCollectionSetResource.Builder<? extends Resource> builder, UcsSwEnvStats stats) {
+        builder.addStringAttribute(createStringAttribute("ucsSwEnvStats", "ucsSwEnvStats.dn", stats.dn.value));
+        builder.addStringAttribute(createStringAttribute("ucsSwEnvStats", "ucsSwEnvStats.thresholded", stats.thresholded));
+        builder.addStringAttribute(createStringAttribute("ucsSwEnvStats", "ucsSwEnvStats.suspect", stats.suspect));
+        builder.addStringAttribute(createStringAttribute("ucsSwEnvStats", "ucsSwEnvStats.timeCollected", stats.timeCollected.toString()));
+        addNumAttr(builder,"ucsSwEnvStats", "MainBoardOutlet1", stats.mainBoardOutlet1);
+        addNumAttr(builder,"ucsSwEnvStats", "MainBoardOutlet2", stats.mainBoardOutlet2);
     }
 
-    public static void addUcsSwSystemStats(ImmutableCollectionSetResource.Builder<? extends Resource> builder, UcsDataCollection stats) {
-        builder.addStringAttribute(createStringAttribute("ucsSwSystemStats", "ucsSwSystemStats.dn", stats.ucsSwSystemStats.dn.value));
-        builder.addStringAttribute(createStringAttribute("ucsSwSystemStats", "ucsSwSystemStats.thresholded", stats.ucsSwSystemStats.thresholded));
-        builder.addStringAttribute(createStringAttribute("ucsSwSystemStats", "ucsSwSystemStats.suspect", stats.ucsSwSystemStats.suspect));
-        builder.addStringAttribute(createStringAttribute("ucsSwSystemStats", "ucsSwSystemStats.timeCollected", stats.ucsSwSystemStats.timeCollected.toString()));
+    public static void addUcsSwSystemStats(ImmutableCollectionSetResource.Builder<? extends Resource> builder, UcsSwSystemStats stats) {
+        builder.addStringAttribute(createStringAttribute("ucsSwSystemStats", "ucsSwSystemStats.dn", stats.dn.value));
+        builder.addStringAttribute(createStringAttribute("ucsSwSystemStats", "ucsSwSystemStats.thresholded", stats.thresholded));
+        builder.addStringAttribute(createStringAttribute("ucsSwSystemStats", "ucsSwSystemStats.suspect", stats.suspect));
+        builder.addStringAttribute(createStringAttribute("ucsSwSystemStats", "ucsSwSystemStats.timeCollected", stats.timeCollected.toString()));
 
-        addNumAttr(builder,"ucsSwSystemStats", "Load", stats.ucsSwSystemStats.load);
-        addNumAttr(builder,"ucsSwSystemStats", "MemAvailable", stats.ucsSwSystemStats.memAvailable);
-        addNumAttr(builder,"ucsSwSystemStats", "MemCached", stats.ucsSwSystemStats.memCached);
+        addNumAttr(builder,"ucsSwSystemStats", "Load", stats.load);
+        addNumAttr(builder,"ucsSwSystemStats", "MemAvailable", stats.memAvailable);
+        addNumAttr(builder,"ucsSwSystemStats", "MemCached", stats.memCached);
     }
 
-    public static void addUcsComputeMbPowerStats(ImmutableCollectionSetResource.Builder<? extends Resource> builder, UcsDataCollection stats) {
-        builder.addStringAttribute(createStringAttribute("ucsComputeMbPowerStats", "ucsComputeMbPowerStats.dn", stats.ucsComputeMbPowerStats.dn.value));
-        addNumAttr(builder, "ucsComputeMbPowerStats", "ConsumedPower", stats.ucsComputeMbPowerStats.consumedPower);
-        addNumAttr(builder, "ucsComputeMbPowerStats", "InputCurrent", stats.ucsComputeMbPowerStats.inputCurrent);
-        addNumAttr(builder, "ucsComputeMbPowerStats", "InputVoltage", stats.ucsComputeMbPowerStats.inputVoltage);
+    public static void addUcsComputeMbPowerStats(ImmutableCollectionSetResource.Builder<? extends Resource> builder, UcsComputeMbPowerStats stats) {
+        builder.addStringAttribute(createStringAttribute("ucsComputeMbPowerStats", "ucsComputeMbPowerStats.dn", stats.dn.value));
+        addNumAttr(builder, "ucsComputeMbPowerStats", "ConsumedPower", stats.consumedPower);
+        addNumAttr(builder, "ucsComputeMbPowerStats", "InputCurrent", stats.inputCurrent);
+        addNumAttr(builder, "ucsComputeMbPowerStats", "InputVoltage", stats.inputVoltage);
     }
 
-    public static void addUcsComputeMbTempStats(ImmutableCollectionSetResource.Builder<? extends Resource> builder, UcsDataCollection stats) {
-        builder.addStringAttribute(createStringAttribute("ucsComputeMbTempStats", "ucsComputeMbTempStats.dn", stats.ucsComputeMbTempStats.dn.value));
-        addNumAttr(builder, "ucsComputeMbTempStats", "FmTempSenIo", stats.ucsComputeMbTempStats.fmTempSenIo);
-        addNumAttr(builder, "ucsComputeMbTempStats", "FmTempSenRear", stats.ucsComputeMbTempStats.fmTempSenRear);
+    public static void addUcsComputeMbTempStats(ImmutableCollectionSetResource.Builder<? extends Resource> builder, UcsComputeMbTempStats stats) {
+        builder.addStringAttribute(createStringAttribute("ucsComputeMbTempStats", "ucsComputeMbTempStats.dn", stats.dn.value));
+        addNumAttr(builder, "ucsComputeMbTempStats", "FmTempSenIo", stats.fmTempSenIo);
+        addNumAttr(builder, "ucsComputeMbTempStats", "FmTempSenRear", stats.fmTempSenRear);
     }
 
-    public static void addUcsEquipmentChassisStats(ImmutableCollectionSetResource.Builder<? extends Resource> builder, UcsDataCollection stats) {
-        builder.addStringAttribute(createStringAttribute("ucsEquipmentChassisStats", "ucsEquipmentChassisStats.dn", stats.ucsEquipmentChassisStats.dn.value));
-        addNumAttr(builder, "ucsEquipmentChassisStats", "ChassisI2CErrors", stats.ucsEquipmentChassisStats.ChassisI2CErrors);
-        addNumAttr(builder, "ucsEquipmentChassisStats", "InputPower", stats.ucsEquipmentChassisStats.inputPower);
-        addNumAttr(builder, "ucsEquipmentChassisStats", "OutputPower", stats.ucsEquipmentChassisStats.outputPower);
+    public static void addUcsEquipmentChassisStats(ImmutableCollectionSetResource.Builder<? extends Resource> builder, UcsEquipmentChassisStats stats) {
+        builder.addStringAttribute(createStringAttribute("ucsEquipmentChassisStats", "ucsEquipmentChassisStats.dn", stats.dn.value));
+        addNumAttr(builder, "ucsEquipmentChassisStats", "ChassisI2CErrors", stats.ChassisI2CErrors);
+        addNumAttr(builder, "ucsEquipmentChassisStats", "InputPower", stats.inputPower);
+        addNumAttr(builder, "ucsEquipmentChassisStats", "OutputPower", stats.outputPower);
     }
 
     public static void addEquipmentNetworkElementFanStats(ImmutableCollectionSet.Builder builder, UcsDataCollection stats, ImmutableNodeResource nodeResource) {

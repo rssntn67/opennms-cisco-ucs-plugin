@@ -91,7 +91,7 @@ public class UcsEquipmentCollector extends AbstractUcsServiceCollector {
 
         final ImmutableCollectionSetResource.Builder<NodeResource> equipmentAttrBuilder =
                 ImmutableCollectionSetResource.newBuilder(NodeResource.class).setResource(nodeResource);
-        addUcsEquipmentChassisStats(equipmentAttrBuilder, stats);
+        stats.ucsEquipmentChassisStats.ifPresent(stat -> addUcsEquipmentChassisStats(equipmentAttrBuilder, stat));
 
         final ImmutableCollectionSet.Builder resultBuilder = ImmutableCollectionSet.newBuilder();
         resultBuilder.addCollectionSetResource(equipmentAttrBuilder.build());
@@ -101,7 +101,7 @@ public class UcsEquipmentCollector extends AbstractUcsServiceCollector {
         addUcsEquipmentIoCardStats(resultBuilder, stats, nodeResource);
 
         return CompletableFuture.completedFuture(resultBuilder.setStatus(CollectionSet.Status.SUCCEEDED)
-                .setTimestamp(stats.ucsEquipmentChassisStats.timeCollected.getTime()).build());
+                .setTimestamp(System.currentTimeMillis()).build());
 
     }
 }

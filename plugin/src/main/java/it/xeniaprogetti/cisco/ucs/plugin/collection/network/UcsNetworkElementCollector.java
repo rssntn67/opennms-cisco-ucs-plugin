@@ -107,9 +107,9 @@ public class UcsNetworkElementCollector extends AbstractUcsServiceCollector {
 
         final ImmutableCollectionSetResource.Builder<NodeResource> networkElementAttrBuilder =
                 ImmutableCollectionSetResource.newBuilder(NodeResource.class).setResource(nodeResource);
-        addUcsSwEnvStats(networkElementAttrBuilder, stats);
-        addUcsSwSystemStats(networkElementAttrBuilder,stats);
-        addUcsSwCardEnvStats(networkElementAttrBuilder, stats);
+        stats.ucsSwEnvStats.ifPresent( stat -> addUcsSwEnvStats(networkElementAttrBuilder, stat));
+        stats.ucsSwSystemStats.ifPresent( stat -> addUcsSwSystemStats(networkElementAttrBuilder,stat));
+        stats.ucsSwCardEnvStats.ifPresent(stat -> addUcsSwCardEnvStats(networkElementAttrBuilder, stat));
 
         final ImmutableCollectionSet.Builder resultBuilder = ImmutableCollectionSet.newBuilder();
         resultBuilder.addCollectionSetResource(networkElementAttrBuilder.build());
@@ -120,7 +120,7 @@ public class UcsNetworkElementCollector extends AbstractUcsServiceCollector {
         addUcsEtherTxStats(resultBuilder, stats, nodeResource, milliseconds);
         addUcsEquipmentPsuInputStats(resultBuilder, stats, nodeResource);
         return CompletableFuture.completedFuture(resultBuilder.setStatus(CollectionSet.Status.SUCCEEDED)
-                .setTimestamp(stats.ucsSwEnvStats.timeCollected.getTime()).build());
+                .setTimestamp(System.currentTimeMillis()).build());
 
     }
 }
