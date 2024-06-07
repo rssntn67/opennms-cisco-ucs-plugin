@@ -152,7 +152,7 @@ public class XmlApiClientTest {
     @Test
     public void testXmlClientService() throws ApiException {
         XmlApiClientProvider clientProvider = new XmlApiClientProvider(5);
-        XmlApiClientService service = new XmlApiClientService(getCredentials(30),clientProvider, 0);
+        XmlApiClientService service = clientProvider.client(getCredentials(30));
         service.getUcsXmlFromDn("fabric/san/A", false);
         service.findDnByClassItem(UcsEnums.NamingClassId.equipmentRackEnclosure).forEach(System.out::println);
 
@@ -174,7 +174,7 @@ public class XmlApiClientTest {
     @Test
     public void testXmlClientServiceForStats() throws ApiException {
         XmlApiClientProvider clientProvider = new XmlApiClientProvider(5);
-        XmlApiClientService service = new XmlApiClientService(getCredentials(30), clientProvider, 0);
+        XmlApiClientService service = clientProvider.client(getCredentials(30));
         List<String> statsItemList = service.findDnByClassItem(UcsEnums.NamingClassId.statsItem);
         System.out.println(statsItemList.size());
         statsItemList.forEach(System.out::println);
@@ -188,10 +188,12 @@ public class XmlApiClientTest {
     @Test
     public void testXmlClientServiceForSwEnvStats() throws ApiException {
         XmlApiClientProvider clientProvider = new XmlApiClientProvider(5);
-        XmlApiClientService service = new XmlApiClientService(getCredentials(30),clientProvider, 0);
+        XmlApiClientService service = clientProvider.client(getCredentials(30));
         Map<String, Set<UcsEnums.NamingClassId>> requestMap = new HashMap<>();
         requestMap.put("sys/switch-A", new HashSet<>());
         requestMap.get("sys/switch-A").add(UcsEnums.NamingClassId.swEnvStats);
+        requestMap.get("sys/switch-A").add(UcsEnums.NamingClassId.swSystemStats);
+        requestMap.get("sys/switch-A").add(UcsEnums.NamingClassId.swCardEnvStats);
         UcsDataCollection ucsDataCollection = service.getUcsDataCollection(requestMap);
         Assert.assertNotNull(ucsDataCollection.ucsSwEnvStats);
         service.disconnect();
@@ -202,7 +204,7 @@ public class XmlApiClientTest {
     @Test
     public void testXmlClientServiceForNetworkElementStatsCollection() throws ApiException {
         XmlApiClientProvider clientProvider = new XmlApiClientProvider(1);
-        XmlApiClientService service = new XmlApiClientService(getCredentials(30),clientProvider, 0);
+        XmlApiClientService service = clientProvider.client(getCredentials(30));
 
         Map<String, Set<UcsEnums.NamingClassId>> requestMap = new HashMap<>();
         var swDn = "sys/switch-A";
@@ -232,7 +234,7 @@ public class XmlApiClientTest {
     @Test
     public void testXmlClientServiceForEquipmentChassisStatsCollection() throws ApiException {
         XmlApiClientProvider clientProvider = new XmlApiClientProvider(1);
-        XmlApiClientService service = new XmlApiClientService(getCredentials(30),clientProvider, 0);
+        XmlApiClientService service = clientProvider.client(getCredentials(30));
 
         Map<String, Set<UcsEnums.NamingClassId>> requestMap = new HashMap<>();
         var dn = "sys/chassis-3";
@@ -250,7 +252,7 @@ public class XmlApiClientTest {
     @Test
     public void testXmlClientServiceForComputeBladeStatsCollection() throws ApiException {
         XmlApiClientProvider clientProvider = new XmlApiClientProvider(1);
-        XmlApiClientService service = new XmlApiClientService(getCredentials(30),clientProvider, 0);
+        XmlApiClientService service = clientProvider.client(getCredentials(30));
 
         Map<String, Set<UcsEnums.NamingClassId>> requestMap = new HashMap<>();
         var dn = "sys/chassis-3/blade-3";
