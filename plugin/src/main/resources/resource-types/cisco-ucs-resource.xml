@@ -27,4 +27,12 @@
         <persistenceSelectorStrategy class="org.opennms.netmgt.collection.support.PersistAllSelectorStrategy"/>
         <storageStrategy class="org.opennms.netmgt.collection.support.IndexStorageStrategy"/>
     </resourceType>
+    <resourceType name="EquipFanModule" label="Equipment Fan Module" resourceLabel="Equipment Fan Module (${resourceName}) dn(${resourceDn})">
+        <persistenceSelectorStrategy class="org.opennms.netmgt.collection.support.PersistAllSelectorStrategy"/>
+        <storageStrategy class="org.opennms.netmgt.collection.support.IndexStorageStrategy"/>
+    </resourceType>
+    <resourceType name="EquipFan" label="Equipment Fan" resourceLabel="Equipment Fan (${resourceName}) dn(${resourceDn})">
+        <persistenceSelectorStrategy class="org.opennms.netmgt.collection.support.PersistAllSelectorStrategy"/>
+        <storageStrategy class="org.opennms.netmgt.collection.support.IndexStorageStrategy"/>
+    </resourceType>
 </resource-types>
