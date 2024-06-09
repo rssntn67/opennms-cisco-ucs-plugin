@@ -95,6 +95,10 @@ public class UcsEquipmentCollector extends AbstractUcsServiceCollector {
 
         final ImmutableCollectionSet.Builder resultBuilder = ImmutableCollectionSet.newBuilder();
         resultBuilder.addCollectionSetResource(equipmentAttrBuilder.build());
+        addUcsEquipmentPsuStats(resultBuilder, stats, nodeResource);
+        addUcsEquipmentIoCardStats(resultBuilder, stats, nodeResource);
+        addUcsEquipmentFanModuleStats(resultBuilder,stats,nodeResource);
+        addUcsEquipmentFanStats(resultBuilder,stats,nodeResource);
         addUcsEtherRxStats(resultBuilder, stats, nodeResource,milliseconds);
         addUcsEtherTxStats(resultBuilder, stats, nodeResource,milliseconds);
         addUcsEtherErrStats(resultBuilder, stats, nodeResource,milliseconds);
@@ -102,8 +106,6 @@ public class UcsEquipmentCollector extends AbstractUcsServiceCollector {
         addUcsEtherNiErrStats(resultBuilder, stats, nodeResource,milliseconds);
         addUcsEtherPauseStats(resultBuilder, stats, nodeResource,milliseconds);
 
-        addUcsEquipmentPsuStats(resultBuilder, stats, nodeResource);
-        addUcsEquipmentIoCardStats(resultBuilder, stats, nodeResource);
 
         return CompletableFuture.completedFuture(resultBuilder.setStatus(CollectionSet.Status.SUCCEEDED)
                 .setTimestamp(System.currentTimeMillis()).build());

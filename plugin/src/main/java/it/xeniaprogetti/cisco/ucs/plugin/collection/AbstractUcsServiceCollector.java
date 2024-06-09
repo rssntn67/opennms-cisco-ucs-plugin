@@ -326,6 +326,27 @@ public abstract class AbstractUcsServiceCollector implements UcsServiceCollector
         });
     }
 
+    public static void addUcsEquipmentFanModuleStats(ImmutableCollectionSet.Builder builder, UcsDataCollection stats, ImmutableNodeResource nodeResource) {
+        stats.ucsEquipmentFanModuleStats.forEach(stat -> {
+            final ImmutableCollectionSetResource.Builder<GenericTypeResource> appResourceBuilder =
+                    getBuilderForResource(stat, nodeResource, "equipmentFanModule");
+
+            addNumAttr(appResourceBuilder, "equipmentFanModule", "AmbientTemp", stat.ambientTemp);
+            addNumAttr(appResourceBuilder, "equipmentFanModule", "FanModuleI2CErrors", stat.FanModuleI2CErrors);
+            builder.addCollectionSetResource(appResourceBuilder.build());
+        });
+    }
+
+    public static void addUcsEquipmentFanStats(ImmutableCollectionSet.Builder builder, UcsDataCollection stats, ImmutableNodeResource nodeResource) {
+        stats.ucsEquipmentFanStats.forEach(stat -> {
+            final ImmutableCollectionSetResource.Builder<GenericTypeResource> appResourceBuilder =
+                    getBuilderForResource(stat, nodeResource, "equipmentFan");
+
+            addNumAttr(appResourceBuilder, "equipmentFan", "Speed", stat.speed);
+            builder.addCollectionSetResource(appResourceBuilder.build());
+        });
+    }
+
     protected ApiClientService getClientService(Map<String, Object> attributes) throws ApiException {
         String alias = Objects.requireNonNull(attributes.get(UcsUtils.UCS_ALIAS_KEY), "alias is missing").toString();
         var connection = connectionManager.getConnection(alias);
