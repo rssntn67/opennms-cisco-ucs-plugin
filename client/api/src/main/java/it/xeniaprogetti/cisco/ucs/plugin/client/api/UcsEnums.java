@@ -10,7 +10,8 @@ public class UcsEnums {
         EquipPsu,
         EquipIOCard,
         EquipFanModule,
-        EquipFan
+        EquipFan,
+        AdaptorEthPort
     }
     public enum NamingClassId {
         aaaAuthMethod,

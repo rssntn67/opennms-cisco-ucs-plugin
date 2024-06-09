@@ -35,4 +35,9 @@
         <persistenceSelectorStrategy class="org.opennms.netmgt.collection.support.PersistAllSelectorStrategy"/>
         <storageStrategy class="org.opennms.netmgt.collection.support.IndexStorageStrategy"/>
     </resourceType>
+    <resourceType name="AdaptorEthPort" label="Adaptor Eth Port" resourceLabel="Adaptor Eth port(${resourceName}) dn(${resourceDn})">
+        <persistenceSelectorStrategy class="org.opennms.netmgt.collection.support.PersistAllSelectorStrategy"/>
+        <storageStrategy class="org.opennms.netmgt.collection.support.IndexStorageStrategy"/>
+    </resourceType>
+
 </resource-types>

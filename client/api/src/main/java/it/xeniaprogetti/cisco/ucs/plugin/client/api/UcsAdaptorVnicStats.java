@@ -2,7 +2,7 @@ package it.xeniaprogetti.cisco.ucs.plugin.client.api;
 
 import java.util.Date;
 
-public class UcsAdaptorVnicStats extends UcsStats {
+public class UcsAdaptorVnicStats extends UcsAdaptorEthPortResourceTypeStats {
 
     public static Builder builder() {
        return new Builder();
