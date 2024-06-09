@@ -280,7 +280,7 @@ public abstract class AbstractUcsServiceCollector implements UcsServiceCollector
                                             .setType("Ether")
                                             .setInstance(etherId)
                                             .build())
-                            .addStringAttribute(createStringAttribute("etherTxStats", "etherRxStats.dn", stat.dn.value))
+                            .addStringAttribute(createStringAttribute("etherTxStats", "etherTxStats.dn", stat.dn.value))
                             .addStringAttribute(createStringAttribute("etherTxStats", "etherDn", etherDn.value))
                             .addStringAttribute(createStringAttribute("etherTxStats", "etherName", etherName))
                             .addStringAttribute(createStringAttribute("etherTxStats", "etherTxStats.etherId", etherId));
