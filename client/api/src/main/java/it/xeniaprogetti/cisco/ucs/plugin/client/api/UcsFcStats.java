@@ -2,7 +2,7 @@ package it.xeniaprogetti.cisco.ucs.plugin.client.api;
 
 import java.util.Date;
 
-public class UcsFcStats extends UcsStats implements UcsResourceType {
+public class UcsFcStats extends UcsFcResourceTypeStats {
 
     public static Builder builder() {
        return new Builder();
@@ -37,11 +37,6 @@ public class UcsFcStats extends UcsStats implements UcsResourceType {
                 ", classId=" + classId +
                 ", classItem=" + classItem +
                 '}';
-    }
-
-    @Override
-    public UcsEnums.ResourceType getResourceType() {
-        return UcsEnums.ResourceType.Fc;
     }
 
     public static class Builder {

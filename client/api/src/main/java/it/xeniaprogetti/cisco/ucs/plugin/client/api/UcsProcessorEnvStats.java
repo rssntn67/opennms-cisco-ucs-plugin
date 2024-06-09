@@ -2,7 +2,7 @@ package it.xeniaprogetti.cisco.ucs.plugin.client.api;
 
 import java.util.Date;
 
-public class UcsProcessorEnvStats extends UcsStats {
+public class UcsProcessorEnvStats extends UcsResourceTypeStats {
 
     public static Builder builder() {
        return new Builder();
@@ -28,6 +28,11 @@ public class UcsProcessorEnvStats extends UcsStats {
                 ", classId=" + classId +
                 ", classItem=" + classItem +
                 '}';
+    }
+
+    @Override
+    public UcsEnums.ResourceType getResourceType() {
+        return UcsEnums.ResourceType.CiscoUcsProcessor;
     }
 
     public static class Builder {

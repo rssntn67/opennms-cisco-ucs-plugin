@@ -2,7 +2,7 @@ package it.xeniaprogetti.cisco.ucs.plugin.client.api;
 
 import java.util.Date;
 
-public class UcsEquipmentPsuInputStats extends UcsStats {
+public class UcsEquipmentPsuInputStats extends UcsResourceTypeStats {
 
     public static Builder builder() {
        return new Builder();
@@ -37,6 +37,11 @@ public class UcsEquipmentPsuInputStats extends UcsStats {
                 ", classId=" + classId +
                 ", classItem=" + classItem +
                 '}';
+    }
+
+    @Override
+    public UcsEnums.ResourceType getResourceType() {
+        return UcsEnums.ResourceType.EquipPsuInput;
     }
 
     public static class Builder {

@@ -1,29 +1,29 @@
 <resource-types xmlns="http://xmlns.opennms.org/xsd/config/datacollection">
-    <resourceType name="CiscoUcsProcessor" label="Ucs Processor" resourceLabel="Processor(${processorName}) dn(${processorDn})">
+    <resourceType name="CiscoUcsProcessor" label="Ucs Processor" resourceLabel="Processor(${resourceName}) dn(${resourceDn})">
         <persistenceSelectorStrategy class="org.opennms.netmgt.collection.support.PersistAllSelectorStrategy"/>
         <storageStrategy class="org.opennms.netmgt.collection.support.IndexStorageStrategy"/>
     </resourceType>
-    <resourceType name="NetworkElementFan" label="Network Element Fan" resourceLabel="Fan(${fanName}) dn(${fanDn}) airFlowDirection(${airFlowDirection})">
+    <resourceType name="NetworkElementFan" label="Network Element Fan" resourceLabel="Fan(${resourceName}) dn(${resourceDn}) airFlowDirection(${airFlowDirection})">
         <persistenceSelectorStrategy class="org.opennms.netmgt.collection.support.PersistAllSelectorStrategy"/>
         <storageStrategy class="org.opennms.netmgt.collection.support.IndexStorageStrategy"/>
     </resourceType>
-    <resourceType name="Fc" label="Fiber Channel Port" resourceLabel="Fiber Channel(${fcName}) dn(${fcDn})">
+    <resourceType name="Fc" label="Fiber Channel Port" resourceLabel="Fiber Channel(${resourceName}) dn(${resourceDn})">
         <persistenceSelectorStrategy class="org.opennms.netmgt.collection.support.PersistAllSelectorStrategy"/>
         <storageStrategy class="org.opennms.netmgt.collection.support.IndexStorageStrategy"/>
     </resourceType>
-    <resourceType name="Ether" label="Ether Port" resourceLabel="Ether Port(${etherName}) dn(${etherDn})">
+    <resourceType name="Ether" label="Ether Port" resourceLabel="Ether Port(${resourceName}) dn(${resourceDn})">
         <persistenceSelectorStrategy class="org.opennms.netmgt.collection.support.PersistAllSelectorStrategy"/>
         <storageStrategy class="org.opennms.netmgt.collection.support.IndexStorageStrategy"/>
     </resourceType>
-    <resourceType name="EquipPsuInput" label="Equipment Psu Input" resourceLabel="Psu Input(${psuInputName}) inputStatus(${inputStatus}) dn(${psuInputDn})">
+    <resourceType name="EquipPsuInput" label="Equipment Psu Input" resourceLabel="Psu Input(${resourceName}) inputStatus(${inputStatus}) dn(${resourceDn})">
         <persistenceSelectorStrategy class="org.opennms.netmgt.collection.support.PersistAllSelectorStrategy"/>
         <storageStrategy class="org.opennms.netmgt.collection.support.IndexStorageStrategy"/>
     </resourceType>
-    <resourceType name="EquipPsu" label="Equipment Psu" resourceLabel="Equipment Psu(${psuName}) dn(${psuDn})">
+    <resourceType name="EquipPsu" label="Equipment Psu" resourceLabel="Equipment Psu(${resourceName}) dn(${resourceDn})">
         <persistenceSelectorStrategy class="org.opennms.netmgt.collection.support.PersistAllSelectorStrategy"/>
         <storageStrategy class="org.opennms.netmgt.collection.support.IndexStorageStrategy"/>
     </resourceType>
-    <resourceType name="EquipIOCard" label="Equipment IO Card" resourceLabel="Equipment IO CARD (${ioCardName}) dn(${ioCardDn})">
+    <resourceType name="EquipIOCard" label="Equipment IO Card" resourceLabel="Equipment IO CARD (${resourceName}) dn(${resourceDn})">
         <persistenceSelectorStrategy class="org.opennms.netmgt.collection.support.PersistAllSelectorStrategy"/>
         <storageStrategy class="org.opennms.netmgt.collection.support.IndexStorageStrategy"/>
     </resourceType>

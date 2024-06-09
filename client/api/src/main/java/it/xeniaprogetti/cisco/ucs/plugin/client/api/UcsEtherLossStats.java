@@ -2,7 +2,7 @@ package it.xeniaprogetti.cisco.ucs.plugin.client.api;
 
 import java.util.Date;
 
-public class UcsEtherLossStats extends UcsStats {
+public class UcsEtherLossStats extends UcsEtherResourceTypeStats {
 
     public static Builder builder() {
        return new Builder();
