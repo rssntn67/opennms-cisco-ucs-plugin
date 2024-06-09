@@ -179,6 +179,10 @@ public abstract class AbstractUcsServiceCollector implements UcsServiceCollector
         });
     }
 
+    public static ImmutableCollectionSetResource.Builder<GenericTypeResource> getBuilderForFc() {
+        return null;
+    }
+
     public static void addUcsFcErrStats(ImmutableCollectionSet.Builder builder, UcsDataCollection stats, ImmutableNodeResource nodeResource, int milliseconds) {
         stats.ucsFcErrStats.forEach(stat -> {
             UcsDn fcDn = UcsDn.getParentDn(stat.dn);

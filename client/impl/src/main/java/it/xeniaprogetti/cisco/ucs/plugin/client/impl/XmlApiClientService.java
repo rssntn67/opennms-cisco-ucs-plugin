@@ -18,6 +18,10 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentNetworkElementFa
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentPsuInputStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentPsuStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentRackEnclosure;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEtherErrStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEtherLossStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEtherNiErrStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEtherPauseStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEtherRxStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEtherTxStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsFault;
@@ -56,6 +60,10 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentIOCard
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentNetworkElementFanStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentPsuInputStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentPsuStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EtherErrStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EtherLossStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EtherNiErrStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EtherPauseStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EtherRxStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EtherTxStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.FcErrStats;
@@ -333,6 +341,10 @@ public class XmlApiClientService implements ApiClientService {
         final List<UcsEquipmentPsuInputStats> ucsEquipmentPsuInputStats = new ArrayList<>();
         final List<UcsEquipmentPsuStats> ucsEquipmentPsuStats = new ArrayList<>();
         final List<UcsEquipmentIOCardStats> ucsEquipmentIOCardStats = new ArrayList<>();
+        final List<UcsEtherErrStats> ucsEtherErrStats = new ArrayList<>();
+        final List<UcsEtherPauseStats> ucsEtherPauseStats = new ArrayList<>();
+        final List<UcsEtherLossStats> ucsEtherLossStats = new ArrayList<>();
+        final List<UcsEtherNiErrStats> ucsEtherNiErrStats = new ArrayList<>();
         for (String dn: collectMap.keySet()) {
             for (UcsEnums.NamingClassId classId: collectMap.get(dn)) {
                 LOG.debug("getUcsDataCollection: parsing dn={}, type={}", dn, classId);
@@ -408,6 +420,18 @@ public class XmlApiClientService implements ApiClientService {
                     case equipmentIOCardStats:
                         statsApi.getEquipmentIOCardStats(aaaApi.getToken(), filter).forEach(e -> ucsEquipmentIOCardStats.add(from(e)));
                         break;
+                    case etherErrStats:
+                        statsApi.getEtherErrStats(aaaApi.getToken(), filter).forEach(e -> ucsEtherErrStats.add(from(e)));
+                        break;
+                    case etherLossStats:
+                        statsApi.getEtherLossStats(aaaApi.getToken(), filter).forEach(e -> ucsEtherLossStats.add(from(e)));
+                        break;
+                    case etherPauseStats:
+                        statsApi.getEtherPauseStats(aaaApi.getToken(), filter).forEach(e -> ucsEtherPauseStats.add(from(e)));
+                        break;
+                    case etherNiErrStats:
+                        statsApi.getEtherNiErrStats(aaaApi.getToken(), filter).forEach(e -> ucsEtherNiErrStats.add(from(e)));
+                        break;
                     default:
                         break;
                 }
@@ -429,6 +453,79 @@ public class XmlApiClientService implements ApiClientService {
                 .withUcsEquipmentPsuInputStats(ucsEquipmentPsuInputStats)
                 .withUcsEquipmentPsuStats(ucsEquipmentPsuStats)
                 .withUcsEquipmentIOCardStats(ucsEquipmentIOCardStats)
+                .withUcsEtherErrStats(ucsEtherErrStats)
+                .withUcsEtherLossStats(ucsEtherLossStats)
+                .withUcsEtherPauseStats(ucsEtherPauseStats)
+                .withUcsEtherNiErrStats(ucsEtherNiErrStats)
+                .build();
+    }
+
+    private UcsEtherNiErrStats from(EtherNiErrStats e) {
+        return UcsEtherNiErrStats.builder()
+                .withDn(e.dn)
+                .withIntervals(e.intervals)
+                .withSuspect(e.suspect)
+                .withThresholded(e.thresholded)
+                .withTimeCollected(e.timeCollected)
+                .withUpdate(e.update)
+                .withFrameTx(e.frameTx)
+                .withCrc(e.crc)
+                .withInRange(e.inRange)
+                .withTooLong(e.tooLong)
+                .withTooShort(e.tooShort)
+                .build();
+    }
+
+    private UcsEtherPauseStats from(EtherPauseStats e) {
+        return UcsEtherPauseStats.builder()
+                .withDn(e.dn)
+                .withIntervals(e.intervals)
+                .withSuspect(e.suspect)
+                .withThresholded(e.thresholded)
+                .withTimeCollected(e.timeCollected)
+                .withUpdate(e.update)
+                .withRecvPause(e.recvPause)
+                .withResets(e.resets)
+                .withXmitPause(e.xmitPause)
+                .build();
+    }
+
+    private UcsEtherLossStats from(EtherLossStats e) {
+        return UcsEtherLossStats.builder()
+                .withDn(e.dn)
+                .withIntervals(e.intervals)
+                .withSuspect(e.suspect)
+                .withThresholded(e.thresholded)
+                .withTimeCollected(e.timeCollected)
+                .withUpdate(e.update)
+                .withCarrierSense(e.carrierSense)
+                .withGiants(e.giants)
+                .withExcessCollision(e.excessCollision)
+                .withLateCollision(e.lateCollision)
+                .withMultiCollision(e.multiCollision)
+                .withSymbol(e.symbol)
+                .withSingleCollision(e.singleCollision)
+                .withSQETest(e.SQETest)
+                .build();
+    }
+
+    private UcsEtherErrStats from(EtherErrStats e) {
+        return UcsEtherErrStats.builder()
+                .withDn(e.dn)
+                .withIntervals(e.intervals)
+                .withSuspect(e.suspect)
+                .withThresholded(e.thresholded)
+                .withTimeCollected(e.timeCollected)
+                .withUpdate(e.update)
+                .withDeferredTx(e.deferredTx)
+                .withAlign(e.align)
+                .withFcs(e.fcs)
+                .withiIntMacRx(e.intMacRx)
+                .withIntMacTx(e.intMacTx)
+                .withOutDiscard(e.outDiscard)
+                .withRcv(e.rcv)
+                .withUnderSize(e.underSize)
+                .withXmit(e.xmit)
                 .build();
     }
 

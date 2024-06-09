@@ -1,6 +1,15 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.api;
 
 public class UcsEnums {
+    public enum ResourceType {
+        CiscoUcsProcessor,
+        NetworkElementFan,
+        Fc,
+        Ether,
+        EquipPsuInput,
+        EquipPsu,
+        EquipIOCard
+    }
     public enum NamingClassId {
         aaaAuthMethod,
         aaaAuthRealm,

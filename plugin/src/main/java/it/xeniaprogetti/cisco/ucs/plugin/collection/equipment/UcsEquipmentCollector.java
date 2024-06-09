@@ -97,6 +97,7 @@ public class UcsEquipmentCollector extends AbstractUcsServiceCollector {
         resultBuilder.addCollectionSetResource(equipmentAttrBuilder.build());
         addUcsEtherRxStats(resultBuilder, stats, nodeResource,milliseconds);
         addUcsEtherTxStats(resultBuilder, stats, nodeResource,milliseconds);
+
         addUcsEquipmentPsuStats(resultBuilder, stats, nodeResource);
         addUcsEquipmentIoCardStats(resultBuilder, stats, nodeResource);
 
