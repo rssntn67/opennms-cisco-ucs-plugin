@@ -228,6 +228,67 @@ public abstract class AbstractUcsServiceCollector implements UcsServiceCollector
         });
     }
 
+    public static void addUcsEtherErrStats(ImmutableCollectionSet.Builder builder, UcsDataCollection stats, ImmutableNodeResource nodeResource, int milliseconds) {
+        stats.ucsEtherErrStats.forEach(stat -> {
+            final ImmutableCollectionSetResource.Builder<GenericTypeResource> appResourceBuilder =
+                    getBuilderForResource(stat, nodeResource, "etherErrStats");
+
+            addNumAttr(appResourceBuilder, "etherErrStats", "Align", stat.align, milliseconds);
+            addNumAttr(appResourceBuilder, "etherErrStats", "DeferredTx", stat.deferredTx, milliseconds);
+            addNumAttr(appResourceBuilder, "etherErrStats", "Fcs", stat.fcs, milliseconds);
+            addNumAttr(appResourceBuilder, "etherErrStats", "IntMacRx", stat.intMacRx, milliseconds);
+            addNumAttr(appResourceBuilder, "etherErrStats", "IntMacTx", stat.intMacTx, milliseconds);
+            addNumAttr(appResourceBuilder, "etherErrStats", "OutDiscard", stat.outDiscard, milliseconds);
+            addNumAttr(appResourceBuilder, "etherErrStats", "Rcv", stat.rcv, milliseconds);
+            addNumAttr(appResourceBuilder, "etherErrStats", "UnderSize", stat.underSize, milliseconds);
+            addNumAttr(appResourceBuilder, "etherErrStats", "Xmit", stat.xmit, milliseconds);
+            builder.addCollectionSetResource(appResourceBuilder.build());
+        });
+    }
+
+    public static void addUcsEtherLossStats(ImmutableCollectionSet.Builder builder, UcsDataCollection stats, ImmutableNodeResource nodeResource, int milliseconds) {
+        stats.ucsEtherLossStats.forEach(stat -> {
+            final ImmutableCollectionSetResource.Builder<GenericTypeResource> appResourceBuilder =
+                    getBuilderForResource(stat, nodeResource, "etherLossStats");
+
+            addNumAttr(appResourceBuilder, "etherLossStats", "CarrierSense", stat.carrierSense, milliseconds);
+            addNumAttr(appResourceBuilder, "etherLossStats", "ExcessCollision", stat.excessCollision, milliseconds);
+            addNumAttr(appResourceBuilder, "etherLossStats", "Giants", stat.giants, milliseconds);
+            addNumAttr(appResourceBuilder, "etherLossStats", "LateCollision", stat.lateCollision, milliseconds);
+            addNumAttr(appResourceBuilder, "etherLossStats", "MultiCollision", stat.multiCollision, milliseconds);
+            addNumAttr(appResourceBuilder, "etherLossStats", "SingleCollision", stat.singleCollision, milliseconds);
+            addNumAttr(appResourceBuilder, "etherLossStats", "SQETest", stat.SQETest, milliseconds);
+            addNumAttr(appResourceBuilder, "etherLossStats", "Symbol", stat.symbol, milliseconds);
+            builder.addCollectionSetResource(appResourceBuilder.build());
+        });
+    }
+
+    public static void addUcsEtherNiErrStats(ImmutableCollectionSet.Builder builder, UcsDataCollection stats, ImmutableNodeResource nodeResource, int milliseconds) {
+        stats.ucsEtherNiErrStats.forEach(stat -> {
+            final ImmutableCollectionSetResource.Builder<GenericTypeResource> appResourceBuilder =
+                    getBuilderForResource(stat, nodeResource, "etherNiErrorStats");
+
+            addNumAttr(appResourceBuilder, "etherNiErrorStats", "Crc", stat.crc, milliseconds);
+            addNumAttr(appResourceBuilder, "etherNiErrorStats", "FrameTx", stat.frameTx, milliseconds);
+            addNumAttr(appResourceBuilder, "etherNiErrorStats", "InRange", stat.inRange, milliseconds);
+            addNumAttr(appResourceBuilder, "etherNiErrorStats", "TooLong", stat.tooLong, milliseconds);
+            addNumAttr(appResourceBuilder, "etherNiErrorStats", "TooShort", stat.tooShort, milliseconds);
+            builder.addCollectionSetResource(appResourceBuilder.build());
+        });
+    }
+
+    public static void addUcsEtherPauseStats(ImmutableCollectionSet.Builder builder, UcsDataCollection stats, ImmutableNodeResource nodeResource, int milliseconds) {
+        stats.ucsEtherPauseStats.forEach(stat -> {
+            final ImmutableCollectionSetResource.Builder<GenericTypeResource> appResourceBuilder =
+                    getBuilderForResource(stat, nodeResource, "etherPauseStats");
+
+            addNumAttr(appResourceBuilder, "etherPauseStats", "RecvPause", stat.recvPause, milliseconds);
+            addNumAttr(appResourceBuilder, "etherPauseStats", "XmitPause", stat.xmitPause, milliseconds);
+            addNumAttr(appResourceBuilder, "etherPauseStats", "Resets", stat.resets, milliseconds);
+            builder.addCollectionSetResource(appResourceBuilder.build());
+        });
+    }
+
     public static void addUcsEquipmentPsuInputStats(ImmutableCollectionSet.Builder builder, UcsDataCollection stats, ImmutableNodeResource nodeResource) {
         stats.ucsEquipmentPsuInputStats.forEach(stat -> {
             final ImmutableCollectionSetResource.Builder<GenericTypeResource> appResourceBuilder =

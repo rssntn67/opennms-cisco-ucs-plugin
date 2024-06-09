@@ -118,6 +118,9 @@ public class UcsNetworkElementCollector extends AbstractUcsServiceCollector {
         addUcsFcErrStats(resultBuilder, stats, nodeResource, milliseconds);
         addUcsEtherRxStats(resultBuilder, stats, nodeResource, milliseconds);
         addUcsEtherTxStats(resultBuilder, stats, nodeResource, milliseconds);
+        addUcsEtherErrStats(resultBuilder, stats, nodeResource,milliseconds);
+        addUcsEtherLossStats(resultBuilder, stats, nodeResource,milliseconds);
+        addUcsEtherPauseStats(resultBuilder, stats, nodeResource,milliseconds);
         addUcsEquipmentPsuInputStats(resultBuilder, stats, nodeResource);
         return CompletableFuture.completedFuture(resultBuilder.setStatus(CollectionSet.Status.SUCCEEDED)
                 .setTimestamp(System.currentTimeMillis()).build());

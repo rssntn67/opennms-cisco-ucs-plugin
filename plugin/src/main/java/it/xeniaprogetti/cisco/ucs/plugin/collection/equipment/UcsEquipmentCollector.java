@@ -97,6 +97,10 @@ public class UcsEquipmentCollector extends AbstractUcsServiceCollector {
         resultBuilder.addCollectionSetResource(equipmentAttrBuilder.build());
         addUcsEtherRxStats(resultBuilder, stats, nodeResource,milliseconds);
         addUcsEtherTxStats(resultBuilder, stats, nodeResource,milliseconds);
+        addUcsEtherErrStats(resultBuilder, stats, nodeResource,milliseconds);
+        addUcsEtherLossStats(resultBuilder, stats, nodeResource,milliseconds);
+        addUcsEtherNiErrStats(resultBuilder, stats, nodeResource,milliseconds);
+        addUcsEtherPauseStats(resultBuilder, stats, nodeResource,milliseconds);
 
         addUcsEquipmentPsuStats(resultBuilder, stats, nodeResource);
         addUcsEquipmentIoCardStats(resultBuilder, stats, nodeResource);
