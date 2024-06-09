@@ -289,6 +289,62 @@ public abstract class AbstractUcsServiceCollector implements UcsServiceCollector
         });
     }
 
+    public static void addUcsAdaptorEthPortErrStats(ImmutableCollectionSet.Builder builder, UcsDataCollection stats, ImmutableNodeResource nodeResource, int milliseconds) {
+        stats.ucsAdaptorEthPortErrStats.forEach(stat -> {
+            String group = "adaptorEthPortErrStats-"+stat.trafficDirection;
+            final ImmutableCollectionSetResource.Builder<GenericTypeResource> appResourceBuilder =
+                    getBuilderForResource(stat, nodeResource, group);
+            addNumAttr(appResourceBuilder, group, "BadCrcPackets", stat.badCrcPackets, milliseconds);
+            addNumAttr(appResourceBuilder, group, "BadLengthPackets", stat.badLengthPackets, milliseconds);
+            addNumAttr(appResourceBuilder, group, "MacDiscardedPackets", stat.macDiscardedPackets, milliseconds);
+            builder.addCollectionSetResource(appResourceBuilder.build());
+        });
+    }
+
+    public static void addUcsAdaptorEthPortMcastStats(ImmutableCollectionSet.Builder builder, UcsDataCollection stats, ImmutableNodeResource nodeResource, int milliseconds) {
+        stats.ucsAdaptorEthPortMcastStats.forEach(stat -> {
+            String group = "adaptorEthPortMcastStats-"+stat.trafficDirection;
+            final ImmutableCollectionSetResource.Builder<GenericTypeResource> appResourceBuilder =
+                    getBuilderForResource(stat, nodeResource, group);
+            addNumAttr(appResourceBuilder, group, "BroadcastPackets", stat.broadcastPackets, milliseconds);
+            addNumAttr(appResourceBuilder, group, "MulticastPackets", stat.multicastPackets, milliseconds);
+            addNumAttr(appResourceBuilder, group, "UnicastPackets", stat.unicastPackets, milliseconds);
+            builder.addCollectionSetResource(appResourceBuilder.build());
+        });
+    }
+
+    public static void addUcsAdaptorEthPortStats(ImmutableCollectionSet.Builder builder, UcsDataCollection stats, ImmutableNodeResource nodeResource, int milliseconds) {
+        stats.ucsAdaptorEthPortStats.forEach(stat -> {
+            String group = "adaptorEthPortStats-"+stat.trafficDirection;
+            final ImmutableCollectionSetResource.Builder<GenericTypeResource> appResourceBuilder =
+                    getBuilderForResource(stat, nodeResource, group);
+            addNumAttr(appResourceBuilder, group, "GoodPackets", stat.goodPackets, milliseconds);
+            addNumAttr(appResourceBuilder, group, "PausePackets", stat.pausePackets, milliseconds);
+            addNumAttr(appResourceBuilder, group, "TotalPackets", stat.totalPackets, milliseconds);
+            addNumAttr(appResourceBuilder, group, "VlanPackets", stat.vlanPackets, milliseconds);
+            addNumAttr(appResourceBuilder, group, "PppPackets", stat.pppPackets, milliseconds);
+            addNumAttr(appResourceBuilder, group, "PerPriorityPausePackets", stat.perPriorityPausePackets, milliseconds);
+            builder.addCollectionSetResource(appResourceBuilder.build());
+        });
+    }
+
+    public static void addUcsAdaptorVnicStats(ImmutableCollectionSet.Builder builder, UcsDataCollection stats, ImmutableNodeResource nodeResource, int milliseconds) {
+        stats.ucsAdaptorVnicStats.forEach(stat -> {
+            String group = "adaptorVnicStats";
+            final ImmutableCollectionSetResource.Builder<GenericTypeResource> appResourceBuilder =
+                    getBuilderForResource(stat, nodeResource, group);
+            addNumAttr(appResourceBuilder, group, "bytesRx", stat.bytesRx, milliseconds);
+            addNumAttr(appResourceBuilder, group, "bytesTx", stat.bytesTx, milliseconds);
+            addNumAttr(appResourceBuilder, group, "packetsRx", stat.packetsRx, milliseconds);
+            addNumAttr(appResourceBuilder, group, "packetsTx", stat.packetsTx, milliseconds);
+            addNumAttr(appResourceBuilder, group, "droppedRx", stat.droppedRx, milliseconds);
+            addNumAttr(appResourceBuilder, group, "droppedTx", stat.droppedTx, milliseconds);
+            addNumAttr(appResourceBuilder, group, "errorsRx", stat.errorsRx, milliseconds);
+            addNumAttr(appResourceBuilder, group, "errorsTx", stat.errorsTx, milliseconds);
+            builder.addCollectionSetResource(appResourceBuilder.build());
+        });
+    }
+
     public static void addUcsEquipmentPsuInputStats(ImmutableCollectionSet.Builder builder, UcsDataCollection stats, ImmutableNodeResource nodeResource) {
         stats.ucsEquipmentPsuInputStats.forEach(stat -> {
             final ImmutableCollectionSetResource.Builder<GenericTypeResource> appResourceBuilder =

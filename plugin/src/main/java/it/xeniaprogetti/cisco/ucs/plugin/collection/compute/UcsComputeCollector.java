@@ -24,6 +24,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
+import static java.util.Objects.requireNonNull;
+
 public class UcsComputeCollector extends AbstractUcsServiceCollector {
     private final Map<UcsEnums.ClassId, Map<String,Set<UcsEnums.NamingClassId>>> collectionItemMap = new HashMap<>();
 
@@ -57,6 +59,7 @@ public class UcsComputeCollector extends AbstractUcsServiceCollector {
 
     @Override
     public CompletableFuture<CollectionSet> collect(CollectionRequest request, Map<String, Object> attributes) {
+        int milliseconds = Integer.parseInt((String) requireNonNull(attributes.get(SERVICE_INTERVAL), "Missing attribute: " + SERVICE_INTERVAL));
         Map<String, Set<UcsEnums.NamingClassId>> requestMap = new HashMap<>();
         LOG.debug("collect: nodeid:{} ipaddr:{}, attributes:{}", request.getNodeId(), request.getAddress(), attributes);
         var dn = attributes.get(UcsUtils.UCS_DN_KEY).toString();
@@ -97,6 +100,10 @@ public class UcsComputeCollector extends AbstractUcsServiceCollector {
 
         final ImmutableCollectionSet.Builder resultBuilder = ImmutableCollectionSet.newBuilder();
         resultBuilder.addCollectionSetResource(computeAttrBuilder.build());
+        addUcsAdaptorEthPortStats(resultBuilder, stats, nodeResource, milliseconds);
+        addUcsAdaptorEthPortErrStats(resultBuilder, stats, nodeResource, milliseconds);
+        addUcsAdaptorEthPortMcastStats(resultBuilder, stats, nodeResource, milliseconds);
+        addUcsAdaptorVnicStats(resultBuilder, stats, nodeResource, milliseconds);
         addUcsProcessorEnvStats(resultBuilder, stats, nodeResource);
 
         return CompletableFuture.completedFuture(resultBuilder.setStatus(CollectionSet.Status.SUCCEEDED)
