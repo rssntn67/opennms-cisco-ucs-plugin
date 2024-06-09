@@ -12,6 +12,8 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDn;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEnums;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentChassis;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentChassisStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentFanModuleStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentFanStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentFex;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentIOCardStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentNetworkElementFanStats;
@@ -56,6 +58,8 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.request.UcsXmlApiRequ
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ComputeMbPowerStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ComputeMbTempStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentChassisStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentFanModuleStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentFanStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentIOCardStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentNetworkElementFanStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentPsuInputStats;
@@ -345,6 +349,8 @@ public class XmlApiClientService implements ApiClientService {
         final List<UcsEtherPauseStats> ucsEtherPauseStats = new ArrayList<>();
         final List<UcsEtherLossStats> ucsEtherLossStats = new ArrayList<>();
         final List<UcsEtherNiErrStats> ucsEtherNiErrStats = new ArrayList<>();
+        final List<UcsEquipmentFanModuleStats> ucsEquipmentFanModuleStats = new ArrayList<>();
+        final List<UcsEquipmentFanStats> ucsEquipmentFanStats = new ArrayList<>();
         for (String dn: collectMap.keySet()) {
             for (UcsEnums.NamingClassId classId: collectMap.get(dn)) {
                 LOG.debug("getUcsDataCollection: parsing dn={}, type={}", dn, classId);
@@ -432,6 +438,12 @@ public class XmlApiClientService implements ApiClientService {
                     case etherNiErrStats:
                         statsApi.getEtherNiErrStats(aaaApi.getToken(), filter).forEach(e -> ucsEtherNiErrStats.add(from(e)));
                         break;
+                    case equipmentFanModuleStats:
+                        statsApi.getEquipmentFanModuleStats(aaaApi.getToken(), filter).forEach(e -> ucsEquipmentFanModuleStats.add(from(e)));
+                        break;
+                    case equipmentFanStats:
+                        statsApi.getEquipmentFanStats(aaaApi.getToken(), filter).forEach(e -> ucsEquipmentFanStats.add(from(e)));
+                        break;
                     default:
                         break;
                 }
@@ -457,6 +469,33 @@ public class XmlApiClientService implements ApiClientService {
                 .withUcsEtherLossStats(ucsEtherLossStats)
                 .withUcsEtherPauseStats(ucsEtherPauseStats)
                 .withUcsEtherNiErrStats(ucsEtherNiErrStats)
+                .withUcsEquipmentFanModuleStats(ucsEquipmentFanModuleStats)
+                .withUcsEquipmentFanStats(ucsEquipmentFanStats)
+                .build();
+    }
+
+    private UcsEquipmentFanStats from(EquipmentFanStats e) {
+        return UcsEquipmentFanStats.builder()
+                .withDn(e.dn)
+                .withIntervals(e.intervals)
+                .withSuspect(e.suspect)
+                .withThresholded(e.thresholded)
+                .withTimeCollected(e.timeCollected)
+                .withUpdate(e.update)
+                .withSpeed(e.speed)
+                .build();
+    }
+
+    private UcsEquipmentFanModuleStats from(EquipmentFanModuleStats e) {
+        return UcsEquipmentFanModuleStats.builder()
+                .withDn(e.dn)
+                .withIntervals(e.intervals)
+                .withSuspect(e.suspect)
+                .withThresholded(e.thresholded)
+                .withTimeCollected(e.timeCollected)
+                .withUpdate(e.update)
+                .withAmbientTemp(e.ambientTemp)
+                .withFanModuleI2CErrors(e.FanModuleI2CErrors)
                 .build();
     }
 

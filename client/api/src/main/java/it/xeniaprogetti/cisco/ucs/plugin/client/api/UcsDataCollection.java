@@ -23,6 +23,8 @@ public class UcsDataCollection {
     public final List<UcsEtherLossStats> ucsEtherLossStats;
     public final List<UcsEtherPauseStats> ucsEtherPauseStats;
     public final List<UcsEtherNiErrStats> ucsEtherNiErrStats;
+    public final List<UcsEquipmentFanModuleStats> ucsEquipmentFanModuleStats;
+    public final List<UcsEquipmentFanStats> ucsEquipmentFanStats;
 
     public static Builder builder() {
         return new Builder();
@@ -73,6 +75,8 @@ public class UcsDataCollection {
         this.ucsEtherLossStats = builder.ucsEtherLossStats;
         this.ucsEtherPauseStats = builder.ucsEtherPauseStats;
         this.ucsEtherNiErrStats = builder.ucsEtherNiErrStats;
+        this.ucsEquipmentFanModuleStats = builder.ucsEquipmentFanModuleStats;
+        this.ucsEquipmentFanStats = builder.ucsEquipmentFanStats;
     }
 
     public Optional<UcsSwEnvStats> getUcsSwEnvStats() {
@@ -120,6 +124,8 @@ public class UcsDataCollection {
         private List<UcsEtherLossStats> ucsEtherLossStats;
         private List<UcsEtherPauseStats> ucsEtherPauseStats;
         private List<UcsEtherNiErrStats> ucsEtherNiErrStats;
+        private List<UcsEquipmentFanModuleStats> ucsEquipmentFanModuleStats;
+        private List<UcsEquipmentFanStats> ucsEquipmentFanStats;
 
 
         private Builder () {
@@ -220,6 +226,16 @@ public class UcsDataCollection {
 
         public Builder withUcsEquipmentIOCardStats(List<UcsEquipmentIOCardStats> ucsEquipmentIOCardStats) {
             this.ucsEquipmentIOCardStats =  ucsEquipmentIOCardStats;
+            return this;
+        }
+
+        public Builder withUcsEquipmentFanModuleStats(List<UcsEquipmentFanModuleStats> ucsEquipmentFanModuleStats) {
+            this.ucsEquipmentFanModuleStats =  ucsEquipmentFanModuleStats;
+            return this;
+        }
+
+        public Builder withUcsEquipmentFanStats(List<UcsEquipmentFanStats> ucsEquipmentFanStats) {
+            this.ucsEquipmentFanStats =  ucsEquipmentFanStats;
             return this;
         }
 
