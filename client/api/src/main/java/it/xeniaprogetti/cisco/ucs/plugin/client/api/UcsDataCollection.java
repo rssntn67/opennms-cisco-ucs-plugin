@@ -25,10 +25,10 @@ public class UcsDataCollection {
     public final List<UcsEtherNiErrStats> ucsEtherNiErrStats;
     public final List<UcsEquipmentFanModuleStats> ucsEquipmentFanModuleStats;
     public final List<UcsEquipmentFanStats> ucsEquipmentFanStats;
-
-    public static Builder builder() {
-        return new Builder();
-    }
+    public final List<UcsAdaptorEthPortErrStats> ucsAdaptorEthPortErrStats;
+    public final List<UcsAdaptorEthPortMcastStats> ucsAdaptorEthPortMcastStats;
+    public final List<UcsAdaptorEthPortStats> ucsAdaptorEthPortStats;
+    public final List<UcsAdaptorVnicStats> ucsAdaptorVnicStats;
 
     @Override
     public String toString() {
@@ -52,7 +52,18 @@ public class UcsDataCollection {
                 ", ucsEtherLossStats=" + ucsEtherLossStats +
                 ", ucsEtherPauseStats=" + ucsEtherPauseStats +
                 ", ucsEtherNiErrStats=" + ucsEtherNiErrStats +
+                ", ucsEquipmentFanModuleStats=" + ucsEquipmentFanModuleStats +
+                ", ucsEquipmentFanStats=" + ucsEquipmentFanStats +
+                ", ucsAdaptorEthPortErrStats=" + ucsAdaptorEthPortErrStats +
+                ", ucsAdaptorEthPortMcastStats=" + ucsAdaptorEthPortMcastStats +
+                ", ucsAdaptorEthPortStats=" + ucsAdaptorEthPortStats +
+                ", ucsAdaptorVnicStats=" + ucsAdaptorVnicStats +
                 '}';
+    }
+
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     private UcsDataCollection(Builder builder) {
@@ -77,6 +88,10 @@ public class UcsDataCollection {
         this.ucsEtherNiErrStats = builder.ucsEtherNiErrStats;
         this.ucsEquipmentFanModuleStats = builder.ucsEquipmentFanModuleStats;
         this.ucsEquipmentFanStats = builder.ucsEquipmentFanStats;
+        this.ucsAdaptorEthPortErrStats = builder.ucsAdaptorEthPortErrStats;
+        this.ucsAdaptorEthPortMcastStats = builder.ucsAdaptorEthPortMcastStats;
+        this.ucsAdaptorEthPortStats = builder.ucsAdaptorEthPortStats;
+        this.ucsAdaptorVnicStats = builder.ucsAdaptorVnicStats;
     }
 
     public Optional<UcsSwEnvStats> getUcsSwEnvStats() {
@@ -126,6 +141,11 @@ public class UcsDataCollection {
         private List<UcsEtherNiErrStats> ucsEtherNiErrStats;
         private List<UcsEquipmentFanModuleStats> ucsEquipmentFanModuleStats;
         private List<UcsEquipmentFanStats> ucsEquipmentFanStats;
+        private List<UcsAdaptorEthPortErrStats> ucsAdaptorEthPortErrStats;
+        private List<UcsAdaptorEthPortMcastStats> ucsAdaptorEthPortMcastStats;
+        private List<UcsAdaptorEthPortStats> ucsAdaptorEthPortStats;
+        private List<UcsAdaptorVnicStats> ucsAdaptorVnicStats;
+
 
 
         private Builder () {
@@ -236,6 +256,26 @@ public class UcsDataCollection {
 
         public Builder withUcsEquipmentFanStats(List<UcsEquipmentFanStats> ucsEquipmentFanStats) {
             this.ucsEquipmentFanStats =  ucsEquipmentFanStats;
+            return this;
+        }
+
+        public Builder withUcsAdaptorEthPortErrStats(List<UcsAdaptorEthPortErrStats> ucsAdaptorEthPortErrStats) {
+            this.ucsAdaptorEthPortErrStats = ucsAdaptorEthPortErrStats;
+            return this;
+        }
+
+        public Builder withUcsAdaptorEthPortMcastStats(List<UcsAdaptorEthPortMcastStats> ucsAdaptorEthPortMcastStats) {
+            this.ucsAdaptorEthPortMcastStats = ucsAdaptorEthPortMcastStats;
+            return this;
+        }
+
+        public Builder withUcsAdaptorEthPortStats(List<UcsAdaptorEthPortStats> ucsAdaptorEthPortStats) {
+            this.ucsAdaptorEthPortStats = ucsAdaptorEthPortStats;
+            return this;
+        }
+
+        public Builder withUcsAdaptorVNicStats(List<UcsAdaptorVnicStats> ucsAdaptorVnicStats) {
+            this.ucsAdaptorVnicStats = ucsAdaptorVnicStats;
             return this;
         }
 

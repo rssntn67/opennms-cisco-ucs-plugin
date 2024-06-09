@@ -1,42 +1,6 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.impl;
 
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientCredentials;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientService;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeBlade;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeMbPowerStats;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeMbTempStats;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeRackUnit;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDataCollection;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDn;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEnums;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentChassis;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentChassisStats;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentFanModuleStats;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentFanStats;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentFex;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentIOCardStats;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentNetworkElementFanStats;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentPsuInputStats;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentPsuStats;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentRackEnclosure;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEtherErrStats;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEtherLossStats;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEtherNiErrStats;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEtherPauseStats;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEtherRxStats;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEtherTxStats;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsFault;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsFcErrStats;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsFcStats;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsIpPoolPooled;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsManager;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsNetworkElement;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsProcessorEnvStats;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsSwCardEnvStats;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsSwEnvStats;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsSwSystemStats;
-import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsUtils;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.*;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.AaaApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.ConfigApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.FaultApi;
@@ -55,6 +19,10 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.network.NetworkElemen
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root.IpPoolPooled;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root.LsServer;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.request.UcsXmlApiRequest;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.AdaptorEthPortErrStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.AdaptorEthPortMcastStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.AdaptorEthPortStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.AdaptorVnicStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ComputeMbPowerStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ComputeMbTempStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentChassisStats;
@@ -351,6 +319,10 @@ public class XmlApiClientService implements ApiClientService {
         final List<UcsEtherNiErrStats> ucsEtherNiErrStats = new ArrayList<>();
         final List<UcsEquipmentFanModuleStats> ucsEquipmentFanModuleStats = new ArrayList<>();
         final List<UcsEquipmentFanStats> ucsEquipmentFanStats = new ArrayList<>();
+        final List<UcsAdaptorEthPortErrStats> ucsAdaptorEthPortErrStats = new ArrayList<>();
+        final List<UcsAdaptorEthPortMcastStats> ucsAdaptorEthPortMcastStats = new ArrayList<>();
+        final List<UcsAdaptorEthPortStats> ucsAdaptorEthPortStats = new ArrayList<>();
+        final List<UcsAdaptorVnicStats> ucsAdaptorVnicStats = new ArrayList<>();
         for (String dn: collectMap.keySet()) {
             for (UcsEnums.NamingClassId classId: collectMap.get(dn)) {
                 LOG.debug("getUcsDataCollection: parsing dn={}, type={}", dn, classId);
@@ -444,6 +416,18 @@ public class XmlApiClientService implements ApiClientService {
                     case equipmentFanStats:
                         statsApi.getEquipmentFanStats(aaaApi.getToken(), filter).forEach(e -> ucsEquipmentFanStats.add(from(e)));
                         break;
+                    case adaptorEthPortErrStats:
+                        statsApi.getAdaptorEthPortErrStats(aaaApi.getToken(), filter).forEach(e -> ucsAdaptorEthPortErrStats.add(from(e)));
+                        break;
+                    case adaptorEthPortMcastStats:
+                        statsApi.getAdaptorEthPortMcastStats(aaaApi.getToken(), filter).forEach(e -> ucsAdaptorEthPortMcastStats.add(from(e)));
+                        break;
+                    case adaptorEthPortStats:
+                        statsApi.getAdaptorEthPortStats(aaaApi.getToken(), filter).forEach(e -> ucsAdaptorEthPortStats.add(from(e)));
+                        break;
+                    case adaptorVnicStats:
+                        statsApi.getAdaptorVnicStats(aaaApi.getToken(), filter).forEach(e -> ucsAdaptorVnicStats.add(from(e)));
+                        break;
                     default:
                         break;
                 }
@@ -471,6 +455,78 @@ public class XmlApiClientService implements ApiClientService {
                 .withUcsEtherNiErrStats(ucsEtherNiErrStats)
                 .withUcsEquipmentFanModuleStats(ucsEquipmentFanModuleStats)
                 .withUcsEquipmentFanStats(ucsEquipmentFanStats)
+                .withUcsAdaptorEthPortErrStats(ucsAdaptorEthPortErrStats)
+                .withUcsAdaptorEthPortMcastStats(ucsAdaptorEthPortMcastStats)
+                .withUcsAdaptorEthPortStats(ucsAdaptorEthPortStats)
+                .withUcsAdaptorVNicStats(ucsAdaptorVnicStats)
+                .build();
+    }
+
+    private UcsAdaptorVnicStats from(AdaptorVnicStats e) {
+        return UcsAdaptorVnicStats.builder()
+                .withDn(e.dn)
+                .withIntervals(e.intervals)
+                .withSuspect(e.suspect)
+                .withThresholded(e.thresholded)
+                .withTimeCollected(e.timeCollected)
+                .withUpdate(e.update)
+                .withBytesRx(e.bytesRx)
+                .withBytesTx(e.bytesTx)
+                .withDroppedRx(e.droppedRx)
+                .withDroppedTx(e.droppedTx)
+                .withErrorsRx(e.errorsRx)
+                .withErrorsTx(e.errorsTx)
+                .withPacketsRx(e.packetsRx)
+                .withPacketsTx(e.packetsTx)
+                .build();
+    }
+
+    private UcsAdaptorEthPortStats from(AdaptorEthPortStats e) {
+        return UcsAdaptorEthPortStats.builder()
+                .withDn(e.dn)
+                .withIntervals(e.intervals)
+                .withSuspect(e.suspect)
+                .withThresholded(e.thresholded)
+                .withTimeCollected(e.timeCollected)
+                .withUpdate(e.update)
+                .withGoodPackets(e.goodPackets)
+                .withPausePackets(e.pausePackets)
+                .withPppPackets(e.pppPackets)
+                .withPerPriorityPausePackets(e.perPriorityPausePackets)
+                .withTotalPackets(e.totalPackets)
+                .withVlanPackets(e.vlanPackets)
+                .withTrafficDirection(e.trafficDirection)
+                .build();
+
+    }
+
+    private UcsAdaptorEthPortMcastStats from(AdaptorEthPortMcastStats e) {
+        return UcsAdaptorEthPortMcastStats.builder()
+                .withDn(e.dn)
+                .withIntervals(e.intervals)
+                .withSuspect(e.suspect)
+                .withThresholded(e.thresholded)
+                .withTimeCollected(e.timeCollected)
+                .withUpdate(e.update)
+                .withBroadcastPackets(e.broadcastPackets)
+                .withMulticastPackets(e.multicastPackets)
+                .withUnicastPackets(e.unicastPacketsDelta)
+                .withTrafficDirection(e.trafficDirection)
+                .build();
+    }
+
+    private UcsAdaptorEthPortErrStats from(AdaptorEthPortErrStats e) {
+        return UcsAdaptorEthPortErrStats.builder()
+                .withDn(e.dn)
+                .withIntervals(e.intervals)
+                .withSuspect(e.suspect)
+                .withThresholded(e.thresholded)
+                .withTimeCollected(e.timeCollected)
+                .withUpdate(e.update)
+                .withBadCrcPackets(e.badCrcPackets)
+                .withBadLengthPackets(e.badLengthPackets)
+                .withMacDiscardedPackets(e.macDiscardedPackets)
+                .withTrafficDirection(e.trafficDirection)
                 .build();
     }
 
