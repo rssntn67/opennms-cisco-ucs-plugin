@@ -126,4 +126,21 @@ public class XmlApiClientProvider implements ApiClientProvider {
         }
         return valid;
     }
+
+    public int getAvail(ApiClientCredentials credentials) {
+        return serviceAvailableMap.get(credentials).size();
+    }
+
+    public int getUsed(ApiClientCredentials credentials) {
+        return serviceUsedMap.get(credentials).size();
+    }
+
+    public int getPool(ApiClientCredentials credentials) {
+        return poolIdMap.get(credentials);
+    }
+
+    public int getPoolSize(ApiClientCredentials credentials) {
+        return poolIdMap.get(credentials)+1;
+    }
+
 }
