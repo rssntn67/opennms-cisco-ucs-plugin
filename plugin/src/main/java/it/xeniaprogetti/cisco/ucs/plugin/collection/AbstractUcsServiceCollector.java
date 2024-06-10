@@ -291,39 +291,39 @@ public abstract class AbstractUcsServiceCollector implements UcsServiceCollector
 
     public static void addUcsAdaptorEthPortErrStats(ImmutableCollectionSet.Builder builder, UcsDataCollection stats, ImmutableNodeResource nodeResource, int milliseconds) {
         stats.ucsAdaptorEthPortErrStats.forEach(stat -> {
-            String group = "adaptorEthPortErrStats-"+stat.trafficDirection;
+            String group = "adaptorEthPortErrStats";
             final ImmutableCollectionSetResource.Builder<GenericTypeResource> appResourceBuilder =
                     getBuilderForResource(stat, nodeResource, group);
-            addNumAttr(appResourceBuilder, group, "BadCrcPackets", stat.badCrcPackets, milliseconds);
-            addNumAttr(appResourceBuilder, group, "BadLengthPackets", stat.badLengthPackets, milliseconds);
-            addNumAttr(appResourceBuilder, group, "MacDiscardedPackets", stat.macDiscardedPackets, milliseconds);
+            addNumAttr(appResourceBuilder, group, "BadCrcPackets"+stat.trafficDirection, stat.badCrcPackets, milliseconds);
+            addNumAttr(appResourceBuilder, group, "BadLengthPackets"+stat.trafficDirection, stat.badLengthPackets, milliseconds);
+            addNumAttr(appResourceBuilder, group, "MacDiscardedPackets"+stat.trafficDirection, stat.macDiscardedPackets, milliseconds);
             builder.addCollectionSetResource(appResourceBuilder.build());
         });
     }
 
     public static void addUcsAdaptorEthPortMcastStats(ImmutableCollectionSet.Builder builder, UcsDataCollection stats, ImmutableNodeResource nodeResource, int milliseconds) {
         stats.ucsAdaptorEthPortMcastStats.forEach(stat -> {
-            String group = "adaptorEthPortMcastStats-"+stat.trafficDirection;
+            String group = "adaptorEthPortMcastStats";
             final ImmutableCollectionSetResource.Builder<GenericTypeResource> appResourceBuilder =
                     getBuilderForResource(stat, nodeResource, group);
-            addNumAttr(appResourceBuilder, group, "BroadcastPackets", stat.broadcastPackets, milliseconds);
-            addNumAttr(appResourceBuilder, group, "MulticastPackets", stat.multicastPackets, milliseconds);
-            addNumAttr(appResourceBuilder, group, "UnicastPackets", stat.unicastPackets, milliseconds);
+            addNumAttr(appResourceBuilder, group, "BroadcastPackets"+stat.trafficDirection, stat.broadcastPackets, milliseconds);
+            addNumAttr(appResourceBuilder, group, "MulticastPackets"+stat.trafficDirection, stat.multicastPackets, milliseconds);
+            addNumAttr(appResourceBuilder, group, "UnicastPackets"+stat.trafficDirection, stat.unicastPackets, milliseconds);
             builder.addCollectionSetResource(appResourceBuilder.build());
         });
     }
 
     public static void addUcsAdaptorEthPortStats(ImmutableCollectionSet.Builder builder, UcsDataCollection stats, ImmutableNodeResource nodeResource, int milliseconds) {
         stats.ucsAdaptorEthPortStats.forEach(stat -> {
-            String group = "adaptorEthPortStats-"+stat.trafficDirection;
+            String group = "adaptorEthPortStats";
             final ImmutableCollectionSetResource.Builder<GenericTypeResource> appResourceBuilder =
                     getBuilderForResource(stat, nodeResource, group);
-            addNumAttr(appResourceBuilder, group, "GoodPackets", stat.goodPackets, milliseconds);
-            addNumAttr(appResourceBuilder, group, "PausePackets", stat.pausePackets, milliseconds);
-            addNumAttr(appResourceBuilder, group, "TotalPackets", stat.totalPackets, milliseconds);
-            addNumAttr(appResourceBuilder, group, "VlanPackets", stat.vlanPackets, milliseconds);
-            addNumAttr(appResourceBuilder, group, "PppPackets", stat.pppPackets, milliseconds);
-            addNumAttr(appResourceBuilder, group, "PerPriorityPausePackets", stat.perPriorityPausePackets, milliseconds);
+            addNumAttr(appResourceBuilder, group, "GoodPackets"+stat.trafficDirection, stat.goodPackets, milliseconds);
+            addNumAttr(appResourceBuilder, group, "PausePackets"+stat.trafficDirection, stat.pausePackets, milliseconds);
+            addNumAttr(appResourceBuilder, group, "TotalPackets"+stat.trafficDirection, stat.totalPackets, milliseconds);
+            addNumAttr(appResourceBuilder, group, "VlanPackets"+stat.trafficDirection, stat.vlanPackets, milliseconds);
+            addNumAttr(appResourceBuilder, group, "PppPackets"+stat.trafficDirection, stat.pppPackets, milliseconds);
+            addNumAttr(appResourceBuilder, group, "PerPriorityPausePackets"+stat.trafficDirection, stat.perPriorityPausePackets, milliseconds);
             builder.addCollectionSetResource(appResourceBuilder.build());
         });
     }
