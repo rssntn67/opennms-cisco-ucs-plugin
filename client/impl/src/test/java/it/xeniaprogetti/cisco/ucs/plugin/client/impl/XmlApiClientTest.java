@@ -102,26 +102,32 @@ public class XmlApiClientTest {
 
     @Test
     public void testXmlClientServicePool() throws ApiException {
-        XmlApiClientProvider clientProvider = new XmlApiClientProvider(2);
+        XmlApiClientProvider clientProvider = new XmlApiClientProvider(5);
+        XmlApiClientService service0 = clientProvider.client(getCredentials(30));
+        Assert.assertEquals(0, service0.getPool());
         XmlApiClientService service1 = clientProvider.client(getCredentials(30));
-        Assert.assertEquals(0, service1.getPool());
+        Assert.assertEquals(1, service1.getPool());
         XmlApiClientService service2 = clientProvider.client(getCredentials(30));
-        Assert.assertEquals(1, service2.getPool());
+        Assert.assertEquals(2, service2.getPool());
+        XmlApiClientService service3 = clientProvider.client(getCredentials(30));
+        Assert.assertEquals(3, service3.getPool());
+        XmlApiClientService service4 = clientProvider.client(getCredentials(30));
+        Assert.assertEquals(4, service4.getPool());
         try {
             clientProvider.client(getCredentials(30));
             Assert.fail();
         } catch (ApiException e) {
             Assert.assertTrue(true);
         }
-        service2.release();
         service1.release();
+        service0.release();
         XmlApiClientService service = clientProvider.client(getCredentials(30));
         Assert.assertEquals(0, service.getPool());
         service.release();
     }
 
-        @Test
-    public void testXmlClientServiceCheckCredentials() throws ApiException, InterruptedException {
+    @Test
+    public void testXmlClientServiceCheckSession() throws ApiException, InterruptedException {
         XmlApiClientProvider clientProvider = new XmlApiClientProvider(5);
         XmlApiClientService service = clientProvider.client(getCredentials(550));
         service.checkSession();

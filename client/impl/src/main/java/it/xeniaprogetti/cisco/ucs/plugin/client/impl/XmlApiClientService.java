@@ -109,13 +109,12 @@ public class XmlApiClientService implements ApiClientService {
     public void disconnect() throws ApiException {
         aaaApi.logout();
         release();
-        LOG.info("disconnect: pool[{}], done ", poolNumber);
+        LOG.info("disconnect: pool[{}] ", poolNumber);
     }
 
     @Override
     public void release() {
         boolean disconnected = apiClientProvider.release(this);
-        LOG.info("release: pool[{}] cleared connection: {}", poolNumber, disconnected);
     }
 
     @Override

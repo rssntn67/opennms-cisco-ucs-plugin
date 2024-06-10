@@ -34,13 +34,15 @@ public class XmlApiClientProvider implements ApiClientProvider {
     }
 
     public boolean release(XmlApiClientService service) {
-        serviceAvailableMap.get(service.getCredentials()).add(service);
         boolean result = serviceUsedMap.get(service.getCredentials()).remove(service);
+        if (result)
+            serviceAvailableMap.get(service.getCredentials()).add(service);
         int avail = serviceAvailableMap.get(service.getCredentials()).size();
         int used = serviceUsedMap.get(service.getCredentials()).size();
         int poolId = poolIdMap.get(service.getCredentials());
         int poolSize = poolId + 1;
-        LOG.info("release: url/user {}/{}, poolSize/maxPoolSize {}/{} avail:{}, used:{}",
+        LOG.info("release:pool[{}], url/user {}/{}, poolSize/maxPoolSize {}/{} avail:{}, used:{}",
+                service.getPool(),
                 service.getCredentials().url,
                 service.getCredentials().username,
                 poolSize,
@@ -50,13 +52,13 @@ public class XmlApiClientProvider implements ApiClientProvider {
         return result;
     }
 
-
     @Override
     public XmlApiClientService client(ApiClientCredentials credentials) throws ApiException {
         if (!serviceAvailableMap.containsKey(credentials)) {
-            LOG.debug("client: url/user {}/{} no client found! Initialize!",
+            LOG.debug("client: No client found! Initializing Client! url/user:{}/{} poolSize/maxPoolSize:0/{}.",
                     credentials.url,
-                    credentials.username);
+                    credentials.username,
+                    this.clientPoolSize);
             serviceAvailableMap.put(credentials, new ArrayList<>());
             serviceUsedMap.put(credentials, new ArrayList<>());
             poolIdMap.put(credentials, -1);
@@ -64,7 +66,8 @@ public class XmlApiClientProvider implements ApiClientProvider {
         int poolId = poolIdMap.get(credentials);
         int poolSize = poolId + 1;
         if (serviceAvailableMap.get(credentials).isEmpty() && poolSize == clientPoolSize) {
-            LOG.info("client: url/user {}/{} poolSize/maxPoolSize {}/{}, no room space left on clientPool",
+            LOG.warn("client:pool[{}] no room space left on pool, url/user:{}/{} poolSize/maxPoolSize:{}/{}, ",
+                    ++poolId,
                     credentials.url,
                     credentials.username,
                     poolSize,
@@ -75,21 +78,27 @@ public class XmlApiClientProvider implements ApiClientProvider {
         }
         XmlApiClientService service;
         if (serviceAvailableMap.get(credentials).isEmpty()) {
-            LOG.info("client: url/user {}/{}, adding a new client to clientPool!",
-                    credentials.url,
-                    credentials.username);
             poolId++;
             poolSize++;
+            LOG.debug("client:pool[{}] new, url/user:{}/{}, creating a new client!",
+                    poolId,
+                    credentials.url,
+                    credentials.username);
             service = new XmlApiClientService(credentials, this, poolId);
             poolIdMap.put(credentials, poolId);
         } else {
-            int size = serviceAvailableMap.get(credentials).size();
-            service = serviceAvailableMap.get(credentials).remove(size-1);
+            int avail = serviceAvailableMap.get(credentials).size();
+            service = serviceAvailableMap.get(credentials).remove(avail-1);
+            LOG.debug("client:pool[{}] get from pool, url/user {}/{}",
+                    service.getPool(),
+                    credentials.url,
+                    credentials.username);
         }
         serviceUsedMap.get(credentials).add(service);
         int avail = serviceAvailableMap.get(credentials).size();
         int used = serviceUsedMap.get(credentials).size();
-        LOG.info("client: url/user {}/{}, poolSize/maxPoolSize {}/{} avail:{}, used:{}",
+        LOG.info("client:pool[{}], url/user {}/{}, poolSize/maxPoolSize {}/{} avail:{}, used:{}",
+                service.getPool(),
                 credentials.url,
                 credentials.username,
                 poolSize,
