@@ -97,7 +97,10 @@ public class UcsComputeCollector extends AbstractUcsServiceCollector {
                 ImmutableCollectionSetResource.newBuilder(NodeResource.class).setResource(nodeResource);
         stats.getUcsComputeMbPowerStats().ifPresent(stat -> addUcsComputeMbPowerStats(computeAttrBuilder, stat));
         stats.getUcsComputeMbTempStats().ifPresent(stat -> addUcsComputeMbTempStats(computeAttrBuilder, stat));
-
+        stats.getUcsComputePCIeFatalCompletionStats().ifPresent(stat -> addUcsComputePCIeFatalCompletionStat(computeAttrBuilder, stat,milliseconds));
+        stats.getUcsComputePCIeFatalProtocolStats().ifPresent(stat -> addUcsComputePCIeFatalProtocolStat(computeAttrBuilder, stat,milliseconds));
+        stats.getUcsComputePCIeFatalReceiveStats().ifPresent(stat -> addUcsComputePCIeFatalReceiveStat(computeAttrBuilder, stat,milliseconds));
+        stats.getUcsComputePCIeFatalStats().ifPresent(stat -> addUcsComputePCIeFatalStat(computeAttrBuilder, stat,milliseconds));
         final ImmutableCollectionSet.Builder resultBuilder = ImmutableCollectionSet.newBuilder();
         resultBuilder.addCollectionSetResource(computeAttrBuilder.build());
         addUcsAdaptorEthPortStats(resultBuilder, stats, nodeResource, milliseconds);

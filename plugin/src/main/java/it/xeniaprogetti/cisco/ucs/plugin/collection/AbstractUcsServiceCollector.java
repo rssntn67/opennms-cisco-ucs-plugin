@@ -6,6 +6,10 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientService;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeMbPowerStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputeMbTempStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputePCIeFatalCompletionStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputePCIeFatalProtocolStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputePCIeFatalReceiveStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsComputePCIeFatalStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDataCollection;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDn;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsEquipmentChassisStats;
@@ -134,6 +138,35 @@ public abstract class AbstractUcsServiceCollector implements UcsServiceCollector
         builder.addStringAttribute(createStringAttribute("ucsComputeMbTempStats", "ucsComputeMbTempStats.dn", stats.dn.value));
         addNumAttr(builder, "ucsComputeMbTempStats", "FmTempSenIo", stats.fmTempSenIo);
         addNumAttr(builder, "ucsComputeMbTempStats", "FmTempSenRear", stats.fmTempSenRear);
+    }
+
+    public static void addUcsComputePCIeFatalCompletionStat(ImmutableCollectionSetResource.Builder<? extends Resource> builder, UcsComputePCIeFatalCompletionStats stats, int milliseconds) {
+        builder.addStringAttribute(createStringAttribute("ucsComputePCIeFatalCompletionStat", "ucsComputePCIeFatalCompletionStat.dn", stats.dn.value));
+        addNumAttr(builder, "ucsComputePCIeFatalCompletionStat", "AbortErrors", stats.AbortErrors, milliseconds);
+        addNumAttr(builder, "ucsComputePCIeFatalCompletionStat", "TimeoutErrors", stats.TimeoutErrors, milliseconds);
+        addNumAttr(builder, "ucsComputePCIeFatalCompletionStat", "UnexpectedErrors", stats.unexpectedErrors, milliseconds);
+    }
+
+    public static void addUcsComputePCIeFatalProtocolStat(ImmutableCollectionSetResource.Builder<? extends Resource> builder, UcsComputePCIeFatalProtocolStats stats, int milliseconds) {
+        builder.addStringAttribute(createStringAttribute("ucsComputePCIeFatalProtocolStat", "ucsComputePCIeFatalProtocolStat.dn", stats.dn.value));
+        addNumAttr(builder, "ucsComputePCIeFatalProtocolStat", "DllpErrors", stats.dllpErrors, milliseconds);
+        addNumAttr(builder, "ucsComputePCIeFatalProtocolStat", "FlowControlErrors", stats.flowControlErrors, milliseconds);
+    }
+
+    public static void addUcsComputePCIeFatalReceiveStat(ImmutableCollectionSetResource.Builder<? extends Resource> builder, UcsComputePCIeFatalReceiveStats stats, int milliseconds) {
+        builder.addStringAttribute(createStringAttribute("ucsComputePCIeFatalReceiveStat", "ucsComputePCIeFatalReceiveStat.dn", stats.dn.value));
+        addNumAttr(builder, "ucsComputePCIeFatalReceiveStat", "BufferOverflowErrors", stats.bufferOverflowErrors, milliseconds);
+        addNumAttr(builder, "ucsComputePCIeFatalReceiveStat", "ErrFatalErrors", stats.errFatalErrors, milliseconds);
+        addNumAttr(builder, "ucsComputePCIeFatalReceiveStat", "ErrNonFatalErrors", stats.errNonFatalErrors, milliseconds);
+        addNumAttr(builder, "ucsComputePCIeFatalReceiveStat", "UnsupportedRequestErrors", stats.unsupportedRequestErrors, milliseconds);
+    }
+
+    public static void addUcsComputePCIeFatalStat(ImmutableCollectionSetResource.Builder<? extends Resource> builder, UcsComputePCIeFatalStats stats, int milliseconds) {
+        builder.addStringAttribute(createStringAttribute("ucsComputePCIeFatalStat", "ucsComputePCIeFatalStat.dn", stats.dn.value));
+        addNumAttr(builder, "ucsComputePCIeFatalStat", "AcsViolationErrors", stats.acsViolationErrors, milliseconds);
+        addNumAttr(builder, "ucsComputePCIeFatalStat", "MalformedTLPErrors", stats.malformedTLPErrors, milliseconds);
+        addNumAttr(builder, "ucsComputePCIeFatalStat", "PoisonedTLPErrors", stats.poisonedTLPErrors, milliseconds);
+        addNumAttr(builder, "ucsComputePCIeFatalStat", "SurpriseLinkDownErrors", stats.surpriseLinkDownErrors, milliseconds);
     }
 
     public static void addUcsEquipmentChassisStats(ImmutableCollectionSetResource.Builder<? extends Resource> builder, UcsEquipmentChassisStats stats) {
