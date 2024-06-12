@@ -4,7 +4,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class MemoryErrorStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
-    public int DramWriteDataCorrectableCRCErrors;
+    public long DramWriteDataCorrectableCRCErrors;
     @JacksonXmlProperty(isAttribute = true)
     public int DramWriteDataCorrectableCRCErrors15Min;
     @JacksonXmlProperty(isAttribute = true)
@@ -26,7 +26,7 @@ public class MemoryErrorStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
     public int DramWriteDataCorrectableCRCErrors2WeeksH;
     @JacksonXmlProperty(isAttribute = true)
-    public int DramWriteDataUnCorrectableCRCErrors;
+    public long DramWriteDataUnCorrectableCRCErrors;
     @JacksonXmlProperty(isAttribute = true)
     public int DramWriteDataUnCorrectableCRCErrors15Min;
     @JacksonXmlProperty(isAttribute = true)
@@ -48,7 +48,7 @@ public class MemoryErrorStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
     public int DramWriteDataUnCorrectableCRCErrors2WeeksH;
     @JacksonXmlProperty(isAttribute = true)
-    public int addressParityErrors;
+    public long addressParityErrors;
     @JacksonXmlProperty(isAttribute = true)
     public int addressParityErrors15Min;
     @JacksonXmlProperty(isAttribute = true)
@@ -70,7 +70,7 @@ public class MemoryErrorStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
     public int addressParityErrors2WeeksH;
     @JacksonXmlProperty(isAttribute = true)
-    public int addressParityErrorsCorrectable;
+    public long addressParityErrorsCorrectable;
     @JacksonXmlProperty(isAttribute = true)
     public int addressParityErrorsCorrectable15Min;
     @JacksonXmlProperty(isAttribute = true)
@@ -92,7 +92,7 @@ public class MemoryErrorStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
     public int addressParityErrorsCorrectable2WeeksH;
     @JacksonXmlProperty(isAttribute = true)
-    public int addressParityErrorsUnCorrectable;
+    public long addressParityErrorsUnCorrectable;
     @JacksonXmlProperty(isAttribute = true)
     public int addressParityErrorsUnCorrectable15Min;
     @JacksonXmlProperty(isAttribute = true)
@@ -114,7 +114,7 @@ public class MemoryErrorStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
     public int addressParityErrorsUnCorrectable2WeeksH;
     @JacksonXmlProperty(isAttribute = true)
-    public int eccMultibitErrors;
+    public long eccMultibitErrors;
     @JacksonXmlProperty(isAttribute = true)
     public int eccMultibitErrors15Min;
     @JacksonXmlProperty(isAttribute = true)
@@ -136,7 +136,7 @@ public class MemoryErrorStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
     public int eccMultibitErrors2WeeksH;
     @JacksonXmlProperty(isAttribute = true)
-    public int eccSinglebitErrors;
+    public long eccSinglebitErrors;
     @JacksonXmlProperty(isAttribute = true)
     public int eccSinglebitErrors15Min;
     @JacksonXmlProperty(isAttribute = true)
@@ -158,7 +158,7 @@ public class MemoryErrorStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
     public int eccSinglebitErrors2WeeksH;
     @JacksonXmlProperty(isAttribute = true)
-    public int mismatchErrors;
+    public long mismatchErrors;
     @JacksonXmlProperty(isAttribute = true)
     public int mismatchErrors15Min;
     @JacksonXmlProperty(isAttribute = true)
