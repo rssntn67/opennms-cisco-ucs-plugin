@@ -4,7 +4,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class ComputePCIeFatalReceiveStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
-    public int bufferOverflowErrors;
+    public long bufferOverflowErrors;
     @JacksonXmlProperty(isAttribute = true)
     public int bufferOverflowErrors15Min;
     @JacksonXmlProperty(isAttribute = true)
@@ -26,7 +26,7 @@ public class ComputePCIeFatalReceiveStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
     public int bufferOverflowErrors2WeeksH;
     @JacksonXmlProperty(isAttribute = true)
-    public int errFatalErrors;
+    public long errFatalErrors;
     @JacksonXmlProperty(isAttribute = true)
     public int errFatalErrors15Min;
     @JacksonXmlProperty(isAttribute = true)
@@ -48,7 +48,7 @@ public class ComputePCIeFatalReceiveStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
     public int errFatalErrors2WeeksH;
     @JacksonXmlProperty(isAttribute = true)
-    public int errNonFatalErrors;
+    public long errNonFatalErrors;
     @JacksonXmlProperty(isAttribute = true)
     public int errNonFatalErrors15Min;
     @JacksonXmlProperty(isAttribute = true)
@@ -70,7 +70,7 @@ public class ComputePCIeFatalReceiveStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
     public int errNonFatalErrors2WeeksH;
     @JacksonXmlProperty(isAttribute = true)
-    public int unsupportedRequestErrors;
+    public long unsupportedRequestErrors;
     @JacksonXmlProperty(isAttribute = true)
     public int unsupportedRequestErrors15Min;
     @JacksonXmlProperty(isAttribute = true)

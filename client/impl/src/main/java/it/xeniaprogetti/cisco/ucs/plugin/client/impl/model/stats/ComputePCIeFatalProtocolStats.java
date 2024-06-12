@@ -6,45 +6,45 @@ public class ComputePCIeFatalProtocolStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
     public long dllpErrors;
     @JacksonXmlProperty(isAttribute = true)
-    public long dllpErrors15Min;
+    public int dllpErrors15Min;
     @JacksonXmlProperty(isAttribute = true)
-    public long dllpErrors15MinH;
+    public int dllpErrors15MinH;
     @JacksonXmlProperty(isAttribute = true)
-    public long dllpErrors1Day;
+    public int dllpErrors1Day;
     @JacksonXmlProperty(isAttribute = true)
-    public long dllpErrors1DayH;
+    public int dllpErrors1DayH;
     @JacksonXmlProperty(isAttribute = true)
-    public long dllpErrors1Hour;
+    public int dllpErrors1Hour;
     @JacksonXmlProperty(isAttribute = true)
-    public long dllpErrors1HourH;
+    public int dllpErrors1HourH;
     @JacksonXmlProperty(isAttribute = true)
-    public long dllpErrors1Week;
+    public int dllpErrors1Week;
     @JacksonXmlProperty(isAttribute = true)
-    public long dllpErrors1WeekH;
+    public int dllpErrors1WeekH;
     @JacksonXmlProperty(isAttribute = true)
-    public long dllpErrors2Weeks;
+    public int dllpErrors2Weeks;
     @JacksonXmlProperty(isAttribute = true)
-    public long dllpErrors2WeeksH;
+    public int dllpErrors2WeeksH;
     @JacksonXmlProperty(isAttribute = true)
     public long flowControlErrors;
     @JacksonXmlProperty(isAttribute = true)
-    public long flowControlErrors15Min;
+    public int flowControlErrors15Min;
     @JacksonXmlProperty(isAttribute = true)
-    public long flowControlErrors15MinH;
+    public int flowControlErrors15MinH;
     @JacksonXmlProperty(isAttribute = true)
-    public long flowControlErrors1Day;
+    public int flowControlErrors1Day;
     @JacksonXmlProperty(isAttribute = true)
-    public long flowControlErrors1DayH;
+    public int flowControlErrors1DayH;
     @JacksonXmlProperty(isAttribute = true)
-    public long flowControlErrors1Hour;
+    public int flowControlErrors1Hour;
     @JacksonXmlProperty(isAttribute = true)
-    public long flowControlErrors1HourH;
+    public int flowControlErrors1HourH;
     @JacksonXmlProperty(isAttribute = true)
-    public long flowControlErrors1Week;
+    public int flowControlErrors1Week;
     @JacksonXmlProperty(isAttribute = true)
-    public long flowControlErrors1WeekH;
+    public int flowControlErrors1WeekH;
     @JacksonXmlProperty(isAttribute = true)
-    public long flowControlErrors2Weeks;
+    public int flowControlErrors2Weeks;
     @JacksonXmlProperty(isAttribute = true)
-    public long flowControlErrors2WeeksH;
+    public int flowControlErrors2WeeksH;
 }

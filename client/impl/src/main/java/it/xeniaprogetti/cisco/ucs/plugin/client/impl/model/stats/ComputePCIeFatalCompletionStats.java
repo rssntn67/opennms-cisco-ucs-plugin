@@ -4,7 +4,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class ComputePCIeFatalCompletionStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
-    public int AbortErrors;
+    public long AbortErrors;
     @JacksonXmlProperty(isAttribute = true)
     public int AbortErrors15Min;
     @JacksonXmlProperty(isAttribute = true)
@@ -26,7 +26,7 @@ public class ComputePCIeFatalCompletionStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
     public int AbortErrors2WeeksH;
     @JacksonXmlProperty(isAttribute = true)
-    public int TimeoutErrors;
+    public long TimeoutErrors;
     @JacksonXmlProperty(isAttribute = true)
     public int TimeoutErrors15Min;
     @JacksonXmlProperty(isAttribute = true)
@@ -48,7 +48,7 @@ public class ComputePCIeFatalCompletionStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
     public int TimeoutErrors2WeeksH;
     @JacksonXmlProperty(isAttribute = true)
-    public int unexpectedErrors;
+    public long unexpectedErrors;
     @JacksonXmlProperty(isAttribute = true)
     public int unexpectedErrors15Min;
     @JacksonXmlProperty(isAttribute = true)

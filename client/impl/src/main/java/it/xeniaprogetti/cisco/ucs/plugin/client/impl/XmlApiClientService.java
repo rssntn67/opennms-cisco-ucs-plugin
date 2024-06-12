@@ -25,6 +25,10 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.AdaptorEthPortS
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.AdaptorVnicStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ComputeMbPowerStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ComputeMbTempStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ComputePCIeFatalCompletionStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ComputePCIeFatalProtocolStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ComputePCIeFatalReceiveStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ComputePCIeFatalStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentChassisStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentFanModuleStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EquipmentFanStats;
@@ -326,6 +330,11 @@ public class XmlApiClientService implements ApiClientService {
         final List<UcsAdaptorVnicStats> ucsAdaptorVnicStats = new ArrayList<>();
         final List<UcsStorageDiskEnvStats> ucsStorageDiskEnvStats = new ArrayList<>();
         final List<UcsStorageSsdHealthStats> ucsStorageSsdHealthStats = new ArrayList<>();
+        UcsComputePCIeFatalCompletionStats ucsComputePCIeFatalCompletionStats = null;
+        UcsComputePCIeFatalProtocolStats ucsComputePCIeFatalProtocolStats = null;
+        UcsComputePCIeFatalReceiveStats ucsComputePCIeFatalReceiveStats = null;
+        UcsComputePCIeFatalStats ucsComputePCIeFatalStats = null;
+
         for (String dn: collectMap.keySet()) {
             for (UcsEnums.NamingClassId classId: collectMap.get(dn)) {
                 LOG.debug("getUcsDataCollection: parsing dn={}, type={}", dn, classId);
@@ -384,6 +393,30 @@ public class XmlApiClientService implements ApiClientService {
                         List<ComputeMbTempStats> listF = statsApi.getComputeMbTempStats(aaaApi.getToken(), filter);
                         if (!listF.isEmpty()) {
                             ucsComputeMbTempStats = from(listF.get(0));
+                        }
+                        break;
+                    case computePCIeFatalCompletionStats:
+                        List<ComputePCIeFatalCompletionStats> listG = statsApi.getComputePCIeFatalCompletionStats(aaaApi.getToken(), filter);
+                        if (!listG.isEmpty()) {
+                            ucsComputePCIeFatalCompletionStats = from(listG.get(0));
+                        }
+                        break;
+                    case computePCIeFatalProtocolStats:
+                        List<ComputePCIeFatalProtocolStats> listH = statsApi.getComputePCIeFatalProtocolStats(aaaApi.getToken(), filter);
+                        if (!listH.isEmpty()) {
+                            ucsComputePCIeFatalProtocolStats = from(listH.get(0));
+                        }
+                        break;
+                    case computePCIeFatalReceiveStats:
+                        List<ComputePCIeFatalReceiveStats> listK = statsApi.getComputePCIeFatalReceiveStats(aaaApi.getToken(), filter);
+                        if (!listK.isEmpty()) {
+                            ucsComputePCIeFatalReceiveStats = from(listK.get(0));
+                        }
+                        break;
+                    case computePCIeFatalStats:
+                        List<ComputePCIeFatalStats> listJ = statsApi.getPCIeFatalStats(aaaApi.getToken(), filter);
+                        if (!listJ.isEmpty()) {
+                            ucsComputePCIeFatalStats = from(listJ.get(0));
                         }
                         break;
                     case etherRxStats:
@@ -470,6 +503,67 @@ public class XmlApiClientService implements ApiClientService {
                 .withUcsAdaptorVNicStats(ucsAdaptorVnicStats)
                 .withUcsStorageDiskEnvStats(ucsStorageDiskEnvStats)
                 .withUcsStorageSsdHealthStats(ucsStorageSsdHealthStats)
+                .withUcsComputePCIeFatalCompletionStats(ucsComputePCIeFatalCompletionStats)
+                .withUcsComputePCIeFatalProtocolStats(ucsComputePCIeFatalProtocolStats)
+                .withUcsComputePCIeFatalReceiveStats(ucsComputePCIeFatalReceiveStats)
+                .withUcsComputePCIeFatalStats(ucsComputePCIeFatalStats)
+                .build();
+    }
+
+    private UcsComputePCIeFatalProtocolStats from(ComputePCIeFatalProtocolStats c) {
+        return UcsComputePCIeFatalProtocolStats.builder()
+                .withDn(c.dn)
+                .withIntervals(c.intervals)
+                .withSuspect(c.suspect)
+                .withThresholded(c.thresholded)
+                .withTimeCollected(c.timeCollected)
+                .withUpdate(c.update)
+                .withDllpErrors(c.dllpErrors)
+                .withFlowControlErrors(c.flowControlErrors)
+                .build();
+    }
+
+    private UcsComputePCIeFatalStats from(ComputePCIeFatalStats c) {
+        return UcsComputePCIeFatalStats.builder()
+                .withDn(c.dn)
+                .withIntervals(c.intervals)
+                .withSuspect(c.suspect)
+                .withThresholded(c.thresholded)
+                .withTimeCollected(c.timeCollected)
+                .withUpdate(c.update)
+                .withAcsViolationErrors(c.acsViolationErrors)
+                .withMalformedTLPErrors(c.malformedTLPErrors)
+                .withPoisonedTLPErrors(c.poisonedTLPErrors)
+                .withSurpriseLinkDownErrors(c.surpriseLinkDownErrors)
+                .build();
+    }
+
+    private UcsComputePCIeFatalReceiveStats from(ComputePCIeFatalReceiveStats c) {
+        return UcsComputePCIeFatalReceiveStats.builder()
+                .withDn(c.dn)
+                .withIntervals(c.intervals)
+                .withSuspect(c.suspect)
+                .withThresholded(c.thresholded)
+                .withTimeCollected(c.timeCollected)
+                .withUpdate(c.update)
+                .withBufferOverflowErrors(c.bufferOverflowErrors)
+                .withErrFatalErrors(c.errFatalErrors)
+                .withErrNonFatalErrors(c.errNonFatalErrors)
+                .withUnsupportedRequestErrors(c.unsupportedRequestErrors)
+                .build();
+    }
+
+    private UcsComputePCIeFatalCompletionStats from(ComputePCIeFatalCompletionStats c) {
+        return UcsComputePCIeFatalCompletionStats.builder()
+                .withDn(c.dn)
+                .withIntervals(c.intervals)
+                .withSuspect(c.suspect)
+                .withThresholded(c.thresholded)
+                .withTimeCollected(c.timeCollected)
+                .withUpdate(c.update)
+                .withUnexpectedErrors(c.unexpectedErrors)
+                .withAbortErrors(c.AbortErrors)
+                .withTimeoutErrors(c.TimeoutErrors)
                 .build();
     }
 

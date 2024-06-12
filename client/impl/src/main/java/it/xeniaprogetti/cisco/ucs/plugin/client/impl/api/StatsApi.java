@@ -133,7 +133,7 @@ public class StatsApi {
                 .stats;
     }
 
-    public List<ComputePCIeFatalCompletionStats> getPCIeFatalCompletionStats(String cookie, UcsXmlApiRequest.InFilter filter) throws ApiException {
+    public List<ComputePCIeFatalCompletionStats> getComputePCIeFatalCompletionStats(String cookie, UcsXmlApiRequest.InFilter filter) throws ApiException {
         LOG.info("getPCIeFatalCompletionStats: {} {}", filter, UcsEnums.NamingClassId.computePCIeFatalCompletionStats);
         return client.getUcsXmlApiResponse(
                 UcsXmlApiRequest.getConfigResolveClassRequest(
@@ -143,7 +143,7 @@ public class StatsApi {
                 .stats;
     }
 
-    public List<ComputePCIeFatalProtocolStats> getPCIeFatalProtocolStats(String cookie, UcsXmlApiRequest.InFilter filter) throws ApiException {
+    public List<ComputePCIeFatalProtocolStats> getComputePCIeFatalProtocolStats(String cookie, UcsXmlApiRequest.InFilter filter) throws ApiException {
         LOG.info("getPCIeFatalProtocolStats: {} {}", filter, UcsEnums.NamingClassId.computePCIeFatalProtocolStats);
         return client.getUcsXmlApiResponse(
                 UcsXmlApiRequest.getConfigResolveClassRequest(
@@ -153,7 +153,7 @@ public class StatsApi {
                 .stats;
     }
 
-    public List<ComputePCIeFatalReceiveStats> getPCIeFatalReceiveStats(String cookie, UcsXmlApiRequest.InFilter filter) throws ApiException {
+    public List<ComputePCIeFatalReceiveStats> getComputePCIeFatalReceiveStats(String cookie, UcsXmlApiRequest.InFilter filter) throws ApiException {
         LOG.info("getPCIeFatalReceiveStats: {} {}", filter, UcsEnums.NamingClassId.computePCIeFatalReceiveStats);
         return client.getUcsXmlApiResponse(
                 UcsXmlApiRequest.getConfigResolveClassRequest(

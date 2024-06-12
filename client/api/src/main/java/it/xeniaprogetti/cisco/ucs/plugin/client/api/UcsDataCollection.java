@@ -31,39 +31,13 @@ public class UcsDataCollection {
     public final List<UcsAdaptorVnicStats> ucsAdaptorVnicStats;
     public final List<UcsStorageDiskEnvStats> ucsStorageDiskEnvStats;
     public final List<UcsStorageSsdHealthStats> ucsStorageSsdHealthStats;
+    private final UcsComputePCIeFatalCompletionStats ucsComputePCIeFatalCompletionStats;
+    private final UcsComputePCIeFatalProtocolStats ucsComputePCIeFatalProtocolStats;
+    private final UcsComputePCIeFatalReceiveStats ucsComputePCIeFatalReceiveStats;
+    private final UcsComputePCIeFatalStats ucsComputePCIeFatalStats;
 
     public static Builder builder() {
         return new Builder();
-    }
-
-    private UcsDataCollection(Builder builder) {
-        this.ucsEquipmentNetworkElementFanStats = builder.ucsEquipmentNetworkElementFanStats;
-        this.ucsSwEnvStats = builder.ucsSwEnvStats;
-        this.ucsSwSystemStats = builder.ucsSwSystemStats;
-        this.ucsSwCardEnvStats= builder.ucsSwCardEnvStats;
-        this.ucsFcStats = builder.ucsFcStats;
-        this.ucsFcErrStats = builder.ucsFcErrStats;
-        this.ucsEquipmentChassisStats = builder.ucsEquipmentChassisStats;
-        this.ucsProcessorEnvStats = builder.ucsProcessorEnvStats;
-        this.ucsComputeMbTempStats = builder.ucsComputeMbTempStats;
-        this.ucsComputeMbPowerStats = builder.ucsComputeMbPowerStats;
-        this.ucsEtherRxStats = builder.ucsEtherRxStats;
-        this.ucsEtherTxStats = builder.ucsEtherTxStats;
-        this.ucsEquipmentPsuInputStats = builder.ucsEquipmentPsuInputStats;
-        this.ucsEquipmentPsuStats = builder.ucsEquipmentPsuStats;
-        this.ucsEquipmentIOCardStats = builder.ucsEquipmentIOCardStats;
-        this.ucsEtherErrStats = builder.ucsEtherErrStats;
-        this.ucsEtherLossStats = builder.ucsEtherLossStats;
-        this.ucsEtherPauseStats = builder.ucsEtherPauseStats;
-        this.ucsEtherNiErrStats = builder.ucsEtherNiErrStats;
-        this.ucsEquipmentFanModuleStats = builder.ucsEquipmentFanModuleStats;
-        this.ucsEquipmentFanStats = builder.ucsEquipmentFanStats;
-        this.ucsAdaptorEthPortErrStats = builder.ucsAdaptorEthPortErrStats;
-        this.ucsAdaptorEthPortMcastStats = builder.ucsAdaptorEthPortMcastStats;
-        this.ucsAdaptorEthPortStats = builder.ucsAdaptorEthPortStats;
-        this.ucsAdaptorVnicStats = builder.ucsAdaptorVnicStats;
-        this.ucsStorageDiskEnvStats = builder.ucsStorageDiskEnvStats;
-        this.ucsStorageSsdHealthStats = builder.ucsStorageSsdHealthStats;
     }
 
     @Override
@@ -96,7 +70,45 @@ public class UcsDataCollection {
                 ", ucsAdaptorVnicStats=" + ucsAdaptorVnicStats +
                 ", ucsStorageDiskEnvStats=" + ucsStorageDiskEnvStats +
                 ", ucsStorageSsdHealthStats=" + ucsStorageSsdHealthStats +
+                ", ucsComputePCIeFatalCompletionStats=" + ucsComputePCIeFatalCompletionStats +
+                ", ucsComputePCIeFatalProtocolStats=" + ucsComputePCIeFatalProtocolStats +
+                ", ucsComputePCIeFatalReceiveStats=" + ucsComputePCIeFatalReceiveStats +
+                ", ucsComputePCIeFatalStats=" + ucsComputePCIeFatalStats +
                 '}';
+    }
+
+    private UcsDataCollection(Builder builder) {
+        this.ucsEquipmentNetworkElementFanStats = builder.ucsEquipmentNetworkElementFanStats;
+        this.ucsSwEnvStats = builder.ucsSwEnvStats;
+        this.ucsSwSystemStats = builder.ucsSwSystemStats;
+        this.ucsSwCardEnvStats= builder.ucsSwCardEnvStats;
+        this.ucsFcStats = builder.ucsFcStats;
+        this.ucsFcErrStats = builder.ucsFcErrStats;
+        this.ucsEquipmentChassisStats = builder.ucsEquipmentChassisStats;
+        this.ucsProcessorEnvStats = builder.ucsProcessorEnvStats;
+        this.ucsComputeMbTempStats = builder.ucsComputeMbTempStats;
+        this.ucsComputeMbPowerStats = builder.ucsComputeMbPowerStats;
+        this.ucsEtherRxStats = builder.ucsEtherRxStats;
+        this.ucsEtherTxStats = builder.ucsEtherTxStats;
+        this.ucsEquipmentPsuInputStats = builder.ucsEquipmentPsuInputStats;
+        this.ucsEquipmentPsuStats = builder.ucsEquipmentPsuStats;
+        this.ucsEquipmentIOCardStats = builder.ucsEquipmentIOCardStats;
+        this.ucsEtherErrStats = builder.ucsEtherErrStats;
+        this.ucsEtherLossStats = builder.ucsEtherLossStats;
+        this.ucsEtherPauseStats = builder.ucsEtherPauseStats;
+        this.ucsEtherNiErrStats = builder.ucsEtherNiErrStats;
+        this.ucsEquipmentFanModuleStats = builder.ucsEquipmentFanModuleStats;
+        this.ucsEquipmentFanStats = builder.ucsEquipmentFanStats;
+        this.ucsAdaptorEthPortErrStats = builder.ucsAdaptorEthPortErrStats;
+        this.ucsAdaptorEthPortMcastStats = builder.ucsAdaptorEthPortMcastStats;
+        this.ucsAdaptorEthPortStats = builder.ucsAdaptorEthPortStats;
+        this.ucsAdaptorVnicStats = builder.ucsAdaptorVnicStats;
+        this.ucsStorageDiskEnvStats = builder.ucsStorageDiskEnvStats;
+        this.ucsStorageSsdHealthStats = builder.ucsStorageSsdHealthStats;
+        this.ucsComputePCIeFatalCompletionStats = builder.ucsComputePCIeFatalCompletionStats;
+        this.ucsComputePCIeFatalProtocolStats = builder.ucsComputePCIeFatalProtocolStats;
+        this.ucsComputePCIeFatalReceiveStats = builder.ucsComputePCIeFatalReceiveStats;
+        this.ucsComputePCIeFatalStats = builder.ucsComputePCIeFatalStats;
     }
 
     public Optional<UcsSwEnvStats> getUcsSwEnvStats() {
@@ -123,6 +135,21 @@ public class UcsDataCollection {
         return Optional.ofNullable(ucsComputeMbTempStats);
     }
 
+    public Optional<UcsComputePCIeFatalCompletionStats> getUcsComputePCIeFatalCompletionStats() {
+        return Optional.ofNullable(ucsComputePCIeFatalCompletionStats);
+    }
+
+    public Optional<UcsComputePCIeFatalProtocolStats> getUcsComputePCIeFatalProtocolStats() {
+        return Optional.ofNullable(ucsComputePCIeFatalProtocolStats);
+    }
+
+    public Optional<UcsComputePCIeFatalReceiveStats> getUcsComputePCIeFatalReceiveStats() {
+        return Optional.ofNullable(ucsComputePCIeFatalReceiveStats);
+    }
+
+    public Optional<UcsComputePCIeFatalStats> getUcsComputePCIeFatalStats() {
+        return Optional.ofNullable(ucsComputePCIeFatalStats);
+    }
 
     public static class Builder {
         private UcsSwEnvStats ucsSwEnvStats;
@@ -152,7 +179,10 @@ public class UcsDataCollection {
         private List<UcsAdaptorVnicStats> ucsAdaptorVnicStats;
         private List<UcsStorageDiskEnvStats> ucsStorageDiskEnvStats;
         private List<UcsStorageSsdHealthStats> ucsStorageSsdHealthStats;
-
+        private UcsComputePCIeFatalCompletionStats ucsComputePCIeFatalCompletionStats;
+        private UcsComputePCIeFatalProtocolStats ucsComputePCIeFatalProtocolStats;
+        private UcsComputePCIeFatalReceiveStats ucsComputePCIeFatalReceiveStats;
+        private UcsComputePCIeFatalStats ucsComputePCIeFatalStats;
 
         private Builder () {
 
@@ -292,6 +322,26 @@ public class UcsDataCollection {
 
         public Builder withUcsStorageSsdHealthStats(List<UcsStorageSsdHealthStats> ucsStorageSsdHealthStats) {
             this.ucsStorageSsdHealthStats = ucsStorageSsdHealthStats;
+            return this;
+        }
+
+        public Builder withUcsComputePCIeFatalCompletionStats(UcsComputePCIeFatalCompletionStats ucsComputePCIeFatalCompletionStats) {
+            this.ucsComputePCIeFatalCompletionStats = ucsComputePCIeFatalCompletionStats;
+            return this;
+        }
+
+        public Builder withUcsComputePCIeFatalProtocolStats(UcsComputePCIeFatalProtocolStats ucsComputePCIeFatalProtocolStats) {
+            this.ucsComputePCIeFatalProtocolStats = ucsComputePCIeFatalProtocolStats;
+            return this;
+        }
+
+        public Builder withUcsComputePCIeFatalReceiveStats(UcsComputePCIeFatalReceiveStats ucsComputePCIeFatalReceiveStats) {
+            this.ucsComputePCIeFatalReceiveStats = ucsComputePCIeFatalReceiveStats;
+            return this;
+        }
+
+        public Builder withUcsComputePCIeFatalStats(UcsComputePCIeFatalStats ucsComputePCIeFatalStats) {
+            this.ucsComputePCIeFatalStats = ucsComputePCIeFatalStats;
             return this;
         }
 

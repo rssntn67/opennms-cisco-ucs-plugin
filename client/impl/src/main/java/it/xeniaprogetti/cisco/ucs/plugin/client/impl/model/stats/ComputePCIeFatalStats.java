@@ -4,7 +4,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class ComputePCIeFatalStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
-    public int acsViolationErrors;
+    public long acsViolationErrors;
     @JacksonXmlProperty(isAttribute = true)
     public int acsViolationErrors15Min;
     @JacksonXmlProperty(isAttribute = true)
@@ -26,7 +26,7 @@ public class ComputePCIeFatalStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
     public int acsViolationErrors2WeeksH;
     @JacksonXmlProperty(isAttribute = true)
-    public int malformedTLPErrors;
+    public long malformedTLPErrors;
     @JacksonXmlProperty(isAttribute = true)
     public int malformedTLPErrors15Min;
     @JacksonXmlProperty(isAttribute = true)
@@ -48,7 +48,7 @@ public class ComputePCIeFatalStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
     public int malformedTLPErrors2WeeksH;
     @JacksonXmlProperty(isAttribute = true)
-    public int poisonedTLPErrors;
+    public long poisonedTLPErrors;
     @JacksonXmlProperty(isAttribute = true)
     public int poisonedTLPErrors15Min;
     @JacksonXmlProperty(isAttribute = true)
@@ -70,7 +70,7 @@ public class ComputePCIeFatalStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
     public int poisonedTLPErrors2WeeksH;
     @JacksonXmlProperty(isAttribute = true)
-    public int surpriseLinkDownErrors;
+    public long surpriseLinkDownErrors;
     @JacksonXmlProperty(isAttribute = true)
     public int surpriseLinkDownErrors15Min;
     @JacksonXmlProperty(isAttribute = true)
