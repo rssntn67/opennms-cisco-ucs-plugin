@@ -33,23 +33,31 @@ public class XmlApiClientProvider implements ApiClientProvider {
         return client;
     }
 
-    public boolean release(XmlApiClientService service) {
+    public void release(XmlApiClientService service) {
         boolean result = serviceUsedMap.get(service.getCredentials()).remove(service);
-        if (result)
-            serviceAvailableMap.get(service.getCredentials()).add(service);
-        int avail = serviceAvailableMap.get(service.getCredentials()).size();
-        int used = serviceUsedMap.get(service.getCredentials()).size();
         int poolId = poolIdMap.get(service.getCredentials());
         int poolSize = poolId + 1;
-        LOG.info("release:pool[{}], url/user {}/{}, poolSize/maxPoolSize {}/{} avail:{}, used:{}",
-                service.getPool(),
-                service.getCredentials().url,
-                service.getCredentials().username,
-                poolSize,
-                this.clientPoolSize,
-                avail,
-                used);
-        return result;
+        if (result) {
+            serviceAvailableMap.get(service.getCredentials()).add(service);
+            LOG.info("release:pool[{}], url/user {}/{}, poolSize/maxPoolSize {}/{} avail:{}, used:{}",
+                    service.getPool(),
+                    service.getCredentials().url,
+                    service.getCredentials().username,
+                    poolSize,
+                    this.clientPoolSize,
+                    serviceAvailableMap.get(service.getCredentials()).size(),
+                    serviceUsedMap.get(service.getCredentials()).size());
+        }
+        else {
+            LOG.error("release:pool[{}] not found, url/user {}/{}, poolSize/maxPoolSize {}/{} avail:{}, used:{}",
+                    service.getPool(),
+                    service.getCredentials().url,
+                    service.getCredentials().username,
+                    poolSize,
+                    this.clientPoolSize,
+                    serviceAvailableMap.get(service.getCredentials()).size(),
+                    serviceUsedMap.get(service.getCredentials()).size());
+        }
     }
 
     @Override

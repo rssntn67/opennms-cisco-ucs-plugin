@@ -114,7 +114,7 @@ public class XmlApiClientService implements ApiClientService {
 
     @Override
     public void release() {
-        boolean disconnected = apiClientProvider.release(this);
+        apiClientProvider.release(this);
     }
 
     @Override
