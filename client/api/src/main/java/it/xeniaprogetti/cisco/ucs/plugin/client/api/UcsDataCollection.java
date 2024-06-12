@@ -14,6 +14,7 @@ public class UcsDataCollection {
     public final List<UcsFcErrStats> ucsFcErrStats;
     public final List<UcsEquipmentNetworkElementFanStats> ucsEquipmentNetworkElementFanStats;
     public final List<UcsProcessorEnvStats> ucsProcessorEnvStats;
+    public final List<UcsProcessorErrorStats> ucsProcessorErrorStats;
     public final List<UcsEtherRxStats> ucsEtherRxStats;
     public final List<UcsEtherTxStats> ucsEtherTxStats;
     public final List<UcsEquipmentPsuInputStats> ucsEquipmentPsuInputStats;
@@ -86,6 +87,7 @@ public class UcsDataCollection {
         this.ucsFcErrStats = builder.ucsFcErrStats;
         this.ucsEquipmentChassisStats = builder.ucsEquipmentChassisStats;
         this.ucsProcessorEnvStats = builder.ucsProcessorEnvStats;
+        this.ucsProcessorErrorStats = builder.ucsProcessorErrorStats;
         this.ucsComputeMbTempStats = builder.ucsComputeMbTempStats;
         this.ucsComputeMbPowerStats = builder.ucsComputeMbPowerStats;
         this.ucsEtherRxStats = builder.ucsEtherRxStats;
@@ -162,6 +164,7 @@ public class UcsDataCollection {
         private List<UcsFcStats> ucsFcStats;
         private List<UcsFcErrStats> ucsFcErrStats;
         private List<UcsProcessorEnvStats> ucsProcessorEnvStats;
+        private List<UcsProcessorErrorStats> ucsProcessorErrorStats;
         private List<UcsEtherRxStats> ucsEtherRxStats;
         private List<UcsEtherTxStats> ucsEtherTxStats;
         private List<UcsEquipmentPsuInputStats> ucsEquipmentPsuInputStats;
@@ -226,6 +229,10 @@ public class UcsDataCollection {
 
         public Builder withUcsProcessorEnvStats(List<UcsProcessorEnvStats> ucsProcessorEnvStats) {
             this.ucsProcessorEnvStats=ucsProcessorEnvStats;
+            return this;
+        }
+        public Builder withUcsProcessorErrorStats(List<UcsProcessorErrorStats> ucsProcessorErrorStats) {
+            this.ucsProcessorErrorStats=ucsProcessorErrorStats;
             return this;
         }
 

@@ -45,6 +45,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EtherTxStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.FcErrStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.FcStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ProcessorEnvStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ProcessorErrorStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.StorageDiskEnvStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.StorageSsdHealthStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.SwCardEnvStats;
@@ -311,6 +312,7 @@ public class XmlApiClientService implements ApiClientService {
         final List<UcsFcStats> fcStats = new ArrayList<>();
         final List<UcsFcErrStats> fcErrStats = new ArrayList<>();
         final List<UcsProcessorEnvStats> ucsProcessorEnvStats = new ArrayList<>();
+        final List<UcsProcessorErrorStats> ucsProcessorErrorStats = new ArrayList<>();
         UcsComputeMbTempStats ucsComputeMbTempStats = null;
         UcsComputeMbPowerStats ucsComputeMbPowerStats = null;
         final List<UcsEtherRxStats> ucsEtherRxStats = new ArrayList<>();
@@ -382,6 +384,9 @@ public class XmlApiClientService implements ApiClientService {
                         break;
                     case processorEnvStats:
                         statsApi.getProcessorEnvStats(aaaApi.getToken(), filter ).forEach(p -> ucsProcessorEnvStats.add(from(p)));
+                        break;
+                    case processorErrorStats:
+                        statsApi.getProcessorErrorStats(aaaApi.getToken(), filter ).forEach(p -> ucsProcessorErrorStats.add(from(p)));
                         break;
                     case computeMbPowerStats:
                         List<ComputeMbPowerStats> listE = statsApi.getComputeMbPowerStats(aaaApi.getToken(), filter);
@@ -484,6 +489,7 @@ public class XmlApiClientService implements ApiClientService {
                 .withUcsFcErrStats(fcErrStats)
                 .withUcsEquipmentChassisStats(ucsEquipmentChassisStats)
                 .withUcsProcessorEnvStats(ucsProcessorEnvStats)
+                .withUcsProcessorErrorStats(ucsProcessorErrorStats)
                 .withUcsComputeMbPowerStats(ucsComputeMbPowerStats)
                 .withUcsComputeTempStats(ucsComputeMbTempStats)
                 .withUcsEtherRxStats(ucsEtherRxStats)
@@ -507,6 +513,24 @@ public class XmlApiClientService implements ApiClientService {
                 .withUcsComputePCIeFatalProtocolStats(ucsComputePCIeFatalProtocolStats)
                 .withUcsComputePCIeFatalReceiveStats(ucsComputePCIeFatalReceiveStats)
                 .withUcsComputePCIeFatalStats(ucsComputePCIeFatalStats)
+                .build();
+    }
+
+    private UcsProcessorErrorStats from(ProcessorErrorStats p) {
+        return UcsProcessorErrorStats.builder()
+                .withDn(p.dn)
+                .withIntervals(p.intervals)
+                .withSuspect(p.suspect)
+                .withThresholded(p.thresholded)
+                .withTimeCollected(p.timeCollected)
+                .withUpdate(p.update)
+                .withCorrectableLinkCRCErrors(p.CorrectableLinkCRCErrors)
+                .withUncorrectableLinkCRCErrors(p.UncorrectableLinkCRCErrors)
+                .withMirroringInterSockErrors(p.mirroringInterSockErrors)
+                .withMirroringIntraSockErrors(p.mirroringIntraSockErrors)
+                .withSmiLinkCorrErrors(p.smiLinkCorrErrors)
+                .withSmiLinkUncorrErrors(p.smiLinkUncorrErrors)
+                .withSparingErrors(p.sparingErrors)
                 .build();
     }
 

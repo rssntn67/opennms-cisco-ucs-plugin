@@ -6,156 +6,156 @@ public class ProcessorErrorStats extends Stats {
     @JacksonXmlProperty(isAttribute = true)
     public long CorrectableLinkCRCErrors;
     @JacksonXmlProperty(isAttribute = true)
-    public long CorrectableLinkCRCErrors15Min;
+    public int CorrectableLinkCRCErrors15Min;
     @JacksonXmlProperty(isAttribute = true)
-    public long CorrectableLinkCRCErrors15MinH;
+    public int CorrectableLinkCRCErrors15MinH;
     @JacksonXmlProperty(isAttribute = true)
-    public long CorrectableLinkCRCErrors1Day;
+    public int CorrectableLinkCRCErrors1Day;
     @JacksonXmlProperty(isAttribute = true)
-    public long CorrectableLinkCRCErrors1DayH;
+    public int CorrectableLinkCRCErrors1DayH;
     @JacksonXmlProperty(isAttribute = true)
-    public long CorrectableLinkCRCErrors1Hour;
+    public int CorrectableLinkCRCErrors1Hour;
     @JacksonXmlProperty(isAttribute = true)
-    public long CorrectableLinkCRCErrors1HourH;
+    public int CorrectableLinkCRCErrors1HourH;
     @JacksonXmlProperty(isAttribute = true)
-    public long CorrectableLinkCRCErrors1Week;
+    public int CorrectableLinkCRCErrors1Week;
     @JacksonXmlProperty(isAttribute = true)
-    public long CorrectableLinkCRCErrors1WeekH;
+    public int CorrectableLinkCRCErrors1WeekH;
     @JacksonXmlProperty(isAttribute = true)
-    public long CorrectableLinkCRCErrors2Weeks;
+    public int CorrectableLinkCRCErrors2Weeks;
     @JacksonXmlProperty(isAttribute = true)
-    public long CorrectableLinkCRCErrors2WeeksH;
+    public int CorrectableLinkCRCErrors2WeeksH;
     @JacksonXmlProperty(isAttribute = true)
     public long UncorrectableLinkCRCErrors;
     @JacksonXmlProperty(isAttribute = true)
-    public long UncorrectableLinkCRCErrors15Min;
+    public int UncorrectableLinkCRCErrors15Min;
     @JacksonXmlProperty(isAttribute = true)
-    public long UncorrectableLinkCRCErrors15MinH;
+    public int UncorrectableLinkCRCErrors15MinH;
     @JacksonXmlProperty(isAttribute = true)
-    public long UncorrectableLinkCRCErrors1Day;
+    public int UncorrectableLinkCRCErrors1Day;
     @JacksonXmlProperty(isAttribute = true)
-    public long UncorrectableLinkCRCErrors1DayH;
+    public int UncorrectableLinkCRCErrors1DayH;
     @JacksonXmlProperty(isAttribute = true)
-    public long UncorrectableLinkCRCErrors1Hour;
+    public int UncorrectableLinkCRCErrors1Hour;
     @JacksonXmlProperty(isAttribute = true)
-    public long UncorrectableLinkCRCErrors1HourH;
+    public int UncorrectableLinkCRCErrors1HourH;
     @JacksonXmlProperty(isAttribute = true)
-    public long UncorrectableLinkCRCErrors1Week;
+    public int UncorrectableLinkCRCErrors1Week;
     @JacksonXmlProperty(isAttribute = true)
-    public long UncorrectableLinkCRCErrors1WeekH;
+    public int UncorrectableLinkCRCErrors1WeekH;
     @JacksonXmlProperty(isAttribute = true)
-    public long UncorrectableLinkCRCErrors2Weeks;
+    public int UncorrectableLinkCRCErrors2Weeks;
     @JacksonXmlProperty(isAttribute = true)
-    public long UncorrectableLinkCRCErrors2WeeksH;
+    public int UncorrectableLinkCRCErrors2WeeksH;
     @JacksonXmlProperty(isAttribute = true)
     public long mirroringInterSockErrors;
     @JacksonXmlProperty(isAttribute = true)
-    public long mirroringInterSockErrors15Min;
+    public int mirroringInterSockErrors15Min;
     @JacksonXmlProperty(isAttribute = true)
-    public long mirroringInterSockErrors15MinH;
+    public int mirroringInterSockErrors15MinH;
     @JacksonXmlProperty(isAttribute = true)
-    public long mirroringInterSockErrors1Day;
+    public int mirroringInterSockErrors1Day;
     @JacksonXmlProperty(isAttribute = true)
-    public long mirroringInterSockErrors1DayH;
+    public int mirroringInterSockErrors1DayH;
     @JacksonXmlProperty(isAttribute = true)
-    public long mirroringInterSockErrors1Hour;
+    public int mirroringInterSockErrors1Hour;
     @JacksonXmlProperty(isAttribute = true)
-    public long mirroringInterSockErrors1HourH;
+    public int mirroringInterSockErrors1HourH;
     @JacksonXmlProperty(isAttribute = true)
-    public long mirroringInterSockErrors1Week;
+    public int mirroringInterSockErrors1Week;
     @JacksonXmlProperty(isAttribute = true)
-    public long mirroringInterSockErrors1WeekH;
+    public int mirroringInterSockErrors1WeekH;
     @JacksonXmlProperty(isAttribute = true)
-    public long mirroringInterSockErrors2Weeks;
+    public int mirroringInterSockErrors2Weeks;
     @JacksonXmlProperty(isAttribute = true)
-    public long mirroringInterSockErrors2WeeksH;
+    public int mirroringInterSockErrors2WeeksH;
     @JacksonXmlProperty(isAttribute = true)
     public long mirroringIntraSockErrors;
     @JacksonXmlProperty(isAttribute = true)
-    public long mirroringIntraSockErrors15Min;
+    public int mirroringIntraSockErrors15Min;
     @JacksonXmlProperty(isAttribute = true)
-    public long mirroringIntraSockErrors15MinH;
+    public int mirroringIntraSockErrors15MinH;
     @JacksonXmlProperty(isAttribute = true)
-    public long mirroringIntraSockErrors1Day;
+    public int mirroringIntraSockErrors1Day;
     @JacksonXmlProperty(isAttribute = true)
-    public long mirroringIntraSockErrors1DayH;
+    public int mirroringIntraSockErrors1DayH;
     @JacksonXmlProperty(isAttribute = true)
-    public long mirroringIntraSockErrors1Hour;
+    public int mirroringIntraSockErrors1Hour;
     @JacksonXmlProperty(isAttribute = true)
-    public long mirroringIntraSockErrors1HourH;
+    public int mirroringIntraSockErrors1HourH;
     @JacksonXmlProperty(isAttribute = true)
-    public long mirroringIntraSockErrors1Week;
+    public int mirroringIntraSockErrors1Week;
     @JacksonXmlProperty(isAttribute = true)
-    public long mirroringIntraSockErrors1WeekH;
+    public int mirroringIntraSockErrors1WeekH;
     @JacksonXmlProperty(isAttribute = true)
-    public long mirroringIntraSockErrors2Weeks;
+    public int mirroringIntraSockErrors2Weeks;
     @JacksonXmlProperty(isAttribute = true)
-    public long mirroringIntraSockErrors2WeeksH;
+    public int mirroringIntraSockErrors2WeeksH;
     @JacksonXmlProperty(isAttribute = true)
     public long smiLinkCorrErrors;
     @JacksonXmlProperty(isAttribute = true)
-    public long smiLinkCorrErrors15Min;
+    public int smiLinkCorrErrors15Min;
     @JacksonXmlProperty(isAttribute = true)
-    public long smiLinkCorrErrors15MinH;
+    public int smiLinkCorrErrors15MinH;
     @JacksonXmlProperty(isAttribute = true)
-    public long smiLinkCorrErrors1Day;
+    public int smiLinkCorrErrors1Day;
     @JacksonXmlProperty(isAttribute = true)
-    public long smiLinkCorrErrors1DayH;
+    public int smiLinkCorrErrors1DayH;
     @JacksonXmlProperty(isAttribute = true)
-    public long smiLinkCorrErrors1Hour;
+    public int smiLinkCorrErrors1Hour;
     @JacksonXmlProperty(isAttribute = true)
-    public long smiLinkCorrErrors1HourH;
+    public int smiLinkCorrErrors1HourH;
     @JacksonXmlProperty(isAttribute = true)
-    public long smiLinkCorrErrors1Week;
+    public int smiLinkCorrErrors1Week;
     @JacksonXmlProperty(isAttribute = true)
-    public long smiLinkCorrErrors1WeekH;
+    public int smiLinkCorrErrors1WeekH;
     @JacksonXmlProperty(isAttribute = true)
-    public long smiLinkCorrErrors2Weeks;
+    public int smiLinkCorrErrors2Weeks;
     @JacksonXmlProperty(isAttribute = true)
-    public long smiLinkCorrErrors2WeeksH;
+    public int smiLinkCorrErrors2WeeksH;
     @JacksonXmlProperty(isAttribute = true)
     public long smiLinkUncorrErrors;
     @JacksonXmlProperty(isAttribute = true)
-    public long smiLinkUncorrErrors15Min;
+    public int smiLinkUncorrErrors15Min;
     @JacksonXmlProperty(isAttribute = true)
-    public long smiLinkUncorrErrors15MinH;
+    public int smiLinkUncorrErrors15MinH;
     @JacksonXmlProperty(isAttribute = true)
-    public long smiLinkUncorrErrors1Day;
+    public int smiLinkUncorrErrors1Day;
     @JacksonXmlProperty(isAttribute = true)
-    public long smiLinkUncorrErrors1DayH;
+    public int smiLinkUncorrErrors1DayH;
     @JacksonXmlProperty(isAttribute = true)
-    public long smiLinkUncorrErrors1Hour;
+    public int smiLinkUncorrErrors1Hour;
     @JacksonXmlProperty(isAttribute = true)
-    public long smiLinkUncorrErrors1HourH;
+    public int smiLinkUncorrErrors1HourH;
     @JacksonXmlProperty(isAttribute = true)
-    public long smiLinkUncorrErrors1Week;
+    public int smiLinkUncorrErrors1Week;
     @JacksonXmlProperty(isAttribute = true)
-    public long smiLinkUncorrErrors1WeekH;
+    public int smiLinkUncorrErrors1WeekH;
     @JacksonXmlProperty(isAttribute = true)
-    public long smiLinkUncorrErrors2Weeks;
+    public int smiLinkUncorrErrors2Weeks;
     @JacksonXmlProperty(isAttribute = true)
-    public long smiLinkUncorrErrors2WeeksH;
+    public int smiLinkUncorrErrors2WeeksH;
     @JacksonXmlProperty(isAttribute = true)
     public long sparingErrors;
     @JacksonXmlProperty(isAttribute = true)
-    public long sparingErrors15Min;
+    public int sparingErrors15Min;
     @JacksonXmlProperty(isAttribute = true)
-    public long sparingErrors15MinH;
+    public int sparingErrors15MinH;
     @JacksonXmlProperty(isAttribute = true)
-    public long sparingErrors1Day;
+    public int sparingErrors1Day;
     @JacksonXmlProperty(isAttribute = true)
-    public long sparingErrors1DayH;
+    public int sparingErrors1DayH;
     @JacksonXmlProperty(isAttribute = true)
-    public long sparingErrors1Hour;
+    public int sparingErrors1Hour;
     @JacksonXmlProperty(isAttribute = true)
-    public long sparingErrors1HourH;
+    public int sparingErrors1HourH;
     @JacksonXmlProperty(isAttribute = true)
-    public long sparingErrors1Week;
+    public int sparingErrors1Week;
     @JacksonXmlProperty(isAttribute = true)
-    public long sparingErrors1WeekH;
+    public int sparingErrors1WeekH;
     @JacksonXmlProperty(isAttribute = true)
-    public long sparingErrors2Weeks;
+    public int sparingErrors2Weeks;
     @JacksonXmlProperty(isAttribute = true)
-    public long sparingErrors2WeeksH;
+    public int sparingErrors2WeeksH;
 }
 
