@@ -403,6 +403,31 @@ public abstract class AbstractUcsServiceCollector implements UcsServiceCollector
         });
     }
 
+    public static void addUcsStorageDiskEnvStats(ImmutableCollectionSet.Builder builder, UcsDataCollection stats, ImmutableNodeResource nodeResource) {
+        stats.ucsStorageDiskEnvStats.forEach(stat -> {
+            final ImmutableCollectionSetResource.Builder<GenericTypeResource> appResourceBuilder =
+                    getBuilderForResource(stat, nodeResource, "storageDiskEnvStats");
+
+            addNumAttr(appResourceBuilder, "storageDiskEnvStats", "Temperature", stat.temperature);
+            addNumAttr(appResourceBuilder, "storageDiskEnvStats", "WearPercentage", stat.wearPercentage);
+            builder.addCollectionSetResource(appResourceBuilder.build());
+        });
+    }
+
+    public static void addUcsStorageSsdHealthStats(ImmutableCollectionSet.Builder builder, UcsDataCollection stats, ImmutableNodeResource nodeResource) {
+        stats.ucsStorageSsdHealthStats.forEach(stat -> {
+            final ImmutableCollectionSetResource.Builder<GenericTypeResource> appResourceBuilder =
+                    getBuilderForResource(stat, nodeResource, "storageSsdHealthStats");
+
+            appResourceBuilder.addStringAttribute(createStringAttribute("storageSsdHealthStats", "Id", stat.id));
+            addNumAttr(appResourceBuilder, "storageSsdHealthStats", "PercentageLifeLeft", stat.percentageLifeLeft);
+            addNumAttr(appResourceBuilder, "storageSsdHealthStats", "PowerCycleCount", stat.powerCycleCount);
+            addNumAttr(appResourceBuilder, "storageSsdHealthStats", "PowerOnHours", stat.powerOnHours);
+            addNumAttr(appResourceBuilder, "storageSsdHealthStats", "WearStatusInDays", stat.wearStatusInDays);
+            builder.addCollectionSetResource(appResourceBuilder.build());
+        });
+    }
+
     protected ApiClientService getClientService(Map<String, Object> attributes) throws ApiException {
         String alias = Objects.requireNonNull(attributes.get(UcsUtils.UCS_ALIAS_KEY), "alias is missing").toString();
         var connection = connectionManager.getConnection(alias);
