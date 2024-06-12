@@ -36,6 +36,8 @@ public class UcsDataCollection {
     private final UcsComputePCIeFatalProtocolStats ucsComputePCIeFatalProtocolStats;
     private final UcsComputePCIeFatalReceiveStats ucsComputePCIeFatalReceiveStats;
     private final UcsComputePCIeFatalStats ucsComputePCIeFatalStats;
+    public final List<UcsMemoryErrorStats> ucsMemoryErrorStats;
+    public final List<UcsMemoryUnitEnvStats> ucsMemoryUnitEnvStats;
 
     public static Builder builder() {
         return new Builder();
@@ -54,6 +56,7 @@ public class UcsDataCollection {
                 ", ucsFcErrStats=" + ucsFcErrStats +
                 ", ucsEquipmentNetworkElementFanStats=" + ucsEquipmentNetworkElementFanStats +
                 ", ucsProcessorEnvStats=" + ucsProcessorEnvStats +
+                ", ucsProcessorErrorStats=" + ucsProcessorErrorStats +
                 ", ucsEtherRxStats=" + ucsEtherRxStats +
                 ", ucsEtherTxStats=" + ucsEtherTxStats +
                 ", ucsEquipmentPsuInputStats=" + ucsEquipmentPsuInputStats +
@@ -75,6 +78,8 @@ public class UcsDataCollection {
                 ", ucsComputePCIeFatalProtocolStats=" + ucsComputePCIeFatalProtocolStats +
                 ", ucsComputePCIeFatalReceiveStats=" + ucsComputePCIeFatalReceiveStats +
                 ", ucsComputePCIeFatalStats=" + ucsComputePCIeFatalStats +
+                ", ucsMemoryErrorStats=" + ucsMemoryErrorStats +
+                ", ucsMemoryUnitEnvStats=" + ucsMemoryUnitEnvStats +
                 '}';
     }
 
@@ -111,6 +116,8 @@ public class UcsDataCollection {
         this.ucsComputePCIeFatalProtocolStats = builder.ucsComputePCIeFatalProtocolStats;
         this.ucsComputePCIeFatalReceiveStats = builder.ucsComputePCIeFatalReceiveStats;
         this.ucsComputePCIeFatalStats = builder.ucsComputePCIeFatalStats;
+        this.ucsMemoryErrorStats = builder.ucsMemoryErrorStats;
+        this.ucsMemoryUnitEnvStats = builder.ucsMemoryUnitEnvStats;
     }
 
     public Optional<UcsSwEnvStats> getUcsSwEnvStats() {
@@ -186,6 +193,8 @@ public class UcsDataCollection {
         private UcsComputePCIeFatalProtocolStats ucsComputePCIeFatalProtocolStats;
         private UcsComputePCIeFatalReceiveStats ucsComputePCIeFatalReceiveStats;
         private UcsComputePCIeFatalStats ucsComputePCIeFatalStats;
+        private List<UcsMemoryErrorStats> ucsMemoryErrorStats;
+        private List<UcsMemoryUnitEnvStats> ucsMemoryUnitEnvStats;
 
         private Builder () {
 
@@ -349,6 +358,16 @@ public class UcsDataCollection {
 
         public Builder withUcsComputePCIeFatalStats(UcsComputePCIeFatalStats ucsComputePCIeFatalStats) {
             this.ucsComputePCIeFatalStats = ucsComputePCIeFatalStats;
+            return this;
+        }
+
+        public Builder withUcsUcsMemoryErrorStats(List<UcsMemoryErrorStats> ucsMemoryErrorStats) {
+            this.ucsMemoryErrorStats = ucsMemoryErrorStats;
+            return this;
+        }
+
+        public Builder withUcsUcsMemoryUnitEnvStats(List<UcsMemoryUnitEnvStats> ucsMemoryUnitEnvStats) {
+            this.ucsMemoryUnitEnvStats = ucsMemoryUnitEnvStats;
             return this;
         }
 

@@ -44,6 +44,8 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EtherRxStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EtherTxStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.FcErrStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.FcStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.MemoryErrorStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.MemoryUnitEnvStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ProcessorEnvStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ProcessorErrorStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.StorageDiskEnvStats;
@@ -336,6 +338,8 @@ public class XmlApiClientService implements ApiClientService {
         UcsComputePCIeFatalProtocolStats ucsComputePCIeFatalProtocolStats = null;
         UcsComputePCIeFatalReceiveStats ucsComputePCIeFatalReceiveStats = null;
         UcsComputePCIeFatalStats ucsComputePCIeFatalStats = null;
+        final List<UcsMemoryErrorStats> ucsMemoryErrorStats = new ArrayList<>();
+        final List<UcsMemoryUnitEnvStats> ucsMemoryUnitEnvStats = new ArrayList<>();
 
         for (String dn: collectMap.keySet()) {
             for (UcsEnums.NamingClassId classId: collectMap.get(dn)) {
@@ -475,6 +479,12 @@ public class XmlApiClientService implements ApiClientService {
                     case storageSsdHealthStats:
                         statsApi.getStorageSsdHealthStats(aaaApi.getToken(), filter).forEach(e -> ucsStorageSsdHealthStats.add(from(e)));
                         break;
+                    case memoryErrorStats:
+                        statsApi.getMemoryErrorStats(aaaApi.getToken(), filter).forEach(m -> ucsMemoryErrorStats.add(from(m)));
+                        break;
+                    case memoryUnitEnvStats:
+                        statsApi.getMemoryUnitEnvStats(aaaApi.getToken(), filter).forEach(m -> ucsMemoryUnitEnvStats.add(from(m)));
+                        break;
                     default:
                         break;
                 }
@@ -513,6 +523,39 @@ public class XmlApiClientService implements ApiClientService {
                 .withUcsComputePCIeFatalProtocolStats(ucsComputePCIeFatalProtocolStats)
                 .withUcsComputePCIeFatalReceiveStats(ucsComputePCIeFatalReceiveStats)
                 .withUcsComputePCIeFatalStats(ucsComputePCIeFatalStats)
+                .withUcsUcsMemoryErrorStats(ucsMemoryErrorStats)
+                .withUcsUcsMemoryUnitEnvStats(ucsMemoryUnitEnvStats)
+                .build();
+    }
+
+    private UcsMemoryUnitEnvStats from(MemoryUnitEnvStats m) {
+        return UcsMemoryUnitEnvStats.builder()
+                .withDn(m.dn)
+                .withIntervals(m.intervals)
+                .withSuspect(m.suspect)
+                .withThresholded(m.thresholded)
+                .withTimeCollected(m.timeCollected)
+                .withUpdate(m.update)
+                .withTemperature(m.temperature)
+                .build();
+    }
+
+    private UcsMemoryErrorStats from(MemoryErrorStats m) {
+        return UcsMemoryErrorStats.builder()
+                .withDn(m.dn)
+                .withIntervals(m.intervals)
+                .withSuspect(m.suspect)
+                .withThresholded(m.thresholded)
+                .withTimeCollected(m.timeCollected)
+                .withUpdate(m.update)
+                .withAddressParityErrors(m.addressParityErrors)
+                .withAddressParityErrorsCorrectable(m.addressParityErrorsCorrectable)
+                .withAddressParityErrorsUnCorrectable(m.addressParityErrorsUnCorrectable)
+                .withMismatchErrors(m.mismatchErrors)
+                .withEccSinglebitErrors(m.eccSinglebitErrors)
+                .withEccMultibitErrors(m.eccMultibitErrors)
+                .withDramWriteDataCorrectableCRCErrors(m.DramWriteDataCorrectableCRCErrors)
+                .withDramWriteDataUnCorrectableCRCErrors(m.DramWriteDataUnCorrectableCRCErrors)
                 .build();
     }
 

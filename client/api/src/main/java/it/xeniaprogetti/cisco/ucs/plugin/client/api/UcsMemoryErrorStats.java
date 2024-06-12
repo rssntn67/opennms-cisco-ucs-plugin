@@ -117,12 +117,12 @@ public class UcsMemoryErrorStats extends UcsMemoryResourceTypeStats {
             return this;
         }
 
-        public Builder withAddressParityErrorsCorrectable(int addressParityErrorsCorrectable){
+        public Builder withAddressParityErrorsCorrectable(long addressParityErrorsCorrectable){
             this.addressParityErrorsCorrectable = addressParityErrorsCorrectable;
             return this;
         }
 
-        public Builder withAddressParityErrorsUnCorrectable(int addressParityErrorsUnCorrectable){
+        public Builder withAddressParityErrorsUnCorrectable(long addressParityErrorsUnCorrectable){
             this.addressParityErrorsUnCorrectable = addressParityErrorsUnCorrectable;
             return this;
         }
@@ -132,11 +132,11 @@ public class UcsMemoryErrorStats extends UcsMemoryResourceTypeStats {
             return this;
         }
 
-        public Builder withEccSinglebitErrors(int eccSinglebitErrors){
+        public Builder withEccSinglebitErrors(long eccSinglebitErrors){
             this.eccSinglebitErrors = eccSinglebitErrors;
             return this;
         }
-        public Builder withMismatchErrors(int mismatchErrors){
+        public Builder withMismatchErrors(long mismatchErrors){
             this.mismatchErrors = mismatchErrors;
             return this;
         }
