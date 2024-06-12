@@ -2,7 +2,7 @@ package it.xeniaprogetti.cisco.ucs.plugin.client.api;
 
 import java.util.Date;
 
-public class UcsMemoryUnitEnvStats extends UcsStats {
+public class UcsMemoryUnitEnvStats extends UcsMemoryResourceTypeStats {
 
     public static Builder builder() {
        return new Builder();

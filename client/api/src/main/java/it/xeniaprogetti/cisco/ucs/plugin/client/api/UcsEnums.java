@@ -11,7 +11,7 @@ public class UcsEnums {
         EquipIOCard,
         EquipFanModule,
         EquipFan,
-        Storage, AdaptorEthPort
+        Storage, Memory, AdaptorEthPort
     }
     public enum NamingClassId {
         aaaAuthMethod,
