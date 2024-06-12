@@ -2,7 +2,7 @@ package it.xeniaprogetti.cisco.ucs.plugin.client.api;
 
 import java.util.Date;
 
-public class UcsStorageSsdHealthStats extends UcsStats {
+public class UcsStorageSsdHealthStats extends UcsStorageResourceTypeStats {
 
     public static Builder builder() {
        return new Builder();
