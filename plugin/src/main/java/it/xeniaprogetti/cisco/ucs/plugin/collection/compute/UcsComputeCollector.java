@@ -111,6 +111,8 @@ public class UcsComputeCollector extends AbstractUcsServiceCollector {
         addUcsProcessorErrorStats(resultBuilder, stats, nodeResource, milliseconds);
         addUcsStorageDiskEnvStats(resultBuilder, stats, nodeResource);
         addUcsStorageSsdHealthStats(resultBuilder,stats,nodeResource);
+        addUcsMemoryErrorStats(resultBuilder, stats, nodeResource, milliseconds);
+        addUcsMemoryUnitEnvStats(resultBuilder, stats, nodeResource);
         return CompletableFuture.completedFuture(resultBuilder.setStatus(CollectionSet.Status.SUCCEEDED)
                 .setTimestamp(System.currentTimeMillis()).build());
     }

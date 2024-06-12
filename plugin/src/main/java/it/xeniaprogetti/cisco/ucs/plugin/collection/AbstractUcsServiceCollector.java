@@ -494,6 +494,35 @@ public abstract class AbstractUcsServiceCollector implements UcsServiceCollector
         });
     }
 
+    public static void addUcsMemoryUnitEnvStats(ImmutableCollectionSet.Builder builder, UcsDataCollection stats, ImmutableNodeResource nodeResource) {
+        final String group = "ucsMemoryUnitEnvStats";
+        stats.ucsMemoryUnitEnvStats.forEach(stat -> {
+            final ImmutableCollectionSetResource.Builder<GenericTypeResource> appResourceBuilder =
+                    getBuilderForResource(stat, nodeResource, group);
+
+            addNumAttr(appResourceBuilder, group, "Temperature", stat.temperature);
+            builder.addCollectionSetResource(appResourceBuilder.build());
+        });
+    }
+
+    public static void addUcsMemoryErrorStats(ImmutableCollectionSet.Builder builder, UcsDataCollection stats, ImmutableNodeResource nodeResource, int milliseconds) {
+        final String group = "ucsMemoryErrorStats";
+        stats.ucsMemoryErrorStats.forEach(stat -> {
+            final ImmutableCollectionSetResource.Builder<GenericTypeResource> appResourceBuilder =
+                    getBuilderForResource(stat, nodeResource, group);
+
+            addNumAttr(appResourceBuilder, group, "AddressParityErrors", stat.addressParityErrors, milliseconds);
+            addNumAttr(appResourceBuilder, group, "AddressParityErrorsCorrectable", stat.addressParityErrorsCorrectable, milliseconds);
+            addNumAttr(appResourceBuilder, group, "AddressParityErrorsUnCorrectable", stat.addressParityErrorsUnCorrectable, milliseconds);
+            addNumAttr(appResourceBuilder, group, "DramWriteDataCorrectableCRCErrors", stat.DramWriteDataCorrectableCRCErrors, milliseconds);
+            addNumAttr(appResourceBuilder, group, "DramWriteDataUnCorrectableCRCErrors", stat.DramWriteDataUnCorrectableCRCErrors, milliseconds);
+            addNumAttr(appResourceBuilder, group, "MismatchErrors", stat.mismatchErrors, milliseconds);
+            addNumAttr(appResourceBuilder, group, "EccMultibitErrors", stat.eccMultibitErrors, milliseconds);
+            addNumAttr(appResourceBuilder, group, "EccSinglebitErrors", stat.eccSinglebitErrors, milliseconds);
+            builder.addCollectionSetResource(appResourceBuilder.build());
+        });
+    }
+
     protected ApiClientService getClientService(Map<String, Object> attributes) throws ApiException {
         String alias = Objects.requireNonNull(attributes.get(UcsUtils.UCS_ALIAS_KEY), "alias is missing").toString();
         var connection = connectionManager.getConnection(alias);
