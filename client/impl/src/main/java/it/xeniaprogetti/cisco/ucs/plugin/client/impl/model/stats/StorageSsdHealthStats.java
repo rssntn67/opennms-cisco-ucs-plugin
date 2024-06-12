@@ -4,7 +4,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class StorageSsdHealthStats extends Stats{
     @JacksonXmlProperty(isAttribute = true)
-    public int id;
+    public String id;
     @JacksonXmlProperty(isAttribute = true)
     public int percentageLifeLeft;
     @JacksonXmlProperty(isAttribute = true)

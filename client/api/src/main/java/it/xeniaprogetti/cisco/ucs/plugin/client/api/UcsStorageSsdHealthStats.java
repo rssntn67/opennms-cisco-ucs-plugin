@@ -8,7 +8,7 @@ public class UcsStorageSsdHealthStats extends UcsStats {
        return new Builder();
     }
 
-    public final int id;
+    public final String id;
     public final int percentageLifeLeft;
     public final int powerCycleCount;
     public final int powerOnHours;
@@ -54,7 +54,7 @@ public class UcsStorageSsdHealthStats extends UcsStats {
         public Date timeCollected;
         public long update;
 
-        private int id;
+        private String id;
         private int percentageLifeLeft;
         private int powerCycleCount;
         private int powerOnHours;
@@ -90,7 +90,7 @@ public class UcsStorageSsdHealthStats extends UcsStats {
             return this;
         }
 
-        public Builder withId(int id){
+        public Builder withId(String id){
             this.id = id;
             return this;
         }

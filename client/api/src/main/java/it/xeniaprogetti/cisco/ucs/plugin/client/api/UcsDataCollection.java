@@ -29,38 +29,8 @@ public class UcsDataCollection {
     public final List<UcsAdaptorEthPortMcastStats> ucsAdaptorEthPortMcastStats;
     public final List<UcsAdaptorEthPortStats> ucsAdaptorEthPortStats;
     public final List<UcsAdaptorVnicStats> ucsAdaptorVnicStats;
-
-    @Override
-    public String toString() {
-        return "UcsDataCollection{" +
-                "ucsSwEnvStats=" + ucsSwEnvStats +
-                ", ucsSwCardEnvStats=" + ucsSwCardEnvStats +
-                ", ucsSwSystemStats=" + ucsSwSystemStats +
-                ", ucsComputeMbPowerStats=" + ucsComputeMbPowerStats +
-                ", ucsComputeMbTempStats=" + ucsComputeMbTempStats +
-                ", ucsEquipmentChassisStats=" + ucsEquipmentChassisStats +
-                ", ucsFcStats=" + ucsFcStats +
-                ", ucsFcErrStats=" + ucsFcErrStats +
-                ", ucsEquipmentNetworkElementFanStats=" + ucsEquipmentNetworkElementFanStats +
-                ", ucsProcessorEnvStats=" + ucsProcessorEnvStats +
-                ", ucsEtherRxStats=" + ucsEtherRxStats +
-                ", ucsEtherTxStats=" + ucsEtherTxStats +
-                ", ucsEquipmentPsuInputStats=" + ucsEquipmentPsuInputStats +
-                ", ucsEquipmentPsuStats=" + ucsEquipmentPsuStats +
-                ", ucsEquipmentIOCardStats=" + ucsEquipmentIOCardStats +
-                ", ucsEtherErrStats=" + ucsEtherErrStats +
-                ", ucsEtherLossStats=" + ucsEtherLossStats +
-                ", ucsEtherPauseStats=" + ucsEtherPauseStats +
-                ", ucsEtherNiErrStats=" + ucsEtherNiErrStats +
-                ", ucsEquipmentFanModuleStats=" + ucsEquipmentFanModuleStats +
-                ", ucsEquipmentFanStats=" + ucsEquipmentFanStats +
-                ", ucsAdaptorEthPortErrStats=" + ucsAdaptorEthPortErrStats +
-                ", ucsAdaptorEthPortMcastStats=" + ucsAdaptorEthPortMcastStats +
-                ", ucsAdaptorEthPortStats=" + ucsAdaptorEthPortStats +
-                ", ucsAdaptorVnicStats=" + ucsAdaptorVnicStats +
-                '}';
-    }
-
+    public final List<UcsStorageDiskEnvStats> ucsStorageDiskEnvStats;
+    public final List<UcsStorageSsdHealthStats> ucsStorageSsdHealthStats;
 
     public static Builder builder() {
         return new Builder();
@@ -92,6 +62,41 @@ public class UcsDataCollection {
         this.ucsAdaptorEthPortMcastStats = builder.ucsAdaptorEthPortMcastStats;
         this.ucsAdaptorEthPortStats = builder.ucsAdaptorEthPortStats;
         this.ucsAdaptorVnicStats = builder.ucsAdaptorVnicStats;
+        this.ucsStorageDiskEnvStats = builder.ucsStorageDiskEnvStats;
+        this.ucsStorageSsdHealthStats = builder.ucsStorageSsdHealthStats;
+    }
+
+    @Override
+    public String toString() {
+        return "UcsDataCollection{" +
+                "ucsSwEnvStats=" + ucsSwEnvStats +
+                ", ucsSwCardEnvStats=" + ucsSwCardEnvStats +
+                ", ucsSwSystemStats=" + ucsSwSystemStats +
+                ", ucsComputeMbPowerStats=" + ucsComputeMbPowerStats +
+                ", ucsComputeMbTempStats=" + ucsComputeMbTempStats +
+                ", ucsEquipmentChassisStats=" + ucsEquipmentChassisStats +
+                ", ucsFcStats=" + ucsFcStats +
+                ", ucsFcErrStats=" + ucsFcErrStats +
+                ", ucsEquipmentNetworkElementFanStats=" + ucsEquipmentNetworkElementFanStats +
+                ", ucsProcessorEnvStats=" + ucsProcessorEnvStats +
+                ", ucsEtherRxStats=" + ucsEtherRxStats +
+                ", ucsEtherTxStats=" + ucsEtherTxStats +
+                ", ucsEquipmentPsuInputStats=" + ucsEquipmentPsuInputStats +
+                ", ucsEquipmentPsuStats=" + ucsEquipmentPsuStats +
+                ", ucsEquipmentIOCardStats=" + ucsEquipmentIOCardStats +
+                ", ucsEtherErrStats=" + ucsEtherErrStats +
+                ", ucsEtherLossStats=" + ucsEtherLossStats +
+                ", ucsEtherPauseStats=" + ucsEtherPauseStats +
+                ", ucsEtherNiErrStats=" + ucsEtherNiErrStats +
+                ", ucsEquipmentFanModuleStats=" + ucsEquipmentFanModuleStats +
+                ", ucsEquipmentFanStats=" + ucsEquipmentFanStats +
+                ", ucsAdaptorEthPortErrStats=" + ucsAdaptorEthPortErrStats +
+                ", ucsAdaptorEthPortMcastStats=" + ucsAdaptorEthPortMcastStats +
+                ", ucsAdaptorEthPortStats=" + ucsAdaptorEthPortStats +
+                ", ucsAdaptorVnicStats=" + ucsAdaptorVnicStats +
+                ", ucsStorageDiskEnvStats=" + ucsStorageDiskEnvStats +
+                ", ucsStorageSsdHealthStats=" + ucsStorageSsdHealthStats +
+                '}';
     }
 
     public Optional<UcsSwEnvStats> getUcsSwEnvStats() {
@@ -145,7 +150,8 @@ public class UcsDataCollection {
         private List<UcsAdaptorEthPortMcastStats> ucsAdaptorEthPortMcastStats;
         private List<UcsAdaptorEthPortStats> ucsAdaptorEthPortStats;
         private List<UcsAdaptorVnicStats> ucsAdaptorVnicStats;
-
+        private List<UcsStorageDiskEnvStats> ucsStorageDiskEnvStats;
+        private List<UcsStorageSsdHealthStats> ucsStorageSsdHealthStats;
 
 
         private Builder () {
@@ -276,6 +282,16 @@ public class UcsDataCollection {
 
         public Builder withUcsAdaptorVNicStats(List<UcsAdaptorVnicStats> ucsAdaptorVnicStats) {
             this.ucsAdaptorVnicStats = ucsAdaptorVnicStats;
+            return this;
+        }
+
+        public Builder withUcsStorageDiskEnvStats(List<UcsStorageDiskEnvStats> ucsStorageDiskEnvStats) {
+            this.ucsStorageDiskEnvStats = ucsStorageDiskEnvStats;
+            return this;
+        }
+
+        public Builder withUcsStorageSsdHealthStats(List<UcsStorageSsdHealthStats> ucsStorageSsdHealthStats) {
+            this.ucsStorageSsdHealthStats = ucsStorageSsdHealthStats;
             return this;
         }
 

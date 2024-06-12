@@ -41,6 +41,8 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.EtherTxStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.FcErrStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.FcStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.ProcessorEnvStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.StorageDiskEnvStats;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.StorageSsdHealthStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.SwCardEnvStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.SwEnvStats;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.SwSystemStats;
@@ -322,6 +324,8 @@ public class XmlApiClientService implements ApiClientService {
         final List<UcsAdaptorEthPortMcastStats> ucsAdaptorEthPortMcastStats = new ArrayList<>();
         final List<UcsAdaptorEthPortStats> ucsAdaptorEthPortStats = new ArrayList<>();
         final List<UcsAdaptorVnicStats> ucsAdaptorVnicStats = new ArrayList<>();
+        final List<UcsStorageDiskEnvStats> ucsStorageDiskEnvStats = new ArrayList<>();
+        final List<UcsStorageSsdHealthStats> ucsStorageSsdHealthStats = new ArrayList<>();
         for (String dn: collectMap.keySet()) {
             for (UcsEnums.NamingClassId classId: collectMap.get(dn)) {
                 LOG.debug("getUcsDataCollection: parsing dn={}, type={}", dn, classId);
@@ -427,6 +431,12 @@ public class XmlApiClientService implements ApiClientService {
                     case adaptorVnicStats:
                         statsApi.getAdaptorVnicStats(aaaApi.getToken(), filter).forEach(e -> ucsAdaptorVnicStats.add(from(e)));
                         break;
+                    case storageDiskEnvStats:
+                        statsApi.getStorageDiskEnvStats(aaaApi.getToken(), filter).forEach(e -> ucsStorageDiskEnvStats.add(from(e)));
+                        break;
+                    case storageSsdHealthStats:
+                        statsApi.getStorageSsdHealthStats(aaaApi.getToken(), filter).forEach(e -> ucsStorageSsdHealthStats.add(from(e)));
+                        break;
                     default:
                         break;
                 }
@@ -458,6 +468,37 @@ public class XmlApiClientService implements ApiClientService {
                 .withUcsAdaptorEthPortMcastStats(ucsAdaptorEthPortMcastStats)
                 .withUcsAdaptorEthPortStats(ucsAdaptorEthPortStats)
                 .withUcsAdaptorVNicStats(ucsAdaptorVnicStats)
+                .withUcsStorageDiskEnvStats(ucsStorageDiskEnvStats)
+                .withUcsStorageSsdHealthStats(ucsStorageSsdHealthStats)
+                .build();
+    }
+
+    private UcsStorageSsdHealthStats from(StorageSsdHealthStats e) {
+        return UcsStorageSsdHealthStats.builder()
+                .withDn(e.dn)
+                .withIntervals(e.intervals)
+                .withSuspect(e.suspect)
+                .withThresholded(e.thresholded)
+                .withTimeCollected(e.timeCollected)
+                .withUpdate(e.update)
+                .withId(e.id)
+                .withPercentageLifeLeft(e.percentageLifeLeft)
+                .withPowerCycleCount(e.powerCycleCount)
+                .withPowerOnHours(e.powerOnHours)
+                .withWearStatusInDays(e.wearStatusInDays)
+                .build();
+    }
+
+    private UcsStorageDiskEnvStats from(StorageDiskEnvStats e) {
+        return UcsStorageDiskEnvStats.builder()
+                .withDn(e.dn)
+                .withIntervals(e.intervals)
+                .withSuspect(e.suspect)
+                .withThresholded(e.thresholded)
+                .withTimeCollected(e.timeCollected)
+                .withUpdate(e.update)
+                .withTemperature(e.temperature)
+                .withWearPercentage(e.wearPercentage)
                 .build();
     }
 
