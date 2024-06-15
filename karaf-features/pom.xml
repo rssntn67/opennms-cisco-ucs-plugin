@@ -87,6 +87,7 @@
                                 <feature>opennms-plugins-cisco-ucs-client</feature>
                                 <feature>guava</feature>
                                 <feature>jackson</feature>
+                                <feature>jackson-data-format</feature>
                                 <feature>okhttp</feature>
                             </features>
                         </configuration>
