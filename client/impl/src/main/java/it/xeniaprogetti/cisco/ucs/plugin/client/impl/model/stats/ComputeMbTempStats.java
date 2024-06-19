@@ -35,5 +35,30 @@ public class ComputeMbTempStats extends Stats {
     public String fmTempSenRearRMax;
     @JacksonXmlProperty(isAttribute = true)
     public String fmTempSenRearRMin;
+
+    @JacksonXmlProperty(isAttribute = true)
+    public double fmTempSenFront;
+    @JacksonXmlProperty(isAttribute = true)
+    public String fmTempSenFrontAvg;
+    @JacksonXmlProperty(isAttribute = true)
+    public String fmTempSenFrontL;
+    @JacksonXmlProperty(isAttribute = true)
+    public String fmTempSenFrontLAvg;
+    @JacksonXmlProperty(isAttribute = true)
+    public String fmTempSenFrontLMax;
+    @JacksonXmlProperty(isAttribute = true)
+    public String fmTempSenFrontLMin;
+    @JacksonXmlProperty(isAttribute = true)
+    public String fmTempSenFrontMax;
+    @JacksonXmlProperty(isAttribute = true)
+    public String fmTempSenFrontMin;
+    @JacksonXmlProperty(isAttribute = true)
+    public String fmTempSenFrontR;
+    @JacksonXmlProperty(isAttribute = true)
+    public String fmTempSenFrontRAvg;
+    @JacksonXmlProperty(isAttribute = true)
+    public String fmTempSenFrontRMax;
+    @JacksonXmlProperty(isAttribute = true)
+    public String fmTempSenFrontRMin;
 }
 
