@@ -6,6 +6,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiException;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ErrorResponse;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.UcsXmlApiResponse;
 import okhttp3.*;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +26,7 @@ public class ApiClient {
     private final String url;
 
     private OkHttpClient client = new OkHttpClient();
-    private final XmlMapper mapper = new XmlMapper();
+    private final XmlMapper mapper = new CustomXmlMapper();
     /*
      * This is very bad practice and should NOT be used in production.
      */
@@ -75,13 +76,37 @@ public class ApiClient {
         this.client = trustAllSslClient(this.client);
     }
 
+    public void doAsyncPost(it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.request.Request xmlrequest) {
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Accept", "*/*")
+                .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .addHeader("User-Agent", ApiClient.class.getCanonicalName())
+                .post(RequestBody.create(xmlrequest.getRequestBody(),XML))
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                LOG.error("doAsyncPost: {}", e.getMessage(), e);
+                throw new RuntimeException("doPost: " + e.getMessage(), e);
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                xmlrequest.setResponse(response);
+                LOG.debug("doAsyncPost: {}", xmlrequest.getResponseBody().string());
+            }
+        });
+
+    }
+
     public String doPost(String requestBody) throws ApiException {
         Request request = new Request.Builder()
                 .url(url)
                 .addHeader("Accept", "*/*")
                 .addHeader("Content-Type", "application/x-www-form-urlencoded")
                 .addHeader("User-Agent", ApiClient.class.getCanonicalName())
-                .post(RequestBody.create(XML, requestBody))
+                .post(RequestBody.create(requestBody,XML))
                 .build();
 
         try {
