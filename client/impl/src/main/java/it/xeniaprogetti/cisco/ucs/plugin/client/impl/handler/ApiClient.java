@@ -101,6 +101,7 @@ public class ApiClient {
     }
 
     public String doPost(String requestBody) throws ApiException {
+        LOG.debug("doPost: requestBody: {}", requestBody);
         Request request = new Request.Builder()
                 .url(url)
                 .addHeader("Accept", "*/*")
@@ -124,7 +125,6 @@ public class ApiClient {
                 }
                 String r = response.body().string();
                 LOG.debug("doPost: Response.Body:{}", r);
-
                 return r;
             }
         } catch (IOException e) {

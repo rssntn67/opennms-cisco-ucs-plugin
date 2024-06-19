@@ -28,7 +28,11 @@ public class AaaLoginResponse extends UcsXmlApiResponse {
     @JacksonXmlProperty(isAttribute = true)
     public long outPasswdExpiryDuration;
     @JacksonXmlProperty(isAttribute = true)
-    public long errorCode;
+    public int errorCode;
+    @JacksonXmlProperty(isAttribute = true)
+    public String invocationResult;
+    @JacksonXmlProperty(isAttribute = true)
+    public String errorDescr;
 
     @Override
     public String toString() {
@@ -46,6 +50,8 @@ public class AaaLoginResponse extends UcsXmlApiResponse {
                 ", outPasswdExpiryStatus='" + outPasswdExpiryStatus + '\'' +
                 ", outPasswdExpiryDuration=" + outPasswdExpiryDuration +
                 ", errorCode=" + errorCode +
+                ", invocationResult=" + invocationResult +
+                ", errorDescr=" + errorDescr +
                 '}';
     }
 }

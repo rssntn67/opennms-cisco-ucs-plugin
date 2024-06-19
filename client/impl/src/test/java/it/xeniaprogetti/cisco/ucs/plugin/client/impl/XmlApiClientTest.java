@@ -107,31 +107,26 @@ public class XmlApiClientTest {
         Assert.assertEquals(0, service0.getPool());
         Assert.assertEquals(0, clientProvider.getAvail(service0.getCredentials()));
         Assert.assertEquals(1, clientProvider.getUsed(service0.getCredentials()));
-        Assert.assertEquals(0, clientProvider.getPool(service0.getCredentials()));
         Assert.assertEquals(1, clientProvider.getPoolSize(service0.getCredentials()));
         XmlApiClientService service1 = clientProvider.client(getCredentials(30));
         Assert.assertEquals(1, service1.getPool());
         Assert.assertEquals(0, clientProvider.getAvail(service0.getCredentials()));
         Assert.assertEquals(2, clientProvider.getUsed(service0.getCredentials()));
-        Assert.assertEquals(1, clientProvider.getPool(service0.getCredentials()));
         Assert.assertEquals(2, clientProvider.getPoolSize(service0.getCredentials()));
         XmlApiClientService service2 = clientProvider.client(getCredentials(30));
         Assert.assertEquals(2, service2.getPool());
         Assert.assertEquals(0, clientProvider.getAvail(service0.getCredentials()));
         Assert.assertEquals(3, clientProvider.getUsed(service0.getCredentials()));
-        Assert.assertEquals(2, clientProvider.getPool(service0.getCredentials()));
         Assert.assertEquals(3, clientProvider.getPoolSize(service0.getCredentials()));
         XmlApiClientService service3 = clientProvider.client(getCredentials(30));
         Assert.assertEquals(3, service3.getPool());
         Assert.assertEquals(0, clientProvider.getAvail(service0.getCredentials()));
         Assert.assertEquals(4, clientProvider.getUsed(service0.getCredentials()));
-        Assert.assertEquals(3, clientProvider.getPool(service0.getCredentials()));
         Assert.assertEquals(4, clientProvider.getPoolSize(service0.getCredentials()));
         XmlApiClientService service4 = clientProvider.client(getCredentials(30));
         Assert.assertEquals(4, service4.getPool());
         Assert.assertEquals(0, clientProvider.getAvail(service0.getCredentials()));
         Assert.assertEquals(5, clientProvider.getUsed(service0.getCredentials()));
-        Assert.assertEquals(4, clientProvider.getPool(service0.getCredentials()));
         Assert.assertEquals(5, clientProvider.getPoolSize(service0.getCredentials()));
         try {
             clientProvider.client(getCredentials(30));
@@ -139,24 +134,20 @@ public class XmlApiClientTest {
         } catch (ApiException e) {
             Assert.assertEquals(0, clientProvider.getAvail(service0.getCredentials()));
             Assert.assertEquals(5, clientProvider.getUsed(service0.getCredentials()));
-            Assert.assertEquals(4, clientProvider.getPool(service0.getCredentials()));
             Assert.assertEquals(5, clientProvider.getPoolSize(service0.getCredentials()));
         }
         service1.release();
         Assert.assertEquals(1, clientProvider.getAvail(service0.getCredentials()));
         Assert.assertEquals(4, clientProvider.getUsed(service0.getCredentials()));
-        Assert.assertEquals(4, clientProvider.getPool(service0.getCredentials()));
         Assert.assertEquals(5, clientProvider.getPoolSize(service0.getCredentials()));
         service0.release();
         Assert.assertEquals(2, clientProvider.getAvail(service0.getCredentials()));
         Assert.assertEquals(3, clientProvider.getUsed(service0.getCredentials()));
-        Assert.assertEquals(4, clientProvider.getPool(service0.getCredentials()));
         Assert.assertEquals(5, clientProvider.getPoolSize(service0.getCredentials()));
         XmlApiClientService service = clientProvider.client(getCredentials(30));
         Assert.assertEquals(0, service.getPool());
         Assert.assertEquals(1, clientProvider.getAvail(service0.getCredentials()));
         Assert.assertEquals(4, clientProvider.getUsed(service0.getCredentials()));
-        Assert.assertEquals(4, clientProvider.getPool(service0.getCredentials()));
         Assert.assertEquals(5, clientProvider.getPoolSize(service0.getCredentials()));
         service.release();
     }

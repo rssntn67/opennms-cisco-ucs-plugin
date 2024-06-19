@@ -106,8 +106,12 @@ public class XmlApiClientService implements ApiClientService {
             aaaApi.refresh();
             LOG.debug("checkSession: pool[{}] refreshed token: previous token was valid for less then {} seconds", poolNumber, credentials.validity);
         } else if (!aaaApi.isValid()) {
-            aaaApi.logout();
             LOG.debug("checkSession: pool[{}] logout! token is no more valid", poolNumber);
+            try {
+                aaaApi.logout();
+            } catch (ApiException e) {
+                LOG.warn("checkSession: pool[{}] logout error", poolNumber);
+            }
             aaaApi.login();
             LOG.debug("checkSession: pool[{}], login!", poolNumber);
         }
@@ -116,9 +120,12 @@ public class XmlApiClientService implements ApiClientService {
 
     @Override
     public void disconnect() throws ApiException {
-        aaaApi.logout();
+        try {
+            aaaApi.logout();
+        } catch (ApiException e) {
+            LOG.warn("disconnect: logout fail:{}, {}", e.getMessage(), e.getResponseBody());
+        }
         release();
-        LOG.info("disconnect: pool[{}] ", poolNumber);
     }
 
     @Override

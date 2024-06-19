@@ -41,34 +41,44 @@ public class AaaApi {
                 (UcsXmlApiRequest.getLoginRequest(this.username,this.password)
                     ,AaaLoginResponse.class
                 );
+        LOG.debug("login: {}", response);
+        if (response.errorCode > 0) {
+            LOG.error("login: {} failed", response);
+            throw new ApiException("login: failed", new RuntimeException("AaaLogin failed"), response.errorCode, response.toString());
+        }
         this.token = response.outCookie;
         this.validityTime = LocalDateTime.now().plusSeconds(response.outRefreshPeriod);
-        LOG.info("login: {} valid until {}", this.token, this.validityTime);
-        LOG.debug("login: {}", response);
+        LOG.info("login: valid until {}", this.validityTime);
     }
 
     public void refresh() throws ApiException {
-            LOG.info("refresh: {} to {}", this.username, this.client.getUrl());
-            AaaRefreshResponse response =
-                    client.getUcsXmlApiResponse
-                    (UcsXmlApiRequest.getRefreshRequest(this.username,this.password, token)
-                            , AaaRefreshResponse.class
-                    );
-            this.token = response.outCookie;
-            this.validityTime = LocalDateTime.now().plusSeconds(response.outRefreshPeriod);
-            LOG.debug("refresh: {}", response);
+        LOG.info("refresh: {} to {}", this.username, this.client.getUrl());
+        AaaRefreshResponse response =
+                client.getUcsXmlApiResponse
+                (UcsXmlApiRequest.getRefreshRequest(this.username,this.password, this.token)
+                        , AaaRefreshResponse.class
+                );
+        LOG.debug("refresh: {}", response);
+        if (response.errorCode > 0) {
+            LOG.error("refresh: {} failed", response);
+            throw new ApiException("refresh: failed", new RuntimeException("AaaRefresh failed"), response.errorCode, response.toString());
+        }
+        this.token = response.outCookie;
+        this.validityTime = LocalDateTime.now().plusSeconds(response.outRefreshPeriod);
     }
 
     public void logout() throws ApiException {
         LOG.info("logout: {} from {}", this.username, this.client.getUrl());
-        if (this.token == null)
-            return;
         AaaLogoutResponse response = client.getUcsXmlApiResponse
                     (UcsXmlApiRequest.getLogoutRequest(token),
                     AaaLogoutResponse.class
                 );
-        this.token = null;
         LOG.debug("logout: {}", response);
+        if (response.errorCode > 0) {
+            LOG.error("logout: {} failed", response);
+            throw new ApiException("logout: failed", new RuntimeException("AaaLogout failed"), response.errorCode, response.toString());
+        }
+        this.token = null;
     }
 
     public boolean isValid() {
