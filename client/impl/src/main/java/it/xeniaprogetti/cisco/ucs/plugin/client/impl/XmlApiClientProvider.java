@@ -24,7 +24,7 @@ public class XmlApiClientProvider implements ApiClientProvider {
     }
 
     protected static ApiClient createApiClient(ApiClientCredentials apiClientCredentials) {
-        ApiClient client = new ApiClient(apiClientCredentials.url);
+        ApiClient client = new ApiClient();
         if (apiClientCredentials.ignoreSslCertificateValidation)
             client.setTrustAllCertsClient();
         return client;

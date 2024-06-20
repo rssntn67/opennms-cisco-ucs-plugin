@@ -19,44 +19,51 @@ import java.util.Objects;
 public class IpApi {
 
     private final ApiClient client;
+    private final String url;
 
-    public IpApi(ApiClient client) {
+    public IpApi(ApiClient client, String url) {
         this.client = Objects.requireNonNull(client);
+        this.url = Objects.requireNonNull(url);
     }
 
     public IpPoolUniverse getIpPoolUniverse(String cookie) throws ApiException {
         return client
                 .getUcsXmlApiResponse(
-                        UcsXmlApiRequest.getConfigResolveDnRequest(cookie,"ip",true)
-                        , ConfigResolveDnResponseIpPoolUniverse.class
+                        UcsXmlApiRequest.getConfigResolveDnRequest(cookie,"ip",true),
+                        this.url,
+                        ConfigResolveDnResponseIpPoolUniverse.class
                 ).outconfig.ippoolUniverse;
     }
 
     public VNicIpV4PooledAddr getVnicVNicIpV4PooledAddr(String cookie, String poolAssignedToDn) throws  ApiException {
         return client.getUcsXmlApiResponse(
-                UcsXmlApiRequest.getConfigResolveDnRequest(cookie, poolAssignedToDn, false)
-                , ConfigResolveDnResponseVNicIpV4PooledAddr.class
+                UcsXmlApiRequest.getConfigResolveDnRequest(cookie, poolAssignedToDn, false),
+                this.url,
+                ConfigResolveDnResponseVNicIpV4PooledAddr.class
         ).outconfig.vnicIpV4PooledAddr;
     }
 
     public IpPoolPooled getIpPoolPooled(String cookie, String poolDn) throws ApiException {
         return client.getUcsXmlApiResponse(
-                UcsXmlApiRequest.getConfigResolveDnRequest(cookie, poolDn, false)
-                , ConfigResolveDnResponseIpPoolPooled.class
+                UcsXmlApiRequest.getConfigResolveDnRequest(cookie, poolDn, false),
+                this.url,
+                ConfigResolveDnResponseIpPoolPooled.class
         ).outconfig.ippoolPooled;
     }
 
     public LsServer getLsServer(String cookie, String assignedToDn) throws ApiException {
         return client.getUcsXmlApiResponse(
-                UcsXmlApiRequest.getConfigResolveDnRequest(cookie, assignedToDn, false)
-                , ConfigResolveDnResponseLsServer.class
+                UcsXmlApiRequest.getConfigResolveDnRequest(cookie, assignedToDn, false),
+                this.url,
+                ConfigResolveDnResponseLsServer.class
         ).outconfig.lsServer;
     }
 
     public IpPoolPool getIpPoolPool(String cookie, String poolName) throws ApiException {
         return client.getUcsXmlApiResponse(
-                UcsXmlApiRequest.getConfigResolveDnRequest(cookie, poolName,true)
-                , ConfigResolveDnResponseIpPoolPool.class
+                UcsXmlApiRequest.getConfigResolveDnRequest(cookie, poolName,true),
+                this.url,
+                ConfigResolveDnResponseIpPoolPool.class
         ).outconfig.ippoolPool;
     }
 

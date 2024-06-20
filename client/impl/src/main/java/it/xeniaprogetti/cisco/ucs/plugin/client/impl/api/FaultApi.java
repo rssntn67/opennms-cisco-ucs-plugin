@@ -10,19 +10,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Objects;
 
 public class FaultApi {
     private final Logger LOG = LoggerFactory.getLogger(ConfigApi.class);
     private final ApiClient client;
+    private final String url;
 
-    public FaultApi(ApiClient client) {
-        this.client = client;
+    public FaultApi(ApiClient client, String url) {
+        this.client = Objects.requireNonNull(client);
+        this.url = Objects.requireNonNull(url);
     }
 
     public List<FaultInst> getUcsFaults(String cookie) throws ApiException {
         LOG.info("getUcsFaults: {}", UcsEnums.NamingClassId.faultInst);
         return client.getUcsXmlApiResponse(
                 UcsXmlApiRequest.getConfigResolveClassRequest(cookie, UcsEnums.NamingClassId.faultInst),
+                this.url,
                 ConfigResolveClassResponseFaultInst.class
         ).faultInsts;
     }
@@ -31,6 +35,7 @@ public class FaultApi {
         LOG.info("getUcsFaultsByFilter: {} {}", filter, UcsEnums.NamingClassId.faultInst);
         return client.getUcsXmlApiResponse(
                 UcsXmlApiRequest.getConfigResolveClassRequest(cookie,filter,UcsEnums.NamingClassId.faultInst),
+                this.url,
                 ConfigResolveClassResponseFaultInst.class).faultInsts;
     }
 

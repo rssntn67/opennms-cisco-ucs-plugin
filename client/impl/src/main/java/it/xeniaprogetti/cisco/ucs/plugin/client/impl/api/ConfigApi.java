@@ -34,22 +34,25 @@ public class ConfigApi {
 
     private final Logger LOG = LoggerFactory.getLogger(ConfigApi.class);
     private final ApiClient client;
+    private final String url;
 
-    public ConfigApi(ApiClient client) {
+    public ConfigApi(ApiClient client, String url) {
         this.client = Objects.requireNonNull(client);
+        this.url = Objects.requireNonNull(url);
     }
 
     public List<String> getDnByClassId(String cookie, UcsEnums.NamingClassId item) throws ApiException {
         LOG.info("getDnByClassId: {}", item);
         return client.getUcsXmlApiResponse(
                             UcsXmlApiRequest.getConfigFindDnsByClassIdRequest(cookie,item),
+                            this.url,
                             ConfigFindDnsByClassIdResponse.class
                 ).dns.stream().map(s -> s.value).collect(Collectors.toList());
     }
 
     public String getUcsEntityByDn(String cookie, String dn, boolean inHierarchical) throws ApiException {
         LOG.info("getUcsEntityByDn: {}", dn);
-        return client.doPost(UcsXmlApiRequest.getConfigResolveDnRequest(cookie,dn,inHierarchical));
+        return client.doPost(UcsXmlApiRequest.getConfigResolveDnRequest(cookie,dn,inHierarchical), url);
     }
 
     public ComputeBlade getUcsComputeBladeByResponse(String response) throws ApiException {
@@ -88,7 +91,7 @@ public class ConfigApi {
     }
 
     public NetworkElement getUcsNetworkElementByResponse(String response) throws ApiException {
-        return client.getUcsXmlApiResponse(response,
+        return client.getUcsXmlApiResponse(response, this.url,
                 ConfigResolveDnResponseNetworkElement.class)
                 .outconfig
                 .networkElement;
@@ -98,6 +101,7 @@ public class ConfigApi {
         LOG.info("getUcsComputeBladeListByClassId: {}", UcsEnums.NamingClassId.computeBlade);
         return client.getUcsXmlApiResponse(
                 UcsXmlApiRequest.getConfigResolveClassRequest(cookie, UcsEnums.NamingClassId.computeBlade),
+                this.url,
                 ConfigResolveClassResponseComputeBlade.class
         ).computeBlades;
     }
@@ -106,6 +110,7 @@ public class ConfigApi {
         LOG.info("getUcsComputeBladeByClassId: {}" , UcsEnums.NamingClassId.computeRackUnit);
         return client.getUcsXmlApiResponse(
                 UcsXmlApiRequest.getConfigResolveClassRequest(cookie, UcsEnums.NamingClassId.computeRackUnit),
+                this.url,
                 ConfigResolveClassResponseComputeRackUnit.class
         ).computeRackUnits;
     }
@@ -114,6 +119,7 @@ public class ConfigApi {
         LOG.info("getUcsEquipmentChassisListByClassId: {}", UcsEnums.NamingClassId.equipmentChassis);
         return client.getUcsXmlApiResponse(
                 UcsXmlApiRequest.getConfigResolveClassRequest(cookie, UcsEnums.NamingClassId.equipmentChassis),
+                this.url,
                 ConfigResolveClassResponseEquipmentChassis.class
         ).equipmentChasses;
     }
@@ -122,6 +128,7 @@ public class ConfigApi {
         LOG.info("getUcsEquipmentFexListByClassId: {}", UcsEnums.NamingClassId.equipmentFex);
         return client.getUcsXmlApiResponse(
                 UcsXmlApiRequest.getConfigResolveClassRequest(cookie, UcsEnums.NamingClassId.equipmentFex),
+                this.url,
                 ConfigResolveClassResponseEquipmentFex.class
         ).equipmentFexes;
     }
@@ -130,6 +137,7 @@ public class ConfigApi {
         LOG.info("getUcsEquipmentRackEnclosureListByClassId: {}", UcsEnums.NamingClassId.equipmentRackEnclosure);
         return client.getUcsXmlApiResponse(
                 UcsXmlApiRequest.getConfigResolveClassRequest(cookie, UcsEnums.NamingClassId.equipmentRackEnclosure),
+                this.url,
                 ConfigResolveClassResponseEquipmentRackEnclosure.class
         ).equipmentRackEnclosures;
     }
@@ -138,6 +146,7 @@ public class ConfigApi {
         LOG.info("getUcsNetworkElementListByClassId: {}", UcsEnums.NamingClassId.networkElement);
         return client.getUcsXmlApiResponse(
                 UcsXmlApiRequest.getConfigResolveClassRequest(cookie, UcsEnums.NamingClassId.networkElement),
+                this.url,
                 ConfigResolveClassResponseNetworkElement.class
         ).networkElements;
     }

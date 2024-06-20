@@ -19,27 +19,30 @@ public class AaaApi {
     private final ApiClient client;
     private final String username;
     private final String password;
+    private final String url;
     private String token;
     private LocalDateTime validityTime = LocalDateTime.now();
 
     public AaaApi(ApiClientCredentials credentials, ApiClient client) {
         Objects.requireNonNull(credentials);
+        this.url = Objects.requireNonNull(credentials.url);
         this.username = credentials.username;
         this.password = Objects.requireNonNull(credentials.password);
         this.client = Objects.requireNonNull(client);
     }
 
     public void keepAlive() throws ApiException {
-        LOG.info("keepAlive: {} to {}", this.username, this.client.getUrl());
-        client.doPost(UcsXmlApiRequest.getKeepAliveRequest(this.token));
+        LOG.info("keepAlive: {} to {}", this.username, this.url);
+        client.doPost(UcsXmlApiRequest.getKeepAliveRequest(this.token), this.url);
     }
 
     public void login() throws ApiException {
-        LOG.info("login: {} to {}", this.username, this.client.getUrl());
+        LOG.info("login: {} to {}", this.username, this.url);
         AaaLoginResponse response =
              client.getUcsXmlApiResponse
-                (UcsXmlApiRequest.getLoginRequest(this.username,this.password)
-                    ,AaaLoginResponse.class
+                (UcsXmlApiRequest.getLoginRequest(this.username,this.password),
+                        this.url,
+                        AaaLoginResponse.class
                 );
         LOG.debug("login: {}", response);
         if (response.errorCode > 0) {
@@ -52,11 +55,12 @@ public class AaaApi {
     }
 
     public void refresh() throws ApiException {
-        LOG.info("refresh: {} to {}", this.username, this.client.getUrl());
+        LOG.info("refresh: {} to {}", this.username, this.url);
         AaaRefreshResponse response =
                 client.getUcsXmlApiResponse
-                (UcsXmlApiRequest.getRefreshRequest(this.username,this.password, this.token)
-                        , AaaRefreshResponse.class
+                (UcsXmlApiRequest.getRefreshRequest(this.username,this.password, this.token),
+                        this.url,
+                        AaaRefreshResponse.class
                 );
         LOG.debug("refresh: {}", response);
         if (response.errorCode > 0) {
@@ -68,9 +72,10 @@ public class AaaApi {
     }
 
     public void logout() throws ApiException {
-        LOG.info("logout: {} from {}", this.username, this.client.getUrl());
+        LOG.info("logout: {} from {}", this.username, this.url);
         AaaLogoutResponse response = client.getUcsXmlApiResponse
-                    (UcsXmlApiRequest.getLogoutRequest(token),
+                (UcsXmlApiRequest.getLogoutRequest(token),
+                    this.url,
                     AaaLogoutResponse.class
                 );
         LOG.debug("logout: {}", response);

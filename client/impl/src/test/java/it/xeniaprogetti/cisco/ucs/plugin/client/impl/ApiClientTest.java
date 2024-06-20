@@ -12,7 +12,6 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.ConfigApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.FaultApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.IpApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.handler.ApiClient;
-import it.xeniaprogetti.cisco.ucs.plugin.client.impl.handler.ApiRequest;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.handler.CustomXmlMapper;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.compute.ComputeBlade;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.compute.ComputeRackUnit;
@@ -41,11 +40,16 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigResolv
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigResolveDnResponseNetworkElement;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ErrorResponse;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.FcStats;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.time.Duration;
@@ -380,13 +384,13 @@ public class ApiClientTest {
     @Test
     public void getComputerRackEnclosureXmlString() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi aaaApi = new AaaApi(credentials,apiClient);
         aaaApi.login();
         String xmlRequest = "<configResolveDn dn=\"sys/rack-enclosure-1\" cookie=\""+aaaApi.getToken()+"\" inHierarchical=\"false\"/>";
         Assert.assertEquals(xmlRequest, UcsXmlApiRequest.getConfigResolveDnRequest(aaaApi.getToken(),"sys/rack-enclosure-1", false));
-        String xmlString = apiClient.doPost(UcsXmlApiRequest.getConfigResolveDnRequest(aaaApi.getToken(),"sys/rack-enclosure-1", false));
+        String xmlString = apiClient.doPost(UcsXmlApiRequest.getConfigResolveDnRequest(aaaApi.getToken(),"sys/rack-enclosure-1", false),credentials.url);
         System.out.println(xmlString);
         aaaApi.logout();
     }
@@ -417,7 +421,7 @@ public class ApiClientTest {
     @Test
     public void testAaaLoginApi() throws InterruptedException, ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi aaaApi = new AaaApi(credentials,apiClient);
         Assert.assertFalse(aaaApi.isValid());
@@ -439,7 +443,7 @@ public class ApiClientTest {
         LOG.info("refresh validity: {}", aaaApi.getValidityTime());
         Thread.sleep(1000);
         aaaApi.logout();
-        Assert.assertFalse(aaaApi.isValid());
+        Assert.assertNull(aaaApi.getToken());
 
     }
 
@@ -451,7 +455,7 @@ public class ApiClientTest {
                 .withPassword("pluto")
                 .withIgnoreSslCertificateValidation(true)
                 .build();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         try {
@@ -469,11 +473,11 @@ public class ApiClientTest {
     @Test
     public void testConfigApiResolveClassNetworkElement() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient client = new ApiClient(credentials.url);
+        ApiClient client = new ApiClient();
         client.setTrustAllCertsClient();
         AaaApi aaaApi = new AaaApi(credentials,client);
         aaaApi.login();
-        ConfigApi configApi = new ConfigApi(client);
+        ConfigApi configApi = new ConfigApi(client,credentials.url);
         List<NetworkElement> elements = configApi.getUcsNetworkElementListByClassId(aaaApi.getToken());
         Assert.assertFalse(elements.isEmpty());
         aaaApi.logout();
@@ -482,11 +486,11 @@ public class ApiClientTest {
     @Test
     public void testConfigApiResolveClassEquipmentFex() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient client = new ApiClient(credentials.url);
+        ApiClient client = new ApiClient();
         client.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,client);
         loginApi.login();
-        ConfigApi configApi = new ConfigApi(client);
+        ConfigApi configApi = new ConfigApi(client,credentials.url);
         List<EquipmentFex> elements = configApi.getUcsEquipmentFexListByClassId(loginApi.getToken());
         Assert.assertFalse(elements.isEmpty());
         loginApi.logout();
@@ -495,11 +499,11 @@ public class ApiClientTest {
     @Test
     public void testConfigApiResolveClassEquipmentChassis() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient client = new ApiClient(credentials.url);
+        ApiClient client = new ApiClient();
         client.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,client);
         loginApi.login();
-        ConfigApi configApi = new ConfigApi(client);
+        ConfigApi configApi = new ConfigApi(client, credentials.url);
         List<EquipmentChassis> elements = configApi.getUcsEquipmentChassisListByClassId(loginApi.getToken());
         Assert.assertFalse(elements.isEmpty());
         Assert.assertEquals(2, elements.size());
@@ -509,11 +513,11 @@ public class ApiClientTest {
     @Test
     public void testConfigApiResolveClassEquipmentRackEnclosure() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient client = new ApiClient(credentials.url);
+        ApiClient client = new ApiClient();
         client.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,client);
         loginApi.login();
-        ConfigApi configApi = new ConfigApi(client);
+        ConfigApi configApi = new ConfigApi(client,credentials.url);
         List<EquipmentRackEnclosure> elements = configApi.getUcsEquipmentRackEnclosureListByClassId(loginApi.getToken());
         Assert.assertFalse(elements.isEmpty());
         Assert.assertEquals(1, elements.size());
@@ -523,11 +527,11 @@ public class ApiClientTest {
     @Test
     public void testConfigApiResolveClassComputeBlade() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient client = new ApiClient(credentials.url);
+        ApiClient client = new ApiClient();
         client.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,client);
         loginApi.login();
-        ConfigApi configApi = new ConfigApi(client);
+        ConfigApi configApi = new ConfigApi(client,credentials.url);
         List<ComputeBlade> elements = configApi.getUcsComputeBladeListByClassId(loginApi.getToken());
         Assert.assertFalse(elements.isEmpty());
         Assert.assertEquals(5, elements.size());
@@ -537,11 +541,11 @@ public class ApiClientTest {
     @Test
     public void testConfigApiResolveClassComputeRackUnit() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient client = new ApiClient(credentials.url);
+        ApiClient client = new ApiClient();
         client.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,client);
         loginApi.login();
-        ConfigApi configApi = new ConfigApi(client);
+        ConfigApi configApi = new ConfigApi(client,credentials.url);
         List<ComputeRackUnit> elements = configApi.getUcsComputeRackUnitListByClassId(loginApi.getToken());
         Assert.assertFalse(elements.isEmpty());
         Assert.assertEquals(9,elements.size());
@@ -552,11 +556,11 @@ public class ApiClientTest {
     @Test
     public void testApiClientApiEquipmentItem() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
-        ConfigApi api = new ConfigApi(apiClient);
+        ConfigApi api = new ConfigApi(apiClient,credentials.url);
         List<String> dns = api.getDnByClassId(loginApi.getToken(), UcsEnums.NamingClassId.equipmentItem);
         for (String dn : dns) {
             LOG.info("equipmentItem: {}",dn);
@@ -567,11 +571,11 @@ public class ApiClientTest {
     @Test
     public void testApiClientComputeItem() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
-        ConfigApi api = new ConfigApi(apiClient);
+        ConfigApi api = new ConfigApi(apiClient,credentials.url);
         List<String> dns = api.getDnByClassId(loginApi.getToken(), UcsEnums.NamingClassId.computeItem);
         for (String dn : dns) {
             LOG.info("computeItem: {}",dn);
@@ -588,11 +592,11 @@ public class ApiClientTest {
     @Test
     public void testConfigApiChassis3ComputeBlade3WithHierarchy() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
-        ConfigApi api = new ConfigApi(apiClient);
+        ConfigApi api = new ConfigApi(apiClient,credentials.url);
         String computeBlade =
                 api.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-3/blade-3", true);
         System.out.println(computeBlade);
@@ -602,11 +606,11 @@ public class ApiClientTest {
     @Test
     public void testConfigApiChassis3ComputeBlade1WithHierarchy() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
-        ConfigApi api = new ConfigApi(apiClient);
+        ConfigApi api = new ConfigApi(apiClient,credentials.url);
         String computeBlade =
                 api.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-3/blade-1", true);
         System.out.println(computeBlade);
@@ -616,11 +620,11 @@ public class ApiClientTest {
     @Test
     public void testIpApi() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
-        IpApi ipApi = new IpApi(apiClient);
+        IpApi ipApi = new IpApi(apiClient,credentials.url);
         IpPoolUniverse ipPoolUniverse = ipApi.getIpPoolUniverse(loginApi.getToken());
         Set<String> pools = new HashSet<>();
         for (IpPoolAddr pool: ipPoolUniverse.ippoolAddr) {
@@ -671,11 +675,11 @@ public class ApiClientTest {
     @Test
     public void willProduceUcsIpPoolTest() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
-        IpApi ipApi = new IpApi(apiClient);
+        IpApi ipApi = new IpApi(apiClient,credentials.url);
         IpPoolUniverse ipPoolUniverse = ipApi.getIpPoolUniverse(loginApi.getToken());
         for (IpPoolAddr pool: ipPoolUniverse.ippoolAddr) {
             if (!pool.assigned.equals("yes"))
@@ -703,12 +707,12 @@ public class ApiClientTest {
     @Test
     public void testApiClientChasses3ComputeBlade1() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
-        ConfigApi configApi = new ConfigApi(apiClient);
-        IpApi ipApi = new IpApi(apiClient);
+        ConfigApi configApi = new ConfigApi(apiClient,credentials.url);
+        IpApi ipApi = new IpApi(apiClient,credentials.url);
         ComputeBlade computeBlade =
                 configApi.getUcsComputeBladeByResponse(
                         configApi.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-3/blade-1", false)
@@ -762,11 +766,11 @@ public class ApiClientTest {
     @Test
     public void testApiClientChassis3ComputeBlade2() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
-        ConfigApi api = new ConfigApi(apiClient);
+        ConfigApi api = new ConfigApi(apiClient,credentials.url);
         ComputeBlade computeBlade =
                 api.getUcsComputeBladeByResponse(
                         api.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-3/blade-2", false)
@@ -800,11 +804,11 @@ public class ApiClientTest {
     @Test
     public void testApiClientChassis3ComputeBlade3() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
-        ConfigApi api = new ConfigApi(apiClient);
+        ConfigApi api = new ConfigApi(apiClient,credentials.url);
         ComputeBlade computeBlade =
                 api.getUcsComputeBladeByResponse(
                         api.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-3/blade-3", false)
@@ -836,11 +840,11 @@ public class ApiClientTest {
     @Test
     public void testConfigApiServiceProfileByDn() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
-        ConfigApi api = new ConfigApi(apiClient);
+        ConfigApi api = new ConfigApi(apiClient,credentials.url);
         String serviceProfile =
                 api.getUcsEntityByDn(loginApi.getToken(),"org-root/ls-osi01-w01-prd01-lnx15", true);
         LOG.info("{}", serviceProfile);
@@ -850,11 +854,11 @@ public class ApiClientTest {
     @Test
     public void testApiClientComputeRackUnit1() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
-        ConfigApi api = new ConfigApi(apiClient);
+        ConfigApi api = new ConfigApi(apiClient,credentials.url);
         ComputeRackUnit computeRackUnit =
                 api.getUcsComputeRackUnitByResponse(
                         api.getUcsEntityByDn(loginApi.getToken(), "sys/rack-unit-1", false)
@@ -888,11 +892,11 @@ public class ApiClientTest {
     @Test
     public void testApiClientComputeRackUnit8() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
-        ConfigApi api = new ConfigApi(apiClient);
+        ConfigApi api = new ConfigApi(apiClient,credentials.url);
         ComputeRackUnit computeRackUnit =
                 api.getUcsComputeRackUnitByResponse(
                         api.getUcsEntityByDn(loginApi.getToken(), "sys/rack-unit-8", false)
@@ -926,11 +930,11 @@ public class ApiClientTest {
     @Test
     public void testApiClientComputeRackUnit9() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
-        ConfigApi api = new ConfigApi(apiClient);
+        ConfigApi api = new ConfigApi(apiClient,credentials.url);
         ComputeRackUnit computeRackUnit =
                 api.getUcsComputeRackUnitByResponse(
                         api.getUcsEntityByDn(loginApi.getToken(), "sys/rack-unit-9", false)
@@ -964,11 +968,11 @@ public class ApiClientTest {
     @Test
     public void testApiEquipmentChassis3() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
-        ConfigApi api = new ConfigApi(apiClient);
+        ConfigApi api = new ConfigApi(apiClient,credentials.url);
         EquipmentChassis equipment =
                 api.getUcsEquipmentChassisByResponse(
                         api.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-3", false)
@@ -1014,11 +1018,11 @@ Thermal	:	OK
     @Test
     public void testApiEquipmentChassis4() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
-        ConfigApi api = new ConfigApi(apiClient);
+        ConfigApi api = new ConfigApi(apiClient,credentials.url);
         EquipmentChassis equipment =
                 api.getUcsEquipmentChassisByResponse(
                         api.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-4", false)
@@ -1064,11 +1068,11 @@ Thermal	:	OK
     @Test
     public void testApiEquipmentFex1() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
-        ConfigApi api = new ConfigApi(apiClient);
+        ConfigApi api = new ConfigApi(apiClient,credentials.url);
         EquipmentFex equipment =
                 api.getUcsEquipmentFexByResponse(
                         api.getUcsEntityByDn(loginApi.getToken(), "sys/fex-1", false)
@@ -1104,11 +1108,11 @@ Thermal	:	N/A
     @Test
     public void testApiEquipmentFex2() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
-        ConfigApi api = new ConfigApi(apiClient);
+        ConfigApi api = new ConfigApi(apiClient,credentials.url);
         EquipmentFex equipment =
                 api.getUcsEquipmentFexByResponse(
                         api.getUcsEntityByDn(loginApi.getToken(), "sys/fex-2", false)
@@ -1143,11 +1147,11 @@ Thermal	:	N/A
     @Test
     public void testApiEquipmentRackEnclosure1() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
-        ConfigApi api = new ConfigApi(apiClient);
+        ConfigApi api = new ConfigApi(apiClient,credentials.url);
         EquipmentRackEnclosure equipment =
                 api.getUcsEquipmentRackEnclosureByResponse(
                         api.getUcsEntityByDn(loginApi.getToken(), "sys/rack-enclosure-1", false)
@@ -1164,11 +1168,11 @@ Thermal	:	N/A
     @Test
     public void testApiNetworkElementA() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
-        ConfigApi api = new ConfigApi(apiClient);
+        ConfigApi api = new ConfigApi(apiClient,credentials.url);
         NetworkElement networkElement =
                 api.getUcsNetworkElementByResponse(
                         api.getUcsEntityByDn(
@@ -1209,11 +1213,11 @@ Oper Evac Mode	:	Off
     @Test
     public void testApiNetworkElementB() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
-        ConfigApi api = new ConfigApi(apiClient);
+        ConfigApi api = new ConfigApi(apiClient,credentials.url);
         NetworkElement networkElement =
                 api.getUcsNetworkElementByResponse(
                         api.getUcsEntityByDn(
@@ -1256,11 +1260,11 @@ Oper Evac Mode	:	Off
     @Test
     public void testApiNetworkElementDnFullHierarchicalTrue() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
-        ConfigApi api = new ConfigApi(apiClient);
+        ConfigApi api = new ConfigApi(apiClient,credentials.url);
         String response = api.getUcsEntityByDn(loginApi.getToken(), "sys/switch-A", true);
         LOG.info("{}", response);
         System.out.println(response);
@@ -1270,11 +1274,11 @@ Oper Evac Mode	:	Off
     @Test
     public void testApiNetworkElementNotExistByDn() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
-        ConfigApi api = new ConfigApi(apiClient);
+        ConfigApi api = new ConfigApi(apiClient,credentials.url);
         String response = api.getUcsEntityByDn(loginApi.getToken(), "sys/switch-K", false);
         LOG.info("{}", response);
         Assert.assertNull(api.getUcsNetworkElementByResponse(response));
@@ -1284,7 +1288,7 @@ Oper Evac Mode	:	Off
     @Test
     public void testApiExistDnButIsUnsupported() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         try {
@@ -1292,7 +1296,7 @@ Oper Evac Mode	:	Off
         } catch (ApiException e) {
             throw new RuntimeException(e);
         }
-        ConfigApi api = new ConfigApi(apiClient);
+        ConfigApi api = new ConfigApi(apiClient,credentials.url);
         String response = api.getUcsEntityByDn(loginApi.getToken(), "sys/chassis-4/psu-4", false);
         LOG.info("{}", response);
         try {
@@ -1307,13 +1311,13 @@ Oper Evac Mode	:	Off
     @Test
     public void testEventSubscriptionRequest() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
         loginApi.keepAlive();
         try {
-            apiClient.doPost(UcsXmlApiRequest.getEventSubscriptionRequest(loginApi.getToken()));
+            apiClient.doPost(UcsXmlApiRequest.getEventSubscriptionRequest(loginApi.getToken()),credentials.url);
         } catch (ApiException e) {
             LOG.error("{}", e.getMessage());
         }
@@ -1323,12 +1327,12 @@ Oper Evac Mode	:	Off
     @Test
     public void testEventUnSubscriptionRequest() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
         loginApi.login();
         try {
-            apiClient.doPost(UcsXmlApiRequest.getEventUnsubscribeRequest(loginApi.getToken()));
+            apiClient.doPost(UcsXmlApiRequest.getEventUnsubscribeRequest(loginApi.getToken()),credentials.url);
         } catch (ApiException e) {
             LOG.error("{}", e.getMessage());
         }
@@ -1336,73 +1340,83 @@ Oper Evac Mode	:	Off
     }
 
     @Test
-    public void asyncDoPostTest() throws JsonProcessingException, ApiException, InterruptedException {
+    public void asyncDoPostTest() throws IOException, ApiException, InterruptedException {
+        Callback callback = new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                LOG.error("doAsyncPost: {}", e.getMessage(), e);
+                throw new RuntimeException("doPost: " + e.getMessage(), e);
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                assert response.body() != null;
+                LOG.debug("doAsyncPost: {}", response.body().string());
+            }
+        };
         XmlMapper mapper = new CustomXmlMapper();
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
-        String loginResponse = apiClient.doPost(UcsXmlApiRequest.getLoginRequest(credentials.username,credentials.password));
+        String loginResponse = apiClient.doPost(UcsXmlApiRequest.getLoginRequest(credentials.username,credentials.password), credentials.url);
         AaaLoginResponse aaaLoginResponse =  mapper.readValue(loginResponse,AaaLoginResponse.class);
         String token = aaaLoginResponse.outCookie;
-        final ApiRequest apiRequest1 = new ApiRequest(UcsXmlApiRequest.getConfigFindDnsByClassIdRequest(token, UcsEnums.NamingClassId.faultInst));
-        final ApiRequest apiRequest2 = new ApiRequest(UcsXmlApiRequest.getConfigFindDnsByClassIdRequest(token, UcsEnums.NamingClassId.fcErrStats));
-        final ApiRequest apiRequest3 = new ApiRequest(UcsXmlApiRequest.getConfigFindDnsByClassIdRequest(token, UcsEnums.NamingClassId.fcpoolAddr));
-        apiClient.doAsyncPost(apiRequest1);
-        apiClient.doAsyncPost(apiRequest2);
-        apiClient.doAsyncPost(apiRequest3);
+        apiClient.doAsyncPost(UcsXmlApiRequest.getConfigFindDnsByClassIdRequest(token, UcsEnums.NamingClassId.faultInst), credentials.url, callback);
+        apiClient.doAsyncPost(UcsXmlApiRequest.getConfigFindDnsByClassIdRequest(token, UcsEnums.NamingClassId.fcErrStats), credentials.url, callback);
+        apiClient.doAsyncPost(UcsXmlApiRequest.getConfigFindDnsByClassIdRequest(token, UcsEnums.NamingClassId.fcpoolAddr), credentials.url, callback);
         Thread.sleep(20000);
 
-        apiClient.doPost(UcsXmlApiRequest.getLogoutRequest(token));
+        apiClient.doPost(UcsXmlApiRequest.getLogoutRequest(token), credentials.url);
     }
 
     @Test
     public void inFilterTest() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials, apiClient);
         loginApi.login();
         UcsXmlApiRequest.InFilter eqFilter = UcsXmlApiRequest.getEqFilter(UcsEnums.NamingClassId.lsServer, "assocState", "associated");
-        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), eqFilter, UcsEnums.NamingClassId.lsServer ));
+        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), eqFilter, UcsEnums.NamingClassId.lsServer ),credentials.url);
         UcsXmlApiRequest.InFilter neFilter = UcsXmlApiRequest.getNeFilter(UcsEnums.NamingClassId.lsServer, "assignState", "assigned");
-        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), neFilter, UcsEnums.NamingClassId.lsServer ));
+        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), neFilter, UcsEnums.NamingClassId.lsServer ), credentials.url);
         UcsXmlApiRequest.InFilter gtFilter = UcsXmlApiRequest.getGtFilter(UcsEnums.NamingClassId.memoryArray, "currCapacity", 1024);
-        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), gtFilter, UcsEnums.NamingClassId.memoryArray ));
+        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), gtFilter, UcsEnums.NamingClassId.memoryArray ),credentials.url);
         UcsXmlApiRequest.InFilter geFilter = UcsXmlApiRequest.getGeFilter(UcsEnums.NamingClassId.memoryArray, "currCapacity", 2048);
-        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), geFilter, UcsEnums.NamingClassId.memoryArray ));
+        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), geFilter, UcsEnums.NamingClassId.memoryArray ),credentials.url);
         UcsXmlApiRequest.InFilter ltFilter = UcsXmlApiRequest.getLtFilter(UcsEnums.NamingClassId.memoryArray, "currCapacity", 1024);
-        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), ltFilter, UcsEnums.NamingClassId.memoryArray ));
+        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), ltFilter, UcsEnums.NamingClassId.memoryArray ),credentials.url);
         UcsXmlApiRequest.InFilter leFilter = UcsXmlApiRequest.getLeFilter(UcsEnums.NamingClassId.memoryArray, "currCapacity", 2048);
-        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), leFilter, UcsEnums.NamingClassId.memoryArray ));
+        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), leFilter, UcsEnums.NamingClassId.memoryArray ),credentials.url);
         UcsXmlApiRequest.InFilter wCardFilter = UcsXmlApiRequest.getWCardFilter(UcsEnums.NamingClassId.adaptorUnit, "serial","QCI1.*");
-        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), wCardFilter, UcsEnums.NamingClassId.adaptorUnit ));
+        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), wCardFilter, UcsEnums.NamingClassId.adaptorUnit ),credentials.url);
         UcsXmlApiRequest.InFilter anyBitFilter = UcsXmlApiRequest.getAnyBitFilter(UcsEnums.NamingClassId.computeItem, "connStatus","A,B");
-        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), anyBitFilter, UcsEnums.NamingClassId.computeItem ));
+        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), anyBitFilter, UcsEnums.NamingClassId.computeItem ),credentials.url);
         UcsXmlApiRequest.InFilter allBitFilter = UcsXmlApiRequest.getAllBitFilter(UcsEnums.NamingClassId.lsServer, "configQualifier", "vnic-capacity,vhba-capacity");
-        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), allBitFilter, UcsEnums.NamingClassId.lsServer ));
+        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), allBitFilter, UcsEnums.NamingClassId.lsServer ),credentials.url);
 
         UcsXmlApiRequest.InFilter andEq1Filter = UcsXmlApiRequest.getEqFilter(UcsEnums.NamingClassId.uuidpoolAddr, "owner","pool");
         UcsXmlApiRequest.InFilter andEq2Filter = UcsXmlApiRequest.getEqFilter(UcsEnums.NamingClassId.uuidpoolAddr, "assigned","yes");
         UcsXmlApiRequest.InFilter andFilter = UcsXmlApiRequest.getAndFilter(new UcsXmlApiRequest.InFilter[] {andEq1Filter,andEq2Filter});
-        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), andFilter, UcsEnums.NamingClassId.uuidpoolAddr ));
+        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), andFilter, UcsEnums.NamingClassId.uuidpoolAddr ),credentials.url);
 
 
         UcsXmlApiRequest.InFilter orEq1Filter = UcsXmlApiRequest.getEqFilter(UcsEnums.NamingClassId.computeItem, "slotId", "1");
         UcsXmlApiRequest.InFilter orEq2Filter = UcsXmlApiRequest.getEqFilter(UcsEnums.NamingClassId.computeItem, "slotId", "8");
         UcsXmlApiRequest.InFilter orFilter = UcsXmlApiRequest.getOrFilter(new UcsXmlApiRequest.InFilter[] {orEq1Filter,orEq2Filter});
-        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), orFilter, UcsEnums.NamingClassId.computeItem ));
+        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), orFilter, UcsEnums.NamingClassId.computeItem ),credentials.url);
 
         UcsXmlApiRequest.InFilter betweenFilter = UcsXmlApiRequest.getBetweenFilter(UcsEnums.NamingClassId.memoryArray, "populated", 1, 5);
-        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), betweenFilter, UcsEnums.NamingClassId.memoryArray ));
+        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), betweenFilter, UcsEnums.NamingClassId.memoryArray ),credentials.url);
 
         UcsXmlApiRequest.InFilter notFilter = UcsXmlApiRequest.getNotFilter(UcsXmlApiRequest.getAnyBitFilter(UcsEnums.NamingClassId.computeItem,"connStatus","unknown"));
-        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), notFilter, UcsEnums.NamingClassId.computeItem ));
+        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), notFilter, UcsEnums.NamingClassId.computeItem ),credentials.url);
 
         UcsXmlApiRequest.InFilter compositeFilter = UcsXmlApiRequest
                 .getAndFilter(new UcsXmlApiRequest.InFilter[] {orFilter,
                         UcsXmlApiRequest
                                 .getNotFilter(UcsXmlApiRequest.getEqFilter(UcsEnums.NamingClassId.computeItem, "chassisId", "5"))});
-        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), compositeFilter, UcsEnums.NamingClassId.computeItem ));
+        apiClient.doPost(UcsXmlApiRequest.getConfigResolveClassRequest(loginApi.getToken(), compositeFilter, UcsEnums.NamingClassId.computeItem ),credentials.url);
 
         loginApi.logout();
 
@@ -1411,10 +1425,10 @@ Oper Evac Mode	:	Off
     @Test
     public void testUcsQueryForFaultsWithFilter() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials, apiClient);
-        FaultApi faultApi = new FaultApi(apiClient);
+        FaultApi faultApi = new FaultApi(apiClient,credentials.url);
         loginApi.login();
         String filterMajorString = "<eq class=\"faultInst\" property=\"highestSeverity\" value=\"major\" />";
         UcsXmlApiRequest.InFilter filterMajor = UcsXmlApiRequest.getEqFilter(UcsEnums.NamingClassId.faultInst, "highestSeverity", "major");
@@ -1466,11 +1480,11 @@ Oper Evac Mode	:	Off
     @Test
     public void testUcsQueryForFaultsInstanceDn() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials, apiClient);
         loginApi.login();
-        ConfigApi configApi = new ConfigApi(apiClient);
+        ConfigApi configApi = new ConfigApi(apiClient,credentials.url);
         List<String> faultsDn = configApi.getDnByClassId(loginApi.getToken(), UcsEnums.NamingClassId.faultInst);
         System.out.println(faultsDn.size());
         faultsDn.forEach(System.out::println);
@@ -1484,10 +1498,10 @@ Oper Evac Mode	:	Off
     @Test
     public void testUcsQueryForFaults() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
-        FaultApi faultApi = new FaultApi(apiClient);
+        FaultApi faultApi = new FaultApi(apiClient,credentials.url);
         loginApi.login();
         final Set<String> codes = new HashSet<>();
         final Set<String> causes = new HashSet<>();
@@ -1526,10 +1540,10 @@ Oper Evac Mode	:	Off
     @Test
     public void testFabricHierarchy() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
-        ConfigApi configApi = new ConfigApi(apiClient);
+        ConfigApi configApi = new ConfigApi(apiClient,credentials.url);
         loginApi.login();
         System.out.println("->"+UcsEnums.NamingClassId.fabricEp);
         configApi.getDnByClassId(loginApi.getToken(), UcsEnums.NamingClassId.fabricEp).forEach(System.out::println);
@@ -1556,10 +1570,10 @@ Oper Evac Mode	:	Off
     @Test
     public void testUcsFabricSanB() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
-        ConfigApi configApi = new ConfigApi(apiClient);
+        ConfigApi configApi = new ConfigApi(apiClient,credentials.url);
         loginApi.login();
         System.out.println(configApi.getUcsEntityByDn(loginApi.getToken(), "fabric/san/B",false));
         loginApi.logout();
@@ -1568,10 +1582,10 @@ Oper Evac Mode	:	Off
     @Test
     public void testUcsFabricLanA() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
-        ConfigApi configApi = new ConfigApi(apiClient);
+        ConfigApi configApi = new ConfigApi(apiClient,credentials.url);
         loginApi.login();
         System.out.println(configApi.getUcsEntityByDn(loginApi.getToken(), "fabric/lan/A",false));
         loginApi.logout();
@@ -1595,10 +1609,10 @@ Oper Evac Mode	:	Off
     @Test
     public void testSwitchSystat() throws ApiException {
         ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         apiClient.setTrustAllCertsClient();
         AaaApi loginApi = new AaaApi(credentials,apiClient);
-        ConfigApi configApi = new ConfigApi(apiClient);
+        ConfigApi configApi = new ConfigApi(apiClient,credentials.url);
         loginApi.login();
         System.out.println(configApi.getUcsEntityByDn(loginApi.getToken(), "sys/switch-A/sysstats",false));
         loginApi.logout();
@@ -1606,8 +1620,7 @@ Oper Evac Mode	:	Off
 
     @Test
     public void testConvertProperlyFcStats() throws ApiException {
-        ApiClientCredentials credentials = getCredentials();
-        ApiClient apiClient = new ApiClient(credentials.url);
+        ApiClient apiClient = new ApiClient();
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(
                 "EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
 

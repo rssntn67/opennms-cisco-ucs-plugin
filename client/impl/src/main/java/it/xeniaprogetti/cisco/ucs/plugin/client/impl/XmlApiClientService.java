@@ -83,10 +83,10 @@ public class XmlApiClientService implements ApiClientService {
         ApiClient client = XmlApiClientProvider.createApiClient(credentials);
         this.credentials = credentials;
         this.aaaApi = new AaaApi(credentials, client);
-        this.configApi = new ConfigApi(client);
-        this.ipApi = new IpApi(client);
-        this.faultApi = new FaultApi(client);
-        this.statsApi = new StatsApi(client);
+        this.configApi = new ConfigApi(client, credentials.url);
+        this.ipApi = new IpApi(client, credentials.url);
+        this.faultApi = new FaultApi(client, credentials.url);
+        this.statsApi = new StatsApi(client, credentials.url);
         this.apiClientProvider = provider;
         this.poolNumber = poolNumber;
     }
@@ -119,7 +119,7 @@ public class XmlApiClientService implements ApiClientService {
     }
 
     @Override
-    public void disconnect() throws ApiException {
+    public void disconnect() {
         try {
             aaaApi.logout();
         } catch (ApiException e) {

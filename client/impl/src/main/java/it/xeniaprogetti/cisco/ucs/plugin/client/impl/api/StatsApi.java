@@ -76,19 +76,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Objects;
 
 public class StatsApi {
     private final Logger LOG = LoggerFactory.getLogger(StatsApi.class);
     private final ApiClient client;
+    private final String url;
 
-    public StatsApi(ApiClient client) {
-        this.client = client;
+    public StatsApi(ApiClient client, String url) {
+        this.client = Objects.requireNonNull(client);
+        this.url = Objects.requireNonNull(url);
     }
 
     public List<AdaptorEthPortErrStats> getAdaptorEthPortErrStats(String cookie, UcsXmlApiRequest.InFilter filter) throws ApiException {
         LOG.info("getAdaptorEthPortErrStats: {} {}", filter, UcsEnums.NamingClassId.adaptorEthPortErrStats);
         return client.getUcsXmlApiResponse(
                 UcsXmlApiRequest.getConfigResolveClassRequest(cookie,filter,UcsEnums.NamingClassId.adaptorEthPortErrStats),
+                this.url,
                 ConfigResolveClassResponseAdaptorEthPortErrStats.class).stats;
     }
 
@@ -96,6 +100,7 @@ public class StatsApi {
         LOG.info("getAdaptorEthPortMcastStats: {} {}", filter, UcsEnums.NamingClassId.adaptorEthPortMcastStats);
         return client.getUcsXmlApiResponse(
                 UcsXmlApiRequest.getConfigResolveClassRequest(cookie,filter,UcsEnums.NamingClassId.adaptorEthPortMcastStats),
+                this.url,
                 ConfigResolveClassResponseAdaptorEthPortMcastStats.class).stats;
     }
 
@@ -103,6 +108,7 @@ public class StatsApi {
         LOG.info("getAdaptorEthPortStats: {} {}", filter, UcsEnums.NamingClassId.adaptorEthPortStats);
         return client.getUcsXmlApiResponse(
                 UcsXmlApiRequest.getConfigResolveClassRequest(cookie,filter,UcsEnums.NamingClassId.adaptorEthPortStats),
+                this.url,
                 ConfigResolveClassResponseAdaptorEthPortStats.class).stats;
     }
 
@@ -110,6 +116,7 @@ public class StatsApi {
         LOG.info("getAdaptorVnicStats: {} {}", filter, UcsEnums.NamingClassId.adaptorVnicStats);
         return client.getUcsXmlApiResponse(
                 UcsXmlApiRequest.getConfigResolveClassRequest(cookie,filter,UcsEnums.NamingClassId.adaptorVnicStats),
+                this.url,
                 ConfigResolveClassResponseAdaptorVnicStats.class).stats;
     }
 
@@ -119,7 +126,9 @@ public class StatsApi {
                 UcsXmlApiRequest.getConfigResolveClassRequest(
                                 cookie,
                                 filter,UcsEnums.NamingClassId.computeMbPowerStats
-                ), ConfigResolveClassResponseComputeMbPowerStats.class)
+                ),
+                this.url,
+                ConfigResolveClassResponseComputeMbPowerStats.class)
                 .stats;
     }
 
@@ -129,7 +138,9 @@ public class StatsApi {
                 UcsXmlApiRequest.getConfigResolveClassRequest(
                         cookie,
                         filter,UcsEnums.NamingClassId.computeMbTempStats
-                ), ConfigResolveClassResponseComputeMbTempStats.class)
+                ),
+                this.url,
+                ConfigResolveClassResponseComputeMbTempStats.class)
                 .stats;
     }
 
@@ -139,7 +150,9 @@ public class StatsApi {
                 UcsXmlApiRequest.getConfigResolveClassRequest(
                         cookie,
                         filter,UcsEnums.NamingClassId.computePCIeFatalCompletionStats
-                ), ConfigResolveClassResponseComputePCIeFatalCompletionStats.class)
+                ),
+                this.url,
+                ConfigResolveClassResponseComputePCIeFatalCompletionStats.class)
                 .stats;
     }
 
@@ -149,7 +162,9 @@ public class StatsApi {
                 UcsXmlApiRequest.getConfigResolveClassRequest(
                         cookie,
                         filter,UcsEnums.NamingClassId.computePCIeFatalProtocolStats
-                ), ConfigResolveClassResponseComputePCIeFatalProtocolStats.class)
+                ),
+                this.url,
+                ConfigResolveClassResponseComputePCIeFatalProtocolStats.class)
                 .stats;
     }
 
@@ -159,7 +174,9 @@ public class StatsApi {
                 UcsXmlApiRequest.getConfigResolveClassRequest(
                         cookie,
                         filter,UcsEnums.NamingClassId.computePCIeFatalReceiveStats
-                ), ConfigResolveClassResponseComputePCIeFatalReceiveStats.class)
+                ),
+                this.url,
+                ConfigResolveClassResponseComputePCIeFatalReceiveStats.class)
                 .stats;
     }
 
@@ -169,7 +186,9 @@ public class StatsApi {
                 UcsXmlApiRequest.getConfigResolveClassRequest(
                         cookie,
                         filter,UcsEnums.NamingClassId.computePCIeFatalStats
-                ), ConfigResolveClassResponseComputePCIeFatalStats.class)
+                ),
+                this.url,
+                ConfigResolveClassResponseComputePCIeFatalStats.class)
                 .stats;
     }
 
@@ -179,7 +198,9 @@ public class StatsApi {
                 UcsXmlApiRequest.getConfigResolveClassRequest(
                         cookie,
                         filter,UcsEnums.NamingClassId.equipmentChassisStats
-                ), ConfigResolveClassResponseEquipmentChassisStats.class)
+                ),
+                this.url,
+                ConfigResolveClassResponseEquipmentChassisStats.class)
                 .stats;
     }
 
@@ -189,7 +210,9 @@ public class StatsApi {
                 UcsXmlApiRequest.getConfigResolveClassRequest(
                         cookie,
                         filter,UcsEnums.NamingClassId.equipmentFanModuleStats
-                ), ConfigResolveClassResponseEquipmentFanModuleStats.class)
+                ),
+                this.url,
+                ConfigResolveClassResponseEquipmentFanModuleStats.class)
                 .stats;
     }
 
@@ -199,7 +222,9 @@ public class StatsApi {
                 UcsXmlApiRequest.getConfigResolveClassRequest(
                         cookie,
                         filter,UcsEnums.NamingClassId.equipmentFanStats
-                ), ConfigResolveClassResponseEquipmentFanStats.class)
+                ),
+                this.url,
+                ConfigResolveClassResponseEquipmentFanStats.class)
                 .stats;
     }
 
@@ -209,7 +234,9 @@ public class StatsApi {
                 UcsXmlApiRequest.getConfigResolveClassRequest(
                         cookie,
                         filter,UcsEnums.NamingClassId.equipmentIOCardStats
-                ), ConfigResolveClassResponseEquipmentIOCardStats.class)
+                ),
+                this.url,
+                ConfigResolveClassResponseEquipmentIOCardStats.class)
                 .stats;
     }
 
@@ -219,7 +246,9 @@ public class StatsApi {
                 UcsXmlApiRequest.getConfigResolveClassRequest(
                         cookie,
                         filter,UcsEnums.NamingClassId.equipmentNetworkElementFanStats
-                ), ConfigResolveClassResponseEquipmentNetworkElementFanStats.class)
+                ),
+                this.url,
+                ConfigResolveClassResponseEquipmentNetworkElementFanStats.class)
                 .stats;
     }
 
@@ -229,7 +258,9 @@ public class StatsApi {
                 UcsXmlApiRequest.getConfigResolveClassRequest(
                         cookie,
                         filter,UcsEnums.NamingClassId.equipmentPsuInputStats
-                ), ConfigResolveClassResponseEquipmentPsuInputStats.class)
+                ),
+                this.url,
+                ConfigResolveClassResponseEquipmentPsuInputStats.class)
                 .stats;
     }
 
@@ -239,7 +270,9 @@ public class StatsApi {
                 UcsXmlApiRequest.getConfigResolveClassRequest(
                         cookie,
                         filter,UcsEnums.NamingClassId.equipmentPsuStats
-                ), ConfigResolveClassResponseEquipmentPsuStats.class)
+                ),
+                this.url,
+                ConfigResolveClassResponseEquipmentPsuStats.class)
                 .stats;
     }
 
@@ -249,7 +282,9 @@ public class StatsApi {
                 UcsXmlApiRequest.getConfigResolveClassRequest(
                         cookie,
                         filter,UcsEnums.NamingClassId.etherErrStats
-                ), ConfigResolveClassResponseEtherErrStats.class)
+                ),
+                this.url,
+                ConfigResolveClassResponseEtherErrStats.class)
                 .stats;
     }
 
@@ -259,7 +294,9 @@ public class StatsApi {
                 UcsXmlApiRequest.getConfigResolveClassRequest(
                         cookie,
                         filter,UcsEnums.NamingClassId.etherLossStats
-                ), ConfigResolveClassResponseEtherLossStats.class)
+                ),
+                this.url,
+                ConfigResolveClassResponseEtherLossStats.class)
                 .stats;
     }
 
@@ -269,7 +306,9 @@ public class StatsApi {
                 UcsXmlApiRequest.getConfigResolveClassRequest(
                         cookie,
                         filter,UcsEnums.NamingClassId.etherNiErrStats
-                ), ConfigResolveClassResponseEtherNiErrStats.class)
+                ),
+                this.url,
+                ConfigResolveClassResponseEtherNiErrStats.class)
                 .stats;
     }
 
@@ -279,7 +318,9 @@ public class StatsApi {
                 UcsXmlApiRequest.getConfigResolveClassRequest(
                         cookie,
                         filter,UcsEnums.NamingClassId.etherPauseStats
-                ), ConfigResolveClassResponseEtherPauseStats.class)
+                ),
+                this.url,
+                ConfigResolveClassResponseEtherPauseStats.class)
                 .stats;
     }
 
@@ -289,7 +330,9 @@ public class StatsApi {
                 UcsXmlApiRequest.getConfigResolveClassRequest(
                         cookie,
                         filter,UcsEnums.NamingClassId.etherRxStats
-                ), ConfigResolveClassResponseEtherRxStats.class)
+                ),
+                this.url,
+                ConfigResolveClassResponseEtherRxStats.class)
                 .stats;
     }
 
@@ -299,7 +342,9 @@ public class StatsApi {
                 UcsXmlApiRequest.getConfigResolveClassRequest(
                         cookie,
                         filter,UcsEnums.NamingClassId.etherTxStats
-                ), ConfigResolveClassResponseEtherTxStats.class)
+                ),
+                this.url,
+                ConfigResolveClassResponseEtherTxStats.class)
                 .stats;
     }
 
@@ -309,7 +354,9 @@ public class StatsApi {
                 UcsXmlApiRequest.getConfigResolveClassRequest(
                         cookie,
                         filter,UcsEnums.NamingClassId.fcErrStats
-                ), ConfigResolveClassResponseFcErrStats.class)
+                ),
+                this.url,
+                ConfigResolveClassResponseFcErrStats.class)
                 .stats;
     }
 
@@ -319,7 +366,9 @@ public class StatsApi {
                 UcsXmlApiRequest.getConfigResolveClassRequest(
                         cookie,
                         filter,UcsEnums.NamingClassId.fcStats
-                ), ConfigResolveClassResponseFcStats.class)
+                ),
+                this.url,
+                ConfigResolveClassResponseFcStats.class)
                 .stats;
     }
 
@@ -329,7 +378,9 @@ public class StatsApi {
                 UcsXmlApiRequest.getConfigResolveClassRequest(
                         cookie,
                         filter,UcsEnums.NamingClassId.memoryErrorStats
-                ), ConfigResolveClassResponseMemoryErrorStats.class)
+                ),
+                this.url,
+                ConfigResolveClassResponseMemoryErrorStats.class)
                 .stats;
     }
 
@@ -339,7 +390,9 @@ public class StatsApi {
                 UcsXmlApiRequest.getConfigResolveClassRequest(
                         cookie,
                         filter,UcsEnums.NamingClassId.memoryUnitEnvStats
-                ), ConfigResolveClassResponseMemoryUnitEnvStats.class)
+                ),
+                this.url,
+                ConfigResolveClassResponseMemoryUnitEnvStats.class)
                 .stats;
     }
 
@@ -349,7 +402,9 @@ public class StatsApi {
                 UcsXmlApiRequest.getConfigResolveClassRequest(
                         cookie,
                         filter,UcsEnums.NamingClassId.processorEnvStats
-                ), ConfigResolveClassResponseProcessorEnvStats.class)
+                ),
+                this.url,
+                ConfigResolveClassResponseProcessorEnvStats.class)
                 .stats;
     }
 
@@ -359,7 +414,8 @@ public class StatsApi {
                 UcsXmlApiRequest.getConfigResolveClassRequest(
                         cookie,
                         filter,UcsEnums.NamingClassId.processorErrorStats
-                ), ConfigResolveClassResponseProcessorErrorStats.class)
+                ),                 this.url,
+                ConfigResolveClassResponseProcessorErrorStats.class)
                 .stats;
     }
 
@@ -369,7 +425,9 @@ public class StatsApi {
                 UcsXmlApiRequest.getConfigResolveClassRequest(
                         cookie,
                         filter,UcsEnums.NamingClassId.storageDiskEnvStats
-                ), ConfigResolveClassResponseStorageDiskEnvStats.class)
+                ),
+                this.url,
+                ConfigResolveClassResponseStorageDiskEnvStats.class)
                 .stats;
     }
 
@@ -379,7 +437,8 @@ public class StatsApi {
                 UcsXmlApiRequest.getConfigResolveClassRequest(
                         cookie,
                         filter,UcsEnums.NamingClassId.storageSsdHealthStats
-                ), ConfigResolveClassResponseStorageSsdHealthStats.class)
+                ),                this.url,
+                ConfigResolveClassResponseStorageSsdHealthStats.class)
                 .stats;
     }
 
@@ -387,6 +446,7 @@ public class StatsApi {
         LOG.info("getUcsSwEnvStats: {} {}", filter, UcsEnums.NamingClassId.swEnvStats);
         return client.getUcsXmlApiResponse(
                 UcsXmlApiRequest.getConfigResolveClassRequest(cookie,filter,UcsEnums.NamingClassId.swEnvStats),
+                this.url,
                 ConfigResolveClassResponseSwEnvStats.class).stats;
     }
 
@@ -394,6 +454,7 @@ public class StatsApi {
         LOG.info("getSwCardEnvStats: {} {}", filter, UcsEnums.NamingClassId.swCardEnvStats);
         return client.getUcsXmlApiResponse(
                 UcsXmlApiRequest.getConfigResolveClassRequest(cookie,filter,UcsEnums.NamingClassId.swCardEnvStats),
+                this.url,
                 ConfigResolveClassResponseSwCardEnvStats.class).stats;
     }
 
@@ -401,6 +462,7 @@ public class StatsApi {
         LOG.info("getSwEnvStats: {} {}", filter, UcsEnums.NamingClassId.swSystemStats);
         return client.getUcsXmlApiResponse(
                 UcsXmlApiRequest.getConfigResolveClassRequest(cookie,filter,UcsEnums.NamingClassId.swSystemStats),
+                this.url,
                 ConfigResolveClassResponseSwSystemStats.class).stats;
     }
 
