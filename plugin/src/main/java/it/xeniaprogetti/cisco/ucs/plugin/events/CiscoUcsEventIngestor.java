@@ -116,6 +116,18 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
         public int hashCode() {
             return Objects.hash(foreignSource, dn, type, alias);
         }
+
+        @Override
+        public String toString() {
+            return "RequisitionIdentifier{" +
+                    "foreignSource='" + foreignSource + '\'' +
+                    ", dn='" + dn + '\'' +
+                    ", fabricLanDn='" + fabricLanDn + '\'' +
+                    ", fabricSanDn='" + fabricSanDn + '\'' +
+                    ", alias='" + alias + '\'' +
+                    ", type=" + type +
+                    '}';
+        }
     }
 
     public CiscoUcsEventIngestor(final ConnectionManager connectionManager,
@@ -185,6 +197,10 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
             }
         }
 
+        for (String curAlias: dnMap.keySet()) {
+            LOG.debug("run: dnMap:{} {}",curAlias, dnMap.get(curAlias));
+
+        }
         Map<String, AlarmType> ciscoUcsFaults =
                 alarmDao.getAlarms().stream()
                         .filter(a -> a.getReductionKey().startsWith(CISCO_UCS_ALARM_UEI+":"))
@@ -222,8 +238,10 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
         int resolved = 0;
         int ignored = 0;
         assert ucsFaults != null;
+        LOG.debug("processAlerts: found {} Fault Instances", ucsFaults.size());
 
         for (final UcsFault ucsFault : ucsFaults) {
+            LOG.debug("processAlerts: {}", ucsFault);
             if (ucsFault.severity == UcsFault.Severity.cleared && cucsAlarms.containsKey(String.valueOf(ucsFault.id)) && cucsAlarms.get(String.valueOf(ucsFault.id)).equals(AlarmType.PROBLEM)) {
                 processAlert(ucsFault, CISCO_UCS_ALARM_RESOLVED_UEI, dnMap);
                 resolved++;
@@ -237,7 +255,7 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
                 ignored++;
             }
         }
-        LOG.info("{} event raised, {} event resolved, {} events ignored.", processed, resolved, ignored);
+        LOG.info("processAlerts: {} event raised, {} event resolved, {} events ignored.", processed, resolved, ignored);
 
     }
     private void processAlert(final UcsFault ucsFault, final String uei, final Map<UcsDn, RequisitionIdentifier> dnMap) {
