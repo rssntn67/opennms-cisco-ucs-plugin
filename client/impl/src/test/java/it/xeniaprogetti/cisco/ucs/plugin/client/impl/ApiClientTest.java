@@ -27,6 +27,9 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root.IpPoolPooled
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root.LsServer;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.org.root.VNicIpV4PooledAddr;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.request.UcsXmlApiRequest;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.AaaLoginResponse;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.AaaLogoutResponse;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.AaaRefreshResponse;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigFindDnsByClassIdResponse;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigResolveDnResponseComputeBlade;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigResolveDnResponseComputeRackUnit;
@@ -338,6 +341,39 @@ public class ApiClientTest {
         ErrorResponse errorResponse = mapper.readValue(xml,ErrorResponse.class);
         Assert.assertEquals("ERR-xml-parse-error", errorResponse.errorCode);
         Assert.assertEquals(594, errorResponse.invocationResult);
+    }
+
+    @Test
+    public void testCanDeserializeLoginErrorString() throws JsonProcessingException {
+        String xml = "<aaaLogin cookie=\"\" response=\"yes\" errorCode=\"572\" invocationResult=\"unidentified-fail\" errorDescr=\"User reached maximum session limit\"> </aaaLogin>";
+        XmlMapper mapper = new CustomXmlMapper();
+        AaaLoginResponse response = mapper.readValue(xml,AaaLoginResponse.class);
+        Assert.assertEquals(572, response.errorCode);
+        Assert.assertEquals("yes", response.response);
+        Assert.assertEquals("unidentified-fail", response.invocationResult);
+        Assert.assertEquals("User reached maximum session limit", response.errorDescr);
+    }
+
+    @Test
+    public void testCanDeserializeRefreshErrorString() throws JsonProcessingException {
+        String xml = "<aaaRefresh cookie=\"\" response=\"yes\" errorCode=\"552\" invocationResult=\"unidentified-fail\" errorDescr=\"Authorization required\"/>";
+        XmlMapper mapper = new CustomXmlMapper();
+        AaaRefreshResponse response = mapper.readValue(xml,AaaRefreshResponse.class);
+        Assert.assertEquals(552, response.errorCode);
+        Assert.assertEquals("yes", response.response);
+        Assert.assertEquals("unidentified-fail", response.invocationResult);
+        Assert.assertEquals("Authorization required", response.errorDescr);
+    }
+
+    @Test
+    public void testCanDeserializeLogoutErrorString() throws JsonProcessingException {
+        String xml = " <aaaLogout cookie=\"\" response=\"yes\" errorCode=\"555\" invocationResult=\"unidentified-fail\" errorDescr=\"Session not found\"> </aaaLogout>";
+        XmlMapper mapper = new CustomXmlMapper();
+        AaaLogoutResponse response = mapper.readValue(xml,AaaLogoutResponse.class);
+        Assert.assertEquals(555, response.errorCode);
+        Assert.assertEquals("yes", response.response);
+        Assert.assertEquals("unidentified-fail", response.invocationResult);
+        Assert.assertEquals("Session not found", response.errorDescr);
     }
 
     @Test
