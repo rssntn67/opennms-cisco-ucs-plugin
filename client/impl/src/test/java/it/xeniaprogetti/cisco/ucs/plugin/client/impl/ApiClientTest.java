@@ -12,6 +12,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.ConfigApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.FaultApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.IpApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.handler.ApiClient;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.handler.ApiRequest;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.handler.CustomXmlMapper;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.compute.ComputeBlade;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.compute.ComputeRackUnit;
@@ -1332,6 +1333,26 @@ Oper Evac Mode	:	Off
             LOG.error("{}", e.getMessage());
         }
         loginApi.logout();
+    }
+
+    @Test
+    public void asyncDoPostTest() throws JsonProcessingException, ApiException, InterruptedException {
+        XmlMapper mapper = new CustomXmlMapper();
+        ApiClientCredentials credentials = getCredentials();
+        ApiClient apiClient = new ApiClient(credentials.url);
+        apiClient.setTrustAllCertsClient();
+        String loginResponse = apiClient.doPost(UcsXmlApiRequest.getLoginRequest(credentials.username,credentials.password));
+        AaaLoginResponse aaaLoginResponse =  mapper.readValue(loginResponse,AaaLoginResponse.class);
+        String token = aaaLoginResponse.outCookie;
+        final ApiRequest apiRequest1 = new ApiRequest(UcsXmlApiRequest.getConfigFindDnsByClassIdRequest(token, UcsEnums.NamingClassId.faultInst));
+        final ApiRequest apiRequest2 = new ApiRequest(UcsXmlApiRequest.getConfigFindDnsByClassIdRequest(token, UcsEnums.NamingClassId.fcErrStats));
+        final ApiRequest apiRequest3 = new ApiRequest(UcsXmlApiRequest.getConfigFindDnsByClassIdRequest(token, UcsEnums.NamingClassId.fcpoolAddr));
+        apiClient.doAsyncPost(apiRequest1);
+        apiClient.doAsyncPost(apiRequest2);
+        apiClient.doAsyncPost(apiRequest3);
+        Thread.sleep(20000);
+
+        apiClient.doPost(UcsXmlApiRequest.getLogoutRequest(token));
     }
 
     @Test
