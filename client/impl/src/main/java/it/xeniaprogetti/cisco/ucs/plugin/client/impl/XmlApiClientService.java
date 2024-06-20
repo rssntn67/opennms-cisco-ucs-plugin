@@ -119,7 +119,7 @@ public class XmlApiClientService implements ApiClientService {
     }
 
     @Override
-    public void disconnect() throws ApiException {
+    public void disconnect() {
         try {
             aaaApi.logout();
         } catch (ApiException e) {
@@ -296,8 +296,8 @@ public class XmlApiClientService implements ApiClientService {
                 .getUcsFaultsByFilter(aaaApi.getToken(), filter)
                 .stream()
                 .map(XmlApiClientService::from)
-                .filter(ucsFault ->
-                        ucsFault.lastTransition.isAfter(from) && ucsFault.lastTransition.isBefore(to))
+//                .filter(ucsFault ->
+//                        ucsFault.lastTransition.isAfter(from) && ucsFault.lastTransition.isBefore(to))
                 .collect(Collectors.toList());
     }
 
