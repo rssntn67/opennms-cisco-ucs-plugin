@@ -26,6 +26,32 @@ public class UcsFault extends UcsEntity {
         this.type = builder.type;
     }
 
+    @Override
+    public String toString() {
+        return "UcsFault{" +
+                "ack='" + ack + '\'' +
+                ", cause='" + cause + '\'' +
+                ", changeSet='" + changeSet + '\'' +
+                ", code='" + code + '\'' +
+                ", created=" + created +
+                ", descr='" + descr + '\'' +
+                ", highestSeverity=" + highestSeverity +
+                ", id=" + id +
+                ", lastTransition=" + lastTransition +
+                ", lc='" + lc + '\'' +
+                ", occur=" + occur +
+                ", origSeverity=" + origSeverity +
+                ", prevSeverity=" + prevSeverity +
+                ", rule='" + rule + '\'' +
+                ", severity=" + severity +
+                ", tags='" + tags + '\'' +
+                ", type=" + type +
+                ", dn=" + dn +
+                ", classId=" + classId +
+                ", classItem=" + classItem +
+                '}';
+    }
+
     public enum Severity {
         critical, major, minor, warning, condition, info, cleared
     }
@@ -65,29 +91,6 @@ public class UcsFault extends UcsEntity {
     public final Severity severity;
     public final String tags;
     public final Type type;
-
-    @Override
-    public String toString() {
-        return "UcsFault{" +
-                "ack='" + ack + '\'' +
-                ", cause='" + cause + '\'' +
-                ", changeSet='" + changeSet + '\'' +
-                ", code='" + code + '\'' +
-                ", created=" + created +
-                ", descr='" + descr + '\'' +
-                ", highestSeverity=" + highestSeverity +
-                ", id=" + id +
-                ", lastTransition=" + lastTransition +
-                ", lc='" + lc + '\'' +
-                ", occur=" + occur +
-                ", origSeverity=" + origSeverity +
-                ", prevSeverity=" + prevSeverity +
-                ", rule='" + rule + '\'' +
-                ", severity=" + severity +
-                ", tags='" + tags + '\'' +
-                ", type=" + type +
-                '}';
-    }
 
     public static class Builder {
         private Builder() {

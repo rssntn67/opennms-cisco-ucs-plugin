@@ -1646,4 +1646,13 @@ Oper Evac Mode	:	Off
         String request = UcsXmlApiRequest.getConfigScopeRequest("real_cookie", "sys/chassis-1/blade-1/board/cpu-2", UcsEnums.NamingClassId.processorEnvStats);
         Assert.assertEquals("<configScope cookie=\"real_cookie\" inHierarchical=\"false\" dn=\"sys/chassis-1/blade-1/board/cpu-2\" inClass=\"processorEnvStats\" />",request);
     }
+
+    @Test
+    public void testDnParentForFault() {
+        UcsDn faultDn = UcsDn.getDn("sys/chassis-6/blade-1/fabric-A/path-1/vc-1297/fault-F0283");
+        UcsDn chassis5Blade2Dn = UcsDn.getDn("sys/chassis-5/blade-2");
+        UcsDn chassis6Blade1Dn = UcsDn.getDn("sys/chassis-6/blade-1");
+        Assert.assertTrue(chassis6Blade1Dn.isParent(faultDn));
+        Assert.assertFalse(chassis5Blade2Dn.isParent(faultDn));
+    }
 }

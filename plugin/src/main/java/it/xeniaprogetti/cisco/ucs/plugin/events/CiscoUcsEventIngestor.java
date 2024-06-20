@@ -197,10 +197,7 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
             }
         }
 
-        for (String curAlias: dnMap.keySet()) {
-            LOG.debug("run: dnMap:{} {}",curAlias, dnMap.get(curAlias));
 
-        }
         Map<String, AlarmType> ciscoUcsFaults =
                 alarmDao.getAlarms().stream()
                         .filter(a -> a.getReductionKey().startsWith(CISCO_UCS_ALARM_UEI+":"))
@@ -215,7 +212,7 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
                 continue;
             }
             try {
-                LOG.info("run: process fault for alias: {}", alias);
+                LOG.info("run: processing fault for alias: {}", alias);
                 processAlerts(
                     service.findUcsFaultsFromDate(OffsetDateTime.now().minusDays(retrieve_days)),
                     dnMap.get(alias),
@@ -234,11 +231,12 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
     }
 
     private void processAlerts(final List<UcsFault> ucsFaults, final Map<UcsDn, RequisitionIdentifier> dnMap, Map<String,AlarmType> cucsAlarms) {
-        int processed = 0;
+        int raised = 0;
         int resolved = 0;
         int ignored = 0;
         assert ucsFaults != null;
         LOG.debug("processAlerts: found {} Fault Instances", ucsFaults.size());
+        LOG.debug("processAlerts: dnMap: {}", dnMap.keySet());
 
         for (final UcsFault ucsFault : ucsFaults) {
             LOG.debug("processAlerts: {}", ucsFault);
@@ -247,22 +245,24 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
                 resolved++;
             } else if (ucsFault.severity != UcsFault.Severity.cleared && !cucsAlarms.containsKey(String.valueOf(ucsFault.id))){
                 processAlert(ucsFault, CISCO_UCS_ALARM_UEI, dnMap);
-                processed++;
+                raised++;
             } else if (ucsFault.severity != UcsFault.Severity.cleared && cucsAlarms.containsKey(String.valueOf(ucsFault.id)) && cucsAlarms.get(String.valueOf(ucsFault.id)).equals(AlarmType.RESOLUTION)){
                 processAlert(ucsFault, CISCO_UCS_ALARM_UEI, dnMap);
-                processed++;
+                raised++;
             } else {
                 ignored++;
             }
         }
-        LOG.info("processAlerts: {} event raised, {} event resolved, {} events ignored.", processed, resolved, ignored);
+        LOG.info("processAlerts: {} raised, {} resolved, {} ignored.", raised, resolved, ignored);
 
     }
     private void processAlert(final UcsFault ucsFault, final String uei, final Map<UcsDn, RequisitionIdentifier> dnMap) {
         List<UcsDn> list = new ArrayList<>(dnMap.keySet());
         list.sort(new UcsDnComparator());
         boolean parsed = false;
+        LOG.debug("processAlert: {}",ucsFault.dn);
         for (UcsDn ucsDn: list ) {
+            LOG.debug("processAlert: parsing {}",ucsDn);
             if (ucsDn.isParent(ucsFault.dn)) {
                 processAlertEntity(dnMap.get(ucsDn), ucsFault, uei);
                 LOG.info("DN {} found for {}",ucsDn.value, ucsFault);
