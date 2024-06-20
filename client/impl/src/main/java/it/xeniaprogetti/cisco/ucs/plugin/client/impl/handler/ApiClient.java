@@ -76,7 +76,7 @@ public class ApiClient {
         this.client = trustAllSslClient(this.client);
     }
 
-    public void doAsyncPost(it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.request.Request xmlrequest) {
+    public void doAsyncPost(ApiRequest xmlrequest) {
         Request request = new Request.Builder()
                 .url(url)
                 .addHeader("Accept", "*/*")

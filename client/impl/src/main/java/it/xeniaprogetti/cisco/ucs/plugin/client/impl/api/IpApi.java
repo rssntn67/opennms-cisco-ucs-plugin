@@ -13,8 +13,6 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigResolv
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigResolveDnResponseIpPoolUniverse;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigResolveDnResponseLsServer;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.response.ConfigResolveDnResponseVNicIpV4PooledAddr;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 

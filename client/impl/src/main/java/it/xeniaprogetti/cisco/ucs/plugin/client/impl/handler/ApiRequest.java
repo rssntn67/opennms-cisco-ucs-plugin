@@ -1,15 +1,15 @@
-package it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.request;
+package it.xeniaprogetti.cisco.ucs.plugin.client.impl.handler;
 
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 import java.io.IOException;
 
-public class Request {
+public class ApiRequest {
     private final String requestBody;
     private ResponseBody responseBody;
 
-    public Request(String requestBody) {
+    public ApiRequest(String requestBody) {
         this.requestBody = requestBody;
     }
 

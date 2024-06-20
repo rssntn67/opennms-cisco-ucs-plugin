@@ -12,6 +12,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.ConfigApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.FaultApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.IpApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.handler.ApiClient;
+import it.xeniaprogetti.cisco.ucs.plugin.client.impl.handler.CustomXmlMapper;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.compute.ComputeBlade;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.compute.ComputeRackUnit;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.equipment.EquipmentChassis;
@@ -126,12 +127,12 @@ public class ApiClientTest {
     @Test
     public void canSerializeAaaLoginToXml() {
         String xml = "<aaaLogin inName=\"pippo\" inPassword=\"pluto\"/>";
-        Assert.assertEquals(xml,UcsXmlApiRequest.getLoginRequest("pippo","pluto"));
+        Assert.assertEquals(xml, UcsXmlApiRequest.getLoginRequest("pippo","pluto"));
     }
 
     @Test
     public void canSerializeConfigFindDnsByClassIdToXml() throws JsonProcessingException {
-        XmlMapper mapper = new XmlMapper();
+        XmlMapper mapper = new CustomXmlMapper();
         String xml="<configFindDnsByClassId cookie=\"1713476816/da9ab72a-49e4-49ed-9a5a-c0e951d00b2f\" " +
                 "response=\"yes\" classId=\"computeItem\"> " +
                 "<outDns> " +
@@ -161,7 +162,7 @@ public class ApiClientTest {
 
     @Test
     public void canDeSerializeXmlToEquipmentChassisBase() throws JsonProcessingException {
-        XmlMapper mapper = new XmlMapper();
+        XmlMapper mapper = new CustomXmlMapper();
         String xml =
                 "<equipmentChassis ackProgressIndicator=\"ack-not-in-progress\" adminState=\"acknowledged\" assetTag=\"\" assignedToDn=\"\" " +
                 "association=\"none\" availability=\"unavailable\" configState=\"ok\" connPath=\"A,B\" connStatus=\"A,B\" discovery=\"undiscovered\" " +
@@ -181,7 +182,7 @@ public class ApiClientTest {
 
     @Test
     public void canDeSerializeXmlToEquipmentChassis() throws JsonProcessingException {
-        XmlMapper mapper = new XmlMapper();
+        XmlMapper mapper = new CustomXmlMapper();
         String xml = "<configResolveDn dn=\"sys/chassis-3\" cookie=\"1713476816/da9ab72a-49e4-49ed-9a5a-c0e951d00b2f\" response=\"yes\"> " +
                 "<outConfig> " +
                 "<equipmentChassis ackProgressIndicator=\"ack-not-in-progress\" adminState=\"acknowledged\" assetTag=\"\" assignedToDn=\"\" " +
@@ -205,7 +206,7 @@ public class ApiClientTest {
 
     @Test
     public void canDeSerializeXmlToEquipmentFex() throws JsonProcessingException {
-        XmlMapper mapper = new XmlMapper();
+        XmlMapper mapper = new CustomXmlMapper();
         String xml = "<configResolveDn dn=\"sys/fex-2\" cookie=\"1714168516/c91b06a0-2ca4-4094-a1d6-098ee701b21c\" response=\"yes\"> " +
                 "<outConfig> <equipmentFex adminPowerState=\"policy\" adminState=\"acknowledged\" configState=\"un-acknowledged\" dn=\"sys/fex-2\" fltAggr=\"0\" fsmDescr=\"\" fsmPrev=\"nop\" fsmProgr=\"100\" fsmRmtInvErrCode=\"none\" fsmRmtInvErrDescr=\"\" fsmRmtInvRslt=\"\" fsmStageDescr=\"\" fsmStamp=\"never\" fsmStatus=\"nop\" fsmTry=\"0\" id=\"2\" licGP=\"0\" licState=\"license-ok\" model=\"N2K-C2232TM-E-10GE\" operQualifier=\"\" operQualifierReason=\"N/A\" operState=\"operable\" operability=\"unknown\" power=\"unknown\" presence=\"unknown\" revision=\"0\" serial=\"FX22\" switchId=\"B\" thermal=\"unknown\" usrLbl=\"\" vendor=\"Cisco Systems\" voltage=\"unknown\"/> " +
                 "</outConfig> </configResolveDn>";
@@ -218,7 +219,7 @@ public class ApiClientTest {
 
     @Test
     public void canDeSerializeXmlToEquipmentRackEnclosure() throws JsonProcessingException {
-        XmlMapper mapper = new XmlMapper();
+        XmlMapper mapper = new CustomXmlMapper();
         String xml = " <configResolveDn dn=\"sys/rack-enclosure-1\" cookie=\"1714205640/a3f871aa-9028-447b-9770-14904ce96e96\" response=\"yes\"> " +
                 "<outConfig> " +
                 "<equipmentRackEnclosure assetTag=\"\" dn=\"sys/rack-enclosure-1\" fltAggr=\"0\" id=\"1\"" +
@@ -263,7 +264,7 @@ public class ApiClientTest {
                 "</outConfig> " +
                 "</configResolveDn>";
 
-        XmlMapper mapper = new XmlMapper();
+        XmlMapper mapper = new CustomXmlMapper();
         ConfigResolveDnResponseComputeBlade response = mapper.readValue(xml, ConfigResolveDnResponseComputeBlade.class);
         LOG.info(response.toString());
         Assert.assertNotNull(response.outconfig.computeBlade.model);
@@ -301,7 +302,7 @@ public class ApiClientTest {
                 " </outConfig> " +
                 "</configResolveDn>";
 
-        XmlMapper mapper = new XmlMapper();
+        XmlMapper mapper = new CustomXmlMapper();
         ConfigResolveDnResponseComputeRackUnit response = mapper.readValue(xml, ConfigResolveDnResponseComputeRackUnit.class);
         LOG.info(response.toString());
         Assert.assertNotNull(response.outconfig.computeRackUnit.model);
@@ -323,7 +324,7 @@ public class ApiClientTest {
                 "shutdownFanRemoveal=\"no\" thermal=\"unknown\" totalMemory=\"32870\" vendor=\"Cisco Systems, Inc.\"/>" +
                 " </outConfig> </configResolveDn>";
 
-        XmlMapper mapper = new XmlMapper();
+        XmlMapper mapper = new CustomXmlMapper();
         ConfigResolveDnResponseNetworkElement response = mapper.readValue(xml, ConfigResolveDnResponseNetworkElement.class);
         Assert.assertNotNull(response.outconfig.networkElement.model);
         Assert.assertEquals(response.dn, response.outconfig.networkElement.dn);
@@ -333,7 +334,7 @@ public class ApiClientTest {
     @Test
     public void testCanDeserializeErrorXmlString() throws JsonProcessingException {
         String xml = "<error cookie=\"\" response=\"yes\" errorCode=\"ERR-xml-parse-error\" invocationResult=\"594\" errorDescr=\"XML PARSING ERROR: unknown attribute &apos;1714204607&apos; in element &apos;configResolveDn&apos;\"/>";
-        XmlMapper mapper = new XmlMapper();
+        XmlMapper mapper = new CustomXmlMapper();
         ErrorResponse errorResponse = mapper.readValue(xml,ErrorResponse.class);
         Assert.assertEquals("ERR-xml-parse-error", errorResponse.errorCode);
         Assert.assertEquals(594, errorResponse.invocationResult);
@@ -347,7 +348,7 @@ public class ApiClientTest {
         AaaApi aaaApi = new AaaApi(credentials,apiClient);
         aaaApi.login();
         String xmlRequest = "<configResolveDn dn=\"sys/rack-enclosure-1\" cookie=\""+aaaApi.getToken()+"\" inHierarchical=\"false\"/>";
-        Assert.assertEquals(xmlRequest,UcsXmlApiRequest.getConfigResolveDnRequest(aaaApi.getToken(),"sys/rack-enclosure-1", false));
+        Assert.assertEquals(xmlRequest, UcsXmlApiRequest.getConfigResolveDnRequest(aaaApi.getToken(),"sys/rack-enclosure-1", false));
         String xmlString = apiClient.doPost(UcsXmlApiRequest.getConfigResolveDnRequest(aaaApi.getToken(),"sys/rack-enclosure-1", false));
         System.out.println(xmlString);
         aaaApi.logout();
