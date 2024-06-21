@@ -5,7 +5,7 @@
         <feature dependency="true">aries-blueprint</feature>
         <feature dependency="true">shell</feature>
         <feature version="${guava.version}" dependency="true">guava</feature>
-        <feature version="${jackson.version}" dependency="true">jackson-data-format</feature>
+        <feature version="${jackson.version}" dependency="true">jackson</feature>
 
         <feature version="${opennms.api.version}" dependency="true">opennms-integration-api</feature>
 
@@ -25,11 +25,7 @@
     <feature name="jackson" description="jackson" version="${jackson.version}">
         <bundle dependency="true">mvn:com.fasterxml.jackson.core/jackson-core/${jackson.version}</bundle>
         <bundle dependency="true">mvn:com.fasterxml.jackson.core/jackson-annotations/${jackson.version}</bundle>
-        <bundle dependency="true">mvn:com.fasterxml.jackson.core/jackson-annotations/${jackson.version}</bundle>
-    </feature>
-
-    <feature name="jackson-dataformat-xml" description="jackson data format XML" version="${jackson.version}">
-        <feature version="${jackson.version}" dependency="true">jackson</feature>
+        <bundle dependency="true">mvn:com.fasterxml.jackson.core/jackson-databind/${jackson.version}</bundle>
         <bundle dependency="true">mvn:org.codehaus.woodstox/stax2-api/4.2.1</bundle>
         <bundle dependency="true">mvn:com.fasterxml.jackson.dataformat/jackson-dataformat-xml/${jackson.version}</bundle>
     </feature>
@@ -43,7 +39,7 @@
         <feature dependency="true">aries-blueprint</feature>
         <feature version="${guava.version}" dependency="true">guava</feature>
 
-        <feature version="${jackson.version}" dependency="true">jackson-data-format</feature>
+        <feature version="${jackson.version}" dependency="true">jackson</feature>
         <feature version="${okhttp.version}" dependency="true">okhttp</feature>
         <bundle>mvn:it.xeniaprogetti.cucs/cisco-ucs-plugin-client-api/${project.version}</bundle>
         <bundle>mvn:it.xeniaprogetti.cucs/cisco-ucs-plugin-client-impl/${project.version}</bundle>
