@@ -6,7 +6,6 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.ConfigApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.FaultApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.IpApi;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.api.StatsApi;
-import it.xeniaprogetti.cisco.ucs.plugin.client.impl.handler.ApiClient;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.compute.ComputeBlade;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.compute.ComputeRackUnit;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.equipment.EquipmentChassis;
@@ -70,52 +69,22 @@ import java.util.stream.Collectors;
 public class XmlApiClientService implements ApiClientService {
 
     Logger LOG = LoggerFactory.getLogger(XmlApiClientService.class);
-    private final ApiClientCredentials credentials;
     private final AaaApi aaaApi;
     private final ConfigApi configApi;
     private final IpApi ipApi;
     private final FaultApi faultApi;
     private final StatsApi statsApi;
-    private final XmlApiClientProvider apiClientProvider;
-    private final int poolNumber;
 
-    public XmlApiClientService(ApiClientCredentials credentials, XmlApiClientProvider provider, int poolNumber) {
-        ApiClient client = XmlApiClientProvider.createApiClient(credentials);
-        this.credentials = credentials;
-        this.aaaApi = new AaaApi(credentials, client);
-        this.configApi = new ConfigApi(client, credentials.url);
-        this.ipApi = new IpApi(client, credentials.url);
-        this.faultApi = new FaultApi(client, credentials.url);
-        this.statsApi = new StatsApi(client, credentials.url);
-        this.apiClientProvider = provider;
-        this.poolNumber = poolNumber;
-    }
-
-    public int getPool() {
-        return this.poolNumber;
-    }
-    protected ApiClientCredentials getCredentials() {
-        return this.credentials;
+    public XmlApiClientService(AaaApi aaaApi) {
+        this.aaaApi = Objects.requireNonNull(aaaApi);
+        this.configApi = new ConfigApi(aaaApi.getClient(), aaaApi.getUrl());
+        this.ipApi = new IpApi(aaaApi.getClient(), aaaApi.getUrl());
+        this.faultApi = new FaultApi(aaaApi.getClient(), aaaApi.getUrl());
+        this.statsApi = new StatsApi(aaaApi.getClient(), aaaApi.getUrl());
     }
 
     protected void checkSession() throws ApiException {
-        if (aaaApi.getToken() == null) {
-            aaaApi.login();
-            LOG.debug("checkSession: pool[{}] login!", poolNumber);
-        } else if (aaaApi.isValid() && !aaaApi.isValidTokenAtLeastFor(credentials.validity)) {
-            aaaApi.refresh();
-            LOG.debug("checkSession: pool[{}] refreshed token: previous token was valid for less then {} seconds", poolNumber, credentials.validity);
-        } else if (!aaaApi.isValid()) {
-            LOG.debug("checkSession: pool[{}] logout! token is no more valid", poolNumber);
-            try {
-                aaaApi.logout();
-            } catch (ApiException e) {
-                LOG.warn("checkSession: pool[{}] logout error", poolNumber);
-            }
-            aaaApi.login();
-            LOG.debug("checkSession: pool[{}], login!", poolNumber);
-        }
-        LOG.info("checkSession: pool[{}] token is valid for at least {} seconds", poolNumber, credentials.validity);
+        aaaApi.checkSession();
     }
 
     @Override
@@ -125,12 +94,6 @@ public class XmlApiClientService implements ApiClientService {
         } catch (ApiException e) {
             LOG.warn("disconnect: logout fail:{}, {}", e.getMessage(), e.getResponseBody());
         }
-        release();
-    }
-
-    @Override
-    public void release() {
-        apiClientProvider.release(this);
     }
 
     @Override
@@ -305,8 +268,8 @@ public class XmlApiClientService implements ApiClientService {
     public UcsManager getUcsManager() throws ApiException {
         return UcsManager
                 .builder()
-                .witLabel(UcsUtils.getLabelFromCredentials(this.credentials))
-                .withAddress(UcsUtils.getIpAddressFromCredentials(this.credentials)).
+                .witLabel(UcsUtils.getLabelFromUrl(aaaApi.getUrl()))
+                .withAddress(UcsUtils.getIpAddressFromUrl(aaaApi.getUrl())).
                 build();
     }
 

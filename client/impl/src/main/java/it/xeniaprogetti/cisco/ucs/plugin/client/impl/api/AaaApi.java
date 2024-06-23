@@ -21,6 +21,7 @@ public class AaaApi {
     private final String password;
     private final String url;
     private String token;
+    private final int validity;
     private LocalDateTime validityTime = LocalDateTime.now();
 
     public AaaApi(ApiClientCredentials credentials, ApiClient client) {
@@ -28,7 +29,28 @@ public class AaaApi {
         this.url = Objects.requireNonNull(credentials.url);
         this.username = credentials.username;
         this.password = Objects.requireNonNull(credentials.password);
+        this.validity = credentials.validity;
         this.client = Objects.requireNonNull(client);
+    }
+
+    public void checkSession() throws ApiException {
+        if (this.toString() == null) {
+            login();
+            LOG.debug("checkSession: pool[{}] login!", 0);
+        } else if (isValid() && !isValidTokenAtLeastFor(this.validity)) {
+            refresh();
+            LOG.debug("checkSession: pool[{}] refreshed token: previous token was valid for less then {} seconds", 0, this.validity);
+        } else if (!isValid()) {
+            LOG.debug("checkSession: pool[{}] logout! token is no more valid", 0);
+            try {
+                logout();
+            } catch (ApiException e) {
+                LOG.warn("checkSession: pool[{}] logout error", 0);
+            }
+            login();
+            LOG.debug("checkSession: pool[{}], login!", 0);
+        }
+        LOG.info("checkSession: pool[{}] token is valid for at least {} seconds", 0, this.validity);
     }
 
     public void keepAlive() throws ApiException {
@@ -100,5 +122,13 @@ public class AaaApi {
 
     public LocalDateTime getValidityTime() {
         return this.validityTime;
+    }
+
+    public ApiClient getClient() {
+        return this.client;
+    }
+
+    public String getUrl() {
+        return this.url;
     }
 }

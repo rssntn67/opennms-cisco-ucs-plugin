@@ -51,7 +51,6 @@ public class GetUcsEntityByDnCommand implements Action {
         row.addContent(dn);
         row.addContent(response.substring(response.indexOf("<outConfig>")+11, response.indexOf("</outConfig>")));
         table.print(System.out, true);
-        service.release();
 
         return null;
 

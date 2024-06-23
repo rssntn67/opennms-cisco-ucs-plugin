@@ -73,8 +73,6 @@ public abstract class CiscoUcsAbstractPoller implements ServicePoller {
                     .setStatus(Status.Unknown)
                     .setReason(e.getMessage())
                     .build());
-        } finally {
-            context.release();
         }
     }
 
@@ -160,10 +158,6 @@ public abstract class CiscoUcsAbstractPoller implements ServicePoller {
             }
             service = CiscoUcsAbstractPoller.this.clientManager.getClientService(connection.get());
 
-        }
-
-        public void release() {
-            service.release();
         }
 
         public UcsNetworkElement getUcsNetworkElement() throws ApiException {

@@ -54,7 +54,7 @@ public class CiscoUcsPluginTest {
 
     @Test
     public void testValidate() {
-        ClientManager clientManager = new ClientManager(new XmlApiClientProvider(1));
+        ClientManager clientManager = new ClientManager(new XmlApiClientProvider());
         ConnectionManagerForTest connectionManager = new ConnectionManagerForTest(getRuntimeInfo(),getSecureCredentialVault());
         Connection connection = connectionManager
                 .newConnection("test","https://10.172.192.15/nuova", "pippo", "pluto", true, 30);

@@ -16,6 +16,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class XmlApiClientTest {
 
@@ -96,65 +99,40 @@ public class XmlApiClientTest {
     @Test
     public void testValidate() {
         ApiClientCredentials credentials = getCredentials(30);
-        XmlApiClientProvider clientProvider = new XmlApiClientProvider(5);
+        XmlApiClientProvider clientProvider = new XmlApiClientProvider();
         Assert.assertTrue(clientProvider.validate(credentials));
     }
 
     @Test
-    public void testXmlClientServicePool() throws ApiException {
-        XmlApiClientProvider clientProvider = new XmlApiClientProvider(5);
-        XmlApiClientService service0 = clientProvider.client(getCredentials(30));
-        Assert.assertEquals(0, service0.getPool());
-        Assert.assertEquals(0, clientProvider.getAvail(service0.getCredentials()));
-        Assert.assertEquals(1, clientProvider.getUsed(service0.getCredentials()));
-        Assert.assertEquals(1, clientProvider.getPoolSize(service0.getCredentials()));
-        XmlApiClientService service1 = clientProvider.client(getCredentials(30));
-        Assert.assertEquals(1, service1.getPool());
-        Assert.assertEquals(0, clientProvider.getAvail(service0.getCredentials()));
-        Assert.assertEquals(2, clientProvider.getUsed(service0.getCredentials()));
-        Assert.assertEquals(2, clientProvider.getPoolSize(service0.getCredentials()));
-        XmlApiClientService service2 = clientProvider.client(getCredentials(30));
-        Assert.assertEquals(2, service2.getPool());
-        Assert.assertEquals(0, clientProvider.getAvail(service0.getCredentials()));
-        Assert.assertEquals(3, clientProvider.getUsed(service0.getCredentials()));
-        Assert.assertEquals(3, clientProvider.getPoolSize(service0.getCredentials()));
-        XmlApiClientService service3 = clientProvider.client(getCredentials(30));
-        Assert.assertEquals(3, service3.getPool());
-        Assert.assertEquals(0, clientProvider.getAvail(service0.getCredentials()));
-        Assert.assertEquals(4, clientProvider.getUsed(service0.getCredentials()));
-        Assert.assertEquals(4, clientProvider.getPoolSize(service0.getCredentials()));
-        XmlApiClientService service4 = clientProvider.client(getCredentials(30));
-        Assert.assertEquals(4, service4.getPool());
-        Assert.assertEquals(0, clientProvider.getAvail(service0.getCredentials()));
-        Assert.assertEquals(5, clientProvider.getUsed(service0.getCredentials()));
-        Assert.assertEquals(5, clientProvider.getPoolSize(service0.getCredentials()));
-        try {
-            clientProvider.client(getCredentials(30));
-            Assert.fail();
-        } catch (ApiException e) {
-            Assert.assertEquals(0, clientProvider.getAvail(service0.getCredentials()));
-            Assert.assertEquals(5, clientProvider.getUsed(service0.getCredentials()));
-            Assert.assertEquals(5, clientProvider.getPoolSize(service0.getCredentials()));
+    public void testXmlClientServicePool() throws ApiException, InterruptedException {
+        XmlApiClientProvider clientProvider = new XmlApiClientProvider();
+        Map<Integer, XmlApiClientService> serviceMap = new HashMap<>();
+        serviceMap.put(0, clientProvider.client(getCredentials(30)));
+        serviceMap.put(1, clientProvider.client(getCredentials(30)));
+        serviceMap.put(2, clientProvider.client(getCredentials(30)));
+        serviceMap.put(3, clientProvider.client(getCredentials(30)));
+        serviceMap.put(4, clientProvider.client(getCredentials(30)));
+        ExecutorService service = Executors.newFixedThreadPool(5);
+        CountDownLatch latch = new CountDownLatch(5);
+        for (int i = 0; i < 4; i++) {
+            XmlApiClientService apiClientService = serviceMap.get(i);
+            service.submit(() -> {
+                try {
+                    apiClientService.checkSession();
+                    apiClientService.disconnect();
+                } catch (ApiException e) {
+                    // Handle exception
+                }
+                latch.countDown();
+            });
         }
-        service1.release();
-        Assert.assertEquals(1, clientProvider.getAvail(service0.getCredentials()));
-        Assert.assertEquals(4, clientProvider.getUsed(service0.getCredentials()));
-        Assert.assertEquals(5, clientProvider.getPoolSize(service0.getCredentials()));
-        service0.release();
-        Assert.assertEquals(2, clientProvider.getAvail(service0.getCredentials()));
-        Assert.assertEquals(3, clientProvider.getUsed(service0.getCredentials()));
-        Assert.assertEquals(5, clientProvider.getPoolSize(service0.getCredentials()));
-        XmlApiClientService service = clientProvider.client(getCredentials(30));
-        Assert.assertEquals(0, service.getPool());
-        Assert.assertEquals(1, clientProvider.getAvail(service0.getCredentials()));
-        Assert.assertEquals(4, clientProvider.getUsed(service0.getCredentials()));
-        Assert.assertEquals(5, clientProvider.getPoolSize(service0.getCredentials()));
-        service.release();
+        latch.await();
+
     }
 
     @Test
     public void testXmlClientServiceCheckSession() throws ApiException, InterruptedException {
-        XmlApiClientProvider clientProvider = new XmlApiClientProvider(5);
+        XmlApiClientProvider clientProvider = new XmlApiClientProvider();
         XmlApiClientService service = clientProvider.client(getCredentials(550));
         service.checkSession();
         LOG.info("sleeping 30sec {}", OffsetDateTime.now());
@@ -182,7 +160,7 @@ public class XmlApiClientTest {
 
     @Test
     public void testXmlClientService() throws ApiException {
-        XmlApiClientProvider clientProvider = new XmlApiClientProvider(5);
+        XmlApiClientProvider clientProvider = new XmlApiClientProvider();
         XmlApiClientService service = clientProvider.client(getCredentials(30));
         service.getUcsXmlFromDn("fabric/san/A", false);
         service.findDnByClassItem(UcsEnums.NamingClassId.equipmentRackEnclosure).forEach(System.out::println);
@@ -204,7 +182,7 @@ public class XmlApiClientTest {
 
     @Test
     public void testXmlClientServiceForStats() throws ApiException {
-        XmlApiClientProvider clientProvider = new XmlApiClientProvider(5);
+        XmlApiClientProvider clientProvider = new XmlApiClientProvider();
         XmlApiClientService service = clientProvider.client(getCredentials(30));
         List<String> statsItemList = service.findDnByClassItem(UcsEnums.NamingClassId.statsItem);
         System.out.println(statsItemList.size());
@@ -218,7 +196,7 @@ public class XmlApiClientTest {
 
     @Test
     public void testXmlClientServiceForSwStats() throws ApiException {
-        XmlApiClientProvider clientProvider = new XmlApiClientProvider(5);
+        XmlApiClientProvider clientProvider = new XmlApiClientProvider();
         XmlApiClientService service = clientProvider.client(getCredentials(30));
         Map<String, Set<UcsEnums.NamingClassId>> requestMap = new HashMap<>();
         requestMap.put("sys/switch-A", new HashSet<>());
@@ -236,7 +214,7 @@ public class XmlApiClientTest {
 
     @Test
     public void testXmlClientServiceForNetworkElementStatsCollection() throws ApiException {
-        XmlApiClientProvider clientProvider = new XmlApiClientProvider(1);
+        XmlApiClientProvider clientProvider = new XmlApiClientProvider();
         XmlApiClientService service = clientProvider.client(getCredentials(30));
 
         Map<String, Set<UcsEnums.NamingClassId>> requestMap = new HashMap<>();
@@ -266,7 +244,7 @@ public class XmlApiClientTest {
 
     @Test
     public void testXmlClientServiceForEquipmentChassisStatsCollection() throws ApiException {
-        XmlApiClientProvider clientProvider = new XmlApiClientProvider(1);
+        XmlApiClientProvider clientProvider = new XmlApiClientProvider();
         XmlApiClientService service = clientProvider.client(getCredentials(30));
 
         Map<String, Set<UcsEnums.NamingClassId>> requestMap = new HashMap<>();
@@ -284,7 +262,7 @@ public class XmlApiClientTest {
 
     @Test
     public void testXmlClientServiceForComputeBladeStatsCollection() throws ApiException {
-        XmlApiClientProvider clientProvider = new XmlApiClientProvider(1);
+        XmlApiClientProvider clientProvider = new XmlApiClientProvider();
         XmlApiClientService service = clientProvider.client(getCredentials(30));
 
         Map<String, Set<UcsEnums.NamingClassId>> requestMap = new HashMap<>();

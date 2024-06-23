@@ -90,8 +90,6 @@ public class UcsComputeCollector extends AbstractUcsServiceCollector {
         } catch (ApiException e) {
             LOG.error("collect: {}", requestMap, e );
             return createFailedCollectionSet(nodeResource, Instant.now().toEpochMilli());
-        } finally {
-            service.release();
         }
         final ImmutableCollectionSetResource.Builder<NodeResource> computeAttrBuilder =
                 ImmutableCollectionSetResource.newBuilder(NodeResource.class).setResource(nodeResource);

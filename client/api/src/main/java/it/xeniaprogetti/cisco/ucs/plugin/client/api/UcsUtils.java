@@ -39,17 +39,17 @@ public class UcsUtils {
         }
     }
 
-    public static String getLabelFromCredentials(ApiClientCredentials credentials) throws ApiException {
+    public static String getLabelFromUrl(String url) throws ApiException {
         try {
-            return (new URL(credentials.url).getHost());
+            return (new URL(url).getHost());
         } catch ( MalformedURLException e) {
             throw new ApiException(e.getMessage(),e);
         }
     }
 
-    public static InetAddress getIpAddressFromCredentials(ApiClientCredentials credentials) throws ApiException {
+    public static InetAddress getIpAddressFromUrl(String url) throws ApiException {
         try {
-            return InetAddress.getByName(new URL(credentials.url).getHost());
+            return InetAddress.getByName(new URL(url).getHost());
         } catch (UnknownHostException | MalformedURLException e) {
             throw new ApiException(e.getMessage(),e);
         }

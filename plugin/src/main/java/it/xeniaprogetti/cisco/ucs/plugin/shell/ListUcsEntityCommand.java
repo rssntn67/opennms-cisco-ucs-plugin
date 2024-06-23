@@ -81,7 +81,6 @@ public class ListUcsEntityCommand implements Action {
             row.addContent(e.classItem);
         }
         table.print(System.out, true);
-        service.release();
 
         return null;
     }

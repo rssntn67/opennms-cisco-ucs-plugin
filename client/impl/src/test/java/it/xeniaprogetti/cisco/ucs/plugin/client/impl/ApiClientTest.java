@@ -86,7 +86,7 @@ public class ApiClientTest {
         Assert.assertTrue(UcsUtils.validate(credentials));
         InetAddress ip;
         try {
-            ip = UcsUtils.getIpAddressFromCredentials(credentials);
+            ip = UcsUtils.getIpAddressFromUrl(credentials.url);
             LOG.info("{}", ip.getHostAddress());
         } catch (ApiException e) {
             Assert.fail();
@@ -107,7 +107,7 @@ public class ApiClientTest {
         Assert.assertTrue(UcsUtils.validate(credentials));
         InetAddress ip;
         try {
-            ip = UcsUtils.getIpAddressFromCredentials(credentials);
+            ip = UcsUtils.getIpAddressFromUrl(credentials.url);
             LOG.info("{}", ip.getHostAddress());
         } catch (ApiException e) {
             Assert.fail();

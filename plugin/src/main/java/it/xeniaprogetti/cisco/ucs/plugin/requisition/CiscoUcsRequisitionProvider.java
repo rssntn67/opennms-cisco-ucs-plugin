@@ -175,8 +175,6 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
             service.getUcsEquipmentRackEnclosureList()
                     .forEach(element -> requisition.addNode(from(element, context, dnToIpListMap.get(element.dn))));
         }
-
-        service.release();
         return requisition.build();
     }
 

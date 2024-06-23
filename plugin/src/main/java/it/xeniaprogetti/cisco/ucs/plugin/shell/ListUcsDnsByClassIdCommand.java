@@ -52,7 +52,6 @@ public class ListUcsDnsByClassIdCommand implements Action {
             row.addContent(dn);
         }
         table.print(System.out, true);
-        service.release();
 
         return null;
     }

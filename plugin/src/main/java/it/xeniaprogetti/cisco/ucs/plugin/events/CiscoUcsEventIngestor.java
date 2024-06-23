@@ -226,8 +226,6 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
                 );
             } catch (ApiException e) {
                 LOG.error("Cannot process fault for alias='{}'. {}", alias, e.getMessage(),e);
-            } finally {
-                service.release();
             }
         }
 
