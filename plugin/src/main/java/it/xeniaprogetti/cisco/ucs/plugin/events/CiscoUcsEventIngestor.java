@@ -203,12 +203,13 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
         }
 
 
-        Map<String, AlarmType> ciscoUcsFaults =
+        Map<String, AlarmType> ciscoUcsAlarmMap =
                 alarmDao.getAlarms().stream()
                         .filter(a -> a.getReductionKey().startsWith(CISCO_UCS_ALARM_UEI+":"))
                         .collect(Collectors.toMap(a->a.getReductionKey().substring(a.getReductionKey().lastIndexOf(":")+1),
                                 Alarm::getType));
-        LOG.info("run: found {} Cisco UCS fault on opennms", ciscoUcsFaults.size());
+        LOG.debug("run: alarmMap: {}", ciscoUcsAlarmMap);
+        LOG.info("run: found {} Cisco UCS fault on opennms", ciscoUcsAlarmMap.size());
         for(final String alias : requisitionIdentifiers.stream().map(ri -> ri.alias).collect(Collectors.toSet())) {
             ApiClientService service;
             try {
@@ -221,7 +222,7 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
                 processAlerts(
                     service.findUcsFaultsFromDate(OffsetDateTime.now().minusDays(retrieve_days)),
                     dnMap.get(alias),
-                    ciscoUcsFaults
+                    ciscoUcsAlarmMap
                 );
             } catch (ApiException e) {
                 LOG.error("Cannot process fault for alias='{}'. {}", alias, e.getMessage(),e);
