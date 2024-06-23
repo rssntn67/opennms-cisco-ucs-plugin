@@ -6,7 +6,7 @@
         <logmsg dest="logndisplay">Resolved! Cisco UCS PluginAlarm %parm[type]%, %parm[code]%, %parm[rule]%</logmsg>
         <severity>Normal</severity>
         <alarm-data reduction-key="%uei%:%nodeid%:%parm[reductionKey]%" alarm-type="2"
-                    clear-key="uei.opennms.org/plugin/cisco/ucs/ucs/fault:%nodeid%:%parm[reductionKey]%"/>
+                    clear-key="uei.opennms.org/plugin/cisco/ucs/fault:%nodeid%:%parm[reductionKey]%"/>
     </event>
     <event>
         <uei>uei.opennms.org/plugin/cisco/ucs/fault</uei>

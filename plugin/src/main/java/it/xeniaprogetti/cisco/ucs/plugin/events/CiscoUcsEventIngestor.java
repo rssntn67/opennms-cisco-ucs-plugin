@@ -185,25 +185,31 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
 
         Map<String, Map<UcsDn, RequisitionIdentifier>> dnMap = new HashMap<>();
         for (RequisitionIdentifier ri : requisitionIdentifiers) {
+            LOG.debug("run: parsing {}", ri);
             if (!dnMap.containsKey(ri.alias)) {
+                LOG.debug("run: creating map for {}", ri.alias);
                 dnMap.put(ri.alias, new HashMap<>());
             }
+            LOG.debug("run: adding dn for {} map for {}",ri.dn, ri.alias);
             dnMap.get(ri.alias).put(UcsDn.getDn(ri.dn),ri);
             if (ri.fabricSanDn != null) {
+                LOG.debug("run: adding fabricSanDn {} map for {}",ri.dn, ri.alias);
                 dnMap.get(ri.alias).put(UcsDn.getDn(ri.fabricSanDn),ri);
             }
             if (ri.fabricLanDn != null) {
+                LOG.debug("run: adding fabricLanDn {} map for {}",ri.dn, ri.alias);
                 dnMap.get(ri.alias).put(UcsDn.getDn(ri.fabricLanDn),ri);
             }
         }
 
 
-        Map<String, AlarmType> ciscoUcsFaults =
+        Map<String, AlarmType> ciscoUcsAlarmMap =
                 alarmDao.getAlarms().stream()
                         .filter(a -> a.getReductionKey().startsWith(CISCO_UCS_ALARM_UEI+":"))
                         .collect(Collectors.toMap(a->a.getReductionKey().substring(a.getReductionKey().lastIndexOf(":")+1),
                                 Alarm::getType));
-        LOG.info("run: found {} Cisco UCS fault on opennms", ciscoUcsFaults.size());
+        LOG.debug("run: alarmMap: {}", ciscoUcsAlarmMap);
+        LOG.info("run: found {} Cisco UCS fault on opennms", ciscoUcsAlarmMap.size());
         for(final String alias : requisitionIdentifiers.stream().map(ri -> ri.alias).collect(Collectors.toSet())) {
             ApiClientService service;
             try {
@@ -216,7 +222,7 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
                 processAlerts(
                     service.findUcsFaultsFromDate(OffsetDateTime.now().minusDays(retrieve_days)),
                     dnMap.get(alias),
-                    ciscoUcsFaults
+                    ciscoUcsAlarmMap
                 );
             } catch (ApiException e) {
                 LOG.error("Cannot process fault for alias='{}'. {}", alias, e.getMessage(),e);
@@ -236,7 +242,6 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
         int ignored = 0;
         assert ucsFaults != null;
         LOG.debug("processAlerts: found {} Fault Instances", ucsFaults.size());
-        LOG.debug("processAlerts: dnMap: {}", dnMap.keySet());
 
         for (final UcsFault ucsFault : ucsFaults) {
             LOG.debug("processAlerts: {}", ucsFault);
@@ -260,12 +265,14 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
         List<UcsDn> list = new ArrayList<>(dnMap.keySet());
         list.sort(new UcsDnComparator());
         boolean parsed = false;
-        LOG.debug("processAlert: {}",ucsFault.dn);
+        LOG.debug("processAlert: faultDn:{}",ucsFault.dn.value);
         for (UcsDn ucsDn: list ) {
-            LOG.debug("processAlert: parsing {}",ucsDn);
+            LOG.debug("processAlert: parsing nodeDn:{}",ucsDn.value);
             if (ucsDn.isParent(ucsFault.dn)) {
-                processAlertEntity(dnMap.get(ucsDn), ucsFault, uei);
-                LOG.info("DN {} found for {}",ucsDn.value, ucsFault);
+                LOG.info("processAlert: nodeDN {} found for faultDn:{}", ucsDn.value, ucsFault.dn.value);
+                RequisitionIdentifier ri = dnMap.get(ucsDn);
+                LOG.debug("processAlert: found {} for faultDn:{}", ri, ucsFault.dn.value);
+                processAlertEntity(ri, ucsFault, uei);
                 parsed = true;
                 break;
             }
@@ -282,6 +289,7 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
             LOG.warn("Ignoring Ucs Fault event #{} since node {} cannot be found.", ucsFault.getClass(), ri.foreignSource + ":" + ri.dn);
             return;
         }
+        LOG.debug("processAlertEntity: faultDn: {}, nodeDn:{} nodeId[{}] uei:{}", ucsFault.dn.value, ri.dn, node.getId(), uei);
 
         Severity severity = SEVERITY_MAP.get(ucsFault.severity);
         if (ucsFault.severity == UcsFault.Severity.cleared) {
@@ -318,8 +326,12 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
 
         builder.setTime(Date.from(ucsFault.lastTransition.toInstant()));
 
-        eventForwarder.sendSync(builder.build());
+        ImmutableInMemoryEvent event = builder.build();
+
+        eventForwarder.sendSync(event);
+        LOG.debug("processAlertEntity: forwarded: {}", event);
     }
+
     @Override
     public String getDescription() {
         return "Cisco UCS Event Ingestor";
