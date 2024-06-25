@@ -79,6 +79,7 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
 
     private static class RequisitionIdentifier {
         private final String foreignSource;
+        private final String foreignId;
         private final String dn;
         private String fabricLanDn;
         private String fabricSanDn;
@@ -91,6 +92,7 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
                     .filter(metaData -> Objects.equals(metaData.getContext(), CiscoUcsRequisitionProvider.CISCO_UCS_METADATA_CONTEXT))
                     .collect(Collectors.toMap(MetaData::getKey, MetaData::getValue));
             foreignSource = Objects.requireNonNull(n.getForeignSource());
+            foreignId = Objects.requireNonNull(n.getForeignId());
             dn = Objects.requireNonNull(map.get(UcsUtils.UCS_DN_KEY));
             alias = Objects.requireNonNull(map.get("alias"));
             type = Objects.requireNonNull(UcsEnums.ClassId.valueOf(map.get("type")));
@@ -107,6 +109,7 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
             if (o == null || getClass() != o.getClass()) return false;
             RequisitionIdentifier requisitionIdentifier = (RequisitionIdentifier) o;
             return Objects.equals(foreignSource, requisitionIdentifier.foreignSource)
+                    && Objects.equals(foreignId, requisitionIdentifier.foreignId)
                     && Objects.equals(dn, requisitionIdentifier.dn)
                     && Objects.equals(type, requisitionIdentifier.type)
                     && Objects.equals(alias, requisitionIdentifier.alias);
@@ -114,13 +117,14 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
 
         @Override
         public int hashCode() {
-            return Objects.hash(foreignSource, dn, type, alias);
+            return Objects.hash(foreignSource, foreignId, dn, type, alias);
         }
 
         @Override
         public String toString() {
             return "RequisitionIdentifier{" +
                     "foreignSource='" + foreignSource + '\'' +
+                    "foreignId='" + foreignId + '\'' +
                     ", dn='" + dn + '\'' +
                     ", fabricLanDn='" + fabricLanDn + '\'' +
                     ", fabricSanDn='" + fabricSanDn + '\'' +
@@ -283,10 +287,10 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
 
     }
     private void processAlertEntity(final RequisitionIdentifier ri, final UcsFault ucsFault, final String uei) {
-        final Node node = nodeDao.getNodeByCriteria(ri.foreignSource + ":" + ri.dn);
+        final Node node = nodeDao.getNodeByForeignSourceAndForeignId(ri.foreignSource, ri.foreignId);
 
         if (node == null) {
-            LOG.warn("Ignoring Ucs Fault event #{} since node {} cannot be found.", ucsFault.getClass(), ri.foreignSource + ":" + ri.dn);
+            LOG.warn("processAlertEntity: Ignoring Ucs Fault event #{} since node {} cannot be found.", ucsFault.dn.value, ri.foreignSource + ":" + ri.foreignId);
             return;
         }
         LOG.debug("processAlertEntity: faultDn: {}, nodeDn:{} nodeId[{}] uei:{}", ucsFault.dn.value, ri.dn, node.getId(), uei);
