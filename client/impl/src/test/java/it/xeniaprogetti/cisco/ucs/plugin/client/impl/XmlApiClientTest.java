@@ -113,13 +113,12 @@ public class XmlApiClientTest {
         serviceMap.put(3, clientProvider.client(getCredentials(30)));
         serviceMap.put(4, clientProvider.client(getCredentials(30)));
         ExecutorService service = Executors.newFixedThreadPool(5);
-        CountDownLatch latch = new CountDownLatch(5);
+        CountDownLatch latch = new CountDownLatch(4);
         for (int i = 0; i < 4; i++) {
             XmlApiClientService apiClientService = serviceMap.get(i);
             service.submit(() -> {
                 try {
                     apiClientService.checkSession();
-                    apiClientService.disconnect();
                 } catch (ApiException e) {
                     // Handle exception
                 }
@@ -127,6 +126,8 @@ public class XmlApiClientTest {
             });
         }
         latch.await();
+        XmlApiClientService apiClientService = serviceMap.get(0);
+        apiClientService.disconnect();
 
     }
 

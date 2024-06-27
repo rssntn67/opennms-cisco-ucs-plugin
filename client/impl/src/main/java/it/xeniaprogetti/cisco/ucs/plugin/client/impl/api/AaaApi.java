@@ -33,8 +33,8 @@ public class AaaApi {
         this.client = Objects.requireNonNull(client);
     }
 
-    public void checkSession() throws ApiException {
-        if (this.toString() == null) {
+    public synchronized void checkSession() throws ApiException {
+        if (this.token == null) {
             login();
             LOG.debug("checkSession: pool[{}] login!", 0);
         } else if (isValid() && !isValidTokenAtLeastFor(this.validity)) {
@@ -53,12 +53,12 @@ public class AaaApi {
         LOG.info("checkSession: pool[{}] token is valid for at least {} seconds", 0, this.validity);
     }
 
-    public void keepAlive() throws ApiException {
+    public synchronized void keepAlive() throws ApiException {
         LOG.info("keepAlive: {} to {}", this.username, this.url);
         client.doPost(UcsXmlApiRequest.getKeepAliveRequest(this.token), this.url);
     }
 
-    public void login() throws ApiException {
+    public synchronized void login() throws ApiException {
         LOG.info("login: {} to {}", this.username, this.url);
         AaaLoginResponse response =
              client.getUcsXmlApiResponse
@@ -76,7 +76,7 @@ public class AaaApi {
         LOG.info("login: valid until {}", this.validityTime);
     }
 
-    public void refresh() throws ApiException {
+    public synchronized void refresh() throws ApiException {
         LOG.info("refresh: {} to {}", this.username, this.url);
         AaaRefreshResponse response =
                 client.getUcsXmlApiResponse
@@ -93,7 +93,7 @@ public class AaaApi {
         this.validityTime = LocalDateTime.now().plusSeconds(response.outRefreshPeriod);
     }
 
-    public void logout() throws ApiException {
+    public synchronized void logout() throws ApiException {
         LOG.info("logout: {} from {}", this.username, this.url);
         AaaLogoutResponse response = client.getUcsXmlApiResponse
                 (UcsXmlApiRequest.getLogoutRequest(token),
