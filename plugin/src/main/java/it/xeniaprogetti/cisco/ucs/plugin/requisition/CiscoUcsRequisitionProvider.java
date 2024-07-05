@@ -1,14 +1,5 @@
 package it.xeniaprogetti.cisco.ucs.plugin.requisition;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import it.xeniaprogetti.cisco.ucs.plugin.client.ClientManager;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.ApiClientService;
@@ -39,6 +30,13 @@ import org.opennms.integration.api.v1.requisition.RequisitionProvider;
 import org.opennms.integration.api.v1.requisition.RequisitionRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class CiscoUcsRequisitionProvider implements RequisitionProvider {
 
@@ -271,6 +269,7 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
                 .setForeignId(networkElement.dn.value.replace("/","-"))
                 .setLocation(context.getLocation())
                 .setNodeLabel(nodeLabel)
+                .addAsset("category", "LanSwitch")
                 .addAsset("comment", "Fabric Interconnect Switch-"+networkElement.id)
                 .addAsset("description", "Cisco UCS Network Element")
                 .addCategory("CiscoUcsFabricInterconnectSwitch")
@@ -466,6 +465,7 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
                 .setForeignId(ucsElement.dn.value.replace("/","-"))
                 .setLocation(context.getLocation())
                 .setNodeLabel(nodeLabel)
+                .addAsset("category", "ServerSystem")
                 .addAsset("comment", ucsElement.dn.value)
                 .addAsset("description", "Cisco UCS Compute Blade")
                 .addCategory("CiscoUcsComputeBlade")
@@ -853,6 +853,7 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
                 .setForeignId(ucsElement.dn.value.replace("/","-"))
                 .setLocation(context.getLocation())
                 .setNodeLabel(nodeLabel)
+                .addAsset("category", "RackUnitSystem")
                 .addCategory("CiscoUcsComputeRackUnit")
                 .addCategory("CiscoUcs")
                 .addAsset("comment", ucsElement.dn.value)
@@ -1267,6 +1268,7 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
                 .setNodeLabel(nodeLabel)
                 .addCategory("CiscoUcsChassis")
                 .addCategory("CiscoUcs")
+                .addAsset("category", "ChassisSystem")
                 .addAsset("comment", ucsElement.dn.value)
                 .addAsset("description", "Cisco UCS Equipment Chassis")
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
@@ -1554,6 +1556,7 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
                 .setNodeLabel(nodeLabel)
                 .addCategory("CiscoUcsFex")
                 .addCategory("CiscoUcs")
+                .addAsset("category", "FexSystem")
                 .addAsset("comment", ucsElement.dn.value)
                 .addAsset("description", "Cisco UCS Equipment Fex")
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
@@ -1751,6 +1754,7 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
                 .setNodeLabel(nodeLabel)
                 .addCategory("CiscoUcsRackEnclosure")
                 .addCategory("CiscoUcs")
+                .addAsset("category", "RackEnclosureSystem")
                 .addAsset("comment", ucsElement.dn.value)
                 .addAsset("description", "Cisco UCS Equipment Rack Enclosure")
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
