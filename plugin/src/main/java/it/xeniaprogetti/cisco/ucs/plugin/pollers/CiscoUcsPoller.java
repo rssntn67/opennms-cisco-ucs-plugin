@@ -26,8 +26,8 @@ public class CiscoUcsPoller extends CiscoUcsAbstractPoller {
 
     @Override
     protected PollerResult poll(final UcsComputeBlade compute) {
+        LOG.info("poll: Ucs Compute Blade Status: {}", compute.operState);
         if (!Objects.equals(compute.operState, "ok")) {
-            LOG.info("poll: Ucs Compute Blade Status: {}", compute.operState);
             return ImmutablePollerResult.newBuilder()
                     .setStatus(Status.Down)
                     .setReason("Ucs Compute Blade Status: " + compute.operState)
@@ -40,8 +40,8 @@ public class CiscoUcsPoller extends CiscoUcsAbstractPoller {
 
     @Override
     protected PollerResult poll(final UcsComputeRackUnit compute) {
+        LOG.info("poll: Ucs Compute Rack Unit Status: {}", compute.operState);
         if (!Objects.equals(compute.operState, "ok")) {
-            LOG.info("poll: Ucs Compute Rack Unit Status: {}", compute.operState);
             return ImmutablePollerResult.newBuilder()
                     .setStatus(Status.Down)
                     .setReason("Ucs Compute Rack Unit Status: " + compute.operState)
@@ -54,8 +54,8 @@ public class CiscoUcsPoller extends CiscoUcsAbstractPoller {
 
     @Override
     protected PollerResult poll(final UcsEquipmentChassis equipment) {
+        LOG.info("poll: Ucs Equipment Chassis Status: {}", equipment.operState);
         if (!Objects.equals(equipment.operState, "operable")) {
-            LOG.info("poll: Ucs Equipment Chassis Status: {}", equipment.operState);
             return ImmutablePollerResult.newBuilder()
                     .setStatus(Status.Down)
                     .setReason("Ucs Equipment Chassis Status: " + equipment.operState)
@@ -68,8 +68,8 @@ public class CiscoUcsPoller extends CiscoUcsAbstractPoller {
 
     @Override
     protected PollerResult poll(final UcsEquipmentFex equipment) {
+        LOG.info("poll: Ucs Equipment Fex Status: {}", equipment.operState);
         if (!Objects.equals(equipment.operState, "operable")) {
-            LOG.info("poll: Ucs Equipment Fex Status: {}", equipment.operState);
             return ImmutablePollerResult.newBuilder()
                     .setStatus(Status.Down)
                     .setReason("Ucs Ucs Equipment Fex Operation Status: " + equipment.operState)
@@ -82,8 +82,8 @@ public class CiscoUcsPoller extends CiscoUcsAbstractPoller {
 
     @Override
     protected PollerResult poll(final UcsEquipmentRackEnclosure equipment) {
+        LOG.info("poll: Ucs Equipment Rack Enclosure Status: {}", equipment.operability);
         if (!Objects.equals(equipment.operability, "operable")) {
-            LOG.info("poll: Ucs Equipment Rack Enclosure Status: {}", equipment.operability);
             return ImmutablePollerResult.newBuilder()
                     .setStatus(Status.Down)
                     .setReason("Ucs Equipment Rack Enclosure Status: " + equipment.operability)
