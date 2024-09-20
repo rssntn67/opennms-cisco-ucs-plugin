@@ -9,7 +9,7 @@ import java.util.List;
 
 public class CiscoUcsPollerConfigurationExtension implements PollerConfigurationExtension {
         final PollerConfigurationExtension pollerConfiguration = new ClasspathPollerConfigurationLoader(CiscoUcsPollerConfigurationExtension.class, "",
-                "poller-configuration.xml").getPollerConfiguration();
+                "cisco-ucs-poller-configuration.xml").getPollerConfiguration();
 
         @Override
         public List<Package> getPackages() {
