@@ -11,7 +11,7 @@ public class UcsCollectorConfigurationExtension implements CollectorConfiguratio
 
     private final CollectorConfigurationExtension collectorConfiguration = new ClasspathCollectorConfigurationLoader(
             UcsCollectorConfigurationExtension.class, "",
-            "collector-configuration.xml"
+            "cisco-ucs-collector-configuration.xml"
     ).getCollectorConfiguration();
 
     @Override
