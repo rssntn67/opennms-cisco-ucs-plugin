@@ -9,7 +9,7 @@ public class EventConfExtension implements org.opennms.integration.api.v1.config
 
     private final ClasspathEventDefinitionLoader classpathEventDefinitionLoader = new ClasspathEventDefinitionLoader(
             EventConfExtension.class,
-            "plugin.ext.events.xml"
+            "cisco-ucs.plugin.ext.events.xml"
     );
 
     @Override
