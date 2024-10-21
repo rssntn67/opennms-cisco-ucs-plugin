@@ -28,8 +28,8 @@
             <parameter key="type" value="${cisco-ucs:type}"/>
         </service>
 
-        <downtime begin="0" end="43200000" interval="300000"/><!-- 5m, 5m, 12h -->
-        <downtime begin="43200000" end="432000000" interval="600000"/><!-- 10m, 12h, 5d -->
+        <downtime begin="0" end="43200000" interval="30000"/><!-- 30s, 5m, 12h -->
+        <downtime begin="43200000" end="432000000" interval="300000"/><!-- 5m, 12h, 5d -->
         <downtime begin="432000000" interval="3600000"/><!-- 1h, 5d -->
     </package>
 
