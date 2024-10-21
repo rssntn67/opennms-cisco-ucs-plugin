@@ -55,9 +55,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.SwSystemStats;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -1023,12 +1021,12 @@ public class XmlApiClientService implements ApiClientService {
                 .withCause(faultInst.cause)
                 .withChangeSet(faultInst.changeSet)
                 .withCode(faultInst.code)
-                .withCreated(faultInst.created.toInstant().atOffset(ZoneOffset.systemDefault().getRules().getOffset(LocalDateTime.now())))
+                .withCreated(faultInst.created)
                 .withDescr(faultInst.descr)
                 .withDn(faultInst.dn)
                 .withHighestSeverity(UcsFault.Severity.valueOf(faultInst.highestSeverity))
                 .withId(faultInst.id)
-                .withLastTransition(faultInst.lastTransition.toInstant().atOffset(ZoneOffset.systemDefault().getRules().getOffset(LocalDateTime.now())))
+                .withLastTransition(faultInst.lastTransition)
                 .withLc(faultInst.lc)
                 .withPrevSeverity(UcsFault.Severity.valueOf(faultInst.prevSeverity))
                 .withOccur(faultInst.occur)
