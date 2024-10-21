@@ -52,13 +52,17 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.InetAddress;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -1464,17 +1468,15 @@ Oper Evac Mode	:	Off
         faults = faultApi.getUcsFaultsByFilter(loginApi.getToken(), wCardFilter);
         System.out.println(faults.size());
         faults.forEach(System.out::println);
-        faults.forEach(f -> {
-            LocalDateTime now = LocalDateTime.now();
-            ZoneId zone = ZoneOffset.systemDefault();
-//            OffsetDateTime time = f.lastTransition.toInstant().atOffset(zone.getRules().getOffset(now));
-            System.out.println(f.lastTransition);
-//            System.out.println(time);
-//            Assert.assertEquals(2024,time.getYear());
-//            Assert.assertEquals(5,time.getMonth().getValue());
-//            Assert.assertTrue(5 <= time.getDayOfMonth() && time.getDayOfMonth() <=7);
-        });
         loginApi.logout();
+    }
+
+    @Test
+    public void testLastTransition() throws ParseException {
+        String lastTransition="2024-10-21T19:04:18.172";
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+        Date time = format.parse(lastTransition);
+        System.out.println(time);
     }
 
     @Test

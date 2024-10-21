@@ -29,6 +29,8 @@ import org.opennms.integration.api.v1.model.immutables.ImmutableInMemoryEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
@@ -335,10 +337,16 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
 
         LOG.debug("processAlertEntity: lastTransition: {}",ucsFault.lastTransition);
 
-        builder.setTime(Date.from(Instant.parse(ucsFault.lastTransition)));
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+
+        try {
+            builder.setTime(format.parse(ucsFault.lastTransition));
+        } catch (ParseException e) {
+            LOG.error("processAlertEntity: {}", e.getMessage());
+            builder.setTime(new Date());
+        }
 
         ImmutableInMemoryEvent event = builder.build();
-
         eventForwarder.sendSync(event);
         LOG.debug("processAlertEntity: forwarded: {}", event);
     }
