@@ -1,8 +1,5 @@
 package it.xeniaprogetti.cisco.ucs.plugin.client.api;
 
-import java.time.OffsetDateTime;
-import java.util.Date;
-
 public class UcsFault extends UcsEntity {
 
 
@@ -79,11 +76,11 @@ public class UcsFault extends UcsEntity {
     public final String cause;
     public final String changeSet;
     public final String code;
-    public final Date created;
+    public final String created;
     public final String descr;
     public final Severity highestSeverity;
     public final long id;
-    public final Date lastTransition;
+    public final String lastTransition;
     public final String lc;
     public final int occur;
     public final Severity origSeverity;
@@ -103,11 +100,11 @@ public class UcsFault extends UcsEntity {
         private String cause;
         private String changeSet;
         private String code;
-        private Date created;
+        private String created;
         private String descr;
         private Severity highestSeverity;
         private long id;
-        private Date lastTransition;
+        private String lastTransition;
         private String lc;
         private int occur;
         private Severity origSeverity;
@@ -142,7 +139,7 @@ public class UcsFault extends UcsEntity {
             return this;
         }
 
-        public Builder withCreated(Date created) {
+        public Builder withCreated(String created) {
             this.created = created;
             return this;
         }
@@ -162,7 +159,7 @@ public class UcsFault extends UcsEntity {
             return this;
         }
 
-        public Builder withLastTransition(Date lastTransition) {
+        public Builder withLastTransition(String lastTransition) {
             this.lastTransition = lastTransition;
             return this;
         }

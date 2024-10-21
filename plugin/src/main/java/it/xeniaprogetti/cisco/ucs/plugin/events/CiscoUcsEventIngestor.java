@@ -307,6 +307,8 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
         builder.addParameter(
                 ImmutableEventParameter.newInstance("ack", ucsFault.ack));
         builder.addParameter(
+                ImmutableEventParameter.newInstance("created", ucsFault.created));
+        builder.addParameter(
                 ImmutableEventParameter.newInstance("reductionKey", String.valueOf(ucsFault.id)));
         builder.addParameter(
                 ImmutableEventParameter.newInstance("cause", ucsFault.cause));
@@ -317,6 +319,12 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
         builder.addParameter(
                 ImmutableEventParameter.newInstance("changeSet", ucsFault.changeSet));
         builder.addParameter(
+                ImmutableEventParameter.newInstance("highestSeverity", ucsFault.highestSeverity.name()));
+        builder.addParameter(
+                ImmutableEventParameter.newInstance("origSeverity", ucsFault.origSeverity.name()));
+        builder.addParameter(
+                ImmutableEventParameter.newInstance("prevSeverity", ucsFault.prevSeverity.name()));
+        builder.addParameter(
                 ImmutableEventParameter.newInstance("descr", ucsFault.descr));
         builder.addParameter(
                 ImmutableEventParameter.newInstance("rule", ucsFault.rule));
@@ -325,8 +333,9 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
         builder.addParameter(
                 ImmutableEventParameter.newInstance("type", ucsFault.type.name()));
 
+        LOG.debug("processAlertEntity: lastTransition: {}",ucsFault.lastTransition);
 
-        builder.setTime(Date.from(ucsFault.lastTransition.toInstant()));
+        builder.setTime(Date.from(Instant.parse(ucsFault.lastTransition)));
 
         ImmutableInMemoryEvent event = builder.build();
 

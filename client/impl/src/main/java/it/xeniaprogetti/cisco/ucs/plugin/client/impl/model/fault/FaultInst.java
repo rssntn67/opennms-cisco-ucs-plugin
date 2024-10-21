@@ -3,8 +3,6 @@ package it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.fault;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.Dn;
 
-import java.util.Date;
-
 public class FaultInst extends Dn {
 
     @JacksonXmlProperty(isAttribute = true)
@@ -16,7 +14,7 @@ public class FaultInst extends Dn {
     @JacksonXmlProperty(isAttribute = true)
     public String code;
     @JacksonXmlProperty(isAttribute = true)
-    public Date created;
+    public String created;
     @JacksonXmlProperty(isAttribute = true)
     public String descr;
     @JacksonXmlProperty(isAttribute = true)
@@ -24,7 +22,7 @@ public class FaultInst extends Dn {
     @JacksonXmlProperty(isAttribute = true)
     public long id;
     @JacksonXmlProperty(isAttribute = true)
-    public Date lastTransition;
+    public String lastTransition;
     @JacksonXmlProperty(isAttribute = true)
     public String lc;
     @JacksonXmlProperty(isAttribute = true)
