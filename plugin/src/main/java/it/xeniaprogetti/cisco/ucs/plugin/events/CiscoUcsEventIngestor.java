@@ -29,13 +29,11 @@ import org.opennms.integration.api.v1.model.immutables.ImmutableInMemoryEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -309,7 +307,7 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
         builder.addParameter(
                 ImmutableEventParameter.newInstance("ack", ucsFault.ack));
         builder.addParameter(
-                ImmutableEventParameter.newInstance("created", ucsFault.created));
+                ImmutableEventParameter.newInstance("created", ucsFault.created.format(UcsUtils.UCS_DATETIME_FORMATTER)));
         builder.addParameter(
                 ImmutableEventParameter.newInstance("reductionKey", String.valueOf(ucsFault.id)));
         builder.addParameter(
@@ -336,15 +334,7 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
                 ImmutableEventParameter.newInstance("type", ucsFault.type.name()));
 
         LOG.debug("processAlertEntity: lastTransition: {}",ucsFault.lastTransition);
-
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-
-        try {
-            builder.setTime(format.parse(ucsFault.lastTransition));
-        } catch (ParseException e) {
-            LOG.error("processAlertEntity: {}", e.getMessage());
-            builder.setTime(new Date());
-        }
+        builder.setTime(Timestamp.valueOf(ucsFault.lastTransition));
 
         ImmutableInMemoryEvent event = builder.build();
         eventForwarder.sendSync(event);

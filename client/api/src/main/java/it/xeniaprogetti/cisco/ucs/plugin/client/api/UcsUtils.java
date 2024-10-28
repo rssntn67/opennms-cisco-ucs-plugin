@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.time.format.DateTimeFormatter;
 
 public class UcsUtils {
 
@@ -17,6 +18,9 @@ public class UcsUtils {
     public final static String UCS_FABRIC_SAN_KEY = "fabric-san-dn";
     public final static String UCS_ALIAS_KEY = "alias";
     public final static String UCS_TYPE_KEY = "type";
+
+    public final static String UCS_EVENT_TIME_PATTERN="yyyy-MM-dd'T'HH:mm:ss.SSS";
+    public static DateTimeFormatter UCS_DATETIME_FORMATTER = DateTimeFormatter.ofPattern(UcsUtils.UCS_EVENT_TIME_PATTERN);
 
     public static InetAddress getValidInetAddress(final String ip) {
         if (Strings.isNullOrEmpty(ip)) {

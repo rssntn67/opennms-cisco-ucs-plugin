@@ -52,14 +52,13 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.InetAddress;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Date;
@@ -1472,11 +1471,35 @@ Oper Evac Mode	:	Off
     }
 
     @Test
-    public void testLastTransition() throws ParseException {
+    public void testLastTransitionWithSimpleDateFormat() throws ParseException {
         String lastTransition="2024-10-21T19:04:18.172";
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+        SimpleDateFormat format = new SimpleDateFormat(UcsUtils.UCS_EVENT_TIME_PATTERN);
         Date time = format.parse(lastTransition);
         System.out.println(time);
+
+    }
+
+    @Test
+    public void testLastTransitionWithDateTimeFormatter() {
+        String lastTransition="2024-10-21T19:04:18.172";
+
+        DateTimeFormatter formatter= DateTimeFormatter.ofPattern(UcsUtils.UCS_EVENT_TIME_PATTERN);
+        LocalDateTime localDateTime = LocalDateTime.parse(lastTransition,formatter);
+        System.out.println(localDateTime);
+        Date date = Timestamp.valueOf(localDateTime);
+        System.out.println(date);
+    }
+
+    @Test
+    public void bothTimeAreEquals() throws ParseException {
+        String timeString="2024-10-24T15:59:39.967";
+        SimpleDateFormat format = new SimpleDateFormat(UcsUtils.UCS_EVENT_TIME_PATTERN);
+        Date datewithSimpleDateFormat = format.parse(timeString);
+
+        DateTimeFormatter formatter= DateTimeFormatter.ofPattern(UcsUtils.UCS_EVENT_TIME_PATTERN);
+        LocalDateTime localDateTime = LocalDateTime.parse(timeString,formatter);
+        Date dateWithDateTimeFormatter = Timestamp.valueOf(localDateTime);
+        Assert.assertEquals(datewithSimpleDateFormat,dateWithDateTimeFormatter);
     }
 
     @Test
