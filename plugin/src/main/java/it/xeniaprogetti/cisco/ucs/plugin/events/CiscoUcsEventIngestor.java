@@ -30,9 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.time.OffsetDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -70,11 +68,8 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
 
     private final EventForwarder eventForwarder;
 
-    private Instant lastPoll = null;
 
     private ScheduledFuture<?> scheduledFuture;
-
-    private final long delay;
 
     private final int retrieve_days;
 
@@ -148,13 +143,12 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
         this.nodeDao = Objects.requireNonNull(nodeDao);
         this.alarmDao = Objects.requireNonNull(alarmDao);
         this.eventForwarder = Objects.requireNonNull(eventForwarder);
-        this.delay = delay;
         this.retrieve_days = retrieve_days;
 
         LOG.debug("Cisco UCS Event Ingestor initializing (delay = {}ms).", delay);
         LOG.debug("Cisco UCS Event Ingestor initializing (retrieve_days = {}).", retrieve_days);
         ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-        scheduledFuture = scheduledExecutorService.scheduleWithFixedDelay(this, this.delay, this.delay, TimeUnit.MILLISECONDS);
+        scheduledFuture = scheduledExecutorService.scheduleWithFixedDelay(this, delay, delay, TimeUnit.MILLISECONDS);
     }
 
     public void destroy() {
@@ -175,12 +169,6 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
     @Override
     public void run() {
         LOG.debug("run: getting events...");
-
-        final Instant now = Instant.now();
-
-        if (lastPoll == null) {
-            lastPoll = now.minus(delay, ChronoUnit.MILLIS);
-        }
 
         final Set<RequisitionIdentifier> requisitionIdentifiers = nodeDao.getNodes().stream()
                 .filter(node -> node.getMetaData().stream()
@@ -232,9 +220,6 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
                 LOG.error("Cannot process fault for alias='{}'. {}", alias, e.getMessage(),e);
             }
         }
-
-        // interval start and end is inclusive
-        lastPoll = now.plus(1, ChronoUnit.MILLIS);
         LOG.debug("run: events got");
     }
 
