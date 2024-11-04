@@ -323,7 +323,7 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
         builder.addParameter(
                 ImmutableEventParameter.newInstance("ack", ucsFault.ack));
         builder.addParameter(
-                ImmutableEventParameter.newInstance("created", ucsFault.created.format(UcsUtils.UCS_DATETIME_FORMATTER)));
+                ImmutableEventParameter.newInstance("created", ucsFault.created));
         builder.addParameter(
                 ImmutableEventParameter.newInstance("reductionKey", String.valueOf(ucsFault.id)));
         builder.addParameter(

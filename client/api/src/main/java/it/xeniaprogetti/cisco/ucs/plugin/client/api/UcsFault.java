@@ -78,7 +78,7 @@ public class UcsFault extends UcsEntity {
     public final String cause;
     public final String changeSet;
     public final String code;
-    public final LocalDateTime created;
+    public final String created;
     public final String descr;
     public final Severity highestSeverity;
     public final long id;
@@ -102,7 +102,7 @@ public class UcsFault extends UcsEntity {
         private String cause;
         private String changeSet;
         private String code;
-        private LocalDateTime created;
+        private String created;
         private String descr;
         private Severity highestSeverity;
         private long id;
@@ -141,7 +141,7 @@ public class UcsFault extends UcsEntity {
             return this;
         }
 
-        public Builder withCreated(LocalDateTime created) {
+        public Builder withCreated(String created) {
             this.created = created;
             return this;
         }

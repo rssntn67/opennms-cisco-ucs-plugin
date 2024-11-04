@@ -55,6 +55,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.impl.model.stats.SwSystemStats;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -67,12 +68,23 @@ import java.util.stream.Collectors;
 
 public class XmlApiClientService implements ApiClientService {
 
-    Logger LOG = LoggerFactory.getLogger(XmlApiClientService.class);
+    private final static Logger LOG = LoggerFactory.getLogger(XmlApiClientService.class);
     private final AaaApi aaaApi;
     private final ConfigApi configApi;
     private final IpApi ipApi;
     private final FaultApi faultApi;
     private final StatsApi statsApi;
+
+    private static LocalDateTime getLocalDateTimeFromCiscoUcsDate(String ucsDateString) {
+        LOG.debug("getLocalDateTimeFromCiscoUcsDate: parsing: {}", ucsDateString);
+        try {
+            return LocalDateTime.parse(ucsDateString, UcsUtils.UCS_DATETIME_FORMATTER);
+        } catch (DateTimeException e) {
+            LOG.error("getLocalDateTimeFromCiscoUcsDate: error parsing: {} -Z {}", ucsDateString,e.getMessage(), e);
+            LOG.info("getLocalDateTimeFromCiscoUcsDate: return LocalDateTime.now()");
+            return LocalDateTime.now();
+        }
+    }
 
     public XmlApiClientService(AaaApi aaaApi) {
         this.aaaApi = Objects.requireNonNull(aaaApi);
@@ -1022,12 +1034,12 @@ public class XmlApiClientService implements ApiClientService {
                 .withCause(faultInst.cause)
                 .withChangeSet(faultInst.changeSet)
                 .withCode(faultInst.code)
-                .withCreated(LocalDateTime.parse(faultInst.created,UcsUtils.UCS_DATETIME_FORMATTER))
+                .withCreated(faultInst.created)
                 .withDescr(faultInst.descr)
                 .withDn(faultInst.dn)
                 .withHighestSeverity(UcsFault.Severity.valueOf(faultInst.highestSeverity))
                 .withId(faultInst.id)
-                .withLastTransition(LocalDateTime.parse(faultInst.lastTransition, UcsUtils.UCS_DATETIME_FORMATTER))
+                .withLastTransition(getLocalDateTimeFromCiscoUcsDate(faultInst.lastTransition))
                 .withLc(faultInst.lc)
                 .withPrevSeverity(UcsFault.Severity.valueOf(faultInst.prevSeverity))
                 .withOccur(faultInst.occur)
