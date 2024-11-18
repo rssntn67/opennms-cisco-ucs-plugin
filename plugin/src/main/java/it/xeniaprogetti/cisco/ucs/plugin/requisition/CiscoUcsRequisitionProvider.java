@@ -269,7 +269,7 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
                 .setForeignId(networkElement.dn.value.replace("/","-"))
                 .setLocation(context.getLocation())
                 .setNodeLabel(nodeLabel)
-                .addAsset("category", "LanSwitch")
+                .addAsset("category", "FabricInterconnectSwitch")
                 .addAsset("comment", "Fabric Interconnect Switch-"+networkElement.id)
                 .addAsset("description", "Cisco UCS Network Element")
                 .addCategory("CiscoUcsFabricInterconnectSwitch")
