@@ -5,6 +5,7 @@ import it.xeniaprogetti.cisco.ucs.plugin.client.api.Aggregate;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDn;
 import it.xeniaprogetti.cisco.ucs.plugin.client.api.UcsDnComparator;
 import it.xeniaprogetti.cisco.ucs.plugin.client.impl.XmlApiClientProvider;
+import it.xeniaprogetti.cisco.ucs.plugin.collection.AbstractUcsServiceCollector;
 import it.xeniaprogetti.cisco.ucs.plugin.connection.Connection;
 import org.junit.Assert;
 import org.junit.Test;
@@ -27,7 +28,6 @@ import java.util.List;
 import java.util.Set;
 
 import static it.xeniaprogetti.cisco.ucs.plugin.collection.AbstractUcsServiceCollector.addAggregate;
-import static it.xeniaprogetti.cisco.ucs.plugin.collection.AbstractUcsServiceCollector.addNumAttr;
 import static it.xeniaprogetti.cisco.ucs.plugin.collection.AbstractUcsServiceCollector.createStringAttribute;
 
 public class CiscoUcsPluginTest {
@@ -149,7 +149,7 @@ public class CiscoUcsPluginTest {
 
         collectionSetBuilder.addStringAttribute(createStringAttribute("test", "test.dn", "abc/pppp"));
         addAggregate(collectionSetBuilder, "test","MainBoardOutlet1Agg", aggregate);
-        addNumAttr(collectionSetBuilder,"test", "MainBoardOutlet1", value);
+        AbstractUcsServiceCollector.addGaugeNumAttr(collectionSetBuilder,"test", "MainBoardOutlet1", value);
 
         final ImmutableCollectionSet.Builder resultBuilder = ImmutableCollectionSet.newBuilder();
         resultBuilder.addCollectionSetResource(collectionSetBuilder.build());
