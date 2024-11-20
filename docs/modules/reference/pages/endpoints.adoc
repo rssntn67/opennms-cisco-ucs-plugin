@@ -1,0 +1,19 @@
+= REST Endpoints
+:imagesdir: ../assets/images
+
+Some RESTful endpoints are available for basic connection management.
+
+NOTE: The `Content-Type` of the request and response is `application/json`.
+
+[options="header, %autowidth"]
+[cols="2,1,3"]
+|===
+| Resource
+| Method
+| Description
+
+| `/rest/cisco-ucs/ping`
+| GET
+| Returns "pong".
+
+----

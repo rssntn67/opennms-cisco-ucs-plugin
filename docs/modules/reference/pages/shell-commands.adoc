@@ -1,0 +1,45 @@
+= Useful Karaf Shell Commands
+:imagesdir: ../assets/images
+
+== opennms-cucs:connection-add
+
+Add a connection to a Cisco UCS Manager XML API.
+
+Syntax: `opennms-cucs:connection-add alias url username password`
+
+.Arguments
+[options="header, autowidth", cols="2,1"]
+|===
+
+| Argument
+| Description
+
+| alias
+| Alias for this connection
+
+| url
+| Cisco UCS Manager XML API URL
+
+| username
+| Cisco UCS Manager XML API Username
+
+| password
+| Cisco UCS Manager XML API Password
+
+|===
+
+== opennms-cucs:list-ucs-entities
+
+List all Supported Ucs Entity
+
+Syntax: `opennms-cucs:list-ucs-entities alias`
+
+.Arguments
+[options="header, autowidth", cols="2,1"]
+|===
+
+| Argument
+| Description
+
+| alias
+| Alias for this connection

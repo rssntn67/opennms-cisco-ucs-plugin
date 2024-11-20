@@ -1,0 +1,34 @@
+= Requisitions
+:imagesdir: ../assets/images
+
+In order to monitor Cisco Ucs Manager Entities, you need to import these entities into OpenNMS.
+To do so, create a requisition for a given connection alias.
+A connection alias can represent multiple clusters.
+All nodes created by a requisition are assigned to the same location controlled by the `location' parameter, which uses the default location if not specified.
+
+Furthermore, a connection can also be used to import vms entities.
+
+Specify the requisition type `nutanix` to import all "powered on" vms defined in Nutanix Prism connection:
+
+```
+opennms:import-requisition ucs alias=aAlias location=naples
+```
+
+
+You can specify an additional parameter, `foreignSource`, to set the foreign source and requisition name.
+The following example creates a Blade requisition named `My-Cluster-Blade-Requisition`.
+
+```
+opennms:import-requisition ucs alias=aAlias foreignSource=My-Cluster-Blade-Requisition
+```
+
+You can specify an additional parameter, `matchVM` (default value null), only vm-name containing provided value will be imported.
+
+You can specify an additional parameter, `importNetworkElement` (default value true), to import or not NetworkElement.
+You can specify an additional parameter, `importComputeBlade` (default value true), to import or not the ComputeBlade.
+You can specify an additional parameter, `importComputeRackUnit` (default value true), to import or not the ComputeRackUnit.
+You can specify an additional parameter, `importEquipmentChassis` (default value true), to import or not the EquipmentChassis.
+You can specify an additional parameter, `importEquipmentFex` (default value true), to import or not the EquipmentFex.
+You can specify an additional parameter, `importEquipmentRackEnclosure` (default value true), to import or not the EquipmentRackEnclosure.
+You can specify an additional parameter, `importUcs` (default value true), to import or not the Ucs Manger host.
+

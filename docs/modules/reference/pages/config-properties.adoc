@@ -1,0 +1,22 @@
+= Configuration Properties
+:imagesdir: ../assets/images
+
+Some configuration properties let you fine-tune the plugin's behavior:
+
+.Configuration properties for `it.xeniaprogetti.cisco.ucs.plugin`
+[options="header, autowidth", cols="3,2,1"]
+|===
+
+| Name
+| Description
+| Default
+
+| events.delay
+| Event polling interval in milliseconds
+| 60000 ms
+
+| events.retrieve.days
+| Events Retrieve Days
+| 3 days
+
+|===

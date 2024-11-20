@@ -1,0 +1,78 @@
+= Terminology
+:imagesdir: ../assets/images
+
+This section introduces some of the basic terms we use in this documentation.
+
+The Cisco Unified Computing System (UCS) Manager is a management solution that participates
+in server, fabric, and storage provisioning, device discovery, inventory, configuration,
+diagnostics, monitoring, fault detection, auditing, and statistics collection.
+
+Supports Cisco UCS B-Series Blade and C-Series Rack Servers, the S3260 storage server, Cisco UCS Mini.
+Programmatically controls server, network, and storage resources, with a unified,
+policy-driven management, so they can be efficiently managed at scale through software
+
+Get started by understanding the fundamentals for the working with UCS Central Technology.
+UCS Central is the single point of management for a Multiple UCS Domains.
+
+UCS Central can manage up to 10,000 Cisco UCS servers (blade, rack, and Mini) and
+Cisco HyperFlex Systems. You can manage multiple Cisco UCS instances or
+domains across globally-distributed locations.
+
+The Cisco UCS Manager XML API is a programmatic interface to Cisco Unified Computing System (UCS). The API accepts XML documents through HTTP or HTTPS. Developers can use any programming language to generate XML documents that contain the API methods. Configuration and state information for Cisco UCS is stored in a hierarchical tree structure known as the management information tree, which is completely accessible through the XML API.
+
+The Cisco UCS Manager XML API supports operations on a single object or an object hierarchy.  An API call can initiate changes to attributes of one or more objects such as chassis, blades, adapters, policies, and other configurable components.
+
+Operation of the API is transactional and terminates on a single data model. Cisco UCS is responsible for all endpoint communication, such as state updates. Users cannot communicate directly to endpoints, which relieves developers from administering isolated, individual component configurations.
+
+The API model includes the following programmatic entities:
+
+Classes—Define the properties and states of objects in the management information tree.
+
+Methods—Actions that the API performs on one or more objects.
+
+Types—Object properties that map values to the object state (for example, equipmentPresence).
+
+A typical request comes into the DME and is placed in the transactor queue in FIFO order. The transactor gets the request from the queue, interprets the request, and performs an authorization check. After the request is confirmed, the transactor updates the management information tree. This complete operation is done in a single transaction.
+
+Full event subscription is enabled. After subscribing, any event notification is sent along with its type of state change.
+
+Cisco UCS Management Information Model
+All the physical and logical components that comprise Cisco UCS are represented in a hierarchical management information model (MIM), also referred to as the MIT. Each node in the tree represents a managed object (MO) or group of objects that contains its administrative state and its operational state.
+
+The hierarchical structure starts at the top (sys) and contains parent and child nodes. Each node in this tree is a managed object and each object in Cisco UCS has a unique distinguished name (DN) that describes the object and its place in the tree. Managed objects are abstractions of the Cisco UCS resources, such as fabric interconnects, chassis, blades, and rack-mounted servers.
+
+Configuration policies are the majority of the policies in the system and describe the configurations of different Cisco UCS components. Policies determine how the system behaves under specific circumstances. Certain managed objects are not created by users, but are automatically created by the Cisco UCS, for example, power supply objects and fan objects. By invoking the API, you are reading and writing objects to the MIM.
+
+The information model is centrally stored and managed by the data management engine (DME), a user-level process running on the fabric interconnects. When a user initiates an administrative change to a Cisco UCS component (for example, applying a service profile to a server), the DME first applies that change to the information model, and then applies the change to the actual managed endpoint. This approach is called a model-driven framework.
+
+The following is a branch diagram that starts at sys from the topRoot of the Cisco UCS management information tree. The diagram shows a hierarchy that consists of five populated chassis with eight blades in each chassis. All the blades shown have one or more adapters. For simplicity, only chassis number five is expanded.
+
+Figure 1. Illustration of MIM Structure Showing Five Chassis
+
+Tree (topRoot):—————————————-Distinguished Name (DN):
+
+|——sys———————————––– (sys)
+     |——chassis-1————————(sys/chassis-1)
+     |——chassis-2————————(sys/chassis-2)
+     |——chassis-3————————(sys/chassis-3)
+     |——chassis-4————————(sys/chassis-4)
+     |——chassis-5————————(sys/chassis-5)
+          |——blade-1————— (sys/chassis-5/blade-1)
+               |——adaptor-1—– (sys/chassis-5/blade-1/adaptor-1)
+          |——blade-2————— (sys/chassis-5/blade-2)
+               |——adaptor-1—– (sys/chassis-5/blade-2/adaptor-1)
+               |——adaptor-2—– (sys/chassis-5/blade-2/adaptor-2)
+          |——blade-3————— (sys/chassis-5/blade-3)
+               |——adaptor-1—– (sys/chassis-5/blade-3/adaptor-1)
+               |——adaptor-2—– (sys/chassis-5/blade-3/adaptor-2)
+          |——blade-4————— (sys/chassis-5/blade-4)
+               |——adaptor-1—– (sys/chassis-5/blade-4/adaptor-1)
+          |——blade-5————— (sys/chassis-5/blade-5)
+               |——adaptor-1—– (sys/chassis-5/blade-5/adaptor-1)
+               |——adaptor-2—– (sys/chassis-5/blade-5/adaptor-2)
+          |——blade-6————— (sys/chassis-5/blade-6)
+               |——adaptor-1—– (sys/chassis-5/blade-6/adaptor-1)
+          |——blade-7————— (sys/chassis-5/blade-7)
+               |——adaptor-1—– (sys/chassis-5/blade-7/adaptor-1)
+          |——blade-8————— (sys/chassis-5/blade-8)
+               |——adaptor-1—– (sys/chassis-5/blade-8/adaptor-1)

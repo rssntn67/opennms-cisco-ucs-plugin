@@ -1,0 +1,10 @@
+= Data Collection
+:imagesdir: ../assets/images
+
+Various collectors exist to gather key metrics of the Cisco UCS entities in OpenNMS:
+
+## UcsCompute
+
+## UcsEquipment
+
+## UcsNetworkElement

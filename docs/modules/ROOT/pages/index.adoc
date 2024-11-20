@@ -1,0 +1,6 @@
+= User's Guide to the _OpenNMS Cisco UCS Plugin_
+:imagesdir: ../assets/images
+:!sectids:
+
+
+This plugin can be used to monitor the key entities of the Cisco UCS Stack stack.

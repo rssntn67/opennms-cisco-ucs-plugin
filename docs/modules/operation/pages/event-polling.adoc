@@ -1,0 +1,28 @@
+= Events
+:imagesdir: ../assets/images
+
+After installation, the plugin starts to collect events for the configured connections.
+These events will be associated with the corresponding entities in the OpenNMS system, using the following event definitions:
+```
+<events xmlns="http://xmlns.opennms.org/xsd/eventconf">
+    <event>
+        <uei>uei.opennms.org/plugin/cisco/ucs/faultResolved</uei>
+        <event-label>Cisco UCS Plugin: Cisco UCS Alarm Event</event-label>
+        <descr>AlarmType:%parm[type]%, AlarmCode:%parm[code]%, AlarmRule:%parm[rule]%</descr>
+        <logmsg dest="logndisplay">Resolved: %parm[descr]%</logmsg>
+        <severity>Normal</severity>
+        <alarm-data reduction-key="%uei%:%nodeid%:%parm[reductionKey]%" alarm-type="2"
+                    clear-key="uei.opennms.org/plugin/cisco/ucs/fault:%nodeid%:%parm[reductionKey]%"/>
+    </event>
+    <event>
+        <uei>uei.opennms.org/plugin/cisco/ucs/fault</uei>
+        <event-label>Cisco UCS Plugin: Cisco UCS Alarm Event</event-label>
+        <descr>AlarmType:%parm[type]%, AlarmCode:%parm[code]%, AlarmRule:%parm[rule]%</descr>
+        <logmsg dest="logndisplay">%parm[descr]%</logmsg>
+        <alarm-data reduction-key="%uei%:%nodeid%:%parm[reductionKey]%" alarm-type="1" />
+    </event>
+</events>
+```
+
+The default polling interval is set to one minute and can be modified by using the configuration property `events.delay`.
+The default events retrieve days is set to 3 days and can be modified by using the configuration property `events.retrieve.days`.

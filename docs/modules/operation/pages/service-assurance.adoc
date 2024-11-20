@@ -1,0 +1,10 @@
+= Service Assurance
+:imagesdir: ../assets/images
+
+Various service monitors will be bound to the imported Cisco Ucs Manager entities in OpenNMS:
+
+## UcsCompute
+
+## UcsEquipment
+
+## UcsNetworkElement
