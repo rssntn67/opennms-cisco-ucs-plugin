@@ -12,7 +12,7 @@ import org.apache.karaf.shell.api.console.Session;
 import org.apache.karaf.shell.support.table.Col;
 import org.apache.karaf.shell.support.table.ShellTable;
 
-@Command(scope = "opennms-cucs", name = "get-ucs-entity", description = "Get Ucs Entity", detailedDescription = "Get Ucs Entity by Dn and ClassId")
+@Command(scope = "opennms-cucs", name = "get-ucs-entity", description = "Get Ucs Entity", detailedDescription = "Get Ucs Entity by Dn")
 @Service
 public class GetUcsEntityByDnCommand implements Action {
 

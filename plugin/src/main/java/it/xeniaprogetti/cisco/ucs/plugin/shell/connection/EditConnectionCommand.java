@@ -28,13 +28,13 @@ public class EditConnectionCommand implements Action {
     @Argument(name = "alias", description = "Alias", required = true)
     public String alias = null;
 
-    @Argument(index = 1, name = "url", description = "Nutanix Prism Url", required = true)
+    @Argument(index = 1, name = "url", description = "Cisco Ucs Manager XML API Url", required = true)
     public String url = null;
 
-    @Argument(index = 2, name = "username", description = "Nutanix Prism API username", required = true)
+    @Argument(index = 2, name = "username", description = "Cisco Ucs Manager XML API username", required = true)
     public String username = null;
 
-    @Argument(index = 3, name = "password", description = "Nutanix Prism API password", required = true, censor = true)
+    @Argument(index = 3, name = "password", description = "Cisco Ucs Manager XML API password", required = true, censor = true)
     public String password = null;
 
     @Argument(index = 4, name = "validity", description = "Cisco Ucs Manager XML API time in seconds to refresh connection")

@@ -34,9 +34,4 @@ feature:install opennms-plugins-cisco-ucs
 bundle:watch *
 ```
 
-
-Once installed, the plugin makes the following Karaf shell commands available:
-* opennms-cisco-ucs:stats
-* opennms-cisco-ucs:push-topology
-
 You can also access the REST endpoint mounted by the plugin at `http://localhost:8980/opennms/rest/cisco-ucs/ping`
