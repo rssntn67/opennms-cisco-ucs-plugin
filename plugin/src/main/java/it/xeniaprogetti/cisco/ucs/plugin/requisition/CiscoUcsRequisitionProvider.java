@@ -1268,7 +1268,7 @@ public class CiscoUcsRequisitionProvider implements RequisitionProvider {
                 .setNodeLabel(nodeLabel)
                 .addCategory("CiscoUcsChassis")
                 .addCategory("CiscoUcs")
-                .addAsset("category", "ChassisSystem")
+                .addAsset("category", "ServerSystem")
                 .addAsset("comment", ucsElement.dn.value)
                 .addAsset("description", "Cisco UCS Equipment Chassis")
                 .addMetaData(ImmutableRequisitionMetaData.newBuilder()
