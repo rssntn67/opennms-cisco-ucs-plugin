@@ -246,33 +246,29 @@ public class XmlApiClientService implements ApiClientService {
 
     @Override
     public List<UcsFault> findUcsFaultsFromDate(final OffsetDateTime from) throws ApiException {
-        List<UcsXmlApiRequest.InFilter> filters = new ArrayList<>();
-        OffsetDateTime to = OffsetDateTime.now();
+        final List<UcsFault> ucsFaults = new ArrayList<>();
+        OffsetDateTime to = OffsetDateTime.now().plusDays(1);
         OffsetDateTime cur = from;
         while (cur.isBefore(to)) {
-            filters.add(
-                UcsXmlApiRequest.getWCardFilter(
-                    UcsEnums.NamingClassId.faultInst,
-                "lastTransition",
-                        cur.toString().substring(0,cur.toString().indexOf("T")+1)+".*")
-            );
-            cur = cur.plusDays(1);
+            List<UcsXmlApiRequest.InFilter> filters = new ArrayList<>();
+            for (int i = 0; i < 3; i++) {
+                filters.add(
+                        UcsXmlApiRequest.getWCardFilter(
+                                UcsEnums.NamingClassId.faultInst,
+                                "lastTransition",
+                                cur.toString().substring(0, cur.toString().indexOf("T") + 1) + ".*")
+                );
+                cur = cur.plusDays(1);
+            }
+            UcsXmlApiRequest.InFilter filter = UcsXmlApiRequest.getOrFilter(filters.toArray(new UcsXmlApiRequest.InFilter[0]));
+            checkSession();
+            ucsFaults.addAll(faultApi
+                    .getUcsFaultsByFilter(aaaApi.getToken(), filter)
+                    .stream()
+                    .map(XmlApiClientService::from)
+                    .collect(Collectors.toList()));
         }
-        filters.add(
-                UcsXmlApiRequest.getWCardFilter(
-                        UcsEnums.NamingClassId.faultInst,
-                        "lastTransition",
-                        to.toString().substring(0,to.toString().indexOf("T")+1)+".*")
-        );
-        UcsXmlApiRequest.InFilter filter = UcsXmlApiRequest.getOrFilter(filters.toArray(new UcsXmlApiRequest.InFilter[0]));
-        checkSession();
-        return faultApi
-                .getUcsFaultsByFilter(aaaApi.getToken(), filter)
-                .stream()
-                .map(XmlApiClientService::from)
-//                .filter(ucsFault ->
-//                        ucsFault.lastTransition.isAfter(from) && ucsFault.lastTransition.isBefore(to))
-                .collect(Collectors.toList());
+        return ucsFaults;
     }
 
     @Override

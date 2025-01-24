@@ -72,7 +72,7 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
     private ScheduledFuture<?> scheduledFuture;
 
     private final int retrieve_days;
-
+    private boolean sync = true;
     private static class RequisitionIdentifier {
         private final String foreignSource;
         private final String foreignId;
@@ -168,7 +168,7 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
 
     @Override
     public void run() {
-        LOG.debug("run: getting events...");
+        LOG.debug("run: getting events. Sync: {}", sync);
 
         final Set<RequisitionIdentifier> requisitionIdentifiers = nodeDao.getNodes().stream()
                 .filter(node -> node.getMetaData().stream()
@@ -202,6 +202,11 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
                                 Function.identity()));
         LOG.debug("run: alarmMap: {}", ciscoUcsAlarmMap);
         LOG.info("run: found {} Cisco UCS fault on opennms", ciscoUcsAlarmMap.size());
+        int effective_retrieve_days = 1;
+        if (sync) {
+            effective_retrieve_days = retrieve_days;
+            sync=false;
+        }
         for(final String alias : requisitionIdentifiers.stream().map(ri -> ri.alias).collect(Collectors.toSet())) {
             ApiClientService service;
             try {
@@ -210,9 +215,9 @@ public class CiscoUcsEventIngestor implements Runnable, HealthCheck {
                 continue;
             }
             try {
-                LOG.info("run: processing fault for alias: {}", alias);
+                LOG.info("run: processing fault for alias: {}, retrieve_days: {}", alias, effective_retrieve_days);
                 processAlerts(
-                    service.findUcsFaultsFromDate(OffsetDateTime.now().minusDays(retrieve_days)),
+                    service.findUcsFaultsFromDate(OffsetDateTime.now().minusDays(effective_retrieve_days)),
                     dnMap.get(alias),
                     ciscoUcsAlarmMap
                 );
