@@ -17,7 +17,7 @@ After this step you can install the plugin in the OpenNMS Karaf shell:
 admin@opennms()> feature:install opennms-plugins-cisco-ucs
 ```
 
-After installation, Nutanix-specific Karaf commands are available to configure the plugin.
+After installation, ucs Karaf commands are available to configure the plugin.
 
 ## Deploy from source
 

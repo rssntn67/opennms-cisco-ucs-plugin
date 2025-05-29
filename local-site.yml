@@ -1,5 +1,5 @@
 site:
-  title: OpenNMS Nutanix Plugin Documentation
+  title: OpenNMS Cisco UCS Plugin Documentation
   url: https://github.com/rssntn67/opennms-cisco-ucs-plugin
   start_page: cisco-ucs::index.adoc
 content:

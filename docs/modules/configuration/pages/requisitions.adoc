@@ -8,7 +8,6 @@ All nodes created by a requisition are assigned to the same location controlled 
 
 Furthermore, a connection can also be used to import vms entities.
 
-Specify the requisition type `nutanix` to import all "powered on" vms defined in Nutanix Prism connection:
 
 ```
 opennms:import-requisition ucs alias=aAlias location=naples
