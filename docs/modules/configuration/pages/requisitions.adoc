@@ -21,7 +21,6 @@ The following example creates a Blade requisition named `My-Cluster-Blade-Requis
 opennms:import-requisition ucs alias=aAlias foreignSource=My-Cluster-Blade-Requisition
 ```
 
-You can specify an additional parameter, `matchVM` (default value null), only vm-name containing provided value will be imported.
 
 You can specify an additional parameter, `importNetworkElement` (default value true), to import or not NetworkElement.
 You can specify an additional parameter, `importComputeBlade` (default value true), to import or not the ComputeBlade.
