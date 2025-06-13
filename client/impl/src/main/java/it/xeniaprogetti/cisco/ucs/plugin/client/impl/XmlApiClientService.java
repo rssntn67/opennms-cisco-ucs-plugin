@@ -220,7 +220,7 @@ public class XmlApiClientService implements ApiClientService {
                 continue;
             UcsDn assignedProfileToDn = Objects.requireNonNull(UcsDn.getParentDn(UcsDn.getDn(pool.assignedToDn)));
             LsServer lsServer = ipApi.getLsServer(aaaApi.getToken(), assignedProfileToDn.value);
-            if (lsServer.pnDn.isEmpty())
+            if (lsServer == null || lsServer.pnDn == null || lsServer.pnDn.isEmpty())
                 continue;
             UcsDn poolDn = Objects.requireNonNull(UcsDn.getParentDn(UcsDn.getDn(pool.ippoolPoolable.poolDn)));
             IpPoolPooled ipPoolPooled = ipApi.getIpPoolPooled(aaaApi.getToken(), pool.ippoolPoolable.poolDn);
